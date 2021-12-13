@@ -19,6 +19,7 @@ import { UrlParams } from "../../UrlParams"
 import { ImportPanelConfig } from "./panels/ImportPanel"
 import { blobToImage } from "../../robowhale/phaser3/utils/blob-to-json"
 import { parseJsonBitmapFont } from "../../robowhale/phaser3/gameObjects/bitmap-text/parse-json-bitmap-font"
+import slash from "slash"
 import Vector2Like = Phaser.Types.Math.Vector2Like
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
@@ -129,7 +130,11 @@ export class BitmapFontEditor extends BaseScene {
 	public init(): void {
 		super.init()
 		
-		this.rootDir = UrlParams.get("root")
+		let rootDit = UrlParams.get("root")
+		if (rootDit) {
+			this.rootDir = slash(rootDit)
+		}
+		
 		this.gameSettings = null
 		this.fontsList = null
 		this.projectsList = null
