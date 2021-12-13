@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/dev/js/cache-busters.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/game.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/GameAnalytics.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/GameAnalytics.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/howler.core.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/idb-keyval.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/phaser.custom.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/phaser.custom.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/polyfills.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/polyfills.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/require.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/ResizeSensor.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/rexawaitloaderplugin.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/rexwebfontloaderplugin.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/sentry.min.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/tweakpane.js" />
+    <file url="file://$PROJECT_DIR$/dev/js/tweakpane.min.js" />
+  </component>
+</project>

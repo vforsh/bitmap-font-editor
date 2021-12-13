@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'PoetsenOne';
+    src:
+        url('../assets/fonts/web/PoetsenOne-Regular-2.woff2') format('woff2'),
+        url('../assets/fonts/web/PoetsenOne-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

@@ -1,0 +1,6 @@
+export enum SceneKey {
+	GLOBAL = "GLOBAL",
+	BOOT = "BOOT",
+	PRELOADER = "PRELOADER",
+	BITMAP_FONT_EDITOR = "BITMAP_FONT_EDITOR",
+}

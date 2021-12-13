@@ -1,0 +1,9 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"watch": false,
+		"noEmit": false,
+		"outDir": "./dev/js/temp",
+		"incremental": true
+	}
+}

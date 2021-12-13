@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/prod" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-bandai" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-editor" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-game-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-orange" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-poki" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy-web" />
+      <excludeFolder url="file://$MODULE_DIR$/dev/js/game" />
+      <excludeFolder url="file://$MODULE_DIR$/dev/js/game-babel" />
+      <excludeFolder url="file://$MODULE_DIR$/game-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/gamifive-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/scripts/phaser-custom/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/scripts/phaser-custom/dist-esbuild" />
+      <excludeFolder url="file://$MODULE_DIR$/scripts/phaser-custom/phaser-src" />
+      <excludeFolder url="file://$MODULE_DIR$/scripts/phaser-custom/src" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/prod-rewarded" />
+      <excludeFolder url="file://$MODULE_DIR$/prod-crazy-games" />
+      <excludeFolder url="file://$MODULE_DIR$/prod-wkb-rewarded" />
+      <excludeFolder url="file://$MODULE_DIR$/test-yagames" />
+      <excludeFolder url="file://$MODULE_DIR$/prod-wkb-gmo" />
+      <excludeFolder url="file://$MODULE_DIR$/dev/js/temp" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

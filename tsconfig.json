@@ -1,0 +1,38 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"sourceMap": false,
+		"noEmit": true,
+		"module": "ES6",
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"watch": true,
+		"lib": [
+			"dom",
+			"es2018",
+			"ES2019.Array",
+			"ES2020.Promise",
+			"ESNext.String"
+		],
+		"skipLibCheck": true,
+		"incremental": true,
+		"pretty": false,
+		"types": [
+			"phaser"
+		],
+		"typeRoots": [
+			"node_modules/phaser/types/phaser.d.ts",
+			"node_modules/gameanalytics/dist/GameAnalytics.d.ts",
+			"node_modules/css-element-queries/src/ResizeSensor.d.ts",
+			"node_modules/tweakpane/dist/types/index.d.ts"
+		]
+	},
+	"exclude": [
+		"**/node_modules",
+		"**/.*/"
+	],
+	"include": [
+		"src/**/*.ts"
+	]
+}
