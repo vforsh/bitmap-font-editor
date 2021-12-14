@@ -2,6 +2,8 @@ const fs = require("fs/promises")
 const { existsSync } = require("fs")
 const formidable = require("formidable")
 const slash = require("slash")
+const isValidFilename = require("valid-filename")
+const { basename } = require("path")
 
 /**
  * @param req {http.IncomingMessage}
@@ -26,6 +28,13 @@ module.exports = function(req, res, next) {
 		if (fileExists && !overwrite) {
 			res.writeHead(400, { "Content-Type": "application/json" })
 			res.end(JSON.stringify({ success: false, error: `File ${filepath} exists already!` }))
+			return
+		}
+
+		let filename = basename(filepath)
+		if (!isValidFilename(filename)) {
+			res.writeHead(400, { "Content-Type": "application/json" })
+			res.end(JSON.stringify({ success: false, error: `Invalid file name "${filename}" !` }))
 			return
 		}
 

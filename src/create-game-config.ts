@@ -1,7 +1,6 @@
 import { Config } from "./Config"
 import { Main } from "./Main"
 import { UrlParams } from "./UrlParams"
-import { isDesktop } from "./robowhale/utils/device/is-desktop"
 
 export enum RendererType {
 	WEBGL = "webgl",
@@ -64,36 +63,12 @@ function getMaxTexturesNum(): number {
 }
 
 function getScaleConfig(): Phaser.Types.Core.ScaleConfig {
-	return isDesktop()
-		? getDesktopScaleConfig()
-		: getMobileScaleConfig()
-}
-
-function getDesktopScaleConfig(): Phaser.Types.Core.ScaleConfig {
-	let config: Phaser.Types.Core.ScaleConfig = {
-		width: Config.SOURCE_GAME_WIDTH,
-		height: Config.SOURCE_GAME_HEIGHT,
-		autoCenter: Phaser.Scale.CENTER_BOTH,
-		mode: Phaser.Scale.FIT,
-	}
-	
-	let useOriginalSize = UrlParams.getBool("originalSize")
-	if (useOriginalSize) {
-		config.max = {
-			width: Config.SOURCE_GAME_WIDTH,
-			height: Config.SOURCE_GAME_HEIGHT,
-		}
-	}
-	
-	return config
-}
-
-function getMobileScaleConfig(): Phaser.Types.Core.ScaleConfig {
 	return {
 		width: Config.SOURCE_GAME_WIDTH,
 		height: Config.SOURCE_GAME_HEIGHT,
+		// autoCenter: Phaser.Scale.CENTER_BOTH,
 		mode: Phaser.Scale.NONE,
-	}
+	} as Phaser.Types.Core.ScaleConfig
 }
 
 function getRenderType(): number {

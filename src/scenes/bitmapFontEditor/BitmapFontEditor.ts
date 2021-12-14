@@ -20,6 +20,8 @@ import { ImportPanelConfig } from "./panels/ImportPanel"
 import { blobToImage } from "../../robowhale/phaser3/utils/blob-to-json"
 import { parseJsonBitmapFont } from "../../robowhale/phaser3/gameObjects/bitmap-text/parse-json-bitmap-font"
 import slash from "slash"
+import { OpenGamePanel, OpenGamePanelEvent } from "./modals/OpenGamePanel"
+import { ModalPanelEvent } from "./modals/ModalPanel"
 import Vector2Like = Phaser.Types.Math.Vector2Like
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
@@ -117,10 +119,12 @@ export class BitmapFontEditor extends BaseScene {
 	public fontsList: FontsList
 	public projectsList: ProjectsList
 	
+	public isReady: boolean
 	public config: BitmapFontProjectConfig
 	private panels: BitmapFontEditorPanelsManager
 	private background: Phaser.GameObjects.Image
 	private glyphsContainer: Phaser.GameObjects.Container
+	private glyphBack: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
 	private separator: Phaser.GameObjects.Image
 	private previewBack: Phaser.GameObjects.Image
@@ -130,18 +134,14 @@ export class BitmapFontEditor extends BaseScene {
 	public init(): void {
 		super.init()
 		
-		let rootDit = UrlParams.get("root")
-		if (rootDit) {
-			this.rootDir = slash(rootDit)
-		}
-		
+		this.rootDir = null
 		this.gameSettings = null
 		this.fontsList = null
 		this.projectsList = null
-		
+		this.glyphs = []
+		this.isReady = false
 		this.initGlowPipeline()
 		this.initConfig()
-		this.glyphs = []
 	}
 	
 	private initGlowPipeline() {
@@ -156,7 +156,7 @@ export class BitmapFontEditor extends BaseScene {
 	private initConfig() {
 		this.config = {
 			content: {
-				content: "0123456789",
+				content: "",
 			},
 			font: {
 				family: "Arial",
@@ -215,20 +215,49 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
+		let rootDir = UrlParams.get("root") ?? await this.showOpenGameWindow()
+		if (rootDir) {
+			rootDir = slash(rootDir)
+		}
+		
+		this.rootDir = rootDir
 		this.gameSettings = this.rootDir && await this.loadGameSettings(this.rootDir)
 		this.fontsList = await this.loadFontsList(this.gameSettings?.fonts)
 		this.projectsList = this.rootDir && await this.loadProjectsList(this.rootDir)
 		
+		if (this.gameSettings) {
+			this.updateRecentProjects()
+		}
+		
 		this.doCreate()
+	}
+	
+	private async showOpenGameWindow(): Promise<string> {
+		return new Promise((resolve, reject) => {
+			let recentProjects = this.game.store.getValue("recent_projects")
+			let panel = new OpenGamePanel(this, { path: "", recent: "" }, recentProjects)
+			panel.once(OpenGamePanelEvent.PROJECT_SELECT, projectPath => {
+				resolve(projectPath)
+				panel.hide()
+			})
+			
+			panel.once(ModalPanelEvent.HIDE, () => {
+				resolve(null)
+			})
+			
+			panel.show()
+		})
 	}
 	
 	private async loadGameSettings(dirpath: string): Promise<GameSettings> {
 		try {
 			let filepath = `${dirpath}/.bmfontsrc`
 			let response = await BrowserSyncService.readFile(filepath)
-			return response.json()
+			let json = await response.json()
+			
+			return json
 		} catch (error) {
-			console.warn(`Can't load game settings!`, error)
+			console.warn(`Can't load game settings!\n`, error)
 			return null
 		}
 	}
@@ -238,7 +267,7 @@ export class BitmapFontEditor extends BaseScene {
 			let response = await BrowserSyncService.fonts(fonts)
 			return response.json()
 		} catch (error) {
-			console.warn("Can't load fonts list!", error)
+			console.warn("Can't load fonts list!\n", error)
 			return null
 		}
 	}
@@ -248,20 +277,35 @@ export class BitmapFontEditor extends BaseScene {
 			let response = await BrowserSyncService.projects(dirpath)
 			return response.json()
 		} catch (error) {
-			console.warn("Can't load projects list!", error)
+			console.warn("Can't load projects list!\n", error)
 			return null
 		}
+	}
+	
+	private updateRecentProjects() {
+		let projects = this.game.store.getValue("recent_projects")
+		let currentProjectName = this.gameSettings.name
+		projects[currentProjectName] = { name: currentProjectName, path: this.rootDir, openedAt: Date.now() }
+		
+		this.game.store.saveValue("recent_projects", projects)
 	}
 	
 	private doCreate() {
 		this.addPanels()
 		this.addBackground()
 		this.addGlyphsContainer()
+		this.addGlyphBack()
 		this.addSeparator()
 		this.addPreviewBack()
+		this.addPreview()
+		
+		this.updateBackgroundColor(0x686868)
 		
 		this.addKeyboardCallbacks()
 		
+		this.addPointerCallbacks()
+		
+		this.isReady = true
 		this.resize()
 	}
 	
@@ -273,7 +317,9 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.strokePanel.on("change", this.onStrokeChange, this)
 		this.panels.shadowPanel.on("change", this.onShadowChange, this)
 		this.panels.glowPanel.on("change", this.onGlowChange, this)
-		this.panels.layoutPanel.on("change", this.onPackingMethodChange, this)
+		this.panels.layoutPanel.on("change", this.onLayoutChange, this)
+		
+		this.panels.gamePanel.openGameButton.on("click", this.onOpenGameButtonClick.bind(this))
 		
 		this.panels.importPanel.on("project-change", this.onProjectChange.bind(this))
 		this.panels.importPanel.loadProjectsButton.on("click", this.onLoadProjectsButtonClick.bind(this))
@@ -395,12 +441,14 @@ export class BitmapFontEditor extends BaseScene {
 		return `rgba(${r},${g},${b},${a})`
 	}
 	
-	private onPackingMethodChange(config: LayoutPanelConfig, property: keyof LayoutPanelConfig): void {
+	private onLayoutChange(config: LayoutPanelConfig, property: keyof LayoutPanelConfig): void {
 		if (property === "method") {
 			this.updatePacking(config.method)
-		} else if (property === "bgColor") {
+		}
+		
+		if (property === "bgColor") {
 			let color = Phaser.Display.Color.GetColor(config.bgColor.r, config.bgColor.g, config.bgColor.b)
-			this.background.setTintFill(color)
+			this.updateBackgroundColor(color)
 		}
 	}
 	
@@ -459,9 +507,13 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
+	private updateBackgroundColor(color: number): void {
+		this.background?.setTintFill(color)
+		this.game.canvas.parentElement.style.backgroundColor = `#${color.toString(16)}`
+	}
+	
 	private addBackground() {
 		this.background = this.add.image(0, 0, "__WHITE")
-		this.background.setTintFill(0x000000)
 		this.size(this.background, ScaleType.FILL)
 		this.pin(this.background, 0.5, 0.5)
 	}
@@ -471,9 +523,17 @@ export class BitmapFontEditor extends BaseScene {
 		this.glyphsContainer.name = "glyphs"
 	}
 	
+	private addGlyphBack() {
+		this.glyphBack = this.add.image(0, 0, "__WHITE")
+		this.glyphBack.setOrigin(0)
+		this.glyphBack.alpha = 0.33
+		this.glyphBack.kill()
+		this.glyphsContainer.add(this.glyphBack)
+	}
+	
 	private addSeparator() {
 		this.separator = this.add.image(0, 0, "__WHITE")
-		this.separator.displayHeight = 4
+		this.separator.displayHeight = 2
 		this.separator.alpha = 0.5
 		this.pin(this.separator, 0.5, 0.5)
 	}
@@ -500,8 +560,39 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	
+	private addPreview() {
+	
+	}
+	
 	private addKeyboardCallbacks() {
 	
+	}
+	
+	private addPointerCallbacks() {
+		this.input.on(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this)
+		this.input.on(Phaser.Input.Events.POINTER_WHEEL, this.onPointerWheel, this)
+	}
+	
+	private onPointerDown(pointer: Phaser.Input.Pointer): void {
+		if (!this.preview) {
+			return
+		}
+		
+		if (pointer.button === 1) { // middle button click
+			this.preview.setScale(1)
+			this.updatePreviewBack()
+		}
+	}
+	
+	private onPointerWheel(pointer, objects, dx, dy: number): void {
+		if (!this.preview) {
+			return
+		}
+		
+		let sign = Phaser.Math.Sign(dy)
+		let deltaScale = -sign * 0.1
+		this.preview.scale += deltaScale
+		this.updatePreviewBack()
 	}
 	
 	private clearGlyphs(): void {
@@ -521,10 +612,24 @@ export class BitmapFontEditor extends BaseScene {
 		glyph.setPadding({ x: font.padding.x, y: font.padding.y })
 		glyph.setStroke(this.rgbaToString(stroke.color), stroke.thickness)
 		glyph.setShadow(shadow.x, shadow.y, this.rgbaToString(shadow.color), shadow.blur, shadow.shadowStroke, shadow.shadowFill)
+		glyph.setInteractive()
+		glyph.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, this.onGlyphPointerOver.bind(this, glyph))
+		glyph.on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, this.onGlyphPointerOut.bind(this))
 		
 		this.glyphsContainer.add(glyph)
 		
 		return glyph
+	}
+	
+	private onGlyphPointerOver(glyph: Phaser.GameObjects.Text): void {
+		this.glyphBack.revive()
+		this.glyphBack.x = glyph.x
+		this.glyphBack.y = glyph.y
+		this.glyphBack.setDisplaySize(glyph.displayWidth, glyph.height)
+	}
+	
+	private onGlyphPointerOut(pointer): void {
+		this.glyphBack.kill()
 	}
 	
 	private onExportButtonClick(button: ButtonApi): void {
@@ -567,12 +672,18 @@ export class BitmapFontEditor extends BaseScene {
 			return { configPath: "", texturePath: "" }
 		}
 		
+		let name = exportConfig.name
+		if (!name) {
+			console.warn(`"name" is not set!`)
+			return { configPath: "", texturePath: "" }
+		}
+		
 		// remove trailing slash if present
 		if (rootDir.endsWith("/")) {
 			rootDir = rootDir.slice(0, -1)
 		}
 		
-		let { name, type: format } = exportConfig
+		let format = exportConfig.type
 		return {
 			configPath: `${this.rootDir}/${name}.${format}`,
 			texturePath: `${this.rootDir}/${name}.png`,
@@ -634,15 +745,25 @@ export class BitmapFontEditor extends BaseScene {
 		this.background.kill()
 		this.separator.kill()
 		this.preview?.kill()
+		this.previewBack.kill()
 	}
 	
 	private afterSnapshot(): void {
 		this.background.revive()
 		this.separator.revive()
 		this.preview?.revive()
+		
+		if (this.config.preview.debug) {
+			this.previewBack.revive()
+		}
 	}
 	
 	private async loadFont(name: string): Promise<Font> {
+		let fontsCache = this.game.stash.get("fonts")
+		if (fontsCache.has(name)) {
+			return fontsCache.get(name)
+		}
+		
 		if (!this.fontsList) {
 			return Promise.reject("Fonts list is not loaded!")
 		}
@@ -655,7 +776,11 @@ export class BitmapFontEditor extends BaseScene {
 		let response = await BrowserSyncService.readFile(path)
 		let blob = await response.blob()
 		let arrayBuffer = await blob.arrayBuffer()
-		return parse(arrayBuffer)
+		let font = parse(arrayBuffer)
+		
+		fontsCache.set(name, font)
+		
+		return font
 	}
 	
 	private async onSaveComplete(response: Response) {
@@ -666,6 +791,10 @@ export class BitmapFontEditor extends BaseScene {
 		console.log(`Texture: ${texture}`)
 		console.log(`Project: ${project}`)
 		console.groupEnd()
+	}
+	
+	private onOpenGameButtonClick(): void {
+		this.restart()
 	}
 	
 	private onProjectChange(config: ImportPanelConfig): void {
@@ -778,28 +907,17 @@ export class BitmapFontEditor extends BaseScene {
 		
 		this.previewBack.kill()
 		
-		let { configPath, texturePath } = this.getExportPaths()
-		if (!configPath || !texturePath) {
-			console.warn("Can't preview the font. Export paths are invalid!", { configPath, texturePath })
+		if (!this.glyphs || this.glyphs.length === 0) {
 			return
 		}
 		
 		let fontKey = Phaser.Math.RND.uuid()
-		let config = JSON.parse(await this.loadFontConfig(configPath))
-		let texture = await this.loadFontTexture(texturePath)
-		this.addBitmapFontToCache(fontKey, texture, config)
-		this.onLoadComplete(fontKey)
-	}
-	
-	private async loadFontConfig(filepath: string): Promise<string> {
-		let response = await BrowserSyncService.readFile(filepath)
-		return response.text()
-	}
-	
-	private async loadFontTexture(filepath: string): Promise<HTMLImageElement> {
-		let response = await BrowserSyncService.readFile(filepath)
-		let blob = await response.blob()
-		return blobToImage(blob)
+		let texture = await this.createTexture()
+		let image = await blobToImage(texture.blob)
+		let font = await this.loadFont(this.config.font.family)
+		let config = createBmfontData(this.config, this.glyphs, texture, font)
+		this.addBitmapFontToCache(fontKey, image, config)
+		this.updatePreview(fontKey)
 	}
 	
 	private addBitmapFontToCache(fontKey: string, texture: HTMLImageElement, config) {
@@ -810,7 +928,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.cache.bitmapFont.add(fontKey, { data, texture: fontKey, frame: null })
 	}
 	
-	private onLoadComplete(fontKey: string): void {
+	private updatePreview(fontKey: string): void {
 		let y = this.separator.y
 		let config = this.panels.previewPanel.config
 		
@@ -825,6 +943,17 @@ export class BitmapFontEditor extends BaseScene {
 	public resize(): void {
 		super.resize()
 		
+		if (!this.isReady) {
+			return
+		}
+		
 		this.separator.displayWidth = Config.GAME_WIDTH
+	}
+	
+	public onShutdown() {
+		super.onShutdown()
+		
+		this.panels.destroy()
+		this.panels = null
 	}
 }

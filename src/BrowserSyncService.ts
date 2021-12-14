@@ -1,3 +1,5 @@
+import type open from "open"
+
 export type BrowserSyncApiEndpoint =
 	| "screenshot"
 	| "bm-font/save"
@@ -5,6 +7,7 @@ export type BrowserSyncApiEndpoint =
 	| "projects"
 	| "read-file"
 	| "write-file"
+	| "open"
 
 export type SaveBitmapFontParams = {
 	project: string,
@@ -46,6 +49,17 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("bm-font/save"), {
 			method: "POST",
 			body: formData,
+		})
+	},
+	
+	open(filepath: string, options?: open.Options): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("open"), {
+			method: "POST",
+			body: JSON.stringify({ filepath, options }),
 		})
 	},
 	

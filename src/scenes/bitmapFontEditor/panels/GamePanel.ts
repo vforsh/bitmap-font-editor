@@ -10,7 +10,7 @@ export type GamePanelConfig = {
 export class GamePanel extends EditorPanel {
 	
 	public config: GamePanelConfig
-	public loadButton: ButtonApi
+	public openGameButton: ButtonApi
 	
 	constructor(scene: Phaser.Scene, container: HTMLElement, config: GamePanelConfig) {
 		super(scene, container, "Game")
@@ -19,8 +19,8 @@ export class GamePanel extends EditorPanel {
 		
 		this.panel.addMonitor(this.config, "name")
 		this.panel.addMonitor(this.config, "fonts", { multiline: true })
+		this.panel.addMonitor(this.config, "fontsDirectory")
 		this.panel.addSeparator()
-		this.panel.addInput(this.config, "fontsDirectory")
-		this.loadButton = this.panel.addButton({ title: "Load" })
+		this.openGameButton = this.panel.addButton({ title: "Open Game" })
 	}
 }

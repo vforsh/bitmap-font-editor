@@ -1,5 +1,6 @@
 import { GraphicsQuality } from "../scale/GraphicsQuality"
 import { getObjectKeys } from "../robowhale/utils/collection/get-object-keys"
+import { RecentProjectsConfig } from "../scenes/bitmapFontEditor/modals/OpenGamePanel"
 
 export const GAME_STORE = {
 	language: "",
@@ -8,6 +9,7 @@ export const GAME_STORE = {
 	sound_muted: false,
 	music_muted: false,
 	editor_zoom: 1,
+	recent_projects: {} as RecentProjectsConfig,
 	build: window.game.config.build_version,
 	login_num: 0,
 }

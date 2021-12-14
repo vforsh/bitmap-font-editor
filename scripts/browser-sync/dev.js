@@ -20,7 +20,6 @@ const queryString = new URLSearchParams({
 	editor: 1,
 	noDecor: 1,
 	originalSize: 1,
-	root: "C:/Users/yafor/YandexDisk/candy-cash/web/dev/assets/fonts/test",
 })
 
 module.exports = {
@@ -35,10 +34,6 @@ module.exports = {
 	reloadDebounce: 500,
 	ui: false,
 	middleware: [
-		{
-			route: "/configs/save",
-			handle: require("./middleware/save-configs"),
-		},
 		{
 			route: "/screenshot",
 			handle: require("./middleware/save-screenshot"),
@@ -62,6 +57,10 @@ module.exports = {
 		{
 			route: "/write-file",
 			handle: require("./middleware/write-file"),
+		},
+		{
+			route: "/open",
+			handle: require("./middleware/open"),
 		},
 	],
 }

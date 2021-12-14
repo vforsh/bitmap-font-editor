@@ -1,6 +1,12 @@
 const { existsSync } = require("fs")
 const fs = require("fs/promises")
 
+/**
+ * @param req {http.IncomingMessage}
+ * @param res {http.ServerResponse}
+ * @param next
+ * @return {*}
+ */
 module.exports = function(req, res, next) {
 	if (req.method !== "POST") {
 		return next()

@@ -54,8 +54,6 @@ module.exports = function(grunt) {
 			css: {
 				src: [
 					"./prod/css/*.css",
-					"!./prod/css/fonts.css",
-					"!./prod/css/editor.css",
 					"!./prod/css/bundle.css",
 				],
 				options: { force: true },
@@ -128,8 +126,6 @@ module.exports = function(grunt) {
 				},
 				src: [
 					"./prod/css/*.css",
-					"!./prod/css/fonts.css",
-					"!./prod/css/editor.css",
 				],
 				dest: "./prod/css/bundle.css",
 			},
@@ -406,7 +402,6 @@ module.exports = function(grunt) {
 				transformContent: {
 					ignoreEntries: ["js/game.min.js"],
 					files: [
-						"css/fonts.css",
 						"index.html",
 					],
 				},

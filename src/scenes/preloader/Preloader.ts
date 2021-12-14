@@ -3,7 +3,6 @@ import { ISceneTransition } from "../../sceneTransition/ISceneTransition"
 import { CanvasSceneTransition } from "../../sceneTransition/CanvasSceneTransition"
 import { BaseScene } from "../../robowhale/phaser3/scenes/BaseScene"
 import { UrlParams } from "../../UrlParams"
-import { isGraphicsQualityOption } from "../../scale/GraphicsQuality"
 import { getCacheBustingUrl } from "../../CacheBuster"
 import { GameStore } from "../../store/GameStore"
 
@@ -86,7 +85,6 @@ export class Preloader extends BaseScene {
 	
 	public create() {
 		this.initStore()
-		this.initGraphicsQuality()
 		this.addScenesTransition()
 		this.addToasts()
 		
@@ -95,20 +93,6 @@ export class Preloader extends BaseScene {
 	
 	private initStore() {
 		this.game.store.changeNumber("login_num", 1)
-	}
-	
-	private initGraphicsQuality() {
-		let qualityUrlParam = UrlParams.get("quality")
-		if (isGraphicsQualityOption(qualityUrlParam)) {
-			this.game.scaler.setQuality(qualityUrlParam)
-			return
-		}
-		
-		let savedQuality = this.game.store.getValue("graphics_quality")
-		if (isGraphicsQualityOption(savedQuality)) {
-			this.game.scaler.setQuality(savedQuality)
-			return
-		}
 	}
 	
 	private addScenesTransition() {

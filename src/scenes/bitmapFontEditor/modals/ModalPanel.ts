@@ -1,15 +1,18 @@
 import EventEmitter = Phaser.Events.EventEmitter
 import { Pane } from "tweakpane"
 import { cssAnimate } from "../../../robowhale/utils/css-animate"
+import { ButtonApi } from "@tweakpane/core"
 
 export enum ModalPanelEvent {
 	CANCEL_CLICK = "__CANCEL_CLICK",
 	OK_CLICK = "__OK_CLICK",
+	HIDE = "__HIDE"
 }
 
 export class ModalPanel<T extends object> extends EventEmitter {
 	
 	public scene: Phaser.Scene
+	private hideOnBgClick: boolean = true
 	protected container: HTMLDivElement
 	protected containerInner: HTMLDivElement
 	protected panel: Pane
@@ -38,7 +41,9 @@ export class ModalPanel<T extends object> extends EventEmitter {
 	}
 	
 	private onContainerPointerDown(event: MouseEvent | TouchEvent): void {
-		// event.stopPropagation()
+		if (!this.hideOnBgClick) {
+			return
+		}
 		
 		if (event.target === this.container) {
 			event.preventDefault()
@@ -58,12 +63,12 @@ export class ModalPanel<T extends object> extends EventEmitter {
 		collapseIcon.style.display = "none"
 	}
 	
-	protected addCancelButton() {
-		this.panel.addButton({ title: "Cancel" }).on("click", this.onCancelButtonClick.bind(this))
+	protected addCancelButton(): ButtonApi {
+		return this.panel.addButton({ title: "Cancel" }).on("click", this.onCancelButtonClick.bind(this))
 	}
 	
-	protected addOkButton() {
-		this.panel.addButton({ title: "Ok" }).on("click", this.onOkButtonClick.bind(this))
+	protected addOkButton(): ButtonApi {
+		return this.panel.addButton({ title: "Ok" }).on("click", this.onOkButtonClick.bind(this))
 	}
 	
 	private onCancelButtonClick(): void {
@@ -86,6 +91,7 @@ export class ModalPanel<T extends object> extends EventEmitter {
 	
 	public hide() {
 		this.container.style.display = "none"
+		this.emit(ModalPanelEvent.HIDE, this)
 	}
 	
 	public setZoom(zoom: number): void {

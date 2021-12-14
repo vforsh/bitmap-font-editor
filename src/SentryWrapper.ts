@@ -198,28 +198,6 @@ export class SentryWrapper {
 		}
 	}
 	
-	public sendFeedback(message: string, email?: string): Promise<string> {
-		if (this._isEnabled === false) {
-			return Promise.reject()
-		}
-		
-		return new Promise<string>((resolve) => {
-			Sentry.withScope((scope) => {
-				let completedLevels = this.game.store.getCompletedLevelNumbers()
-				
-				scope.setContext("feedback", {
-					completedLevels: completedLevels.join(", "),
-					completedLevelsNum: completedLevels.length,
-					email: email ?? "<empty>",
-					message: message ?? "<empty>",
-				})
-				
-				let eventId = Sentry.captureMessage("Feedback")
-				resolve(eventId)
-			})
-		})
-	}
-	
 	public getGameSnapshotAsBlob(options: SnapshotOptions = { format: "image/jpeg", quality: 0.25 }): Promise<Blob> {
 		return new Promise((resolve, reject) => {
 			this.game.renderer.snapshot(async (snapshot: HTMLImageElement) => {

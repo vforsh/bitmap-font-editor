@@ -46,29 +46,40 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		this.layoutPanel = new LayoutPanel(this.scene, this.leftPanels, config.layout)
 		
 		// right panels
-		let gameSettings = this.scene.gameSettings
-		let gamePanelConfig: GamePanelConfig = {
-			name: gameSettings?.name ?? "",
-			fontsDirectory: this.scene.rootDir ?? "",
-			fonts: gameSettings?.fonts.join("\n") ?? "",
-		}
-		
+		let gamePanelConfig = this.createGamePanelConfig()
 		this.gamePanel = new GamePanel(this.scene, this.rightPanels, gamePanelConfig)
 		this.importPanel = new ImportPanel(this.scene, this.rightPanels, config.import)
 		this.exportPanel = new ExportPanel(this.scene, this.rightPanels, config.export)
 		this.previewPanel = new PreviewPanel(this.scene, this.rightPanels, config.preview)
 	}
 	
+	private createGamePanelConfig(): GamePanelConfig {
+		let gameSettings = this.scene.gameSettings
+		if (!gameSettings) {
+			return {
+				name: "",
+				fonts: "",
+				fontsDirectory: "",
+			}
+		}
+		
+		return {
+			name: gameSettings.name ?? "",
+			fontsDirectory: this.scene.rootDir,
+			fonts: gameSettings.fonts.join("\n"),
+		}
+	}
+	
 	private addPanelContainers() {
 		let zoom = this.scene.game.store.getValue("editor_zoom")
 		
-		this.leftPanels = this.getPanelsContainer("editor-panels-left")
-		this.leftPanels.style.visibility = "visible"
-		this.leftPanels.style.zoom = zoom.toString()
+		this.leftPanels = this.getPanelsContainer("left-sidebar")
+		// this.leftPanels.style.visibility = "visible"
+		// this.leftPanels.style.zoom = zoom.toString()
 		
-		this.rightPanels = this.getPanelsContainer("editor-panels-right")
-		this.rightPanels.style.visibility = "visible"
-		this.rightPanels.style.zoom = zoom.toString()
+		this.rightPanels = this.getPanelsContainer("right-sidebar")
+		// this.rightPanels.style.visibility = "visible"
+		// this.rightPanels.style.zoom = zoom.toString()
 	}
 	
 	private getPanelsContainer(elementId: string): HTMLDivElement {
@@ -106,7 +117,7 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	}
 	
 	public resetZoom(): void {
-		let zoom: number = 1
+		let zoom = 1
 		this.rightPanels.style.zoom = zoom.toString()
 		this.scene.game.store.saveValue("editor_zoom", zoom)
 	}
@@ -114,9 +125,16 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	public destroy(): void {
 		super.destroy()
 		
-		this.leftPanels.style.visibility = "hidden"
-		this.rightPanels.style.visibility = "hidden"
-		
 		this.contentPanel.destroy()
+		this.fontPanel.destroy()
+		this.strokePanel.destroy()
+		this.shadowPanel.destroy()
+		this.glowPanel.destroy()
+		this.layoutPanel.destroy()
+		
+		this.gamePanel.destroy()
+		this.importPanel.destroy()
+		this.exportPanel.destroy()
+		this.previewPanel.destroy()
 	}
 }

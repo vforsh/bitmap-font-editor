@@ -1,9 +1,12 @@
+import { Font } from "opentype.js"
+
 const GAME_STASH = {
 	webp: false,
 	avif: false,
 	development: false,
 	editorEnabled: false,
 	num: 1,
+	fonts: new Map<string, Font>(),
 }
 
 type GameStashType = Partial<typeof GAME_STASH>
@@ -25,7 +28,7 @@ export class GameStash {
 	private readonly stash: GameStashType
 	
 	constructor() {
-		this.stash = {}
+		this.stash = GAME_STASH
 	}
 	
 	public get<K extends GameStashKey>(key: K): GameStashValue<K> | undefined {
