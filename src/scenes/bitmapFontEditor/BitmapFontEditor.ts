@@ -189,7 +189,7 @@ export class BitmapFontEditor extends BaseScene {
 				color: { r: 255, g: 255, b: 255 },
 			},
 			layout: {
-				bgColor: { r: 0, g: 0, b: 0 },
+				bgColor: { r: 104, g: 104, b: 104 },
 				method: PackingMethod.ROW,
 			},
 			import: {
@@ -293,13 +293,13 @@ export class BitmapFontEditor extends BaseScene {
 	private doCreate() {
 		this.addPanels()
 		this.addBackground()
-		this.addGlyphsContainer()
 		this.addGlyphBack()
+		this.addGlyphsContainer()
 		this.addSeparator()
 		this.addPreviewBack()
 		this.addPreview()
 		
-		this.updateBackgroundColor(0x686868)
+		this.updateBackgroundColor(this.rgbaToNumber(this.config.layout.bgColor))
 		
 		this.addKeyboardCallbacks()
 		
@@ -441,6 +441,13 @@ export class BitmapFontEditor extends BaseScene {
 		return `rgba(${r},${g},${b},${a})`
 	}
 	
+	private rgbaToNumber(rgb: RGBA | RGB): number {
+		let { r, g, b } = rgb
+		let a = rgb["a"] ?? 1
+		
+		return Phaser.Display.Color.GetColor32(r, g, b, a)
+	}
+	
 	private onLayoutChange(config: LayoutPanelConfig, property: keyof LayoutPanelConfig): void {
 		if (property === "method") {
 			this.updatePacking(config.method)
@@ -509,7 +516,8 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private updateBackgroundColor(color: number): void {
 		this.background?.setTintFill(color)
-		this.game.canvas.parentElement.style.backgroundColor = `#${color.toString(16)}`
+		this.game.canvas.parentElement.style.backgroundColor = `#${color.toString(16).padStart(6, "0")}`
+		
 	}
 	
 	private addBackground() {
@@ -518,17 +526,16 @@ export class BitmapFontEditor extends BaseScene {
 		this.pin(this.background, 0.5, 0.5)
 	}
 	
-	private addGlyphsContainer() {
-		this.glyphsContainer = this.add.container(0, 0)
-		this.glyphsContainer.name = "glyphs"
-	}
-	
 	private addGlyphBack() {
 		this.glyphBack = this.add.image(0, 0, "__WHITE")
 		this.glyphBack.setOrigin(0)
 		this.glyphBack.alpha = 0.33
 		this.glyphBack.kill()
-		this.glyphsContainer.add(this.glyphBack)
+	}
+	
+	private addGlyphsContainer() {
+		this.glyphsContainer = this.add.container(0, 0)
+		this.glyphsContainer.name = "glyphs"
 	}
 	
 	private addSeparator() {
@@ -623,8 +630,8 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private onGlyphPointerOver(glyph: Phaser.GameObjects.Text): void {
 		this.glyphBack.revive()
-		this.glyphBack.x = glyph.x
-		this.glyphBack.y = glyph.y
+		this.glyphBack.x = this.glyphsContainer.x + glyph.x
+		this.glyphBack.y = this.glyphsContainer.y + glyph.y
 		this.glyphBack.setDisplaySize(glyph.displayWidth, glyph.height)
 	}
 	
@@ -845,7 +852,10 @@ export class BitmapFontEditor extends BaseScene {
 		
 		BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
-			.then(result => this.applyProjectConfig(result))
+			.then((result: BitmapFontProjectConfig) => {
+				result.import.project = projectFilepath
+				this.applyProjectConfig(result)
+			})
 			.catch(error => console.log(`Can't load bitmap font projects!`, error))
 			.finally(() => {
 				projectInput.disabled = false
@@ -865,8 +875,6 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.importPanel.refresh()
 		this.panels.exportPanel.refresh()
 		this.panels.previewPanel.refresh()
-		
-		this.onContentChange(this.config.content.content)
 	}
 	
 	private onPreviewDebugSettingsChange(config: PreviewPanelConfig): void {
