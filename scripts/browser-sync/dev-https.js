@@ -10,6 +10,9 @@ let https = keyExists && certExists
 	? { https: { key: keyPath, cert: certPath } }
 	: { https: true }
 
+/**
+ * @type {browserSync.Options}
+ */
 module.exports = {
 	...coreConfig,
 	...https,

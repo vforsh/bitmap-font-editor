@@ -11,6 +11,9 @@ const queryString = new URLSearchParams({
 	fakeAds: 1,
 })
 
+/**
+ * @type {browserSync.Options}
+ */
 module.exports = {
 	...coreConfig,
 	files,

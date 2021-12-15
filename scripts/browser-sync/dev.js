@@ -18,10 +18,11 @@ const queryString = new URLSearchParams({
 	stats: 0,
 	analytics: 0,
 	editor: 1,
-	noDecor: 1,
-	originalSize: 1,
 })
 
+/**
+ * @type {browserSync.Options}
+ */
 module.exports = {
 	files,
 	ignore,
