@@ -599,7 +599,7 @@ export class BitmapFontEditor extends BaseScene {
 		}
 		
 		BrowserSyncService.saveBitmapFont({
-			config: JSON.stringify(fontData, null, "\t"),
+			config: JSON.stringify(fontData),
 			configPath: configPath,
 			texture: texture.blob,
 			texturePath: texturePath,
