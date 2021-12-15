@@ -1,7 +1,8 @@
 import { EditorPanel } from "./EditorPanel"
 import { InputBindingApi, TpChangeEvent } from "@tweakpane/core"
 import { uniq, without } from "lodash-es"
-import { BitmapFontProjectConfig } from "../BitmapFontEditor"
+import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
+import { getObjectKeys } from "../../../robowhale/utils/collection/get-object-keys"
 
 export enum ContentPanelEvent {
 	CONTENT_CHANGE = "ContentPanel_CONTENT_CHANGE",
@@ -13,6 +14,12 @@ export class ContentPanel extends EditorPanel {
 	
 	private config: ContentPanelConfig
 	private contentInput: InputBindingApi<unknown, string>
+	private contentPresets = {
+		"a-z": "abcdefghijklmnopqrstuvwxyz",
+		"A-Z": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		"0-9": "0123456789",
+		"?!.,": "?!.,-:()",
+	} as const
 	
 	constructor(scene: Phaser.Scene, container: HTMLElement, config: ContentPanelConfig) {
 		super(scene, container, "Content")
@@ -21,32 +28,25 @@ export class ContentPanel extends EditorPanel {
 		
 		this.contentInput = this.panel.addInput(this.config, "content").on("change", this.onContentChange.bind(this))
 		
-		this.panel.addButton({ title: "Numbers" }).on("click", () => {
-			let chars = "0987654321"
-			
-			if (this.isShiftDown) {
-				this.removeChars(chars)
-			} else {
-				this.addChars(chars)
-			}
-			
-			this.contentInput.refresh()
+		let buttonTitles = getObjectKeys(this.contentPresets)
+		let gridSize = { width: 2, height: 2 }
+		let grid = this.panel.addBlade({
+			view: "buttongrid",
+			label: "presets",
+			size: [gridSize.width, gridSize.height],
+			cells: (x, y) => ({
+				title: buttonTitles[y * gridSize.width + x],
+			}),
 		})
 		
-		this.panel.addButton({ title: "Lowercase" }).on("click", () => {
-			let chars = "abcdefghijklmnopqrstuvwxyz"
-			
-			if (this.isShiftDown) {
-				this.removeChars(chars)
-			} else {
-				this.addChars(chars)
+		// @ts-ignore
+		grid.on("click", (event: TpButtonGridEvent) => {
+			let cell = event.cell
+			let title = cell.title
+			let chars = this.contentPresets[title]
+			if (!chars) {
+				return
 			}
-			
-			this.contentInput.refresh()
-		})
-		
-		this.panel.addButton({ title: "Uppercase" }).on("click", () => {
-			let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			
 			if (this.isShiftDown) {
 				this.removeChars(chars)

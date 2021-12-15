@@ -1,4 +1,4 @@
-import { Font } from "opentype.js"
+import type { Font } from "opentype.js"
 
 const GAME_STASH = {
 	webp: false,

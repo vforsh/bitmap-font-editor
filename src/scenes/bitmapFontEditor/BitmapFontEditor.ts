@@ -9,10 +9,10 @@ import { createBmfontData } from "./create-bmfont-data"
 import { BrowserSyncService } from "../../BrowserSyncService"
 import { Config } from "../../Config"
 import { ShadowPanelConfig } from "./panels/ShadowPanel"
-import { merge } from "lodash-es"
+import { cloneDeep, merge } from "lodash-es"
 import { GlowPanelConfig } from "./panels/GlowPanel"
 import { GlowPostFX } from "../../robowhale/phaser3/fx/GlowPostFX"
-import { BitmapTextAlign, PreviewPanelConfig } from "./panels/PreviewPanel"
+import { PreviewPanelConfig } from "./panels/PreviewPanel"
 import * as potpack from "potpack"
 import { ButtonApi } from "@tweakpane/core"
 import { UrlParams } from "../../UrlParams"
@@ -22,76 +22,8 @@ import { parseJsonBitmapFont } from "../../robowhale/phaser3/gameObjects/bitmap-
 import slash from "slash"
 import { OpenGamePanel, OpenGamePanelEvent } from "./modals/OpenGamePanel"
 import { ModalPanelEvent } from "./modals/ModalPanel"
-import Vector2Like = Phaser.Types.Math.Vector2Like
+import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFontProjectConfig"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
-
-export type RGBA = {
-	r: number
-	g: number
-	b: number
-	a: number
-}
-
-export type RGB = Omit<RGBA, "a">
-
-export interface BitmapFontProjectConfig {
-	content: {
-		content: string
-	},
-	font: {
-		family: string
-		weight: number
-		size: number
-		lineHeight: number
-		resolution: number
-		color: RGBA
-		padding: Vector2Like
-		spacing: Vector2Like
-	},
-	stroke: {
-		color: RGBA
-		thickness: number
-	},
-	shadow: {
-		x: number
-		y: number
-		color: RGBA
-		blur: number
-		shadowStroke: boolean
-		shadowFill: boolean
-	},
-	glow: {
-		enabled: boolean
-		quality: number
-		distance: number
-		innerStrength: number
-		outerStrength: number
-		color: RGB
-	},
-	layout: {
-		bgColor: RGB
-		method: PackingMethod
-	},
-	import: {
-		project: string
-		custom: string
-	},
-	export: {
-		name: string
-		type: "json" | "xml"
-		config: string
-		texture: string
-	},
-	preview: {
-		align: BitmapTextAlign
-		maxWidth: number
-		letterSpacing: number
-		fontSize: number
-		content: string
-		debug: boolean
-		debugColor: RGBA
-	},
-}
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 
@@ -140,8 +72,8 @@ export class BitmapFontEditor extends BaseScene {
 		this.projectsList = null
 		this.glyphs = []
 		this.isReady = false
+		this.config = cloneDeep(DEFAULT_CONFIG)
 		this.initGlowPipeline()
-		this.initConfig()
 	}
 	
 	private initGlowPipeline() {
@@ -150,67 +82,6 @@ export class BitmapFontEditor extends BaseScene {
 		let pipeline = renderer.pipelines.getPostPipeline(pipelineKey) as GlowPostFX
 		if (!pipeline) {
 			renderer.pipelines.addPostPipeline(pipelineKey, GlowPostFX)
-		}
-	}
-	
-	private initConfig() {
-		this.config = {
-			content: {
-				content: "",
-			},
-			font: {
-				family: "Arial",
-				weight: 400,
-				size: 50,
-				lineHeight: 1,
-				resolution: 2,
-				color: { r: 255, g: 255, b: 255, a: 1 },
-				padding: { x: 0, y: 0 },
-				spacing: { x: 0, y: 0 },
-			},
-			stroke: {
-				color: { r: 0, g: 0, b: 0, a: 1 },
-				thickness: 0,
-			},
-			shadow: {
-				x: 0,
-				y: 0,
-				color: { r: 0, g: 0, b: 0, a: 1 },
-				blur: 0,
-				shadowStroke: false,
-				shadowFill: true,
-			},
-			glow: {
-				enabled: false,
-				quality: 0.25,
-				distance: 10,
-				innerStrength: 0,
-				outerStrength: 2,
-				color: { r: 255, g: 255, b: 255 },
-			},
-			layout: {
-				bgColor: { r: 104, g: 104, b: 104 },
-				method: PackingMethod.ROW,
-			},
-			import: {
-				project: "",
-				custom: "",
-			},
-			export: {
-				name: "",
-				type: "json",
-				config: "",
-				texture: "",
-			},
-			preview: {
-				align: BitmapTextAlign.CENTER,
-				maxWidth: 120,
-				letterSpacing: 0,
-				fontSize: 30,
-				content: "12345 123456 12352",
-				debug: true,
-				debugColor: { r: 255, g: 255, b: 255, a: 0.25 },
-			},
 		}
 	}
 	
@@ -515,9 +386,10 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private updateBackgroundColor(color: number): void {
-		this.background?.setTintFill(color)
-		this.game.canvas.parentElement.style.backgroundColor = `#${color.toString(16).padStart(6, "0")}`
+		let { r, g, b, a } = Phaser.Display.Color.ColorToRGBA(color)
+		this.game.canvas.parentElement.style.backgroundColor = `rgba(${r},${g},${b},${a})`
 		
+		this.background?.setTintFill(color)
 	}
 	
 	private addBackground() {
@@ -578,6 +450,7 @@ export class BitmapFontEditor extends BaseScene {
 	private addPointerCallbacks() {
 		this.input.on(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this)
 		this.input.on(Phaser.Input.Events.POINTER_WHEEL, this.onPointerWheel, this)
+		this.input.on(Phaser.Input.Events.GAME_OUT, this.onPointerGameOut, this)
 	}
 	
 	private onPointerDown(pointer: Phaser.Input.Pointer): void {
@@ -600,6 +473,10 @@ export class BitmapFontEditor extends BaseScene {
 		let deltaScale = -sign * 0.1
 		this.preview.scale += deltaScale
 		this.updatePreviewBack()
+	}
+	
+	private onPointerGameOut(): void {
+		this.glyphBack.kill()
 	}
 	
 	private clearGlyphs(): void {
@@ -805,9 +682,13 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onProjectChange(config: ImportPanelConfig): void {
-		if (config.project) {
-			this.loadProject(config.project)
+		if (!config.project) {
+			// create new empty project
+			this.applyProjectConfig(cloneDeep(DEFAULT_CONFIG))
+			return
 		}
+		
+		this.loadProject(config.project)
 	}
 	
 	private onLoadProjectsButtonClick(): void {
@@ -885,7 +766,7 @@ export class BitmapFontEditor extends BaseScene {
 		let { r, g, b, a } = config.debugColor
 		this.previewBack.setTintFill(Phaser.Display.Color.GetColor(r, g, b))
 		this.previewBack.alpha = a
-		this.previewBack.visible = config.debug
+		this.updatePreviewBack()
 	}
 	
 	private onPreviewSettingsChange(config: PreviewPanelConfig, property: keyof PreviewPanelConfig): void {
@@ -940,7 +821,8 @@ export class BitmapFontEditor extends BaseScene {
 		let y = this.separator.y
 		let config = this.panels.previewPanel.config
 		
-		this.preview = this.add.bitmapText(0, y, fontKey, config.content, config.fontSize, config.align)
+		let content = config.content || this.config.content.content
+		this.preview = this.add.bitmapText(0, y, fontKey, content, config.fontSize, config.align)
 		this.preview.setOrigin(0, 0)
 		this.preview.setMaxWidth(config.maxWidth)
 		this.preview.setLetterSpacing(config.letterSpacing)

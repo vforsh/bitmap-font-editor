@@ -1,5 +1,5 @@
 import { EditorPanel } from "./EditorPanel"
-import { BitmapFontProjectConfig } from "../BitmapFontEditor"
+import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 
 export type GlowPanelConfig = BitmapFontProjectConfig["glow"]
 

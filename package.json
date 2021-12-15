@@ -41,6 +41,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@sentry/browser": "^6.1.0",
+		"@tweakpane/plugin-essentials": "^0.1.4",
 		"@types/node-fetch": "^2.5.10",
 		"css-element-queries": "^1.2.3",
 		"gameanalytics": "^4.2.0",
@@ -56,11 +57,11 @@
 		"screenfull": "^6.0.0",
 		"slash": "^3.0.0",
 		"ttfinfo": "^0.2.0",
-		"tweakpane": "^3.0.6",
+		"tweakpane": "^3.0.7",
 		"valid-filename": "3.1"
 	},
 	"devDependencies": {
-		"@tweakpane/core": "^1.0.7",
+		"@tweakpane/core": "^1.0.8",
 		"@types/diff": "^5.0.1",
 		"@types/formidable": "^2.0.0",
 		"@types/grunt": "^0.4.27",

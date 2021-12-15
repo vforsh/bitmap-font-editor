@@ -28,9 +28,7 @@
 }
 
 .sidebar {
-    /*TODO use var here */
-    transform: scale(1.2);
-    width: 83%;
+
 }
 
 .sidebar > div {

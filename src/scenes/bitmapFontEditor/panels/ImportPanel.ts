@@ -1,6 +1,6 @@
 import { EditorPanel } from "./EditorPanel"
 import { ButtonApi, InputBindingApi, ListParamsOptions } from "@tweakpane/core"
-import { BitmapFontProjectConfig } from "../BitmapFontEditor"
+import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 
 export type ImportPanelConfig = BitmapFontProjectConfig["import"]
 

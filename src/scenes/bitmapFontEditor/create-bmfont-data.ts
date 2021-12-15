@@ -1,6 +1,7 @@
 import { Font } from "opentype.js"
 import { without } from "lodash-es"
-import { BitmapFontProjectConfig, BitmapFontTexture } from "./BitmapFontEditor"
+import { BitmapFontTexture } from "./BitmapFontEditor"
+import { BitmapFontProjectConfig } from "./BitmapFontProjectConfig"
 
 export type BmFontInfo = {
 	face: string

@@ -8,7 +8,7 @@ export const GAME_STORE = {
 	graphics_quality_manually: false,
 	sound_muted: false,
 	music_muted: false,
-	editor_zoom: 1,
+	editor_zoom: 1.2,
 	recent_projects: {} as RecentProjectsConfig,
 	build: window.game.config.build_version,
 	login_num: 0,

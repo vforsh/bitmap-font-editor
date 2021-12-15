@@ -51,6 +51,8 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		this.importPanel = new ImportPanel(this.scene, this.rightPanels, config.import)
 		this.exportPanel = new ExportPanel(this.scene, this.rightPanels, config.export)
 		this.previewPanel = new PreviewPanel(this.scene, this.rightPanels, config.preview)
+		
+		this.addKeyboardCallbacks()
 	}
 	
 	private createGamePanelConfig(): GamePanelConfig {
@@ -71,15 +73,11 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	}
 	
 	private addPanelContainers() {
-		let zoom = this.scene.game.store.getValue("editor_zoom")
-		
 		this.leftPanels = this.getPanelsContainer("left-sidebar")
-		// this.leftPanels.style.visibility = "visible"
-		// this.leftPanels.style.zoom = zoom.toString()
-		
 		this.rightPanels = this.getPanelsContainer("right-sidebar")
-		// this.rightPanels.style.visibility = "visible"
-		// this.rightPanels.style.zoom = zoom.toString()
+		
+		let zoom = this.scene.game.store.getValue("editor_zoom")
+		this.setZoom(zoom)
 	}
 	
 	private getPanelsContainer(elementId: string): HTMLDivElement {
@@ -106,20 +104,41 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		this.rightPanels.classList.add("disable-panel-input")
 	}
 	
-	public changeZoom(sign: number = 1): void {
-		let zoom = parseFloat(this.rightPanels.style.zoom) || 1
-		let newZoom = zoom + Phaser.Math.Sign(sign) * 0.1
-		newZoom = Math.max(0.2, newZoom)
+	private addKeyboardCallbacks() {
+		this.scene.onKeyDown("PLUS", (e: KeyboardEvent) => {
+			if (e.shiftKey) {
+				this.changeZoom(0.05)
+			}
+		})
 		
-		this.leftPanels.style.zoom = newZoom.toString()
-		this.rightPanels.style.zoom = newZoom.toString()
-		this.scene.game.store.saveValue("editor_zoom", newZoom)
+		this.scene.onKeyDown("MINUS", (e: KeyboardEvent) => {
+			if (e.shiftKey) {
+				this.changeZoom(-0.05)
+			}
+		})
+		
+		this.scene.onKeyDown("ZERO", (e: KeyboardEvent) => {
+			if (e.shiftKey) {
+				this.setZoom(1)
+			}
+		})
 	}
 	
-	public resetZoom(): void {
-		let zoom = 1
-		this.rightPanels.style.zoom = zoom.toString()
-		this.scene.game.store.saveValue("editor_zoom", zoom)
+	public changeZoom(delta = 0.1): void {
+		let currentZoom = this.scene.game.store.getValue("editor_zoom")
+		currentZoom = Math.max(0.2, currentZoom + delta)
+		currentZoom = Phaser.Math.RoundTo(currentZoom, -2)
+		this.setZoom(currentZoom)
+	}
+	
+	public setZoom(value: number): void {
+		let transform = `scale(${value})`
+		let width = `${(100 / value).toFixed(0)}%`
+		this.rightPanels.style.transform = transform
+		this.rightPanels.style.width = width
+		this.leftPanels.style.transform = transform
+		this.leftPanels.style.width = width
+		this.scene.game.store.saveValue("editor_zoom", value)
 	}
 	
 	public destroy(): void {

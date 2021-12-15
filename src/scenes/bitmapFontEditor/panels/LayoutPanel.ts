@@ -1,7 +1,7 @@
 import { EditorPanel } from "./EditorPanel"
 import { ListParamsOptions } from "@tweakpane/core"
 import { getObjectKeys } from "../../../robowhale/utils/collection/get-object-keys"
-import { BitmapFontProjectConfig } from "../BitmapFontEditor"
+import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 
 export enum PackingMethod {
 	ROW = "row",

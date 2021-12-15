@@ -1,6 +1,6 @@
 import { EditorPanel } from "./EditorPanel"
 import { TpChangeEvent } from "@tweakpane/core"
-import { BitmapFontProjectConfig, RGBA } from "../BitmapFontEditor"
+import { BitmapFontProjectConfig, RGBA } from "../BitmapFontProjectConfig"
 
 export type StrokePanelConfig = BitmapFontProjectConfig["stroke"]
 

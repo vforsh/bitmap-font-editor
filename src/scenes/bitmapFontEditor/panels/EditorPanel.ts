@@ -1,5 +1,6 @@
 import EventEmitter = Phaser.Events.EventEmitter
 import { Pane } from "tweakpane"
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials"
 
 export class EditorPanel extends EventEmitter {
 	
@@ -15,6 +16,7 @@ export class EditorPanel extends EventEmitter {
 		this.scene.input.keyboard.on("keyup-SHIFT", this.onShiftUp, this)
 		
 		this.panel = new Pane({ title, container })
+		this.panel.registerPlugin(EssentialsPlugin)
 	}
 	
 	private onShiftDown(): void {
