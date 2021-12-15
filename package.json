@@ -23,7 +23,8 @@
 		"phaser-custom": "cd scripts/phaser-custom/ && node build.mjs && cpy ./dist/ ../../dev/js/",
 		"compress-graphics": "grunt compress-graphics",
 		"compress-graphics-clear": "grunt clean:compressed_graphics && grunt compress-graphics",
-		"bump-build-version": "grunt update-build-version"
+		"bump-build-version": "grunt update-build-version",
+		"clear-dotenv": "del-cli .env"
 	},
 	"engines": {
 		"node": ">=14.16",
@@ -45,6 +46,7 @@
 		"@types/browser-sync": "^2.26.3",
 		"@types/node-fetch": "^2.5.10",
 		"css-element-queries": "^1.2.3",
+		"dotenv": "^10.0.0",
 		"gameanalytics": "^4.2.0",
 		"get-system-fonts": "^2.0.2",
 		"howler": "^2.2.3",

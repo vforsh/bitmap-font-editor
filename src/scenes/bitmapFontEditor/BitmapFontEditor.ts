@@ -86,7 +86,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
-		let rootDir = UrlParams.get("root") ?? await this.showOpenGameWindow()
+		let rootDir = UrlParams.get("game") ?? await this.showOpenGameWindow()
 		if (rootDir) {
 			rootDir = slash(rootDir)
 		}
@@ -98,6 +98,15 @@ export class BitmapFontEditor extends BaseScene {
 		
 		if (this.gameSettings) {
 			this.updateRecentProjects()
+		}
+		
+		let project = UrlParams.get("project")
+		if (project) {
+			project = slash(project)
+		}
+		
+		if (this.projectsList?.includes(project)) {
+			this.config.import.project = project
 		}
 		
 		this.doCreate()
@@ -178,6 +187,10 @@ export class BitmapFontEditor extends BaseScene {
 		
 		this.isReady = true
 		this.resize()
+		
+		if (this.config.import.project) {
+			this.loadProject(this.config.import.project)
+		}
 	}
 	
 	private addPanels() {

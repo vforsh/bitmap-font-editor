@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 const files = [
 	"dev/assets/configs/shop_offers.json",
 	"dev/assets/graphics/*.json",
@@ -12,12 +14,10 @@ const files = [
 
 const ignore = []
 
+const { game, project } = process.env
 const queryString = new URLSearchParams({
-	dev: 1,
-	instantSceneChange: 1,
-	stats: 0,
-	analytics: 0,
-	editor: 1,
+	...(game && { game }),
+	...(project && { project }),
 })
 
 /**
@@ -28,8 +28,6 @@ module.exports = {
 	ignore,
 	server: true,
 	startPath: `dev/index.html?${queryString.toString()}`,
-	open: "external",
-	host: require("./bs-get-ip")(),
 	timestamps: true,
 	notify: false,
 	reloadDebounce: 500,

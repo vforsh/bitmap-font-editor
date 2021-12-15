@@ -1,4 +1,5 @@
 .idea/workspace.xml
+.env
 node_modules
 prod
 /prod-*

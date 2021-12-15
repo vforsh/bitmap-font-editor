@@ -13,13 +13,12 @@ export type UrlParam =
 	| "noWebp"
 	| "noAvif"
 	| "maxTextures" // WebGL param
-	| "originalSize"
 	| "sentry"
 	| "storage"
 	| "quality"
 	| "throttle"
-	| "noDecor"
-	| "root"
+	| "game"
+	| "project"
 
 export type UrlParamType = UrlParam /*| string*/
 
