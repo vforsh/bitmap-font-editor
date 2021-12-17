@@ -12,6 +12,7 @@ export const GAME_STORE = {
 	recent_projects: {} as RecentProjectsConfig,
 	build: window.game.config.build_version,
 	login_num: 0,
+	texture_packer_exe: "",
 }
 
 export type GameStoreKey = keyof typeof GAME_STORE

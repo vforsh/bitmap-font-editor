@@ -29,6 +29,11 @@ export class ExportPanel extends EditorPanel {
 			this.refresh()
 		})
 		
+		this.panel.addInput(this.config, "texturePacker").on("change", event => {
+			this.config[event.presetKey] = slash(event.value)
+			this.refresh()
+		})
+		
 		this.exportButton = this.panel.addButton({ title: "Export" })
 	}
 	

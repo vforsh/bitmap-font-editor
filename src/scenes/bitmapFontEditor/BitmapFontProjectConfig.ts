@@ -58,6 +58,7 @@ export interface BitmapFontProjectConfig {
 		type: "json" | "xml"
 		config: string
 		texture: string
+		texturePacker: string
 	},
 	preview: {
 		align: BitmapTextAlign
@@ -117,6 +118,7 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		type: "json",
 		config: "",
 		texture: "",
+		texturePacker: "",
 	},
 	preview: {
 		debug: true,

@@ -23,6 +23,8 @@ import slash from "slash"
 import { OpenGamePanel, OpenGamePanelEvent } from "./modals/OpenGamePanel"
 import { ModalPanelEvent } from "./modals/ModalPanel"
 import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFontProjectConfig"
+import type { ExecaReturnValue } from "execa"
+import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
@@ -605,7 +607,7 @@ export class BitmapFontEditor extends BaseScene {
 			texturePath: texturePath,
 			project: JSON.stringify(this.config, null, "\t"),
 		})
-			.then(response => this.onSaveComplete(response))
+			.then(response => this.onExportComplete(response))
 			.catch(error => console.log(`Can't save bitmap font!`, error))
 			.finally(() => {
 			})
@@ -680,14 +682,81 @@ export class BitmapFontEditor extends BaseScene {
 		return font
 	}
 	
-	private async onSaveComplete(response: Response) {
+	private async onExportComplete(response: Response) {
 		let { config, texture, project } = await response.json()
 		
 		console.group("Bitmap font was exported! ✔")
 		console.log(`Config: ${config}`)
 		console.log(`Texture: ${texture}`)
 		console.log(`Project: ${project}`)
+		
+		let texturePacker = this.config.export.texturePacker
+		if (texturePacker) {
+			let { error } = await this.updateTexturePackerProject(texturePacker)
+			if (error) {
+				console.warn("Can't update Texture Packer project!\n", error)
+			} else {
+				console.log(`Texture Packer Project: file:///${texturePacker}`)
+			}
+		}
+		
 		console.groupEnd()
+	}
+	
+	private async updateTexturePackerProject(texturePackerProjectPath: string): Promise<{ error? }> {
+		try {
+			let texturePackerExePath = await this.getTexturePackerExePath()
+			if (!texturePackerExePath) {
+				throw "Path to TexturePacker.exe is not set!"
+			}
+			
+			let command = `"${slash(texturePackerExePath)}" ${texturePackerProjectPath}`
+			let response = await BrowserSyncService.command(command, { shell: true })
+			let result = (await response.json()) as { success: boolean, error?, data? }
+			if (!result.success) {
+				throw result.error
+			}
+			
+			let data = result.data as ExecaReturnValue
+			if (data.exitCode !== 0) {
+				throw data
+			}
+			
+			return {}
+		} catch (error) {
+			return { error }
+		}
+	}
+	
+	private async getTexturePackerExePath(): Promise<string> {
+		let path = this.game.store.getValue("texture_packer_exe")
+		if (path) {
+			return path
+		}
+		
+		path = await this.promptTexturePackerExePath()
+		
+		if (path) {
+			this.game.store.saveValue("texture_packer_exe", slash(path))
+		}
+		
+		return path
+	}
+	
+	private promptTexturePackerExePath(): Promise<string> {
+		return new Promise((resolve, reject) => {
+			let panel = new GetTexturePackerPathPanel(this, { path: "" })
+			panel.once(ModalPanelEvent.OK_CLICK, () => {
+				resolve(panel.config.path)
+				panel.hide()
+			})
+			
+			panel.once(ModalPanelEvent.HIDE, () => {
+				resolve(null)
+			})
+			
+			panel.show()
+		})
 	}
 	
 	private onOpenGameButtonClick(): void {
