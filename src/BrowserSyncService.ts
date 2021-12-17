@@ -1,4 +1,5 @@
 import type open from "open"
+import type { Options } from "execa"
 
 export type BrowserSyncApiEndpoint =
 	| "screenshot"
@@ -8,6 +9,7 @@ export type BrowserSyncApiEndpoint =
 	| "read-file"
 	| "write-file"
 	| "open"
+	| "command"
 
 export type SaveBitmapFontParams = {
 	project: string,
@@ -87,6 +89,17 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("write-file"), {
 			method: "POST",
 			body: formData,
+		})
+	},
+	
+	command(command: string, options?: Options): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("command"), {
+			method: "POST",
+			body: JSON.stringify({ command, options }),
 		})
 	},
 	

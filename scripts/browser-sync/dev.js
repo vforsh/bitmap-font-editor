@@ -61,5 +61,9 @@ module.exports = {
 			route: "/open",
 			handle: require("./middleware/open"),
 		},
+		{
+			route: "/command",
+			handle: require("./middleware/command"),
+		},
 	],
 }
