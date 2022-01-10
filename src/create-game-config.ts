@@ -66,8 +66,7 @@ function getScaleConfig(): Phaser.Types.Core.ScaleConfig {
 	return {
 		width: Config.SOURCE_GAME_WIDTH,
 		height: Config.SOURCE_GAME_HEIGHT,
-		// autoCenter: Phaser.Scale.CENTER_BOTH,
-		mode: Phaser.Scale.NONE,
+		mode: Phaser.Scale.RESIZE,
 	} as Phaser.Types.Core.ScaleConfig
 }
 

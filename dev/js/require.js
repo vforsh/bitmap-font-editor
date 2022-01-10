@@ -6,7 +6,6 @@ function require(lib) {
 		"howler": window,
 		"@sentry/browser": Sentry,
 		"@sentry/types": Sentry,
-		"css-element-queries": { ResizeSensor },
 		"idb-keyval": idbKeyval,
 	}
 

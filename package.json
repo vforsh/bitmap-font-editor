@@ -45,7 +45,6 @@
 		"@tweakpane/plugin-essentials": "^0.1.4",
 		"@types/browser-sync": "^2.26.3",
 		"@types/node-fetch": "^2.5.10",
-		"css-element-queries": "^1.2.3",
 		"dotenv": "^10.0.0",
 		"gameanalytics": "^4.2.0",
 		"get-system-fonts": "^2.0.2",
