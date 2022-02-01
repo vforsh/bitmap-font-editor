@@ -8,6 +8,7 @@ export type ExportPanelConfig = BitmapFontProjectConfig["export"]
 export class ExportPanel extends EditorPanel {
 	
 	public config: ExportPanelConfig
+	public locateTpProjectButton: ButtonApi
 	public exportButton: ButtonApi
 	
 	constructor(scene: Phaser.Scene, container: HTMLElement, config: ExportPanelConfig) {
@@ -33,6 +34,10 @@ export class ExportPanel extends EditorPanel {
 			this.config[event.presetKey] = slash(event.value)
 			this.refresh()
 		})
+		
+		this.locateTpProjectButton = this.panel.addButton({ title: "Locate TP project" })
+		
+		this.panel.addSeparator()
 		
 		this.exportButton = this.panel.addButton({ title: "Export" })
 	}

@@ -212,6 +212,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.importPanel.loadProjectsButton.on("click", this.onLoadProjectsButtonClick.bind(this))
 		this.panels.importPanel.loadButton.on("click", this.onLoadCustomProjectButtonClick.bind(this))
 		
+		this.panels.exportPanel.locateTpProjectButton.on("click", this.onLocateTpProjectButtonClick.bind(this, this.panels.exportPanel.locateTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
 		
 		this.panels.previewPanel.on("debug-change", this.onPreviewDebugSettingsChange.bind(this))
@@ -530,6 +531,17 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private onGlyphPointerOut(pointer): void {
 		this.glyphBack.kill()
+	}
+	
+	private async onLocateTpProjectButtonClick(button: ButtonApi) {
+		let tpProjectPath = this.config.export.texturePacker
+		if (tpProjectPath) {
+			await BrowserSyncService.open(tpProjectPath, { wait: true })
+			return
+		}
+		
+		// TODO find TP project file
+		// let [tpProjectFile] = await promptFiles({ fileTypes: ".tps" })
 	}
 	
 	private onExportButtonClick(button: ButtonApi): void {
