@@ -26,6 +26,7 @@ import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFont
 import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
+import path from "path-browserify"
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 
@@ -594,6 +595,13 @@ export class BitmapFontEditor extends BaseScene {
 		let font = await this.loadFont(this.config.font.family)
 		let fontData = createBmfontData(this.config, this.glyphs, texture, font)
 		
+		if (this.config.export.texturePacker) {
+			let atlas = await this.getAtlasPathFromTpConfig(this.config.export.texturePacker)
+			if (atlas) {
+				fontData.atlas = atlas
+			}
+		}
+		
 		let { width: textureW, height: textureH } = texture
 		let { width: canvasW, height: canvasH } = this.game.canvas
 		if (textureW > canvasW || textureH > canvasH) {
@@ -611,6 +619,19 @@ export class BitmapFontEditor extends BaseScene {
 			.catch(error => console.log(`Can't save bitmap font!`, error))
 			.finally(() => {
 			})
+	}
+	
+	private async getAtlasPathFromTpConfig(pathToTpConfig: string): Promise<string | undefined> {
+		try {
+			let response = await BrowserSyncService.readFile(pathToTpConfig)
+			let text = await response.text() // TP config file is a XML file
+			let dataFile = /<struct type="DataFile">((.|\n)*?)<\/struct>/.exec(text)[1]
+			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
+			
+			return path.join(pathToTpConfig, filename)
+		} catch (e) {
+			return
+		}
 	}
 	
 	private async createTexture(): Promise<BitmapFontTexture> {

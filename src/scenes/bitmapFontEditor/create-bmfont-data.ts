@@ -64,6 +64,7 @@ export interface BmFontKerning extends Record<string, unknown> {
 }
 
 export interface BmFontData {
+	atlas?: string
 	info: BmFontInfo
 	common: BmFontCommon
 	pages: BmFontPage[]
