@@ -64,12 +64,16 @@ export interface BmFontKerning extends Record<string, unknown> {
 }
 
 export interface BmFontData {
-	atlas?: string
 	info: BmFontInfo
 	common: BmFontCommon
 	pages: BmFontPage[]
 	chars: BmFontChars
 	kernings: BmFontKernings
+	extra?: {
+		atlas: string
+		texture: string
+		texturePacker: string
+	}
 }
 
 export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser.GameObjects.Text[], texture: BitmapFontTexture, font: Font): BmFontData {

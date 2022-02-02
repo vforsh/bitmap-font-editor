@@ -25,8 +25,8 @@ import { ModalPanelEvent } from "./modals/ModalPanel"
 import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFontProjectConfig"
 import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
-import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 import path from "path-browserify"
+import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 
@@ -608,9 +608,13 @@ export class BitmapFontEditor extends BaseScene {
 		let fontData = createBmfontData(this.config, this.glyphs, texture, font)
 		
 		if (this.config.export.texturePacker) {
-			let atlas = await this.getAtlasPathFromTpConfig(this.config.export.texturePacker)
+			let atlas = await this.getAtlasDataPathFromTpConfig(this.config.export.texturePacker)
 			if (atlas) {
-				fontData.atlas = atlas
+				fontData.extra = {
+					atlas: atlas,
+					texture: texturePath,
+					texturePacker: this.config.export.texturePacker,
+				}
 			}
 		}
 		
@@ -633,7 +637,8 @@ export class BitmapFontEditor extends BaseScene {
 			})
 	}
 	
-	private async getAtlasPathFromTpConfig(pathToTpConfig: string): Promise<string | undefined> {
+	// TP config = TexturePacker XML config (.tps)
+	private async getAtlasDataPathFromTpConfig(pathToTpConfig: string): Promise<string | undefined> {
 		try {
 			let response = await BrowserSyncService.readFile(pathToTpConfig)
 			let text = await response.text() // TP config file is a XML file
@@ -740,7 +745,7 @@ export class BitmapFontEditor extends BaseScene {
 		try {
 			let texturePackerExePath = await this.getTexturePackerExePath()
 			if (!texturePackerExePath) {
-				throw "Path to TexturePacker.exe is not set!"
+				throw "Path to the TexturePacker executable is not set!"
 			}
 			
 			let command = `"${slash(texturePackerExePath)}" ${texturePackerProjectPath}`
