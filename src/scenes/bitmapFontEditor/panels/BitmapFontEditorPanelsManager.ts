@@ -13,6 +13,7 @@ import { GamePanel, GamePanelConfig } from "./GamePanel"
 export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	
 	private readonly scene: BitmapFontEditor
+	public keyboardCallbacksEnabled = true
 	public leftPanels: HTMLElement
 	public rightPanels: HTMLElement
 	
@@ -106,18 +107,30 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	
 	private addKeyboardCallbacks() {
 		this.scene.onKeyDown("PLUS", (e: KeyboardEvent) => {
+			if (!this.keyboardCallbacksEnabled) {
+				return
+			}
+			
 			if (e.shiftKey) {
 				this.changeZoom(0.05)
 			}
 		})
 		
 		this.scene.onKeyDown("MINUS", (e: KeyboardEvent) => {
+			if (!this.keyboardCallbacksEnabled) {
+				return
+			}
+			
 			if (e.shiftKey) {
 				this.changeZoom(-0.05)
 			}
 		})
 		
 		this.scene.onKeyDown("ZERO", (e: KeyboardEvent) => {
+			if (!this.keyboardCallbacksEnabled) {
+				return
+			}
+			
 			if (e.shiftKey) {
 				this.setZoom(1)
 			}

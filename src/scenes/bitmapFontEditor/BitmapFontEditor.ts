@@ -194,6 +194,19 @@ export class BitmapFontEditor extends BaseScene {
 		if (this.config.import.project) {
 			this.loadProject(this.config.import.project)
 		}
+		
+		document.querySelectorAll(".tp-txtv_i").forEach((input: HTMLInputElement) => {
+			input.addEventListener("focus", this.onTweakpaneInputFocus.bind(this))
+			input.addEventListener("blur", this.onTweakpaneInputBlur.bind(this))
+		})
+	}
+	
+	private onTweakpaneInputFocus(): void {
+		this.panels.keyboardCallbacksEnabled = false
+	}
+	
+	private onTweakpaneInputBlur(): void {
+		this.panels.keyboardCallbacksEnabled = true
 	}
 	
 	private addPanels() {
