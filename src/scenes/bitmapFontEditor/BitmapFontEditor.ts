@@ -194,19 +194,6 @@ export class BitmapFontEditor extends BaseScene {
 		if (this.config.import.project) {
 			this.loadProject(this.config.import.project)
 		}
-		
-		document.querySelectorAll(".tp-txtv_i").forEach((input: HTMLInputElement) => {
-			input.addEventListener("focus", this.onTweakpaneInputFocus.bind(this))
-			input.addEventListener("blur", this.onTweakpaneInputBlur.bind(this))
-		})
-	}
-	
-	private onTweakpaneInputFocus(): void {
-		this.panels.keyboardCallbacksEnabled = false
-	}
-	
-	private onTweakpaneInputBlur(): void {
-		this.panels.keyboardCallbacksEnabled = true
 	}
 	
 	private addPanels() {
@@ -232,6 +219,11 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.previewPanel.on("change", this.onPreviewSettingsChange.bind(this))
 		this.panels.previewPanel.previewButton.on("click", this.onPreviewButtonClick.bind(this))
 		
+		document.querySelectorAll(".tp-txtv_i").forEach((input: HTMLInputElement) => {
+			input.addEventListener("focus", this.onTweakpaneInputFocus.bind(this))
+			input.addEventListener("blur", this.onTweakpaneInputBlur.bind(this))
+		})
+		
 		if (this.fontsList) {
 			this.updateFontFamilyInput(this.fontsList)
 		}
@@ -239,6 +231,14 @@ export class BitmapFontEditor extends BaseScene {
 		if (this.projectsList) {
 			this.updateProjectsList(this.projectsList)
 		}
+	}
+	
+	private onTweakpaneInputFocus(): void {
+		this.panels.keyboardCallbacksEnabled = false
+	}
+	
+	private onTweakpaneInputBlur(): void {
+		this.panels.keyboardCallbacksEnabled = true
 	}
 	
 	private updateFontFamilyInput(data: FontsList): void {
