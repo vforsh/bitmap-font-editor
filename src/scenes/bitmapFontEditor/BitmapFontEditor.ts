@@ -26,8 +26,8 @@ import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFont
 import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
 import path from "path-browserify"
-import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 import { getRendererSnapshot } from "../../robowhale/phaser3/utils/get-renderer-snapshot"
+import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 
@@ -62,6 +62,7 @@ export class BitmapFontEditor extends BaseScene {
 	private glyphsContainer: Phaser.GameObjects.Container
 	private glyphBack: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
+	private glyphsInfo: Phaser.GameObjects.Text
 	private separator: Phaser.GameObjects.Image
 	private previewBack: Phaser.GameObjects.Image
 	private preview: Phaser.GameObjects.BitmapText
@@ -179,6 +180,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.addBackground()
 		this.addGlyphBack()
 		this.addGlyphsContainer()
+		this.addGlyphsInfo()
 		this.addSeparator()
 		this.addPreviewBack()
 		this.addPreview()
@@ -441,6 +443,22 @@ export class BitmapFontEditor extends BaseScene {
 		this.glyphsContainer.name = "glyphs"
 	}
 	
+	private addGlyphsInfo() {
+		let content = ""
+		let style: Phaser.Types.GameObjects.Text.TextStyle = {
+			fontFamily: "Verdana",
+			fontStyle: "400",
+			fontSize: "28px",
+			color: "#ffffff",
+			align: "right",
+			resolution: 1.5,
+		}
+		
+		this.glyphsInfo = this.add.text(0, 0, content, style)
+		this.glyphsInfo.setOrigin(1, 1)
+		this.pin(this.glyphsInfo, 1, 0.5, -10, -6)
+	}
+	
 	private addSeparator() {
 		this.separator = this.add.image(0, 0, "__WHITE")
 		this.separator.displayHeight = 2
@@ -554,10 +572,16 @@ export class BitmapFontEditor extends BaseScene {
 		this.glyphBack.x = this.glyphsContainer.x + glyph.x
 		this.glyphBack.y = this.glyphsContainer.y + glyph.y
 		this.glyphBack.setDisplaySize(glyph.displayWidth, glyph.height)
+		
+		let glyphId = glyph.text.charCodeAt(0)
+		let info = `"${glyph.text}" (id ${glyphId}): ${glyph.displayWidth}x${glyph.displayHeight}`
+		this.glyphsInfo.revive()
+		this.glyphsInfo.setText(info)
 	}
 	
 	private onGlyphPointerOut(pointer): void {
 		this.glyphBack.kill()
+		this.glyphsInfo.kill()
 	}
 	
 	private async onLocateTpProjectButtonClick(button: ButtonApi) {
