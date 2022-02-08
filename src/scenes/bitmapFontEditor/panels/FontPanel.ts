@@ -34,12 +34,12 @@ export class FontPanel extends EditorPanel {
 			max: 150,
 		}).on("change", () => this.emit("change", this.config))
 		
-		this.panel.addInput(this.config, "lineHeight", {
+		/*this.panel.addInput(this.config, "lineHeight", {
 			step: 0.05,
 			min: 0,
 			max: 2,
 			format: (num) => Math.round(num * 100) + "%",
-		})
+		})*/
 		
 		this.panel.addInput(this.config, "weight", {
 			step: 100,

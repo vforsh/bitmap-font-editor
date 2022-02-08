@@ -86,6 +86,10 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 	let spacing = config.font.spacing
 	let baselines = getFontBaselines(font, fontSize)
 	
+	let lineHeight = Math.max(...glyphs.map(g => g.displayHeight))
+	let fullLineHeight = lineHeight * config.font.lineHeight
+	let yOffset = (fullLineHeight - lineHeight) / 2
+	
 	// http://www.angelcode.com/products/bmfont/doc/file_format.html
 	return {
 		info: {
@@ -103,7 +107,7 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			stretchH: 100,
 		},
 		common: {
-			lineHeight: fontSize * config.font.lineHeight,
+			lineHeight: fullLineHeight,
 			base: Math.round(baselines.alphabetic - baselines.top),
 			pages: 1,
 			packed: 0,
@@ -114,7 +118,7 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			id: 0,
 			file: config.export.texture.split("/").pop(), // e.g. top_labels.png
 		}],
-		chars: createChars(glyphs, font),
+		chars: createChars(glyphs, fullLineHeight, yOffset),
 		kernings: createKernings(glyphs, font, fontSize),
 	}
 }
@@ -136,7 +140,7 @@ function getFontBaselines(font: Font, fontSize: number) {
 	}
 }
 
-function createChars(glyphs: Phaser.GameObjects.Text[], font: Font): BmFontChars {
+function createChars(glyphs: Phaser.GameObjects.Text[], height, yOffset: number): BmFontChars {
 	let list: BmFontChar[] = glyphs.map((text) => {
 		return {
 			char: text.text,
@@ -145,11 +149,11 @@ function createChars(glyphs: Phaser.GameObjects.Text[], font: Font): BmFontChars
 			id: text.text.charCodeAt(0),
 			chnl: 15,
 			width: text.width,
-			height: text.height,
+			height: height,
 			page: 0,
 			xadvance: text.width, // TODO how to calculate xadvance ???
 			xoffset: 0, // TODO how to calcualte xoffset ???
-			yoffset: 0, // TODO how to calcualte yoffset ???
+			yoffset: yOffset, // TODO how to calcualte yoffset ???
 		}
 	})
 	
