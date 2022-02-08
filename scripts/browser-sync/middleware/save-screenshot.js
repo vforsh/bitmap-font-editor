@@ -1,6 +1,7 @@
 const fs = require("fs/promises")
 const open = require("open")
 const path = require("path")
+const { existsSync } = require("fs")
 
 module.exports = function saveMiddleware(request, response, next) {
 	if (request.method !== "POST") {
@@ -18,6 +19,7 @@ module.exports = function saveMiddleware(request, response, next) {
 		let directory = "screenshots"
 		let filename = `${directory}/${Date.now()}.png`
 
+		await ensureDirectoryExists(directory)
 		await clearOldScreenshots(directory)
 
 		fs.writeFile(filename, result).then(async () => {
@@ -30,6 +32,18 @@ module.exports = function saveMiddleware(request, response, next) {
 			response.end()
 		})
 	})
+}
+
+/**
+ * @param directory {string}
+ * @returns {Promise<void>}
+ */
+async function ensureDirectoryExists(directory) {
+	if (existsSync(directory)) {
+		return Promise.resolve()
+	}
+
+	return fs.mkdir(directory)
 }
 
 /**

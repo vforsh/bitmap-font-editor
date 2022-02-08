@@ -27,6 +27,7 @@ import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
 import path from "path-browserify"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
+import { getRendererSnapshot } from "../../robowhale/phaser3/utils/get-renderer-snapshot"
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 
@@ -474,7 +475,20 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private addKeyboardCallbacks() {
+		this.onKeyDown("S", this.makeScreenshot, this)
+	}
 	
+	private async makeScreenshot() {
+		if (BrowserSyncService.isAvailable() === false) {
+			return
+		}
+		
+		try {
+			let blob = await getRendererSnapshot(this.renderer)
+			await BrowserSyncService.saveScreenshot(blob)
+		} catch (error) {
+			console.error("Can't save screenshot!", error)
+		}
 	}
 	
 	private addPointerCallbacks() {
