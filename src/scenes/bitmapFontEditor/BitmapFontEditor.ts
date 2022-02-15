@@ -238,11 +238,11 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onTweakpaneInputFocus(): void {
-		this.panels.keyboardCallbacksEnabled = false
+		this.input.keyboard.enabled = false
 	}
 	
 	private onTweakpaneInputBlur(): void {
-		this.panels.keyboardCallbacksEnabled = true
+		this.input.keyboard.enabled = true
 	}
 	
 	private updateFontFamilyInput(data: FontsList): void {
@@ -552,7 +552,15 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private addPointerCallbacks() {
+		this.input.on(Phaser.Input.Events.POINTER_DOWN, this.blurFocusedTweakpaneInput, this)
 		this.input.on(Phaser.Input.Events.GAME_OUT, this.onPointerGameOut, this)
+	}
+	
+	private blurFocusedTweakpaneInput(): void {
+		let ae = document.activeElement
+		if (ae && ae instanceof HTMLInputElement && ae.classList.contains("tp-txtv_i")) {
+			ae.blur()
+		}
 	}
 	
 	private onPointerGameOut(): void {
@@ -666,8 +674,8 @@ export class BitmapFontEditor extends BaseScene {
 		
 		let format = exportConfig.type
 		return {
-			configPath: `${this.rootDir}/${name}.${format}`,
-			texturePath: `${this.rootDir}/${name}.png`,
+			configPath: `${rootDir}/${name}.${format}`,
+			texturePath: `${rootDir}/${name}.png`,
 		}
 	}
 	
