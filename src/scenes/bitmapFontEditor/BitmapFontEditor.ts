@@ -380,6 +380,13 @@ export class BitmapFontEditor extends BaseScene {
 			default:
 				break
 		}
+		
+		if (!this.doGlyphsFitIntoCanvas()) {
+			console.warn(`Glyphs don't fit into the canvas! Forcing to use "SQUARE" packing method.`)
+			this.config.layout.method = PackingMethod.SQUARE
+			this.panels.layoutPanel.refresh()
+			this.packGlyphsInSquare()
+		}
 	}
 	
 	private packGlyphsInRow() {
@@ -416,6 +423,13 @@ export class BitmapFontEditor extends BaseScene {
 			glyph.x = x
 			glyph.y = y
 		})
+	}
+	
+	private doGlyphsFitIntoCanvas(): boolean {
+		let { width, height } = this.getTextureSize()
+		let { width: canvasWidth, height: canvasHeight } = this.game.canvas
+		
+		return width <= canvasWidth && height <= canvasHeight
 	}
 	
 	private updateBackgroundColor(color: number): void {
@@ -703,11 +717,17 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private async createTexture(): Promise<BitmapFontTexture> {
-		let width = Math.max(...this.glyphs.map(glyph => glyph.x + glyph.displayWidth))
-		let height = Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight))
+		let { width, height } = this.getTextureSize()
 		let blob = await this.makeSnapshot(0, 0, width, height)
 		
 		return { blob, width, height }
+	}
+	
+	private getTextureSize(): { width: number, height: number } {
+		return {
+			width: Math.max(...this.glyphs.map(glyph => glyph.x + glyph.displayWidth)),
+			height: Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight)),
+		}
 	}
 	
 	private makeSnapshot(x: number, y: number, width: number, height: number): Promise<Blob> {
