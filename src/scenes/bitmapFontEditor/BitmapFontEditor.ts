@@ -27,6 +27,7 @@ import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
 import path from "path-browserify"
 import { getRendererSnapshot } from "../../robowhale/phaser3/utils/get-renderer-snapshot"
+import { BitmapFontEditorDepth } from "./BitmapFontEditorDepth"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
@@ -60,7 +61,7 @@ export class BitmapFontEditor extends BaseScene {
 	private panels: BitmapFontEditorPanelsManager
 	private background: Phaser.GameObjects.Image
 	private glyphsContainer: Phaser.GameObjects.Container
-	private glyphBack: Phaser.GameObjects.Image
+	private glyphDebug: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
 	private glyphsInfo: Phaser.GameObjects.Text
 	private previewBack: Phaser.GameObjects.Image
@@ -446,15 +447,17 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private addGlyphBack() {
-		this.glyphBack = this.add.image(0, 0, "__WHITE")
-		this.glyphBack.setOrigin(0)
-		this.glyphBack.alpha = 0.33
-		this.glyphBack.kill()
+		this.glyphDebug = this.add.image(0, 0, "__WHITE")
+		this.glyphDebug.setOrigin(0)
+		this.glyphDebug.setDepth(BitmapFontEditorDepth.GLYPHS_DEBUG)
+		this.glyphDebug.alpha = 0.33
+		this.glyphDebug.kill()
 	}
 	
 	private addGlyphsContainer() {
 		this.glyphsContainer = this.add.container(0, 0)
 		this.glyphsContainer.name = "glyphs"
+		this.glyphsContainer.setDepth(BitmapFontEditorDepth.GLYPHS)
 	}
 	
 	private addGlyphsInfo() {
@@ -488,6 +491,7 @@ export class BitmapFontEditor extends BaseScene {
 			return
 		}
 		
+		// TODO we should zoom camera here instead of doing this
 		let sign = Phaser.Math.Sign(dy)
 		let deltaScale = -sign * 0.1
 		this.preview.scale += deltaScale
@@ -552,7 +556,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onPointerGameOut(): void {
-		this.glyphBack.kill()
+		this.glyphDebug.kill()
 	}
 	
 	private clearGlyphs(): void {
@@ -582,10 +586,10 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onGlyphPointerOver(glyph: Phaser.GameObjects.Text): void {
-		this.glyphBack.revive()
-		this.glyphBack.x = this.glyphsContainer.x + glyph.x
-		this.glyphBack.y = this.glyphsContainer.y + glyph.y
-		this.glyphBack.setDisplaySize(glyph.displayWidth, glyph.height)
+		this.glyphDebug.revive()
+		this.glyphDebug.x = this.glyphsContainer.x + glyph.x
+		this.glyphDebug.y = this.glyphsContainer.y + glyph.y
+		this.glyphDebug.setDisplaySize(glyph.displayWidth, glyph.height)
 		
 		let glyphId = glyph.text.charCodeAt(0)
 		let info = `"${glyph.text}" (id ${glyphId}): ${glyph.displayWidth}x${glyph.displayHeight}`
@@ -594,7 +598,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onGlyphPointerOut(pointer): void {
-		this.glyphBack.kill()
+		this.glyphDebug.kill()
 		this.glyphsInfo.kill()
 	}
 	
