@@ -118,7 +118,7 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			id: 0,
 			file: config.export.texture.split("/").pop(), // e.g. top_labels.png
 		}],
-		chars: createChars(glyphs, fullLineHeight, yOffset),
+		chars: createChars(glyphs, fullLineHeight, 0, yOffset),
 		kernings: createKernings(glyphs, font, fontSize),
 	}
 }
@@ -140,7 +140,7 @@ function getFontBaselines(font: Font, fontSize: number) {
 	}
 }
 
-function createChars(glyphs: Phaser.GameObjects.Text[], height, yOffset: number): BmFontChars {
+function createChars(glyphs: Phaser.GameObjects.Text[], height, xOffset = 0, yOffset = 0): BmFontChars {
 	let list: BmFontChar[] = glyphs.map((text) => {
 		return {
 			char: text.text,
@@ -152,7 +152,7 @@ function createChars(glyphs: Phaser.GameObjects.Text[], height, yOffset: number)
 			height: height,
 			page: 0,
 			xadvance: text.width, // TODO how to calculate xadvance ???
-			xoffset: 0, // TODO how to calcualte xoffset ???
+			xoffset: xOffset, // TODO how to calcualte xoffset ???
 			yoffset: yOffset, // TODO how to calcualte yoffset ???
 		}
 	})
