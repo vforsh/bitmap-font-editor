@@ -63,8 +63,8 @@ export class BitmapFontEditor extends BaseScene {
 	private glyphBack: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
 	private glyphsInfo: Phaser.GameObjects.Text
-	private separator: Phaser.GameObjects.Image
 	private previewBack: Phaser.GameObjects.Image
+	private previewDebug: Phaser.GameObjects.Image
 	private preview: Phaser.GameObjects.BitmapText
 	private glowPipelineKey = "GlowPostFX" as const
 	
@@ -181,8 +181,8 @@ export class BitmapFontEditor extends BaseScene {
 		this.addGlyphBack()
 		this.addGlyphsContainer()
 		this.addGlyphsInfo()
-		this.addSeparator()
 		this.addPreviewBack()
+		this.addPreviewDebug()
 		this.addPreview()
 		
 		this.updateBackgroundColor(this.rgbaToNumber(this.config.layout.bgColor))
@@ -446,7 +446,7 @@ export class BitmapFontEditor extends BaseScene {
 	private addGlyphsInfo() {
 		let content = ""
 		let style: Phaser.Types.GameObjects.Text.TextStyle = {
-			fontFamily: "Verdana",
+			fontFamily: "monospace",
 			fontStyle: "400",
 			fontSize: "28px",
 			color: "#ffffff",
@@ -459,32 +459,56 @@ export class BitmapFontEditor extends BaseScene {
 		this.pin(this.glyphsInfo, 1, 0.5, -10, -6)
 	}
 	
-	private addSeparator() {
-		this.separator = this.add.image(0, 0, "__WHITE")
-		this.separator.displayHeight = 2
-		this.separator.alpha = 0.5
-		this.pin(this.separator, 0.5, 0.5)
-	}
-	
 	private addPreviewBack() {
 		this.previewBack = this.add.image(0, 0, "__WHITE")
-		this.previewBack.kill()
-		this.previewBack.alpha = 0.33
+		this.previewBack.setTintFill(0x4D4D4D)
 		this.previewBack.setOrigin(0, 0)
+		this.previewBack.setInteractive()
+		this.previewBack.on(Phaser.Input.Events.GAMEOBJECT_POINTER_WHEEL, this.onPreviewPointerWheel, this)
+		this.previewBack.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, this.onPreviewPointerDown, this)
+		this.pin(this.previewBack, 0, 0.5)
 	}
 	
-	private updatePreviewBack(): void {
-		if (!this.preview || !this.preview.visible || !this.config.preview.debug) {
-			this.previewBack.kill()
-		} else {
-			this.previewBack.revive()
+	private onPreviewPointerWheel(pointer, dx, dy: number): void {
+		if (!this.preview) {
+			return
 		}
 		
-		if (this.previewBack.visible) {
-			this.previewBack.displayWidth = this.preview.width
-			this.previewBack.displayHeight = this.preview.height
-			this.previewBack.x = this.preview.x
-			this.previewBack.y = this.preview.y
+		let sign = Phaser.Math.Sign(dy)
+		let deltaScale = -sign * 0.1
+		this.preview.scale += deltaScale
+		this.updatePreviewDebug()
+	}
+	
+	private onPreviewPointerDown(pointer: Phaser.Input.Pointer): void {
+		if (!this.preview) {
+			return
+		}
+		
+		if (pointer.button === 1) { // middle button click
+			this.preview.setScale(1)
+			this.updatePreviewDebug()
+		}
+	}
+	
+	private addPreviewDebug() {
+		this.previewDebug = this.add.image(0, 0, "__WHITE")
+		this.previewDebug.kill()
+		this.previewDebug.alpha = 0.33
+	}
+	
+	private updatePreviewDebug(): void {
+		if (!this.preview || !this.preview.visible || !this.config.preview.debug) {
+			this.previewDebug.kill()
+		} else {
+			this.previewDebug.revive()
+		}
+		
+		if (this.previewDebug.visible) {
+			this.previewDebug.displayWidth = this.preview.width
+			this.previewDebug.displayHeight = this.preview.height
+			this.previewDebug.x = this.preview.x
+			this.previewDebug.y = this.preview.y
 		}
 	}
 	
@@ -510,31 +534,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private addPointerCallbacks() {
-		this.input.on(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this)
-		this.input.on(Phaser.Input.Events.POINTER_WHEEL, this.onPointerWheel, this)
 		this.input.on(Phaser.Input.Events.GAME_OUT, this.onPointerGameOut, this)
-	}
-	
-	private onPointerDown(pointer: Phaser.Input.Pointer): void {
-		if (!this.preview) {
-			return
-		}
-		
-		if (pointer.button === 1) { // middle button click
-			this.preview.setScale(1)
-			this.updatePreviewBack()
-		}
-	}
-	
-	private onPointerWheel(pointer, objects, dx, dy: number): void {
-		if (!this.preview) {
-			return
-		}
-		
-		let sign = Phaser.Math.Sign(dy)
-		let deltaScale = -sign * 0.1
-		this.preview.scale += deltaScale
-		this.updatePreviewBack()
 	}
 	
 	private onPointerGameOut(): void {
@@ -731,18 +731,18 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private beforeSnapshot(): void {
 		this.background.kill()
-		this.separator.kill()
-		this.preview?.kill()
 		this.previewBack.kill()
+		this.preview?.kill()
+		this.previewDebug.kill()
 	}
 	
 	private afterSnapshot(): void {
 		this.background.revive()
-		this.separator.revive()
+		this.previewBack.revive()
 		this.preview?.revive()
 		
 		if (this.config.preview.debug) {
-			this.previewBack.revive()
+			this.previewDebug.revive()
 		}
 	}
 	
@@ -935,9 +935,9 @@ export class BitmapFontEditor extends BaseScene {
 		}
 		
 		let { r, g, b, a } = config.debugColor
-		this.previewBack.setTintFill(Phaser.Display.Color.GetColor(r, g, b))
-		this.previewBack.alpha = a
-		this.updatePreviewBack()
+		this.previewDebug.setTintFill(Phaser.Display.Color.GetColor(r, g, b))
+		this.previewDebug.alpha = a
+		this.updatePreviewDebug()
 	}
 	
 	private onPreviewSettingsChange(config: PreviewPanelConfig, property: keyof PreviewPanelConfig): void {
@@ -958,14 +958,14 @@ export class BitmapFontEditor extends BaseScene {
 		this.preview.setMaxWidth(config.maxWidth)
 		this.preview.setLetterSpacing(config.letterSpacing)
 		
-		this.updatePreviewBack()
+		this.updatePreviewDebug()
 	}
 	
 	private async onPreviewButtonClick() {
 		this.preview?.destroy()
 		this.preview = null
 		
-		this.previewBack.kill()
+		this.previewDebug.kill()
 		
 		if (!this.glyphs || this.glyphs.length === 0) {
 			return
@@ -989,16 +989,16 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private updatePreview(fontKey: string): void {
-		let y = this.separator.y
+		let { x, y } = this.previewBack.getCenter()
 		let config = this.panels.previewPanel.config
 		
 		let content = config.content || this.config.content.content
-		this.preview = this.add.bitmapText(0, y, fontKey, content, config.fontSize, config.align)
-		this.preview.setOrigin(0, 0)
+		this.preview = this.add.bitmapText(x, y, fontKey, content, config.fontSize, config.align)
+		this.preview.setOrigin(0.5)
 		this.preview.setMaxWidth(config.maxWidth)
 		this.preview.setLetterSpacing(config.letterSpacing)
 		
-		this.updatePreviewBack()
+		this.updatePreviewDebug()
 	}
 	
 	public resize(): void {
@@ -1008,7 +1008,24 @@ export class BitmapFontEditor extends BaseScene {
 			return
 		}
 		
-		this.separator.displayWidth = Config.GAME_WIDTH
+		this.alignPreviewBack()
+		this.alignPreview()
+	}
+	
+	private alignPreviewBack() {
+		this.previewBack.displayWidth = Config.GAME_WIDTH
+		this.previewBack.displayHeight = Config.HALF_GAME_HEIGHT
+	}
+	
+	private alignPreview() {
+		if (!this.preview) {
+			return
+		}
+		
+		let { x, y } = this.previewBack.getCenter()
+		this.preview.x = x
+		this.preview.y = y
+		this.updatePreviewDebug()
 	}
 	
 	public onShutdown() {
