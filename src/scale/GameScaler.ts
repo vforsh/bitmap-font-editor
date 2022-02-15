@@ -29,7 +29,6 @@ export class GameScaler {
 		this.scale = this.game.scale
 		this.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this)
 		this.canvas = this.scale.canvas
-		this.canvas.style.position = "absolute"
 	}
 	
 	private onResize(): void {
