@@ -25,6 +25,7 @@ export class LayoutPanel extends EditorPanel {
 		
 		this.panel.addInput(this.config, "method", {
 			options: this.createOptions(),
+			label: "packing method",
 		}).on("change", event => this.emit("change", this.config, event.presetKey))
 	}
 	
