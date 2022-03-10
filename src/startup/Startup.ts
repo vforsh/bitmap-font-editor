@@ -1,13 +1,11 @@
 import { Main } from "../Main"
 import { initSentry } from "./init-sentry"
-import { initAnalytics } from "./init-analytics"
 import { initCacheBusters } from "../CacheBuster"
 import { updateUrlQuery } from "../robowhale/utils/update-url-query"
 
 window.addEventListener("load", () => {
 	initCacheBusters()
 	initSentry()
-	initAnalytics()
 	
 	createGame()
 })

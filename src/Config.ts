@@ -1,5 +1,4 @@
 ﻿export class Config {
-	public static SERVER_URL: string = "https://robowhale.com/html5/papa-louie-levels/"
 	public static SOURCE_GAME_WIDTH: number = 750
 	public static SOURCE_GAME_HEIGHT: number = 1000
 	public static IS_LANDSCAPE: boolean = Config.SOURCE_GAME_WIDTH > Config.SOURCE_GAME_HEIGHT
