@@ -78,7 +78,7 @@
 		"@vheemstra/imagemin-avifenc": "^1.0.0",
 		"animate.css": "^4.1.1",
 		"async": "^3.2.0",
-		"browser-sync": "^2.27.7",
+		"browser-sync": "^2.27.9",
 		"chalk": "^4.1.1",
 		"compression": "^1.7.4",
 		"core-js": "^3.17.2",
@@ -87,7 +87,7 @@
 		"cpy-cli": "^3.1.1",
 		"del-cli": "^4.0.1",
 		"diff": "^5.0.0",
-		"esbuild": "^0.14.2",
+		"esbuild": "^0.14.38",
 		"esbuild-ifdef": "^0.1.8",
 		"eventemitter3": "^4.0.7",
 		"execa": "^5.0.0",
@@ -125,7 +125,7 @@
 		"ssh2": "^0.8.9",
 		"time-stamp": "^2.2.0",
 		"tmp": "^0.2.1",
-		"typescript": "^4.6.2",
+		"typescript": "^4.6.3",
 		"write-json-file": "^4.3.0"
 	}
 }
