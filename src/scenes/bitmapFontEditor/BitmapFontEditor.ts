@@ -600,7 +600,9 @@ export class BitmapFontEditor extends BaseScene {
 		this.glyphDebug.setDisplaySize(glyph.displayWidth, glyph.height)
 		
 		let glyphId = glyph.text.charCodeAt(0)
-		let info = `"${glyph.text}" (id ${glyphId}): ${glyph.displayWidth}x${glyph.displayHeight}`
+		let glyphWidth = Phaser.Math.RoundTo(glyph.displayWidth, -1)
+		let glyphHeight = Phaser.Math.RoundTo(glyph.displayHeight, -1)
+		let info = `"${glyph.text}" (id ${glyphId}): ${glyphWidth}x${glyphHeight}`
 		this.glyphsInfo.revive()
 		this.glyphsInfo.setText(info)
 	}

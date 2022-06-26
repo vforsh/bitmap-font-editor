@@ -129,4 +129,4 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		fontSize: 30,
 		content: "",
 	},
-})
+} as const)

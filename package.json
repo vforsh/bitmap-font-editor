@@ -55,7 +55,7 @@
 		"p-retry": "^4.5.0",
 		"p-timeout": "^5.0.0",
 		"path-browserify": "^1.0.1",
-		"phaser": "github:photonstorm/phaser",
+		"phaser": "git+https://github.com/photonstorm/phaser.git",
 		"phaser3-rex-plugins": "^1.1.31",
 		"potpack": "^1.0.2",
 		"screenfull": "^6.0.0",

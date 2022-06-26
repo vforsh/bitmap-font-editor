@@ -1,7 +1,8 @@
 var Phaser = (function() {
+  var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = function(cb, mod) {
     return function __require() {
-      return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
     };
   };
 
@@ -275,6 +276,8 @@ var Phaser = (function() {
         CheapArray("Uint16Array");
         CheapArray("Int16Array");
         CheapArray("ArrayBuffer");
+        CheapArray("Int8Array");
+        CheapArray("Uint8Array");
       }
       var CheapArray;
     }
@@ -347,7 +350,7 @@ var Phaser = (function() {
   var require_const = __commonJS({
     "../../node_modules/phaser/src/const.js": function(exports, module) {
       var CONST = {
-        VERSION: "3.60.0-beta.4",
+        VERSION: "3.60.0-beta.10",
         BlendModes: require_BlendModes(),
         ScaleModes: require_ScaleModes(),
         AUTO: 0,
@@ -1945,6 +1948,10 @@ var Phaser = (function() {
           var cos = Math.cos(delta);
           var sin = Math.sin(delta);
           return this.set(cos * this.x - sin * this.y, sin * this.x + cos * this.y);
+        },
+        project: function(src) {
+          var scalar = this.dot(src) / src.dot(src);
+          return this.copy(src).scale(scalar);
         }
       });
       Vector2.ZERO = new Vector2();
@@ -2923,25 +2930,42 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/utils/object/GetValue.js
   var require_GetValue = __commonJS({
     "../../node_modules/phaser/src/utils/object/GetValue.js": function(exports, module) {
-      var GetValue = function(source, key, defaultValue) {
-        if (!source || typeof source === "number") {
+      var GetValue = function(source, key, defaultValue, altSource) {
+        if (!source && !altSource || typeof source === "number") {
           return defaultValue;
-        } else if (source.hasOwnProperty(key)) {
+        } else if (source && source.hasOwnProperty(key)) {
           return source[key];
+        } else if (altSource && altSource.hasOwnProperty(key)) {
+          return altSource[key];
         } else if (key.indexOf(".") !== -1) {
           var keys = key.split(".");
-          var parent = source;
-          var value = defaultValue;
+          var parentA = source;
+          var parentB = altSource;
+          var valueA = defaultValue;
+          var valueB = defaultValue;
+          var valueAFound = true;
+          var valueBFound = true;
           for (var i = 0; i < keys.length; i++) {
-            if (parent.hasOwnProperty(keys[i])) {
-              value = parent[keys[i]];
-              parent = parent[keys[i]];
+            if (parentA && parentA.hasOwnProperty(keys[i])) {
+              valueA = parentA[keys[i]];
+              parentA = parentA[keys[i]];
             } else {
-              value = defaultValue;
-              break;
+              valueAFound = false;
+            }
+            if (parentB && parentB.hasOwnProperty(keys[i])) {
+              valueB = parentB[keys[i]];
+              parentB = parentB[keys[i]];
+            } else {
+              valueBFound = false;
             }
           }
-          return value;
+          if (valueAFound) {
+            return valueA;
+          } else if (valueBFound) {
+            return valueB;
+          } else {
+            return defaultValue;
+          }
         } else {
           return defaultValue;
         }
@@ -3388,6 +3412,11 @@ var Phaser = (function() {
           }
           this.width = frame.realWidth;
           this.height = frame.realHeight;
+          var input = this.input;
+          if (input && !input.customHitArea) {
+            input.hitArea.width = this.width;
+            input.hitArea.height = this.height;
+          }
           return this;
         },
         setSize: function(width, height) {
@@ -4071,6 +4100,7 @@ var Phaser = (function() {
       var Vector2 = require_Vector2();
       var _FLAG = 4;
       var Transform = {
+        hasTransformComponent: true,
         _scaleX: 1,
         _scaleY: 1,
         _rotation: 0,
@@ -4630,7 +4660,7 @@ var Phaser = (function() {
       function Events() {
       }
       if (Object.create) {
-        Events.prototype = Object.create(null);
+        Events.prototype = /* @__PURE__ */ Object.create(null);
         if (!new Events().__proto__)
           prefix = false;
       }
@@ -13465,37 +13495,21 @@ var Phaser = (function() {
             "#000000"
           ];
           var defaultBannerTextColor = "#ffffff";
-          this.width = GetValue(config, "width", 1024);
-          this.height = GetValue(config, "height", 768);
-          this.zoom = GetValue(config, "zoom", 1);
-          this.parent = GetValue(config, "parent", void 0);
-          this.scaleMode = GetValue(config, "scaleMode", 0);
-          this.expandParent = GetValue(config, "expandParent", true);
-          this.autoRound = GetValue(config, "autoRound", false);
-          this.autoCenter = GetValue(config, "autoCenter", 0);
-          this.resizeInterval = GetValue(config, "resizeInterval", 500);
-          this.fullscreenTarget = GetValue(config, "fullscreenTarget", null);
-          this.minWidth = GetValue(config, "minWidth", 0);
-          this.maxWidth = GetValue(config, "maxWidth", 0);
-          this.minHeight = GetValue(config, "minHeight", 0);
-          this.maxHeight = GetValue(config, "maxHeight", 0);
           var scaleConfig = GetValue(config, "scale", null);
-          if (scaleConfig) {
-            this.width = GetValue(scaleConfig, "width", this.width);
-            this.height = GetValue(scaleConfig, "height", this.height);
-            this.zoom = GetValue(scaleConfig, "zoom", this.zoom);
-            this.parent = GetValue(scaleConfig, "parent", this.parent);
-            this.scaleMode = GetValue(scaleConfig, "mode", this.scaleMode);
-            this.expandParent = GetValue(scaleConfig, "expandParent", this.expandParent);
-            this.autoRound = GetValue(scaleConfig, "autoRound", this.autoRound);
-            this.autoCenter = GetValue(scaleConfig, "autoCenter", this.autoCenter);
-            this.resizeInterval = GetValue(scaleConfig, "resizeInterval", this.resizeInterval);
-            this.fullscreenTarget = GetValue(scaleConfig, "fullscreenTarget", this.fullscreenTarget);
-            this.minWidth = GetValue(scaleConfig, "min.width", this.minWidth);
-            this.maxWidth = GetValue(scaleConfig, "max.width", this.maxWidth);
-            this.minHeight = GetValue(scaleConfig, "min.height", this.minHeight);
-            this.maxHeight = GetValue(scaleConfig, "max.height", this.maxHeight);
-          }
+          this.width = GetValue(scaleConfig, "width", 1024, config);
+          this.height = GetValue(scaleConfig, "height", 768, config);
+          this.zoom = GetValue(scaleConfig, "zoom", 1, config);
+          this.parent = GetValue(scaleConfig, "parent", void 0, config);
+          this.scaleMode = GetValue(scaleConfig, scaleConfig ? "mode" : "scaleMode", 0, config);
+          this.expandParent = GetValue(scaleConfig, "expandParent", true, config);
+          this.autoRound = GetValue(scaleConfig, "autoRound", false, config);
+          this.autoCenter = GetValue(scaleConfig, "autoCenter", 0, config);
+          this.resizeInterval = GetValue(scaleConfig, "resizeInterval", 500, config);
+          this.fullscreenTarget = GetValue(scaleConfig, "fullscreenTarget", null, config);
+          this.minWidth = GetValue(scaleConfig, "minWidth", 0, config);
+          this.maxWidth = GetValue(scaleConfig, "maxWidth", 0, config);
+          this.minHeight = GetValue(scaleConfig, "minHeight", 0, config);
+          this.maxHeight = GetValue(scaleConfig, "maxHeight", 0, config);
           this.renderType = GetValue(config, "type", CONST.AUTO);
           this.canvas = GetValue(config, "canvas", null);
           this.context = GetValue(config, "context", null);
@@ -13537,28 +13551,28 @@ var Phaser = (function() {
             this.hideBanner = true;
           }
           this.fps = GetValue(config, "fps", null);
-          var renderConfig = GetValue(config, "render", config);
-          this.pipeline = GetValue(renderConfig, "pipeline", null);
-          this.antialias = GetValue(renderConfig, "antialias", true);
-          this.antialiasGL = GetValue(renderConfig, "antialiasGL", true);
-          this.mipmapFilter = GetValue(renderConfig, "mipmapFilter", "LINEAR");
-          this.desynchronized = GetValue(renderConfig, "desynchronized", false);
-          this.roundPixels = GetValue(renderConfig, "roundPixels", false);
-          this.pixelArt = GetValue(renderConfig, "pixelArt", this.zoom !== 1);
+          var renderConfig = GetValue(config, "render", null);
+          this.pipeline = GetValue(renderConfig, "pipeline", null, config);
+          this.antialias = GetValue(renderConfig, "antialias", true, config);
+          this.antialiasGL = GetValue(renderConfig, "antialiasGL", true, config);
+          this.mipmapFilter = GetValue(renderConfig, "mipmapFilter", "LINEAR", config);
+          this.desynchronized = GetValue(renderConfig, "desynchronized", false, config);
+          this.roundPixels = GetValue(renderConfig, "roundPixels", false, config);
+          this.pixelArt = GetValue(renderConfig, "pixelArt", this.zoom !== 1, config);
           if (this.pixelArt) {
             this.antialias = false;
             this.antialiasGL = false;
             this.roundPixels = true;
           }
-          this.transparent = GetValue(renderConfig, "transparent", false);
-          this.clearBeforeRender = GetValue(renderConfig, "clearBeforeRender", true);
-          this.preserveDrawingBuffer = GetValue(renderConfig, "preserveDrawingBuffer", false);
-          this.premultipliedAlpha = GetValue(renderConfig, "premultipliedAlpha", true);
-          this.failIfMajorPerformanceCaveat = GetValue(renderConfig, "failIfMajorPerformanceCaveat", false);
-          this.powerPreference = GetValue(renderConfig, "powerPreference", "default");
-          this.batchSize = GetValue(renderConfig, "batchSize", 4096);
-          this.maxTextures = GetValue(renderConfig, "maxTextures", -1);
-          this.maxLights = GetValue(renderConfig, "maxLights", 10);
+          this.transparent = GetValue(renderConfig, "transparent", false, config);
+          this.clearBeforeRender = GetValue(renderConfig, "clearBeforeRender", true, config);
+          this.preserveDrawingBuffer = GetValue(renderConfig, "preserveDrawingBuffer", false, config);
+          this.premultipliedAlpha = GetValue(renderConfig, "premultipliedAlpha", true, config);
+          this.failIfMajorPerformanceCaveat = GetValue(renderConfig, "failIfMajorPerformanceCaveat", false, config);
+          this.powerPreference = GetValue(renderConfig, "powerPreference", "default", config);
+          this.batchSize = GetValue(renderConfig, "batchSize", 4096, config);
+          this.maxTextures = GetValue(renderConfig, "maxTextures", -1, config);
+          this.maxLights = GetValue(renderConfig, "maxLights", 10, config);
           var bgc = GetValue(config, "backgroundColor", 0);
           this.backgroundColor = ValueToColor(bgc);
           if (this.transparent) {
@@ -13571,8 +13585,7 @@ var Phaser = (function() {
           this.defaultPhysicsSystem = GetValue(this.physics, "default", false);
           this.loaderBaseURL = GetValue(config, "loader.baseURL", "");
           this.loaderPath = GetValue(config, "loader.path", "");
-          var defaultParallel = Device.os.android ? 6 : 32;
-          this.loaderMaxParallelDownloads = GetValue(config, "loader.maxParallelDownloads", defaultParallel);
+          this.loaderMaxParallelDownloads = GetValue(config, "loader.maxParallelDownloads", Device.os.android ? 6 : 32);
           this.loaderCrossOrigin = GetValue(config, "loader.crossOrigin", void 0);
           this.loaderResponseType = GetValue(config, "loader.responseType", "");
           this.loaderAsync = GetValue(config, "loader.async", true);
@@ -13581,6 +13594,7 @@ var Phaser = (function() {
           this.loaderTimeout = GetValue(config, "loader.timeout", 0);
           this.loaderWithCredentials = GetValue(config, "loader.withCredentials", false);
           this.loaderImageLoadType = GetValue(config, "loader.imageLoadType", "XHR");
+          this.loaderLocalScheme = GetValue(config, "loader.localScheme", ["file://", "capacitor://"]);
           this.installGlobalPlugins = [];
           this.installScenePlugins = [];
           var plugins = GetValue(config, "plugins", null);
@@ -13650,8 +13664,8 @@ var Phaser = (function() {
         var encoderOptions = GetFastValue(config, "encoder", 0.92);
         var x = Math.abs(Math.round(GetFastValue(config, "x", 0)));
         var y = Math.abs(Math.round(GetFastValue(config, "y", 0)));
-        var width = GetFastValue(config, "width", canvas.width);
-        var height = GetFastValue(config, "height", canvas.height);
+        var width = Math.floor(GetFastValue(config, "width", canvas.width));
+        var height = Math.floor(GetFastValue(config, "height", canvas.height));
         var getPixel = GetFastValue(config, "getPixel", false);
         if (getPixel) {
           var context = canvas.getContext("2d");
@@ -13661,7 +13675,9 @@ var Phaser = (function() {
         } else if (x !== 0 || y !== 0 || width !== canvas.width || height !== canvas.height) {
           var copyCanvas = CanvasPool.createWebGL(this, width, height);
           var ctx = copyCanvas.getContext("2d");
-          ctx.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+          if (width > 0 && height > 0) {
+            ctx.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+          }
           var image1 = new Image();
           image1.onerror = function() {
             callback.call(null);
@@ -14070,7 +14086,9 @@ var Phaser = (function() {
           if (sprite.mask) {
             sprite.mask.preRenderCanvas(this, sprite, camera);
           }
-          ctx.drawImage(frame.source.image, frameX, frameY, frameWidth, frameHeight, x, y, frameWidth / res, frameHeight / res);
+          if (frameWidth > 0 && frameHeight > 0) {
+            ctx.drawImage(frame.source.image, frameX, frameY, frameWidth, frameHeight, x, y, frameWidth / res, frameHeight / res);
+          }
           if (sprite.mask) {
             sprite.mask.postRenderCanvas(this, sprite, camera);
           }
@@ -14429,6 +14447,15 @@ var Phaser = (function() {
           if (!fragmentShaderSource) {
             return "";
           }
+          var src = "vec4 getSampler (int index, vec2 uv) {";
+          for (var i = 0; i < maxTextures; i++) {
+            if (i > 0 && i < maxTextures) {
+              src += "\nelse ";
+            }
+            src += "if (index == " + i + ") { return texture2D(uMainSampler[" + i + "], uv); }";
+          }
+          src += "\nreturn vec4(0);\n}";
+          fragmentShaderSource = fragmentShaderSource.replace(/%getSampler%/gi, src);
           return fragmentShaderSource.replace(/%count%/gi, maxTextures.toString());
         }
       };
@@ -16302,19 +16329,7 @@ var Phaser = (function() {
         "varying float outTintEffect;",
         "varying vec4 outTint;",
         "",
-        "vec4 getSampler (int index, vec2 uv)",
-        "{",
-        "    for (int i = 0; i < numTextures; ++i)",
-        "    {",
-        "        if (i == index)",
-        "        {",
-        "            return texture2D(uMainSampler[i], uv);",
-        "        }",
-        "    }",
-        "",
-        "    //  Return black",
-        "    return vec4(0);",
-        "}",
+        "%getSampler%",
         "",
         "void main ()",
         "{",
@@ -18114,7 +18129,7 @@ var Phaser = (function() {
           gl.bindFramebuffer(gl.FRAMEBUFFER, null);
           gl.bindTexture(gl.TEXTURE_2D, null);
         },
-        blitFrame: function(source, target, brightness, clear, clearAlpha, eraseMode) {
+        blitFrame: function(source, target, brightness, clear, clearAlpha, eraseMode, flipY) {
           if (brightness === void 0) {
             brightness = 1;
           }
@@ -18126,6 +18141,9 @@ var Phaser = (function() {
           }
           if (eraseMode === void 0) {
             eraseMode = false;
+          }
+          if (flipY === void 0) {
+            flipY = false;
           }
           var gl = this.gl;
           this.setShader(this.copyShader);
@@ -18153,6 +18171,9 @@ var Phaser = (function() {
           if (eraseMode) {
             var blendMode = this.renderer.currentBlendMode;
             this.renderer.setBlendMode(BlendModes.ERASE);
+          }
+          if (flipY) {
+            this.flipY();
           }
           gl.bufferData(gl.ARRAY_BUFFER, this.vertexData, gl.STATIC_DRAW);
           gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -18698,13 +18719,13 @@ var Phaser = (function() {
       var CanvasPool = require_CanvasPool();
       var Color = require_Color();
       var GetFastValue = require_GetFastValue();
-      var WebGLSnapshot = function(sourceCanvas, config) {
-        var gl = sourceCanvas.getContext("experimental-webgl");
+      var WebGLSnapshot = function(sourceContext, config) {
+        var gl = sourceContext;
         var callback = GetFastValue(config, "callback");
         var type = GetFastValue(config, "type", "image/png");
         var encoderOptions = GetFastValue(config, "encoder", 0.92);
-        var x = GetFastValue(config, "x", 0);
-        var y = GetFastValue(config, "y", 0);
+        var x = Math.abs(Math.round(GetFastValue(config, "x", 0)));
+        var y = Math.abs(Math.round(GetFastValue(config, "y", 0)));
         var getPixel = GetFastValue(config, "getPixel", false);
         var isFramebuffer = GetFastValue(config, "isFramebuffer", false);
         var bufferWidth = isFramebuffer ? GetFastValue(config, "bufferWidth", 1) : gl.drawingBufferWidth;
@@ -18715,8 +18736,8 @@ var Phaser = (function() {
           gl.readPixels(x, destY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
           callback.call(null, new Color(pixel[0], pixel[1], pixel[2], pixel[3] / 255));
         } else {
-          var width = GetFastValue(config, "width", bufferWidth);
-          var height = GetFastValue(config, "height", bufferHeight);
+          var width = Math.floor(GetFastValue(config, "width", bufferWidth));
+          var height = Math.floor(GetFastValue(config, "height", bufferHeight));
           var total = width * height * 4;
           var pixels = new Uint8Array(total);
           gl.readPixels(x, bufferHeight - y - height, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
@@ -19726,7 +19747,7 @@ var Phaser = (function() {
           this.emit(Events.POST_RENDER);
           var state = this.snapshotState;
           if (state.callback) {
-            WebGLSnapshot(this.canvas, state);
+            WebGLSnapshot(this.gl, state);
             state.callback = null;
           }
           if (this.textureFlush > 0) {
@@ -19778,7 +19799,7 @@ var Phaser = (function() {
           state.bufferWidth = bufferWidth;
           state.bufferHeight = bufferHeight;
           this.setFramebuffer(framebuffer);
-          WebGLSnapshot(this.canvas, state);
+          WebGLSnapshot(this.gl, state);
           this.setFramebuffer(currentFramebuffer);
           state.callback = null;
           state.isFramebuffer = false;
@@ -20271,7 +20292,7 @@ var Phaser = (function() {
           } else if (seamless) {
             this.startTime += -this.lastTime + (this.lastTime + window.performance.now());
           }
-          this.raf.start(this.step.bind(this), this.useRAF);
+          this.raf.start(this.step.bind(this), this.forceSetTimeOut, this._target);
           this.running = true;
           this.step();
         },
@@ -22395,7 +22416,7 @@ var Phaser = (function() {
         exists: function(key) {
           return this.anims.has(key);
         },
-        createFromAseprite: function(key, tags) {
+        createFromAseprite: function(key, tags, target) {
           var output = [];
           var data = this.game.cache.json.get(key);
           if (!data) {
@@ -22416,27 +22437,20 @@ var Phaser = (function() {
                 return;
               }
               if (!tags || tags && tags.indexOf(name) > -1) {
-                var tempFrames = [];
-                var minDuration = Number.MAX_SAFE_INTEGER;
+                var totalDuration = 0;
                 for (var i = from; i <= to; i++) {
                   var frameKey = i.toString();
                   var frame = frames[frameKey];
                   if (frame) {
                     var frameDuration = GetFastValue(frame, "duration", Number.MAX_SAFE_INTEGER);
-                    if (frameDuration < minDuration) {
-                      minDuration = frameDuration;
-                    }
-                    tempFrames.push({ frame: frameKey, duration: frameDuration });
+                    animFrames.push({ key: key, frame: frameKey, duration: frameDuration });
+                    totalDuration += frameDuration;
                   }
                 }
-                tempFrames.forEach(function(entry) {
-                  animFrames.push({
-                    key: key,
-                    frame: entry.frame,
-                    duration: entry.duration - minDuration
-                  });
+                var msPerFrame = totalDuration / animFrames.length;
+                animFrames.forEach(function(entry) {
+                  entry.duration -= msPerFrame;
                 });
-                var totalDuration = minDuration * animFrames.length;
                 if (direction === "reverse") {
                   animFrames = animFrames.reverse();
                 }
@@ -22446,7 +22460,14 @@ var Phaser = (function() {
                   duration: totalDuration,
                   yoyo: direction === "pingpong"
                 };
-                var result = _this.create(createConfig);
+                var result;
+                if (target) {
+                  if (target.anims) {
+                    result = target.anims.create(createConfig);
+                  }
+                } else {
+                  result = _this.create(createConfig);
+                }
                 if (result) {
                   output.push(result);
                 }
@@ -23368,7 +23389,7 @@ var Phaser = (function() {
           }
         },
         disableContextMenu: function() {
-          document.body.addEventListener("contextmenu", function(event) {
+          this.target.addEventListener("contextmenu", function(event) {
             event.preventDefault();
             return false;
           });
@@ -23874,7 +23895,7 @@ var Phaser = (function() {
           }
         },
         disableContextMenu: function() {
-          document.body.addEventListener("contextmenu", function(event) {
+          this.target.addEventListener("contextmenu", function(event) {
             event.preventDefault();
             return false;
           });
@@ -26452,6 +26473,9 @@ var Phaser = (function() {
           }
         },
         loadComplete: function(loader) {
+          if (this.game.sound && this.game.sound.onBlurPausedSounds) {
+            this.game.sound.unlock();
+          }
           this.create(loader.scene);
         },
         payloadComplete: function(loader) {
@@ -26689,7 +26713,10 @@ var Phaser = (function() {
             return this;
           }
           var sys = scene.sys;
-          if (sys.isActive() || sys.isPaused()) {
+          var status = sys.settings.status;
+          if (status >= CONST.START && status <= CONST.CREATING) {
+            return this;
+          } else if (status >= CONST.RUNNING && status <= CONST.SLEEPING) {
             sys.shutdown();
             sys.sceneUpdate = NOOP;
             sys.start(data);
@@ -26716,6 +26743,9 @@ var Phaser = (function() {
         stop: function(key, data) {
           var scene = this.getScene(key);
           if (scene && !scene.sys.isTransitioning() && scene.sys.settings.status !== CONST.SHUTDOWN) {
+            var loader = scene.sys.load;
+            loader.off(LoaderEvents.COMPLETE, this.loadComplete, this);
+            loader.off(LoaderEvents.COMPLETE, this.payloadComplete, this);
             scene.sys.shutdown(data);
           }
           return this;
@@ -26805,7 +26835,7 @@ var Phaser = (function() {
           } else {
             var indexA = this.getIndex(keyA);
             var indexB = this.getIndex(keyB);
-            if (indexA !== -1 && indexB !== -1) {
+            if (indexA !== -1 && indexB !== -1 && indexB < indexA) {
               var tempScene = this.getAt(indexB);
               this.scenes.splice(indexB, 1);
               this.scenes.splice(indexA + (indexB > indexA), 0, tempScene);
@@ -26822,7 +26852,7 @@ var Phaser = (function() {
           } else {
             var indexA = this.getIndex(keyA);
             var indexB = this.getIndex(keyB);
-            if (indexA !== -1 && indexB !== -1) {
+            if (indexA !== -1 && indexB !== -1 && indexB > indexA) {
               var tempScene = this.getAt(indexB);
               this.scenes.splice(indexB, 1);
               if (indexA === 0) {
@@ -28441,7 +28471,9 @@ var Phaser = (function() {
             var cd = textureFrame.canvasData;
             var canvas = CanvasPool.create2D(this, cd.width, cd.height);
             var ctx = canvas.getContext("2d");
-            ctx.drawImage(textureFrame.source.image, cd.x, cd.y, cd.width, cd.height, 0, 0, cd.width, cd.height);
+            if (cd.width > 0 && cd.height > 0) {
+              ctx.drawImage(textureFrame.source.image, cd.x, cd.y, cd.width, cd.height, 0, 0, cd.width, cd.height);
+            }
             data = canvas.toDataURL(type, encoderOptions);
             CanvasPool.remove(canvas);
           }
@@ -28765,24 +28797,17 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js
-  var require_DECODED_ALL_EVENT = __commonJS({
-    "../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js": function(exports, module) {
-      module.exports = "decodedall";
-    }
-  });
-
-  // ../../node_modules/phaser/src/sound/events/DECODED_KEY_EVENT.js
-  var require_DECODED_KEY_EVENT = __commonJS({
-    "../../node_modules/phaser/src/sound/events/DECODED_KEY_EVENT.js": function(exports, module) {
-      module.exports = "decoded-";
-    }
-  });
-
   // ../../node_modules/phaser/src/sound/events/DECODED_EVENT.js
   var require_DECODED_EVENT = __commonJS({
     "../../node_modules/phaser/src/sound/events/DECODED_EVENT.js": function(exports, module) {
       module.exports = "decoded";
+    }
+  });
+
+  // ../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js
+  var require_DECODED_ALL_EVENT = __commonJS({
+    "../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js": function(exports, module) {
+      module.exports = "decodedall";
     }
   });
 
@@ -28938,9 +28963,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/sound/events/index.js": function(exports, module) {
       module.exports = {
         COMPLETE: require_COMPLETE_EVENT2(),
-        DECODED_ALL: require_DECODED_ALL_EVENT(),
-        DECODED_KEY: require_DECODED_KEY_EVENT(),
         DECODED: require_DECODED_EVENT(),
+        DECODED_ALL: require_DECODED_ALL_EVENT(),
         DESTROY: require_DESTROY_EVENT8(),
         DETUNE: require_DETUNE_EVENT(),
         GLOBAL_DETUNE: require_GLOBAL_DETUNE_EVENT(),
@@ -28971,7 +28995,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/utils/array/SafeRange.js": function(exports, module) {
       var SafeRange = function(array, startIndex, endIndex, throwError) {
         var len = array.length;
-        if (startIndex < 0 || startIndex > len || startIndex >= endIndex || endIndex > len || startIndex + endIndex > len) {
+        if (startIndex < 0 || startIndex > len || startIndex >= endIndex || endIndex > len) {
           if (throwError) {
             throw new Error("Range Error: Values outside acceptable range");
           }
@@ -29058,45 +29082,12 @@ var Phaser = (function() {
           this.pauseOnBlur = true;
           this._rate = 1;
           this._detune = 0;
-          this.locked = true;
+          this.locked = this.locked || false;
           this.unlocked = false;
-          this.pendingUnlock = false;
           game.events.on(GameEvents.BLUR, this.onGameBlur, this);
           game.events.on(GameEvents.FOCUS, this.onGameFocus, this);
           game.events.on(GameEvents.PRE_STEP, this.update, this);
           game.events.once(GameEvents.DESTROY, this.destroy, this);
-          if (this.locked && game.isBooted) {
-            this.unlock();
-          } else {
-            game.events.once(GameEvents.BOOT, this.unlock, this);
-          }
-        },
-        unlock: function() {
-          if (this.pendingUnlock) {
-            return;
-          }
-          console.log("BaseSoundManager.unlock");
-          var _this = this;
-          var body = document.body;
-          var bodyAdd = body.addEventListener;
-          var bodyRemove = body.removeEventListener;
-          var unlockHandler = function unlockHandler2() {
-            if (!_this.pendingUnlock) {
-              return;
-            }
-            _this.unlockHandler();
-            bodyRemove("touchstart", unlockHandler2);
-            bodyRemove("touchend", unlockHandler2);
-            bodyRemove("click", unlockHandler2);
-            bodyRemove("keydown", unlockHandler2);
-          };
-          if (body) {
-            bodyAdd("touchstart", unlockHandler, false);
-            bodyAdd("touchend", unlockHandler, false);
-            bodyAdd("click", unlockHandler, false);
-            bodyAdd("keydown", unlockHandler, false);
-            this.pendingUnlock = true;
-          }
         },
         add: NOOP,
         addAudioSprite: function(key, config) {
@@ -29200,6 +29191,7 @@ var Phaser = (function() {
           });
           return stopped;
         },
+        unlock: NOOP,
         onBlur: NOOP,
         onFocus: NOOP,
         onGameBlur: function() {
@@ -29213,28 +29205,37 @@ var Phaser = (function() {
           }
         },
         update: function(time, delta) {
-          var i;
-          var sounds = this.sounds;
-          for (i = sounds.length - 1; i >= 0; i--) {
-            if (sounds[i].pendingRemove) {
-              sounds.splice(i, 1);
+          if (this.unlocked) {
+            this.unlocked = false;
+            this.locked = false;
+            this.emit(Events.UNLOCKED, this);
+          }
+          for (var i = this.sounds.length - 1; i >= 0; i--) {
+            if (this.sounds[i].pendingRemove) {
+              this.sounds.splice(i, 1);
             }
           }
-          for (i = 0; i < sounds.length; i++) {
-            sounds[i].update(time, delta);
-          }
+          this.sounds.forEach(function(sound) {
+            sound.update(time, delta);
+          });
+        },
+        destroy: function() {
+          this.game.events.off(GameEvents.BLUR, this.onGameBlur, this);
+          this.game.events.off(GameEvents.FOCUS, this.onGameFocus, this);
+          this.game.events.off(GameEvents.PRE_STEP, this.update, this);
+          this.removeAllListeners();
+          this.removeAll();
+          this.sounds.length = 0;
+          this.sounds = null;
+          this.game = null;
         },
         forEachActiveSound: function(callback, scope) {
-          if (scope === void 0) {
-            scope = this;
-          }
-          var sounds = this.sounds;
-          for (var i = 0; i < sounds.length; i++) {
-            var sound = sounds[i];
+          var _this = this;
+          this.sounds.forEach(function(sound, index) {
             if (sound && !sound.pendingRemove) {
-              callback.call(scope, sound, i, sounds);
+              callback.call(scope || _this, sound, index, _this.sounds);
             }
-          }
+          });
         },
         setRate: function(value) {
           this.rate = value;
@@ -29267,18 +29268,6 @@ var Phaser = (function() {
             });
             this.emit(Events.GLOBAL_DETUNE, this, value);
           }
-        },
-        destroy: function() {
-          var events = this.game.events;
-          events.off(GameEvents.BLUR, this.onGameBlur, this);
-          events.off(GameEvents.FOCUS, this.onGameFocus, this);
-          events.off(GameEvents.PRE_STEP, this.update, this);
-          events.off(GameEvents.BOOT, this.unlock, this);
-          this.removeAllListeners();
-          this.removeAll();
-          this.sounds.length = 0;
-          this.sounds = null;
-          this.game = null;
         }
       });
       module.exports = BaseSoundManager;
@@ -29473,9 +29462,9 @@ var Phaser = (function() {
           if (config === void 0) {
             config = {};
           }
-          this.tags = manager.cache.get(key);
+          this.tags = manager.game.cache.audio.get(key);
           if (!this.tags) {
-            throw new Error('Audio cache missing "' + key + '"');
+            throw new Error('There is no audio asset with key "' + key + '" in the audio cache');
           }
           this.audio = null;
           this.startTime = 0;
@@ -29483,23 +29472,18 @@ var Phaser = (function() {
           this.duration = this.tags[0].duration;
           this.totalDuration = this.tags[0].duration;
           BaseSound.call(this, manager, key, config);
-          console.log("HTML5AudioSound created", this.tags);
         },
         play: function(markerName, config) {
           if (this.manager.isLocked(this, "play", [markerName, config])) {
-            console.log("HAS.play 1");
             return false;
           }
           if (!BaseSound.prototype.play.call(this, markerName, config)) {
-            console.log("HAS.play 2");
             return false;
           }
           if (!this.pickAndPlayAudioTag()) {
-            console.log("HAS.play 3");
             return false;
           }
           this.emit(Events.PLAY, this);
-          console.log("HAS.play 4");
           return true;
         },
         pause: function() {
@@ -29840,7 +29824,6 @@ var Phaser = (function() {
       var BaseSoundManager = require_BaseSoundManager();
       var Class = require_Class();
       var Events = require_events15();
-      var GameEvents = require_events();
       var HTML5AudioSound = require_HTML5AudioSound();
       var HTML5AudioSoundManager = new Class({
         Extends: BaseSoundManager,
@@ -29849,53 +29832,86 @@ var Phaser = (function() {
           this.audioPlayDelay = 0.1;
           this.loopEndOffset = 0.05;
           this.onBlurPausedSounds = [];
-          this.lockedActionsQueue = [];
+          this.locked = "ontouchstart" in window;
+          this.lockedActionsQueue = this.locked ? [] : null;
           this._mute = false;
           this._volume = 1;
-          this.cache = game.cache.audio;
           BaseSoundManager.call(this, game);
-        },
-        unlockHandler: function() {
-          this.createAudioTags();
-        },
-        createAudioTags: function() {
-          console.log("HTML5AudioSoundManager.createAudioTags");
-          if (!this.pendingUnlock) {
-            console.log("unlock bail 1 - pending unlock false");
-            return;
-          }
-          this.locked = false;
-          this.emit(Events.UNLOCKED, this);
-          var lockedTags = [];
-          this.cache.entries.each(function(key, tags) {
-            for (var i = 0; i < tags.length; i++) {
-              var tag = tags[i];
-              console.log("tag unlock", tag.dataset.name, tag.dataset.locked);
-              if (tag.dataset.locked === "true") {
-                lockedTags.push(tag);
-              }
-            }
-          });
-          if (lockedTags.length === 0) {
-            return;
-          }
-          var lastTag = lockedTags[lockedTags.length - 1];
-          lastTag.oncanplaythrough = function() {
-            lastTag.oncanplaythrough = null;
-            lockedTags.forEach(function(tag) {
-              tag.dataset.locked = "false";
-              console.log("lastTag unlock", tag.dataset.name);
-            });
-          };
-          lockedTags.forEach(function(tag) {
-            tag.load();
-            console.log("tag.load", tag.dataset.name);
-          });
         },
         add: function(key, config) {
           var sound = new HTML5AudioSound(this, key, config);
           this.sounds.push(sound);
           return sound;
+        },
+        unlock: function() {
+          this.locked = false;
+          var _this = this;
+          this.game.cache.audio.entries.each(function(key, tags) {
+            for (var i = 0; i < tags.length; i++) {
+              if (tags[i].dataset.locked === "true") {
+                _this.locked = true;
+                return false;
+              }
+            }
+            return true;
+          });
+          if (!this.locked) {
+            return;
+          }
+          var moved = false;
+          var detectMove = function() {
+            moved = true;
+          };
+          var unlock = function() {
+            if (moved) {
+              moved = false;
+              return;
+            }
+            document.body.removeEventListener("touchmove", detectMove);
+            document.body.removeEventListener("touchend", unlock);
+            var lockedTags = [];
+            _this.game.cache.audio.entries.each(function(key, tags) {
+              for (var i = 0; i < tags.length; i++) {
+                var tag = tags[i];
+                if (tag.dataset.locked === "true") {
+                  lockedTags.push(tag);
+                }
+              }
+              return true;
+            });
+            if (lockedTags.length === 0) {
+              return;
+            }
+            var lastTag = lockedTags[lockedTags.length - 1];
+            lastTag.oncanplaythrough = function() {
+              lastTag.oncanplaythrough = null;
+              lockedTags.forEach(function(tag) {
+                tag.dataset.locked = "false";
+              });
+              _this.unlocked = true;
+            };
+            lockedTags.forEach(function(tag) {
+              tag.load();
+            });
+          };
+          this.once(Events.UNLOCKED, function() {
+            this.forEachActiveSound(function(sound) {
+              if (sound.currentMarker === null && sound.duration === 0) {
+                sound.duration = sound.tags[0].duration;
+              }
+              sound.totalDuration = sound.tags[0].duration;
+            });
+            while (this.lockedActionsQueue.length) {
+              var lockedAction = this.lockedActionsQueue.shift();
+              if (lockedAction.sound[lockedAction.prop].apply) {
+                lockedAction.sound[lockedAction.prop].apply(lockedAction.sound, lockedAction.value || []);
+              } else {
+                lockedAction.sound[lockedAction.prop] = lockedAction.value;
+              }
+            }
+          }, this);
+          document.body.addEventListener("touchmove", detectMove, false);
+          document.body.addEventListener("touchend", unlock, false);
         },
         onBlur: function() {
           this.forEachActiveSound(function(sound) {
@@ -29910,6 +29926,11 @@ var Phaser = (function() {
             sound.onFocus();
           });
           this.onBlurPausedSounds.length = 0;
+        },
+        destroy: function() {
+          BaseSoundManager.prototype.destroy.call(this);
+          this.onBlurPausedSounds.length = 0;
+          this.onBlurPausedSounds = null;
         },
         isLocked: function(sound, prop, value) {
           if (sound.tags[0].dataset.locked === "true") {
@@ -29926,6 +29947,18 @@ var Phaser = (function() {
           this.mute = value;
           return this;
         },
+        mute: {
+          get: function() {
+            return this._mute;
+          },
+          set: function(value) {
+            this._mute = value;
+            this.forEachActiveSound(function(sound) {
+              sound.updateMute();
+            });
+            this.emit(Events.GLOBAL_MUTE, this, value);
+          }
+        },
         setVolume: function(value) {
           this.volume = value;
           return this;
@@ -29941,23 +29974,6 @@ var Phaser = (function() {
             });
             this.emit(Events.GLOBAL_VOLUME, this, value);
           }
-        },
-        mute: {
-          get: function() {
-            return this._mute;
-          },
-          set: function(value) {
-            this._mute = value;
-            this.forEachActiveSound(function(sound) {
-              sound.updateMute();
-            });
-            this.emit(Events.GLOBAL_MUTE, this, value);
-          }
-        },
-        destroy: function() {
-          BaseSoundManager.prototype.destroy.call(this);
-          this.onBlurPausedSounds.length = 0;
-          this.onBlurPausedSounds = null;
         }
       });
       module.exports = HTML5AudioSoundManager;
@@ -30153,11 +30169,14 @@ var Phaser = (function() {
           if (config === void 0) {
             config = {};
           }
-          this.audioBuffer;
+          this.audioBuffer = manager.game.cache.audio.get(key);
+          if (!this.audioBuffer) {
+            throw new Error('Audio key "' + key + '" missing from cache');
+          }
           this.source = null;
           this.loopSource = null;
-          this.muteNode;
-          this.volumeNode;
+          this.muteNode = manager.context.createGain();
+          this.volumeNode = manager.context.createGain();
           this.pannerNode = null;
           this.playTime = 0;
           this.startTime = 0;
@@ -30165,58 +30184,19 @@ var Phaser = (function() {
           this.rateUpdates = [];
           this.hasEnded = false;
           this.hasLooped = false;
-          this.pendingPlay = false;
-          BaseSound.call(this, manager, key, config);
-          if (manager.unlocked) {
-            this.init();
-          } else {
-            manager.once(Events.UNLOCKED, this.init, this);
-          }
-        },
-        init: function() {
-          var manager = this.manager;
-          var context = manager.context;
-          this.muteNode = context.createGain();
-          this.volumeNode = context.createGain();
           this.muteNode.connect(this.volumeNode);
-          if (context.createStereoPanner) {
-            this.pannerNode = context.createStereoPanner();
+          if (manager.context.createStereoPanner) {
+            this.pannerNode = manager.context.createStereoPanner();
             this.volumeNode.connect(this.pannerNode);
             this.pannerNode.connect(manager.destination);
           } else {
             this.volumeNode.connect(manager.destination);
           }
-          var key = this.key;
-          var buffer = manager.cache.get(key);
-          if (buffer) {
-            this.audioBuffer = buffer;
-            this.duration = buffer.duration;
-            this.totalDuration = buffer.duration;
-          } else if (manager.decodeQueue.has(key)) {
-            manager.once(Events.DECODED_KEY + key, this.setAudioBuffer, this);
-            manager.decodeAudioQueue(key);
-          } else {
-            throw new Error('Missing Audio: "' + key + '"');
-          }
-        },
-        setAudioBuffer: function(audioBuffer) {
-          this.audioBuffer = audioBuffer;
-          this.duration = audioBuffer.duration;
-          this.totalDuration = audioBuffer.duration;
-          var pending = this.pendingPlay;
-          if (pending) {
-            this.pendingPlay = null;
-            this.play(pending.markerName, pending.config);
-          }
+          this.duration = this.audioBuffer.duration;
+          this.totalDuration = this.audioBuffer.duration;
+          BaseSound.call(this, manager, key, config);
         },
         play: function(markerName, config) {
-          if (!this.audioBuffer) {
-            this.pendingPlay = { markerName: markerName, config: config };
-            if (this.manager.unlocked) {
-              this.init();
-            }
-            return true;
-          }
           if (!BaseSound.prototype.play.call(this, markerName, config)) {
             return false;
           }
@@ -30226,7 +30206,7 @@ var Phaser = (function() {
           return true;
         },
         pause: function() {
-          if (!this.manager.context || this.manager.context.currentTime < this.startTime) {
+          if (this.manager.context.currentTime < this.startTime) {
             return false;
           }
           if (!BaseSound.prototype.pause.call(this)) {
@@ -30238,7 +30218,7 @@ var Phaser = (function() {
           return true;
         },
         resume: function() {
-          if (!this.manager.context || this.manager.context.currentTime < this.startTime) {
+          if (this.manager.context.currentTime < this.startTime) {
             return false;
           }
           if (!BaseSound.prototype.resume.call(this)) {
@@ -30340,6 +30320,21 @@ var Phaser = (function() {
             this.emit(Events.LOOPED, this);
           }
         },
+        destroy: function() {
+          BaseSound.prototype.destroy.call(this);
+          this.audioBuffer = null;
+          this.stopAndRemoveBufferSource();
+          this.muteNode.disconnect();
+          this.muteNode = null;
+          this.volumeNode.disconnect();
+          this.volumeNode = null;
+          if (this.pannerNode) {
+            this.pannerNode.disconnect();
+            this.pannerNode = null;
+          }
+          this.rateUpdates.length = 0;
+          this.rateUpdates = null;
+        },
         calculateRate: function() {
           BaseSound.prototype.calculateRate.call(this);
           var now = this.manager.context.currentTime;
@@ -30378,34 +30373,6 @@ var Phaser = (function() {
           var lastRateUpdate = this.rateUpdates[this.rateUpdates.length - 1];
           return this.playTime + lastRateUpdate.time + (this.duration - lastRateUpdateCurrentTime) / lastRateUpdate.rate;
         },
-        setRate: function(value) {
-          this.rate = value;
-          return this;
-        },
-        setDetune: function(value) {
-          this.detune = value;
-          return this;
-        },
-        setMute: function(value) {
-          this.mute = value;
-          return this;
-        },
-        setVolume: function(value) {
-          this.volume = value;
-          return this;
-        },
-        setSeek: function(value) {
-          this.seek = value;
-          return this;
-        },
-        setLoop: function(value) {
-          this.loop = value;
-          return this;
-        },
-        setPan: function(value) {
-          this.pan = value;
-          return this;
-        },
         rate: {
           get: function() {
             return this.currentConfig.rate;
@@ -30415,6 +30382,10 @@ var Phaser = (function() {
             this.calculateRate();
             this.emit(Events.RATE, this, value);
           }
+        },
+        setRate: function(value) {
+          this.rate = value;
+          return this;
         },
         detune: {
           get: function() {
@@ -30426,33 +30397,37 @@ var Phaser = (function() {
             this.emit(Events.DETUNE, this, value);
           }
         },
+        setDetune: function(value) {
+          this.detune = value;
+          return this;
+        },
         mute: {
           get: function() {
-            return this.muteNode && this.muteNode.gain.value === 0;
+            return this.muteNode.gain.value === 0;
           },
           set: function(value) {
-            if (this.muteNode) {
-              this.currentConfig.mute = value;
-              this.muteNode.gain.setValueAtTime(value ? 0 : 1, 0);
-              this.emit(Events.MUTE, this, value);
-            }
+            this.currentConfig.mute = value;
+            this.muteNode.gain.setValueAtTime(value ? 0 : 1, 0);
+            this.emit(Events.MUTE, this, value);
           }
+        },
+        setMute: function(value) {
+          this.mute = value;
+          return this;
         },
         volume: {
           get: function() {
-            if (this.volumeNode) {
-              return this.volumeNode.gain.value;
-            } else {
-              return -1;
-            }
+            return this.volumeNode.gain.value;
           },
           set: function(value) {
-            if (this.volumeNode) {
-              this.currentConfig.volume = value;
-              this.volumeNode.gain.setValueAtTime(value, 0);
-              this.emit(Events.VOLUME, this, value);
-            }
+            this.currentConfig.volume = value;
+            this.volumeNode.gain.setValueAtTime(value, 0);
+            this.emit(Events.VOLUME, this, value);
           }
+        },
+        setVolume: function(value) {
+          this.volume = value;
+          return this;
         },
         seek: {
           get: function() {
@@ -30468,7 +30443,7 @@ var Phaser = (function() {
             }
           },
           set: function(value) {
-            if (!this.manager.context || this.manager.context.currentTime < this.startTime) {
+            if (this.manager.context.currentTime < this.startTime) {
               return;
             }
             if (this.isPlaying || this.isPaused) {
@@ -30481,6 +30456,10 @@ var Phaser = (function() {
               this.emit(Events.SEEK, this, value);
             }
           }
+        },
+        setSeek: function(value) {
+          this.seek = value;
+          return this;
         },
         loop: {
           get: function() {
@@ -30496,6 +30475,10 @@ var Phaser = (function() {
             }
             this.emit(Events.LOOP, this, value);
           }
+        },
+        setLoop: function(value) {
+          this.loop = value;
+          return this;
         },
         pan: {
           get: function() {
@@ -30513,24 +30496,9 @@ var Phaser = (function() {
             this.emit(Events.PAN, this, value);
           }
         },
-        destroy: function() {
-          BaseSound.prototype.destroy.call(this);
-          this.audioBuffer = null;
-          this.stopAndRemoveBufferSource();
-          if (this.muteNode) {
-            this.muteNode.disconnect();
-            this.muteNode = null;
-          }
-          if (this.volumeNode) {
-            this.volumeNode.disconnect();
-            this.volumeNode = null;
-          }
-          if (this.pannerNode) {
-            this.pannerNode.disconnect();
-            this.pannerNode = null;
-          }
-          this.rateUpdates.length = 0;
-          this.rateUpdates = null;
+        setPan: function(value) {
+          this.pan = value;
+          return this;
         }
       });
       module.exports = WebAudioSound;
@@ -30544,44 +30512,36 @@ var Phaser = (function() {
       var BaseSoundManager = require_BaseSoundManager();
       var Class = require_Class();
       var Events = require_events15();
-      var GetFastValue = require_GetFastValue();
-      var Map = require_Map();
+      var GameEvents = require_events();
       var WebAudioSound = require_WebAudioSound();
       var WebAudioSoundManager = new Class({
         Extends: BaseSoundManager,
         initialize: function WebAudioSoundManager2(game) {
-          this.config = game.config.audio;
-          this.context;
-          this.masterMuteNode;
-          this.masterVolumeNode;
-          this.destination;
-          this.decodeQueue = new Map();
-          this.decodeOnDemand = GetFastValue(this.config, "decodeOnDemand", true);
-          this.cache = game.cache.audio;
+          this.context = this.createAudioContext(game);
+          this.masterMuteNode = this.context.createGain();
+          this.masterVolumeNode = this.context.createGain();
+          this.masterMuteNode.connect(this.masterVolumeNode);
+          this.masterVolumeNode.connect(this.context.destination);
+          this.destination = this.masterMuteNode;
+          this.locked = this.context.state === "suspended" && ("ontouchstart" in window || "onclick" in window);
           BaseSoundManager.call(this, game);
+          if (this.locked && game.isBooted) {
+            this.unlock();
+          } else {
+            game.events.once(GameEvents.BOOT, this.unlock, this);
+          }
         },
-        unlockHandler: function() {
-          this.createAudioContext();
-        },
-        createAudioContext: function() {
-          var context;
-          var audioConfig = this.config;
+        createAudioContext: function(game) {
+          var audioConfig = game.config.audio;
           if (audioConfig.context) {
             audioConfig.context.resume();
-            context = audioConfig.context;
+            return audioConfig.context;
           }
           if (window.hasOwnProperty("AudioContext")) {
-            context = new AudioContext({ latencyHint: "interactive" });
+            return new AudioContext();
           } else if (window.hasOwnProperty("webkitAudioContext")) {
-            context = new window.webkitAudioContext({ latencyHint: "interactive" });
+            return new window.webkitAudioContext();
           }
-          this.setAudioContext(context);
-          if (this.locked) {
-            this.unlocked = true;
-            this.locked = false;
-            this.emit(Events.UNLOCKED, this);
-          }
-          return context;
         },
         setAudioContext: function(context) {
           if (this.context) {
@@ -30606,36 +30566,15 @@ var Phaser = (function() {
           this.sounds.push(sound);
           return sound;
         },
-        decodeAudioQueue: function(key) {
-          var context = this.context;
-          var queue = this.decodeQueue;
-          if (key && !Array.isArray(key)) {
-            key = [key];
-          }
-          var isDecoding = false;
-          if (context) {
-            for (var i = 0; i < key.length; i++) {
-              var entry = queue.get(key[i]);
-              if (entry && !entry.decoding) {
-                entry.decoding = true;
-                context.decodeAudioData(entry.data, entry.success, entry.failure);
-                isDecoding = true;
-              }
-            }
-          }
-          return isDecoding;
-        },
         decodeAudio: function(audioKey, audioData) {
           var audioFiles;
           if (!Array.isArray(audioKey)) {
-            audioFiles = [{ key: audioKey, data: audioData, decoding: false }];
+            audioFiles = [{ key: audioKey, data: audioData }];
           } else {
             audioFiles = audioKey;
           }
           var cache = this.game.cache.audio;
           var remaining = audioFiles.length;
-          var context = this.context;
-          var queue = this.decodeQueue;
           for (var i = 0; i < audioFiles.length; i++) {
             var entry = audioFiles[i];
             var key = entry.key;
@@ -30645,8 +30584,7 @@ var Phaser = (function() {
             }
             var success = function(key2, audioBuffer) {
               cache.add(key2, audioBuffer);
-              this.emit(Events.DECODED, key2, audioBuffer);
-              this.emit(Events.DECODED_KEY + key2, audioBuffer);
+              this.emit(Events.DECODED, key2);
               remaining--;
               if (remaining === 0) {
                 this.emit(Events.DECODED_ALL);
@@ -30659,22 +30597,44 @@ var Phaser = (function() {
                 this.emit(Events.DECODED_ALL);
               }
             }.bind(this, key);
-            if (!context || this.decodeOnDemand) {
-              queue.set(key, { data: data, success: success, failure: failure, decoding: false });
-            } else {
-              entry.decoding = true;
-              context.decodeAudioData(data, success, failure);
+            this.context.decodeAudioData(data, success, failure);
+          }
+        },
+        unlock: function() {
+          var _this = this;
+          var body = document.body;
+          var unlockHandler = function unlockHandler2() {
+            if (_this.context && body) {
+              var bodyRemove = body.removeEventListener;
+              _this.context.resume().then(function() {
+                bodyRemove("touchstart", unlockHandler2);
+                bodyRemove("touchend", unlockHandler2);
+                bodyRemove("click", unlockHandler2);
+                bodyRemove("keydown", unlockHandler2);
+                _this.unlocked = true;
+              }, function() {
+                bodyRemove("touchstart", unlockHandler2);
+                bodyRemove("touchend", unlockHandler2);
+                bodyRemove("click", unlockHandler2);
+                bodyRemove("keydown", unlockHandler2);
+              });
             }
+          };
+          if (body) {
+            body.addEventListener("touchstart", unlockHandler, false);
+            body.addEventListener("touchend", unlockHandler, false);
+            body.addEventListener("click", unlockHandler, false);
+            body.addEventListener("keydown", unlockHandler, false);
           }
         },
         onBlur: function() {
-          if (!this.locked && this.context) {
+          if (!this.locked) {
             this.context.suspend();
           }
         },
         onFocus: function() {
           var context = this.context;
-          if (context && (context.state === "suspended" || context.state === "interrupted") && !this.locked) {
+          if ((context.state === "suspended" || context.state === "interrupted") && !this.locked) {
             context.resume();
           }
         },
@@ -30685,63 +30645,47 @@ var Phaser = (function() {
             context.resume();
           }
         },
+        destroy: function() {
+          this.destination = null;
+          this.masterVolumeNode.disconnect();
+          this.masterVolumeNode = null;
+          this.masterMuteNode.disconnect();
+          this.masterMuteNode = null;
+          if (this.game.config.audio.context) {
+            this.context.suspend();
+          } else {
+            var _this = this;
+            this.context.close().then(function() {
+              _this.context = null;
+            });
+          }
+          BaseSoundManager.prototype.destroy.call(this);
+        },
         setMute: function(value) {
           this.mute = value;
           return this;
+        },
+        mute: {
+          get: function() {
+            return this.masterMuteNode.gain.value === 0;
+          },
+          set: function(value) {
+            this.masterMuteNode.gain.setValueAtTime(value ? 0 : 1, 0);
+            this.emit(Events.GLOBAL_MUTE, this, value);
+          }
         },
         setVolume: function(value) {
           this.volume = value;
           return this;
         },
-        mute: {
-          get: function() {
-            return this.masterMuteNode && this.masterMuteNode.gain.value === 0;
-          },
-          set: function(value) {
-            if (this.masterMuteNode) {
-              this.masterMuteNode.gain.setValueAtTime(value ? 0 : 1, 0);
-              this.emit(Events.GLOBAL_MUTE, this, value);
-            }
-          }
-        },
         volume: {
           get: function() {
-            if (this.masterVolumeNode) {
-              return this.masterVolumeNode.gain.value;
-            } else {
-              return 0;
-            }
+            return this.masterVolumeNode.gain.value;
           },
           set: function(value) {
-            if (this.masterVolumeNode) {
-              this.masterVolumeNode.gain.setValueAtTime(value, 0);
-              this.emit(Events.GLOBAL_VOLUME, this, value);
-            }
+            this.masterVolumeNode.gain.setValueAtTime(value, 0);
+            this.emit(Events.GLOBAL_VOLUME, this, value);
           }
-        },
-        destroy: function() {
-          if (this.masterVolumeNode) {
-            this.masterVolumeNode.disconnect();
-          }
-          if (this.masterMuteNode) {
-            this.masterMuteNode.disconnect();
-          }
-          this.decodeQueue.clear();
-          this.destination = null;
-          this.masterVolumeNode = null;
-          this.masterMuteNode = null;
-          this.decodeQueue = null;
-          if (this.context) {
-            if (this.config.context) {
-              this.context.suspend();
-            } else {
-              var _this = this;
-              this.context.close().then(function() {
-                _this.context = null;
-              });
-            }
-          }
-          BaseSoundManager.prototype.destroy.call(this);
         }
       });
       module.exports = WebAudioSoundManager;
@@ -31897,8 +31841,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureRender.js
   var require_RenderTextureRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_RenderTextureWebGLRenderer();
       }
@@ -31987,6 +31932,7 @@ var Phaser = (function() {
           this.texture = null;
           this.frame = null;
           this._saved = false;
+          this.isSpriteTexture = false;
           if (key === void 0) {
             this.canvas = CanvasPool.create2D(this, width, height);
             this.texture = scene.sys.textures.addCanvas(UUID(), this.canvas);
@@ -32010,6 +31956,7 @@ var Phaser = (function() {
           } else if (renderer.type === CONST.WEBGL) {
             this.drawGameObject = this.batchGameObjectWebGL;
             this.renderTarget = new RenderTarget(renderer, width, height, 1, 0, false);
+            this.setFlipY(this.isSpriteTexture);
           } else if (renderer.type === CONST.CANVAS) {
             this.drawGameObject = this.batchGameObjectCanvas;
           }
@@ -32023,6 +31970,11 @@ var Phaser = (function() {
         },
         setSize: function(width, height) {
           return this.resize(width, height);
+        },
+        setIsSpriteTexture: function(value) {
+          this.isSpriteTexture = value;
+          this.setFlipY(value);
+          return this;
         },
         resize: function(width, height) {
           if (height === void 0) {
@@ -32042,6 +31994,7 @@ var Phaser = (function() {
                 frame.source.isRenderTexture = true;
                 frame.source.isGLTexture = true;
                 frame.source.glTexture = renderTarget.texture;
+                frame.source.glTexture.flipY = true;
               }
               this.camera.setSize(width, height);
               frame.source.width = width;
@@ -32100,9 +32053,9 @@ var Phaser = (function() {
           if (height === void 0) {
             height = frame.cutHeight;
           }
-          var r = (rgb >> 16 & 255) / 255;
-          var g = (rgb >> 8 & 255) / 255;
-          var b = (rgb & 255) / 255;
+          var r = rgb >> 16 & 255;
+          var g = rgb >> 8 & 255;
+          var b = rgb & 255;
           var renderTarget = this.renderTarget;
           camera.preRender();
           if (renderTarget) {
@@ -32115,7 +32068,7 @@ var Phaser = (function() {
             var rh = renderer.height;
             var sx = rw / tw;
             var sy = rh / th;
-            pipeline.drawFillRect(x * sx, y * sy, width * sx, height * sy, Utils.getTintFromFloats(b, g, r, 1), alpha);
+            pipeline.drawFillRect(x * sx, y * sy, width * sx, height * sy, Utils.getTintFromFloats(b / 255, g / 255, r / 255, 1), alpha);
             renderTarget.unbind(true);
           } else {
             var ctx = this.context;
@@ -32222,7 +32175,7 @@ var Phaser = (function() {
           if (renderTarget) {
             var canvasTarget = renderer.endCapture();
             var util = renderer.pipelines.setUtility();
-            util.blitFrame(canvasTarget, renderTarget, 1, false, false, erase);
+            util.blitFrame(canvasTarget, renderTarget, 1, false, false, erase, this.isSpriteTexture);
             renderer.resetScissor();
             renderer.resetViewport();
           } else {
@@ -32281,6 +32234,9 @@ var Phaser = (function() {
           if (gameObject.renderDirect) {
             gameObject.renderDirect(this.renderer, gameObject, this.camera);
           } else {
+            if (!this._eraseMode) {
+              this.renderer.setBlendMode(gameObject.blendMode);
+            }
             gameObject.renderWebGL(this.renderer, gameObject, this.camera);
           }
           gameObject.setPosition(prevX, prevY);
@@ -32332,7 +32288,9 @@ var Phaser = (function() {
             ctx.globalCompositeOperation = this._eraseMode ? "destination-out" : "source-over";
             ctx.globalAlpha = alpha;
             matrix.setToContext(ctx);
-            ctx.drawImage(source, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
+            if (cd.width > 0 && cd.height > 0) {
+              ctx.drawImage(source, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
+            }
             ctx.restore();
           }
         },
@@ -33448,7 +33406,7 @@ var Phaser = (function() {
           renderer.nextTypeMatch = i < childCount - 1 ? children[i + 1].type === renderer.currentType : false;
           child.setScrollFactor(childScrollFactorX * scrollFactorX, childScrollFactorY * scrollFactorY);
           child.setAlpha(childAlphaTopLeft * alpha, childAlphaTopRight * alpha, childAlphaBottomLeft * alpha, childAlphaBottomRight * alpha);
-          child.renderWebGL(renderer, child, camera, transformMatrix);
+          child.renderWebGL(renderer, child, camera, transformMatrix, container);
           child.setAlpha(childAlphaTopLeft, childAlphaTopRight, childAlphaBottomLeft, childAlphaBottomRight);
           child.setScrollFactor(childScrollFactorX, childScrollFactorY);
           if (mask) {
@@ -33519,8 +33477,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/container/ContainerRender.js
   var require_ContainerRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/container/ContainerRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_ContainerWebGLRenderer();
       }
@@ -33661,14 +33620,16 @@ var Phaser = (function() {
             if (gameObject.parentContainer) {
               gameObject.parentContainer.remove(gameObject);
             }
-            gameObject.removeFromDisplayList();
             gameObject.parentContainer = this;
+            gameObject.removeFromDisplayList();
+            gameObject.addedToScene();
           }
         },
         removeHandler: function(gameObject) {
-          gameObject.off(Events.DESTROY, this.remove);
+          gameObject.off(Events.DESTROY, this.remove, this);
           if (this.exclusive) {
             gameObject.parentContainer = null;
+            gameObject.removedFromScene();
             gameObject.addToDisplayList();
           }
         },
@@ -33679,7 +33640,8 @@ var Phaser = (function() {
           if (this.parentContainer) {
             this.parentContainer.pointToContainer(source, output);
           } else {
-            output = new Vector2(source.x, source.y);
+            output.x = source.x;
+            output.y = source.y;
           }
           var tempMatrix = this.tempTransformMatrix;
           tempMatrix.applyITRS(this.x, this.y, this.rotation, this.scaleX, this.scaleY);
@@ -33776,11 +33738,17 @@ var Phaser = (function() {
           return this;
         },
         removeAll: function(destroyChild) {
-          var removed = ArrayUtils.RemoveBetween(this.list, 0, this.list.length, this.removeHandler, this);
+          var list = this.list;
           if (destroyChild) {
-            for (var i = 0; i < removed.length; i++) {
-              removed[i].destroy();
+            for (var i = 0; i < list.length; i++) {
+              if (list[i] && list[i].scene) {
+                list[i].off(Events.DESTROY, this.remove, this);
+                list[i].destroy();
+              }
             }
+            this.list = [];
+          } else {
+            ArrayUtils.RemoveBetween(list, 0, list.length, this.removeHandler, this);
           }
           return this;
         },
@@ -34157,6 +34125,9 @@ var Phaser = (function() {
           if (gameObject.displayList && gameObject.displayList !== this) {
             gameObject.removeFromDisplayList();
           }
+          if (gameObject.parentContainer) {
+            gameObject.parentContainer.remove(gameObject);
+          }
           if (!gameObject.displayList) {
             this.queueDepthSort();
             gameObject.displayList = this;
@@ -34190,11 +34161,9 @@ var Phaser = (function() {
         },
         shutdown: function() {
           var list = this.list;
-          var i = list.length;
-          while (i--) {
-            list[i].destroy(true);
+          while (list.length) {
+            list[0].destroy(true);
           }
-          list.length = 0;
           this.events.off(SceneEvents.SHUTDOWN, this.shutdown, this);
         },
         destroy: function() {
@@ -34250,14 +34219,34 @@ var Phaser = (function() {
           this._toProcess = 0;
           this.checkQueue = false;
         },
+        isActive: function(item) {
+          return this._active.indexOf(item) > -1;
+        },
+        isPending: function(item) {
+          return this._toProcess > 0 && this._pending.indexOf(item) > -1;
+        },
+        isDestroying: function(item) {
+          return this._destroy.indexOf(item) > -1;
+        },
         add: function(item) {
+          if (this.checkQueue && (this.isActive(item) || this.isPending(item))) {
+            return item;
+          }
           this._pending.push(item);
           this._toProcess++;
           return item;
         },
         remove: function(item) {
-          this._destroy.push(item);
-          this._toProcess++;
+          if (this.isPending(item)) {
+            var pending = this._pending;
+            var idx = pending.indexOf(item);
+            if (idx !== -1) {
+              pending.splice(idx, 1);
+            }
+          } else if (this.isActive(item)) {
+            this._destroy.push(item);
+            this._toProcess++;
+          }
           return item;
         },
         removeAll: function() {
@@ -35170,8 +35159,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/graphics/GraphicsRender.js
   var require_GraphicsRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/graphics/GraphicsRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_GraphicsWebGLRenderer();
         renderCanvas = require_GraphicsCanvasRenderer();
@@ -35667,8 +35657,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/image/ImageRender.js
   var require_ImageRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/image/ImageRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_ImageWebGLRenderer();
       }
@@ -35999,8 +35990,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseRender.js
   var require_EllipseRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_EllipseWebGLRenderer();
       }
@@ -36146,8 +36138,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/shape/line/LineRender.js
   var require_LineRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/shape/line/LineRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_LineWebGLRenderer();
       }
@@ -36288,8 +36281,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleRender.js
   var require_RectangleRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_RectangleWebGLRenderer();
       }
@@ -38059,6 +38053,9 @@ var Phaser = (function() {
           }
           return anim;
         },
+        createFromAseprite: function(key, tags) {
+          return this.animationManager.createFromAseprite(key, tags, this.parent);
+        },
         generateFrameNames: function(key, config) {
           return this.animationManager.generateFrameNames(key, config);
         },
@@ -38122,8 +38119,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/sprite/SpriteRender.js
   var require_SpriteRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/sprite/SpriteRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_SpriteWebGLRenderer();
       }
@@ -38861,8 +38859,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/text/TextRender.js
   var require_TextRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/text/TextRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_TextWebGLRenderer();
       }
@@ -39031,16 +39030,6 @@ var Phaser = (function() {
           this.wordWrapUseAdvanced;
           this._font;
           this.setStyle(style, false, true);
-          var metrics = GetValue(style, "metrics", false);
-          if (metrics) {
-            this.metrics = {
-              ascent: GetValue(metrics, "ascent", 0),
-              descent: GetValue(metrics, "descent", 0),
-              fontSize: GetValue(metrics, "fontSize", 0)
-            };
-          } else {
-            this.metrics = MeasureText(this);
-          }
         },
         setStyle: function(style, updateText, setDefaults) {
           if (updateText === void 0) {
@@ -39069,8 +39058,18 @@ var Phaser = (function() {
           if (fill !== null) {
             this.color = fill;
           }
+          var metrics = GetValue(style, "metrics", false);
+          if (metrics) {
+            this.metrics = {
+              ascent: GetValue(metrics, "ascent", 0),
+              descent: GetValue(metrics, "descent", 0),
+              fontSize: GetValue(metrics, "fontSize", 0)
+            };
+          } else if (updateText || !this.metrics) {
+            this.metrics = MeasureText(this);
+          }
           if (updateText) {
-            return this.update(true);
+            return this.parent.updateText();
           } else {
             return this.parent;
           }
@@ -40043,7 +40042,7 @@ var Phaser = (function() {
             i: charIndex,
             char: text[i],
             code: charCode,
-            x: (glyph.xOffset + xAdvance) * scale,
+            x: (glyph.xOffset + x) * scale,
             y: (glyph.yOffset + yAdvance) * scale,
             w: glyph.width * scale,
             h: glyph.height * scale,
@@ -40053,7 +40052,7 @@ var Phaser = (function() {
             line: currentLine,
             glyph: glyph
           });
-          xAdvance += glyph.xAdvance + letterSpacing;
+          xAdvance += glyph.xAdvance + letterSpacing + (kerningOffset !== void 0 ? kerningOffset : 0);
           lastGlyph = glyph;
           lastCharCode = charCode;
           currentLineWidth = gw * scale;
@@ -40427,7 +40426,7 @@ var Phaser = (function() {
           x *= scale;
           y *= scale;
           x += lineOffsetX;
-          xAdvance += glyph.xAdvance + letterSpacing;
+          xAdvance += glyph.xAdvance + letterSpacing + (kerningOffset !== void 0 ? kerningOffset : 0);
           lastGlyph = glyph;
           lastCharCode = charCode;
           if (glyphW === 0 || glyphH === 0 || charCode === 32) {
@@ -40452,8 +40451,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextRender.js
   var require_BitmapTextRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_BitmapTextWebGLRenderer();
       }
@@ -40898,6 +40898,9 @@ var Phaser = (function() {
           var t = typeof value;
           this.onEmit = this.defaultEmit;
           this.onUpdate = this.defaultUpdate;
+          if (value === null) {
+            return;
+          }
           if (t === "number") {
             this.onEmit = this.staticValueEmit;
             this.onUpdate = this.staticValueUpdate;
@@ -41095,7 +41098,6 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/particles/Particle.js": function(exports, module) {
       var Class = require_Class();
       var DegToRad = require_DegToRad();
-      var DistanceBetween = require_DistanceBetween();
       var Particle = new Class({
         initialize: function Particle2(emitter) {
           this.emitter = emitter;
@@ -41165,10 +41167,9 @@ var Phaser = (function() {
           } else if (emitter.moveTo) {
             var mx = emitter.moveToX.onEmit(this, "moveToX");
             var my = emitter.moveToY ? emitter.moveToY.onEmit(this, "moveToY") : mx;
-            var angle = Math.atan2(my - this.y, mx - this.x);
-            var speed = DistanceBetween(this.x, this.y, mx, my) / (this.life / 1e3);
-            this.velocityX = Math.cos(angle) * speed;
-            this.velocityY = Math.sin(angle) * speed;
+            var lifeS = this.life / 1e3;
+            this.velocityX = (mx - this.x) / lifeS;
+            this.velocityY = (my - this.y) / lifeS;
           } else {
             this.velocityX = sx;
             this.velocityY = sy;
@@ -41502,8 +41503,8 @@ var Phaser = (function() {
           this.speedX = new EmitterOp(config, "speedX", 0, true);
           this.speedY = new EmitterOp(config, "speedY", 0, true);
           this.moveTo = false;
-          this.moveToX = new EmitterOp(config, "moveToX", 0, true);
-          this.moveToY = new EmitterOp(config, "moveToY", 0, true);
+          this.moveToX = new EmitterOp(config, "moveToX", null, true);
+          this.moveToY = new EmitterOp(config, "moveToY", null, true);
           this.bounce = new EmitterOp(config, "bounce", 0, true);
           this.scaleX = new EmitterOp(config, "scaleX", 1);
           this.scaleY = new EmitterOp(config, "scaleY", 1);
@@ -41566,7 +41567,7 @@ var Phaser = (function() {
             }
           }
           this.acceleration = this.accelerationX.propertyValue !== 0 || this.accelerationY.propertyValue !== 0;
-          this.moveTo = this.moveToX.propertyValue !== 0 || this.moveToY.propertyValue !== 0;
+          this.moveTo = this.moveToX.propertyValue !== null && this.moveToY.propertyValue !== null;
           if (HasValue(config, "speed")) {
             this.speedX.loadConfig(config, "speed");
             this.speedY = null;
@@ -42010,9 +42011,9 @@ var Phaser = (function() {
             this.emitParticle();
           } else if (this.frequency > 0) {
             this._counter -= delta;
-            if (this._counter <= 0) {
+            while (this._counter <= 0) {
               this.emitParticle();
-              this._counter = this.frequency - Math.abs(this._counter);
+              this._counter += this.frequency;
             }
           }
         },
@@ -42167,18 +42168,20 @@ var Phaser = (function() {
             camMatrix.multiply(particleMatrix, calcMatrix);
             var frame = particle.frame;
             var cd = frame.canvasData;
-            var x = -frame.halfWidth;
-            var y = -frame.halfHeight;
-            ctx.globalAlpha = alpha;
-            ctx.save();
-            calcMatrix.setToContext(ctx);
-            if (roundPixels) {
-              x = Math.round(x);
-              y = Math.round(y);
+            if (cd.width > 0 && cd.height > 0) {
+              var x = -frame.halfWidth;
+              var y = -frame.halfHeight;
+              ctx.globalAlpha = alpha;
+              ctx.save();
+              calcMatrix.setToContext(ctx);
+              if (roundPixels) {
+                x = Math.round(x);
+                y = Math.round(y);
+              }
+              ctx.imageSmoothingEnabled = !(!renderer.antialias || frame.source.scaleMode);
+              ctx.drawImage(frame.source.image, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
+              ctx.restore();
             }
-            ctx.imageSmoothingEnabled = !(!renderer.antialias || frame.source.scaleMode);
-            ctx.drawImage(frame.source.image, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
-            ctx.restore();
           }
           ctx.restore();
         }
@@ -42190,8 +42193,9 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/particles/ParticleManagerRender.js
   var require_ParticleManagerRender = __commonJS({
     "../../node_modules/phaser/src/gameobjects/particles/ParticleManagerRender.js": function(exports, module) {
-      var renderWebGL = require_NOOP();
-      var renderCanvas = require_NOOP();
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
       if (true) {
         renderWebGL = require_ParticleManagerWebGLRenderer();
       }
@@ -45466,8 +45470,9 @@ var Phaser = (function() {
           }
           if (debug) {
             debug.isFilled = false;
+            debug.strokeColor = color;
             debug.preUpdate = function() {
-              debug.setStrokeStyle(1 / gameObject.scale, color);
+              debug.setStrokeStyle(1 / gameObject.scale, debug.strokeColor);
               debug.setDisplayOrigin(gameObject.displayOriginX, gameObject.displayOriginY);
               var x = gameObject.x;
               var y = gameObject.y;
@@ -45841,8 +45846,6 @@ var Phaser = (function() {
           this.emit(Events.UP, this, event);
         },
         reset: function() {
-          this.preventDefault = true;
-          this.enabled = true;
           this.isDown = false;
           this.isUp = true;
           this.altKey = false;
@@ -46624,13 +46627,16 @@ var Phaser = (function() {
           this.loader = loader;
           this.cache = GetFastValue(fileConfig, "cache", false);
           this.type = GetFastValue(fileConfig, "type", false);
+          if (!this.type) {
+            throw new Error("Invalid File type: " + this.type);
+          }
           this.key = GetFastValue(fileConfig, "key", false);
           var loadKey = this.key;
           if (loader.prefix && loader.prefix !== "") {
             this.key = loader.prefix + loadKey;
           }
-          if (!this.type || !this.key) {
-            throw new Error("Invalid Loader." + this.type + " key");
+          if (!this.key) {
+            throw new Error("Invalid File key: " + this.key);
           }
           var url = GetFastValue(fileConfig, "url");
           if (url === void 0) {
@@ -46680,7 +46686,9 @@ var Phaser = (function() {
           }
         },
         onLoad: function(xhr, event) {
-          var isLocalFile = xhr.responseURL && (xhr.responseURL.indexOf("file://") === 0 || xhr.responseURL.indexOf("capacitor://") === 0);
+          var isLocalFile = xhr.responseURL && this.loader.localSchemes.some(function(scheme) {
+            return xhr.responseURL.indexOf(scheme) === 0;
+          });
           var localFileOk = isLocalFile && event.target.status === 0;
           var success = !(event.target && event.target.status !== 200) || localFileOk;
           if (xhr.readyState === 4 && xhr.status >= 400 && xhr.status <= 599) {
@@ -46870,7 +46878,7 @@ var Phaser = (function() {
         },
         addToCache: function() {
           var linkFile = this.linkFile;
-          if (linkFile && linkFile.state === CONST.FILE_COMPLETE) {
+          if (linkFile && linkFile.state >= CONST.FILE_COMPLETE) {
             if (this.type === "image") {
               this.cache.addImage(this.key, this.data, linkFile.data);
             } else {
@@ -47343,6 +47351,8 @@ var Phaser = (function() {
             type = GetFastValue(config, "type", "script");
             xhrSettings = GetFastValue(config, "xhrSettings");
             extension = GetFastValue(config, "extension", extension);
+          } else if (type === void 0) {
+            type = "script";
           }
           var fileConfig = {
             type: type,
@@ -47390,6 +47400,7 @@ var Phaser = (function() {
       var Events = require_events14();
       var FileTypesManager = require_FileTypesManager();
       var GetFastValue = require_GetFastValue();
+      var GetValue = require_GetValue();
       var PluginCache = require_PluginCache();
       var SceneEvents = require_events5();
       var XHRSettings = require_XHRSettings();
@@ -47415,6 +47426,7 @@ var Phaser = (function() {
           this.xhr = XHRSettings(GetFastValue(sceneConfig, "responseType", gameConfig.loaderResponseType), GetFastValue(sceneConfig, "async", gameConfig.loaderAsync), GetFastValue(sceneConfig, "user", gameConfig.loaderUser), GetFastValue(sceneConfig, "password", gameConfig.loaderPassword), GetFastValue(sceneConfig, "timeout", gameConfig.loaderTimeout), GetFastValue(sceneConfig, "withCredentials", gameConfig.loaderWithCredentials));
           this.crossOrigin = GetFastValue(sceneConfig, "crossOrigin", gameConfig.loaderCrossOrigin);
           this.imageLoadType = GetFastValue(sceneConfig, "imageLoadType", gameConfig.loaderImageLoadType);
+          this.localSchemes = GetFastValue(sceneConfig, "localScheme", gameConfig.loaderLocalScheme);
           this.totalToLoad = 0;
           this.progress = 0;
           this.list = new CustomSet();
@@ -47508,8 +47520,11 @@ var Phaser = (function() {
           return keyConflict;
         },
         addPack: function(pack, packKey) {
-          if (packKey && pack.hasOwnProperty(packKey)) {
-            pack = { packKey: pack[packKey] };
+          if (typeof packKey === "string") {
+            var subPack = GetValue(pack, packKey);
+            if (subPack) {
+              pack = { packKey: subPack };
+            }
           }
           var total = 0;
           var currentBaseURL = this.baseURL;
@@ -49692,10 +49707,12 @@ var Phaser = (function() {
             wasPaused = true;
             this.state = TWEEN_CONST.ACTIVE;
           }
-          this.isSeeking = true;
-          do {
-            this.update(0, delta);
-          } while (this.totalProgress < toPosition);
+          if (toPosition > 0) {
+            this.isSeeking = true;
+            do {
+              this.update(0, delta);
+            } while (this.totalProgress < toPosition);
+          }
           this.isSeeking = false;
           if (wasPaused) {
             this.state = TWEEN_CONST.PAUSED;
