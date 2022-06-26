@@ -43,7 +43,7 @@ module.exports = {
 		},
 		{
 			route: "/fonts",
-			handle: require("./middleware/get-fonts-list"),
+			handle: require("./middleware/get-ttf-fonts"),
 		},
 		{
 			route: "/projects",

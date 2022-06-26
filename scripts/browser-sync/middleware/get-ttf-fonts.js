@@ -3,19 +3,27 @@ const ttfinfo = require("ttfinfo")
 const slash = require('slash')
 
 module.exports = function(req, res, next) {
+	if (req.method !== "POST") {
+		return next()
+	}
+
 	let data = ""
 	req.on("data", chunk => data += chunk)
 	req.on("end", async () => {
 		let { fonts } = JSON.parse(data)
 
-		getFontsList(fonts).then((fonts) => {
+		getTtfFonts(fonts).then((fonts) => {
 			res.writeHead(200, { "Content-Type": "application/json" })
 			res.end(JSON.stringify(fonts))
 		})
 	})
 }
 
-async function getFontsList(fontsToInclude) {
+/**
+ * @param fontsToInclude {string[]}
+ * @return {Promise<Record<string, unknown>>}
+ */
+async function getTtfFonts(fontsToInclude) {
 	let fontPaths = await getSystemFonts()
 	let fonts = await Promise.all(
 		fontPaths
