@@ -1,4 +1,7 @@
 # Bitmap Font Editor
+
+![Screenshot](screenshot.png)
+
 - [Origin Story](#origin-story)
 - [Features](#features)
 - [How to use](#how-to-use)
@@ -87,7 +90,7 @@ Application entry point is at **src/startup/Startup.ts**
 
 
 - **gsheet-to-texts**  
-  `node scripts/texts/gsheet-to-texts.js && yarn run texts-to-ts`    
+  `node scripts/texts/gsheet-to-texts.js && node run texts-to-ts`    
   Google Sheet to [dev/assets/texts.json](dev/assets/texts.json) conversion. Check the [Localization with Google Sheets](#localization-with-google-sheets) section.
 
 
