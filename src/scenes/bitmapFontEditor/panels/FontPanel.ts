@@ -1,7 +1,7 @@
 import { EditorPanel } from "./EditorPanel"
 import { ButtonApi, InputBindingApi, ListParamsOptions } from "@tweakpane/core"
-import Vector2Like = Phaser.Types.Math.Vector2Like
 import { BitmapFontProjectConfig, RGBA } from "../BitmapFontProjectConfig"
+import Vector2Like = Phaser.Types.Math.Vector2Like
 
 export type TextFontConfig = {
 	family: string,

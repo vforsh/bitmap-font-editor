@@ -106,15 +106,6 @@ export class BitmapFontEditor extends BaseScene {
 			this.updateRecentProjects()
 		}
 		
-		let project = UrlParams.get("project")
-		if (project) {
-			project = slash(project)
-		}
-		
-		if (this.projectsList?.includes(project)) {
-			this.config.import.project = project
-		}
-		
 		this.doCreate()
 	}
 	
@@ -195,8 +186,9 @@ export class BitmapFontEditor extends BaseScene {
 		this.isReady = true
 		this.resize()
 		
-		if (this.config.import.project) {
-			this.loadProject(this.config.import.project)
+		let projectPath = UrlParams.get("project")
+		if (projectPath) {
+			this.loadProject(projectPath)
 		}
 	}
 	
@@ -792,7 +784,7 @@ export class BitmapFontEditor extends BaseScene {
 		
 		let path = this.fontsList[name]?.path
 		if (!path) {
-			return Promise.reject("Path for this font name doesn't exist!")
+			return Promise.reject(`Path for this font (${name}) doesn't exist!`)
 		}
 		
 		let response = await BrowserSyncService.readFile(path)
@@ -889,7 +881,11 @@ export class BitmapFontEditor extends BaseScene {
 	private onProjectChange(config: ImportPanelConfig): void {
 		if (!config.project) {
 			// create new empty project
-			this.applyProjectConfig(cloneDeep(DEFAULT_CONFIG))
+			let defaultConfig = cloneDeep(DEFAULT_CONFIG)
+			let defaultFont = Object.keys(this.fontsList).sort()[0]
+			defaultConfig.font.family = defaultFont
+			
+			this.applyProjectConfig(defaultConfig)
 			return
 		}
 		
