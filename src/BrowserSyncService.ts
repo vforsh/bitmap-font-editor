@@ -1,5 +1,6 @@
 import type open from "open"
 import type { Options } from "execa"
+import type { GlobbyOptions } from "globby"
 
 export type BrowserSyncApiEndpoint =
 	| "screenshot"
@@ -10,6 +11,7 @@ export type BrowserSyncApiEndpoint =
 	| "write-file"
 	| "open"
 	| "command"
+	| "globby"
 
 export type SaveBitmapFontParams = {
 	project: string,
@@ -122,6 +124,17 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("projects"), {
 			method: "POST",
 			body: JSON.stringify({ dirpath }),
+		})
+	},
+	
+	globby(patterns: string | string[], options?: GlobbyOptions): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("globby"), {
+			method: "POST",
+			body: JSON.stringify({ patterns, options }),
 		})
 	},
 	

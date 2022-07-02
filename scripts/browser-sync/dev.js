@@ -65,5 +65,9 @@ module.exports = {
 			route: "/command",
 			handle: require("./middleware/command"),
 		},
+		{
+			route: "/globby",
+			handle: require("./middleware/globby"),
+		},
 	],
 }
