@@ -5,7 +5,7 @@ import { ContentPanelEvent } from "./panels/ContentPanel"
 import { LayoutPanelConfig, PackingMethod } from "./panels/LayoutPanel"
 import { TextFontConfig } from "./panels/FontPanel"
 import { Font, parse } from "opentype.js"
-import { BmFontData, createBmfontData } from "./create-bmfont-data"
+import { createBmfontData } from "./create-bmfont-data"
 import { BrowserSyncService } from "../../BrowserSyncService"
 import { Config } from "../../Config"
 import { ShadowPanelConfig } from "./panels/ShadowPanel"
@@ -13,21 +13,21 @@ import { cloneDeep, get, merge, set } from "lodash-es"
 import { GlowPanelConfig } from "./panels/GlowPanel"
 import { GlowPostFX } from "../../robowhale/phaser3/fx/GlowPostFX"
 import { PreviewPanelConfig } from "./panels/PreviewPanel"
-import * as potpack from "potpack"
 import { ButtonApi } from "@tweakpane/core"
 import { UrlParams } from "../../UrlParams"
 import { ImportPanelConfig } from "./panels/ImportPanel"
 import { blobToImage } from "../../robowhale/phaser3/utils/blob-to-json"
 import { parseJsonBitmapFont } from "../../robowhale/phaser3/gameObjects/bitmap-text/parse-json-bitmap-font"
-import slash from "slash"
 import { OpenGamePanel, OpenGamePanelEvent } from "./modals/OpenGamePanel"
 import { ModalPanelEvent } from "./modals/ModalPanel"
 import { BitmapFontProjectConfig, DEFAULT_CONFIG, RGB, RGBA } from "./BitmapFontProjectConfig"
-import type { ExecaReturnValue } from "execa"
 import { GetTexturePackerPathPanel } from "./modals/GetTexturePackerPathPanel"
-import path from "path-browserify"
 import { getRendererSnapshot } from "../../robowhale/phaser3/utils/get-renderer-snapshot"
 import { BitmapFontEditorDepth } from "./BitmapFontEditorDepth"
+import type { ExecaReturnValue } from "execa"
+import * as potpack from "potpack"
+import slash from "slash"
+import path from "path-browserify"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
@@ -51,10 +51,10 @@ export type FontListEntry = {
 
 export class BitmapFontEditor extends BaseScene {
 	
-	public rootDir: string
+	public gameDir: string
 	public fontsDir: string
-	public gameSettingsPath: string
-	public gameSettings: GameSettings
+	public fontsSettingsPath: string
+	public fontsSettings: GameSettings
 	public fontsList: FontsList
 	public projectsList: ProjectsList
 	
@@ -74,8 +74,10 @@ export class BitmapFontEditor extends BaseScene {
 	public init(): void {
 		super.init()
 		
-		this.rootDir = null
-		this.gameSettings = null
+		this.gameDir = null
+		this.fontsDir = null
+		this.fontsSettingsPath = null
+		this.fontsSettings = null
 		this.fontsList = null
 		this.projectsList = null
 		this.glyphs = []
@@ -94,27 +96,23 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
-		let rootDir = UrlParams.get("game") ?? await this.showOpenGameWindow()
-		if (rootDir) {
-			rootDir = slash(rootDir)
+		let gameDir = UrlParams.get("game") ?? await this.showOpenGameWindow()
+		if (gameDir) {
+			gameDir = slash(gameDir)
 		}
 		
-		this.rootDir = rootDir
-		this.gameSettingsPath = this.rootDir && await this.getPathToGameSettings(this.rootDir)
-		this.gameSettings = this.gameSettingsPath && await this.loadGameSettings(this.gameSettingsPath)
-		this.fontsDir = this.gameSettingsPath && path.dirname(this.gameSettingsPath)
-		this.fontsList = await this.loadFontsList(this.gameSettings?.fonts)
+		this.gameDir = gameDir
+		this.fontsSettingsPath = this.gameDir && await this.getPathToFontsSettings(this.gameDir)
+		this.fontsSettings = this.fontsSettingsPath && await this.loadFontsSettings(this.fontsSettingsPath)
+		this.fontsDir = this.fontsSettingsPath && path.dirname(this.fontsSettingsPath)
+		this.fontsList = await this.loadFontsList(this.fontsSettings?.fonts)
 		this.projectsList = this.fontsDir && await this.loadProjectsList(this.fontsDir)
 		
-		if (this.gameSettings) {
+		if (this.fontsSettings) {
 			this.updateRecentProjects()
 		}
 		
 		this.doCreate()
-	}
-	
-	private getRelativeToRootPath(_path: string): string {
-	    return path.relative(this.rootDir, _path)
 	}
 	
 	private async showOpenGameWindow(): Promise<string> {
@@ -134,7 +132,7 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
-	private async getPathToGameSettings(dirpath: string, file = '.bmfontsrc'): Promise<string> {
+	private async getPathToFontsSettings(dirpath: string, file = '.bmfontsrc'): Promise<string> {
 		let response = await BrowserSyncService.globby(path.join(dirpath, "**", file))
 		let json = await response.json()
 		if (!json.success) {
@@ -143,18 +141,18 @@ export class BitmapFontEditor extends BaseScene {
 		
 		let files = json.result as string[]
 		if (!files.length) {
-			throw new Error(`Can't find '.bmfontsrc' file in '${dirpath}'!`)
+			throw new Error(`Can't find '${file}' file in '${dirpath}'!`)
 		}
 		
 		if (files.length > 1) {
-			console.warn(`There are several '.bmfontsrc' files in '${dirpath}'!`, files)
+			console.warn(`There are several '${file}' files in '${dirpath}'!`, files)
 			return files.find(file => file.includes('bitmap')) ?? files[0]
 		}
 		
 		return files[0]
 	}
 	
-	private async loadGameSettings(filepath: string): Promise<GameSettings> {
+	private async loadFontsSettings(filepath: string): Promise<GameSettings> {
 		try {
 			let response = await BrowserSyncService.readFile(filepath)
 			let json = await response.json()
@@ -188,8 +186,8 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private updateRecentProjects() {
 		let projects = this.game.store.getValue("recent_projects")
-		let currentProjectName = this.gameSettings.name
-		projects[currentProjectName] = { name: currentProjectName, path: this.rootDir, openedAt: Date.now() }
+		let currentProjectName = this.fontsSettings.name
+		projects[currentProjectName] = { name: currentProjectName, path: this.gameDir, openedAt: Date.now() }
 		
 		this.game.store.saveValue("recent_projects", projects)
 	}
@@ -291,7 +289,7 @@ export class BitmapFontEditor extends BaseScene {
 		reloadButton.disabled = true
 		familyInput.disabled = true
 		
-		BrowserSyncService.fonts(this.gameSettings?.fonts)
+		BrowserSyncService.fonts(this.fontsSettings?.fonts)
 			.then(response => response.json())
 			.then(fonts => {
 				this.fontsList = fonts
@@ -755,6 +753,10 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
+	private getRelativeToRootPath(_path: string): string {
+		return path.relative(this.gameDir, _path)
+	}
+	
 	// TP config = TexturePacker XML config (.tps)
 	private async getAtlasDataPathFromTpConfig(pathToTpConfig: string): Promise<string | undefined> {
 		try {
@@ -939,8 +941,8 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private onLoadProjectsButtonClick(): void {
-		if (!this.rootDir) {
-			console.warn("Can't load projects list because root directory is not set!")
+		if (!this.fontsDir) {
+			console.warn("Can't load projects list because fonts directory is not set!")
 			return
 		}
 		
@@ -948,7 +950,7 @@ export class BitmapFontEditor extends BaseScene {
 		projectInput.disabled = true
 		loadProjectsButton.disabled = true
 		
-		BrowserSyncService.projects(this.rootDir)
+		BrowserSyncService.projects(this.fontsDir)
 			.then(response => response.json())
 			.then((projects) => {
 				this.projectsList = projects

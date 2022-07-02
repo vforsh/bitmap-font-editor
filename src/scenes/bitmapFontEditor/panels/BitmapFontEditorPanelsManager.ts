@@ -56,8 +56,8 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	}
 	
 	private createGamePanelConfig(): GamePanelConfig {
-		let gameSettings = this.scene.gameSettings
-		if (!gameSettings) {
+		let fontsSettings = this.scene.fontsSettings
+		if (!fontsSettings) {
 			return {
 				name: "",
 				gameDirectory: "",
@@ -67,10 +67,10 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		}
 		
 		return {
-			name: gameSettings.name ?? "",
-			gameDirectory: this.scene.rootDir,
+			name: fontsSettings.name ?? "",
+			gameDirectory: this.scene.gameDir,
 			fontsDirectory: this.scene.fontsDir,
-			fonts: gameSettings.fonts.join("\n"),
+			fonts: fontsSettings.fonts.join("\n"),
 		}
 	}
 	
