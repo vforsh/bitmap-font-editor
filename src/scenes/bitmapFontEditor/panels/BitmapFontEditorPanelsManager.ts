@@ -60,14 +60,16 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		if (!gameSettings) {
 			return {
 				name: "",
-				fonts: "",
+				gameDirectory: "",
 				fontsDirectory: "",
+				fonts: "",
 			}
 		}
 		
 		return {
 			name: gameSettings.name ?? "",
-			fontsDirectory: this.scene.rootDir,
+			gameDirectory: this.scene.rootDir,
+			fontsDirectory: this.scene.fontsDir,
 			fonts: gameSettings.fonts.join("\n"),
 		}
 	}

@@ -3,6 +3,7 @@ import { ButtonApi } from "@tweakpane/core"
 
 export type GamePanelConfig = {
 	name: string
+	gameDirectory: string
 	fontsDirectory: string
 	fonts: string
 }
@@ -19,6 +20,7 @@ export class GamePanel extends EditorPanel {
 		
 		this.panel.addMonitor(this.config, "name")
 		this.panel.addMonitor(this.config, "fonts", { multiline: true })
+		this.panel.addMonitor(this.config, "gameDirectory")
 		this.panel.addMonitor(this.config, "fontsDirectory")
 		this.panel.addSeparator()
 		this.openGameButton = this.panel.addButton({ title: "Open Game" })

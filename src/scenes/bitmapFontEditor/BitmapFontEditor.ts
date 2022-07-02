@@ -5,11 +5,11 @@ import { ContentPanelEvent } from "./panels/ContentPanel"
 import { LayoutPanelConfig, PackingMethod } from "./panels/LayoutPanel"
 import { TextFontConfig } from "./panels/FontPanel"
 import { Font, parse } from "opentype.js"
-import { createBmfontData } from "./create-bmfont-data"
+import { BmFontData, createBmfontData } from "./create-bmfont-data"
 import { BrowserSyncService } from "../../BrowserSyncService"
 import { Config } from "../../Config"
 import { ShadowPanelConfig } from "./panels/ShadowPanel"
-import { cloneDeep, merge } from "lodash-es"
+import { cloneDeep, get, merge, set } from "lodash-es"
 import { GlowPanelConfig } from "./panels/GlowPanel"
 import { GlowPostFX } from "../../robowhale/phaser3/fx/GlowPostFX"
 import { PreviewPanelConfig } from "./panels/PreviewPanel"
@@ -52,6 +52,8 @@ export type FontListEntry = {
 export class BitmapFontEditor extends BaseScene {
 	
 	public rootDir: string
+	public fontsDir: string
+	public gameSettingsPath: string
 	public gameSettings: GameSettings
 	public fontsList: FontsList
 	public projectsList: ProjectsList
@@ -98,15 +100,21 @@ export class BitmapFontEditor extends BaseScene {
 		}
 		
 		this.rootDir = rootDir
-		this.gameSettings = this.rootDir && await this.loadGameSettings(this.rootDir)
+		this.gameSettingsPath = this.rootDir && await this.getPathToGameSettings(this.rootDir)
+		this.gameSettings = this.gameSettingsPath && await this.loadGameSettings(this.gameSettingsPath)
+		this.fontsDir = this.gameSettingsPath && path.dirname(this.gameSettingsPath)
 		this.fontsList = await this.loadFontsList(this.gameSettings?.fonts)
-		this.projectsList = this.rootDir && await this.loadProjectsList(this.rootDir)
+		this.projectsList = this.fontsDir && await this.loadProjectsList(this.fontsDir)
 		
 		if (this.gameSettings) {
 			this.updateRecentProjects()
 		}
 		
 		this.doCreate()
+	}
+	
+	private getRelativeToRootPath(_path: string): string {
+	    return path.relative(this.rootDir, _path)
 	}
 	
 	private async showOpenGameWindow(): Promise<string> {
@@ -126,9 +134,28 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
-	private async loadGameSettings(dirpath: string): Promise<GameSettings> {
+	private async getPathToGameSettings(dirpath: string, file = '.bmfontsrc'): Promise<string> {
+		let response = await BrowserSyncService.globby(path.join(dirpath, "**", file))
+		let json = await response.json()
+		if (!json.success) {
+			throw new Error(json.error)
+		}
+		
+		let files = json.result as string[]
+		if (!files.length) {
+			throw new Error(`Can't find '.bmfontsrc' file in '${dirpath}'!`)
+		}
+		
+		if (files.length > 1) {
+			console.warn(`There are several '.bmfontsrc' files in '${dirpath}'!`, files)
+			return files.find(file => file.includes('bitmap')) ?? files[0]
+		}
+		
+		return files[0]
+	}
+	
+	private async loadGameSettings(filepath: string): Promise<GameSettings> {
 		try {
-			let filepath = `${dirpath}/.bmfontsrc`
 			let response = await BrowserSyncService.readFile(filepath)
 			let json = await response.json()
 			
@@ -649,9 +676,9 @@ export class BitmapFontEditor extends BaseScene {
 			return { configPath: customConfigPath, texturePath: customTexturePath }
 		}
 		
-		let rootDir = this.rootDir
-		if (!rootDir) {
-			console.warn("Root directory is not set!")
+		let fontsDir = this.fontsDir
+		if (!fontsDir) {
+			console.warn("Fonts directory is not set!")
 			return { configPath: "", texturePath: "" }
 		}
 		
@@ -661,15 +688,10 @@ export class BitmapFontEditor extends BaseScene {
 			return { configPath: "", texturePath: "" }
 		}
 		
-		// remove trailing slash if present
-		if (rootDir.endsWith("/")) {
-			rootDir = rootDir.slice(0, -1)
-		}
-		
 		let format = exportConfig.type
 		return {
-			configPath: `${rootDir}/${name}.${format}`,
-			texturePath: `${rootDir}/${name}.png`,
+			configPath: path.join(fontsDir, `${name}.${format}`),
+			texturePath: path.join(fontsDir, `${name}.png`),
 		}
 	}
 	
@@ -700,12 +722,37 @@ export class BitmapFontEditor extends BaseScene {
 			configPath: configPath,
 			texture: texture.blob,
 			texturePath: texturePath,
-			project: JSON.stringify(this.config, null, "\t"),
+			project: this.getProjectConfigToExport(this.config),
 		})
 			.then(response => this.onExportComplete(response))
 			.catch(error => console.log(`Can't save bitmap font!`, error))
 			.finally(() => {
 			})
+	}
+	
+	private getProjectConfigToExport(config: BitmapFontProjectConfig): string {
+		let configCopy = cloneDeep(config)
+		
+		this.adjustProjectConfigPaths(configCopy)
+		
+		return JSON.stringify(configCopy, null, "\t")
+	}
+	
+	private adjustProjectConfigPaths(configCopy: BitmapFontProjectConfig): void {
+		let pathes = [
+			"import.project",
+			"import.custom",
+			"export.config",
+			"export.texture",
+			"export.texturePacker",
+		]
+		
+		pathes.forEach((path) => {
+			let value = get(configCopy, path)
+			if (value) {
+				set(configCopy, path, slash(this.getRelativeToRootPath(value)))
+			}
+		})
 	}
 	
 	// TP config = TexturePacker XML config (.tps)
@@ -721,7 +768,6 @@ export class BitmapFontEditor extends BaseScene {
 			return
 		}
 	}
-	
 	private async createTexture(): Promise<BitmapFontTexture> {
 		let { width, height } = this.getTextureSize()
 		let blob = await this.makeSnapshot(0, 0, width, height)
