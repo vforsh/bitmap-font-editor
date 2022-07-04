@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 require("dotenv").config()
 
 const files = [
@@ -33,6 +34,12 @@ module.exports = {
 	reloadDebounce: 500,
 	ui: false,
 	middleware: [
+		bodyParser.json({
+			type: ['text/*', 'application/json'],
+		}),
+		bodyParser.raw({
+			type: ['image/png'],
+		}),
 		{
 			route: "/screenshot",
 			handle: require("./middleware/save-screenshot"),

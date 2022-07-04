@@ -3,34 +3,27 @@ const open = require("open")
 const path = require("path")
 const { existsSync } = require("fs")
 
-module.exports = function saveMiddleware(request, response, next) {
-	if (request.method !== "POST") {
-		return next()
-	}
+/**
+ * @param req {http.IncomingMessage & { body: Buffer }}
+ * @param res {http.ServerResponse}
+ * @param next {() => void}
+ * @return {*}
+ */
+module.exports = async function saveScreenshot(req, res, next) {
+	let directory = "screenshots"
+	let filename = `${directory}/${Date.now()}.png`
 
-	/**
-	 * @type {Buffer[]}
-	 */
-	let dataRaw = []
-	request.on("data", (chunk) => dataRaw.push(chunk))
-	request.on("end", async () => {
-		let result = Buffer.concat(dataRaw)
+	await ensureDirectoryExists(directory)
+	await clearOldScreenshots(directory)
 
-		let directory = "screenshots"
-		let filename = `${directory}/${Date.now()}.png`
-
-		await ensureDirectoryExists(directory)
-		await clearOldScreenshots(directory)
-
-		fs.writeFile(filename, result).then(async () => {
-			await open(filename, { wait: true })
-			response.writeHead(200, `File was successfuly saved!`)
-		}).catch((error) => {
-			console.error(error)
-			response.writeHead(400, JSON.stringify(error))
-		}).finally(() => {
-			response.end()
-		})
+	fs.writeFile(filename, req.body).then(async () => {
+		await open(filename, { wait: true })
+		res.writeHead(200, `File was successfuly saved!`)
+	}).catch((error) => {
+		console.error(error)
+		res.writeHead(400, JSON.stringify(error))
+	}).finally(() => {
+		res.end()
 	})
 }
 

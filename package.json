@@ -67,6 +67,7 @@
 	},
 	"devDependencies": {
 		"@tweakpane/core": "^1.0.8",
+		"@types/body-parser": "^1.19.2",
 		"@types/diff": "^5.0.1",
 		"@types/formidable": "^2.0.0",
 		"@types/grunt": "^0.4.27",
@@ -78,6 +79,7 @@
 		"@vheemstra/imagemin-avifenc": "^1.0.0",
 		"animate.css": "^4.1.1",
 		"async": "^3.2.0",
+		"body-parser": "^1.20.0",
 		"browser-sync": "^2.27.9",
 		"chalk": "^4.1.1",
 		"compression": "^1.7.4",

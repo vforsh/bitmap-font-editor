@@ -1,21 +1,19 @@
 const getSystemFonts = require("get-system-fonts")
 const ttfinfo = require("ttfinfo")
-const slash = require('slash')
+const slash = require("slash")
 
+/**
+ * @param req {http.IncomingMessage & { body: unknown }}
+ * @param res {http.ServerResponse}
+ * @param next {() => void}
+ * @return {*}
+ */
 module.exports = function(req, res, next) {
-	if (req.method !== "POST") {
-		return next()
-	}
+	let { fonts } = req.body
 
-	let data = ""
-	req.on("data", chunk => data += chunk)
-	req.on("end", async () => {
-		let { fonts } = JSON.parse(data)
-
-		getTtfFonts(fonts).then((fonts) => {
-			res.writeHead(200, { "Content-Type": "application/json" })
-			res.end(JSON.stringify(fonts))
-		})
+	getTtfFonts(fonts).then((fonts) => {
+		res.writeHead(200, { "Content-Type": "application/json" })
+		res.end(JSON.stringify(fonts))
 	})
 }
 

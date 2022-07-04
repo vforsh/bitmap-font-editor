@@ -1,37 +1,22 @@
 const { existsSync } = require("fs")
 const open = require("open")
+const { sendError, sendSuccess } = require("./utils")
 
 /**
- * @param req {http.IncomingMessage}
+ * @param req {http.IncomingMessage & { body: unknown }}
  * @param res {http.ServerResponse}
- * @param next
+ * @param next {() => void}
  * @return {*}
  */
 module.exports = function(req, res, next) {
-	if (req.method !== "POST") {
-		return next()
+	let { filepath, options } = req.body
+
+	let fileExists = existsSync(filepath)
+	if (fileExists === false) {
+		return sendError(res, `Path ${filepath} doesn't exist!`)
 	}
 
-	let data = ""
-	req.on("data", chunk => data += chunk)
-	req.on("end", async () => {
-		let { filepath, options } = JSON.parse(data)
-
-		let fileExists = existsSync(filepath)
-		if (fileExists === false) {
-			res.writeHead(400, { "Content-Type": "application/json" })
-			res.end(JSON.stringify({ success: false, error: `Path ${filepath} doesn't exist!` }))
-			return
-		}
-
-		open(filepath, options)
-			.then((result) => {
-				res.writeHead(200, { "Content-Type": "application/json" })
-				res.end(JSON.stringify({ success: true, result }))
-			})
-			.catch((error) => {
-				res.writeHead(400, { "Content-Type": "application/json" })
-				res.end(JSON.stringify({ success: false, error }))
-			})
-	})
+	open(filepath, options)
+		.then(result => sendSuccess(res, result))
+		.catch(error => sendError(res, error))
 }
