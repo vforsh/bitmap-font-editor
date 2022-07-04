@@ -47,7 +47,7 @@ async function clearOldScreenshots(directory) {
 	let threshold = toMs({ days: 5 })
 	let files = await fs.readdir(path.normalize(directory))
 
-	for await (filepath of files) {
+	for await (let filepath of files) {
 		let fullpath = path.join(directory, filepath)
 		let status = await fs.stat(fullpath)
 		let msSinceCreated = Date.now() - status.birthtimeMs

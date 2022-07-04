@@ -2,6 +2,10 @@ import type open from "open"
 import type { Options } from "execa"
 import type { GlobbyOptions } from "globby"
 
+export type BrowserSyncResponse =
+	| { success: true, result: unknown }
+	| { success: false, error: unknown }
+
 export type BrowserSyncApiEndpoint =
 	| "screenshot"
 	| "bm-font/save"

@@ -3,6 +3,7 @@ const fs = require("fs/promises")
 const path = require("path")
 const globby = require("globby")
 const slash = require("slash")
+const { sendError } = require("./utils")
 
 /**
  * @param req {http.IncomingMessage & { body: unknown }}
@@ -15,16 +16,12 @@ module.exports = async function(req, res, next) {
 
 	let dirExists = existsSync(dirpath)
 	if (dirExists === false) {
-		res.writeHead(400, `Directory ${dirpath} doesn't exist!`)
-		res.end()
-		return
+		return sendError(res, `Directory ${dirpath} doesn't exist!`)
 	}
 
 	let stat = await fs.stat(dirpath)
 	if (stat.isDirectory() === false) {
-		res.writeHead(400, `${dirpath} is not a directory!`)
-		res.end()
-		return
+		return sendError(res, `${dirpath} is not a directory!`)
 	}
 
 	// globby doesn't allow backward slashes so we replace them
