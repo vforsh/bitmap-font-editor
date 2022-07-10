@@ -36,7 +36,7 @@ export class ExportPanel extends EditorPanel {
 		})
 		
 		this.locateTpProjectButton = this.panel.addButton({ title: "Locate TP project" })
-		this.locateTpProjectButton.hidden = true
+		// this.locateTpProjectButton.hidden = true
 		
 		this.panel.addSeparator()
 		

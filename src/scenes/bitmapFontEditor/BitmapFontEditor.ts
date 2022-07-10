@@ -646,6 +646,8 @@ export class BitmapFontEditor extends BaseScene {
 			return
 		}
 		
+		// TODO normalize export paths in config
+		// then update the view
 		let { configPath, texturePath } = this.getExportPaths()
 		
 		if (!configPath) {
@@ -667,11 +669,9 @@ export class BitmapFontEditor extends BaseScene {
 	private getExportPaths(): { configPath: string, texturePath: string } {
 		let exportConfig = this.panels.exportPanel.config
 		
-		let customConfigPath = exportConfig.config
-		let customTexturePath = exportConfig.texture
-		let useCustomPaths = customConfigPath || customTexturePath
+		let useCustomPaths = exportConfig.config || exportConfig.texture
 		if (useCustomPaths) {
-			return { configPath: customConfigPath, texturePath: customTexturePath }
+			return this.getCustomExportPath(exportConfig)
 		}
 		
 		let fontsDir = this.fontsDir
@@ -691,6 +691,32 @@ export class BitmapFontEditor extends BaseScene {
 			configPath: path.join(fontsDir, `${name}.${format}`),
 			texturePath: path.join(fontsDir, `${name}.png`),
 		}
+	}
+	
+	private getCustomExportPath(config: BitmapFontProjectConfig['export']): { configPath: string, texturePath: string } {
+		let gameDir = this.gameDir
+		let configPath = config.config
+		let texturePath = config.texture
+		
+		if (!path.isAbsolute(configPath)) {
+			configPath = path.join(gameDir, configPath)
+		}
+		
+		let configExtname = path.extname(configPath)
+		if (!configExtname) {
+			configPath = path.join(configPath, `${config.name}.${config.type}`)
+		}
+		
+		if (!path.isAbsolute(texturePath)) {
+			texturePath = path.join(gameDir, texturePath)
+		}
+		
+		let textureExtname = path.extname(texturePath)
+		if (!textureExtname) {
+			texturePath = path.join(texturePath, `${config.name}.png`)
+		}
+		
+		return { configPath: configPath, texturePath: texturePath }
 	}
 	
 	private async export(configPath: string, texturePath: string) {
@@ -737,7 +763,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private adjustProjectConfigPaths(configCopy: BitmapFontProjectConfig): void {
-		let pathes = [
+		let propertyPaths = [
 			"import.project",
 			"import.custom",
 			"export.config",
@@ -745,16 +771,16 @@ export class BitmapFontEditor extends BaseScene {
 			"export.texturePacker",
 		]
 		
-		pathes.forEach((path) => {
-			let value = get(configCopy, path)
-			if (value) {
-				set(configCopy, path, slash(this.getRelativeToRootPath(value)))
+		propertyPaths.forEach((propertyPath) => {
+			let filepath = get(configCopy, propertyPath)
+			if (filepath && path.isAbsolute(filepath)) {
+				set(configCopy, propertyPath, slash(this.getRelativeToRootPath(filepath)))
 			}
 		})
 	}
 	
-	private getRelativeToRootPath(_path: string): string {
-		return path.relative(this.gameDir, _path)
+	private getRelativeToRootPath(filepath: string): string {
+		return path.relative(this.gameDir, filepath)
 	}
 	
 	// TP config = TexturePacker XML config (.tps)
