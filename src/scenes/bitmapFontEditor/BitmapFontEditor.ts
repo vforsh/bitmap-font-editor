@@ -728,9 +728,9 @@ export class BitmapFontEditor extends BaseScene {
 			let atlas = await this.getAtlasDataPathFromTpConfig(this.config.export.texturePacker)
 			if (atlas) {
 				fontData.extra = {
-					atlas: atlas,
+					atlas: this.getRelativeToRootPath(atlas),
 					texture: texturePath,
-					texturePacker: this.config.export.texturePacker,
+					texturePacker: this.getRelativeToRootPath(this.config.export.texturePacker),
 				}
 			}
 		}
