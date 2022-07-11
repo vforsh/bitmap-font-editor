@@ -35,6 +35,7 @@ export type BitmapFontTexture = { blob: Blob, width: number, height: number }
 export type GameSettings = {
 	name: string
 	format: "json" | "xml"
+	atlases: string[]
 	fonts: string[]
 }
 
@@ -57,6 +58,7 @@ export class BitmapFontEditor extends BaseScene {
 	public fontsSettings: GameSettings
 	public fontsList: FontsList
 	public projectsList: ProjectsList
+	public atlasesList: string[] // TexturePacker projects (.tps files)
 	
 	public isReady: boolean
 	public config: BitmapFontProjectConfig
@@ -80,6 +82,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.fontsSettings = null
 		this.fontsList = null
 		this.projectsList = null
+		this.atlasesList = null
 		this.glyphs = []
 		this.isReady = false
 		this.config = cloneDeep(DEFAULT_CONFIG)
@@ -107,6 +110,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.fontsDir = this.fontsSettingsPath && path.dirname(this.fontsSettingsPath)
 		this.fontsList = await this.loadFontsList(this.fontsSettings?.fonts)
 		this.projectsList = this.fontsDir && await this.loadProjectsList(this.fontsDir)
+		this.atlasesList = await this.loadAtlasesList(this.fontsSettings?.atlases)
 		
 		if (this.fontsSettings) {
 			this.updateRecentProjects()
@@ -184,6 +188,18 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	
+	private async loadAtlasesList(globPatterns: string[] = []): Promise<string[]> {
+		try {
+			let patterns = globPatterns.map(pattern => path.join(this.gameDir, pattern))
+			let response = await BrowserSyncService.globby(patterns)
+			let json = await response.json()
+			return json.result
+		} catch (error) {
+			console.warn("Can't load atlases list!\n", error)
+			return null
+		}
+	}
+	
 	private updateRecentProjects() {
 		let projects = this.game.store.getValue("recent_projects")
 		let currentProjectName = this.fontsSettings.name
@@ -233,7 +249,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.importPanel.loadProjectsButton.on("click", this.onLoadProjectsButtonClick.bind(this))
 		this.panels.importPanel.loadButton.on("click", this.onLoadCustomProjectButtonClick.bind(this))
 		
-		this.panels.exportPanel.locateTpProjectButton.on("click", this.onLocateTpProjectButtonClick.bind(this, this.panels.exportPanel.locateTpProjectButton))
+		this.panels.exportPanel.openTpProjectButton.on("click", this.onOpenTpProjectButtonClick.bind(this, this.panels.exportPanel.openTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
 		
 		this.panels.previewPanel.on("debug-change", this.onPreviewDebugSettingsChange.bind(this))
@@ -251,6 +267,10 @@ export class BitmapFontEditor extends BaseScene {
 		
 		if (this.projectsList) {
 			this.updateProjectsList(this.projectsList)
+		}
+		
+		if (this.atlasesList) {
+			this.panels.exportPanel.updateAtlasesList(this.atlasesList)
 		}
 	}
 	
@@ -629,32 +649,29 @@ export class BitmapFontEditor extends BaseScene {
 		this.glyphsInfo.kill()
 	}
 	
-	private async onLocateTpProjectButtonClick(button: ButtonApi) {
+	private async onOpenTpProjectButtonClick(button: ButtonApi) {
 		let tpProjectPath = this.config.export.texturePacker
 		if (tpProjectPath) {
 			await BrowserSyncService.open(tpProjectPath, { wait: true })
-			return
 		}
-		
-		// TODO find TP project file
-		// let [tpProjectFile] = await promptFiles({ fileTypes: ".tps" })
 	}
 	
 	private onExportButtonClick(button: ButtonApi): void {
+		this.normalizeExportPaths()
+		this.panels.exportPanel.refresh()
+		
 		if (this.glyphs.length === 0) {
 			console.warn("Nothing to export!")
 			return
 		}
 		
-		// TODO normalize export paths in config
-		// then update the view
-		let { configPath, texturePath } = this.getExportPaths()
-		
+		let configPath = this.config.export.config
 		if (!configPath) {
 			console.warn("Please set export path for the font's config!")
 			return
 		}
 		
+		let texturePath = this.config.export.texture
 		if (!texturePath) {
 			console.warn("Please set export path for the font's texture!")
 			return
@@ -666,57 +683,40 @@ export class BitmapFontEditor extends BaseScene {
 			.finally(() => button.disabled = false)
 	}
 	
-	private getExportPaths(): { configPath: string, texturePath: string } {
-		let exportConfig = this.panels.exportPanel.config
-		
-		let useCustomPaths = exportConfig.config || exportConfig.texture
-		if (useCustomPaths) {
-			return this.getCustomExportPath(exportConfig)
-		}
-		
+	private normalizeExportPaths(): void {
 		let fontsDir = this.fontsDir
-		if (!fontsDir) {
-			console.warn("Fonts directory is not set!")
-			return { configPath: "", texturePath: "" }
+		let { name, type, config, texture } = this.config.export
+		
+		if (config) {
+			if (path.isAbsolute(config)) {
+				config = this.getRelativeToRootPath(config)
+			}
+			
+			let configExtname = path.extname(config)
+			if (!configExtname) {
+				config = path.join(config, `${name}.${type}`)
+			}
+		} else {
+			config = path.join(fontsDir, `${name}.${type}`)
+			config = this.getRelativeToRootPath(config)
 		}
 		
-		let name = exportConfig.name
-		if (!name) {
-			console.warn(`"name" is not set!`)
-			return { configPath: "", texturePath: "" }
+		if (texture) {
+			if (path.isAbsolute(texture)) {
+				texture = this.getRelativeToRootPath(texture)
+			}
+			
+			let textureExtname = path.extname(texture)
+			if (!textureExtname) {
+				texture = path.join(texture, `${name}.png`)
+			}
+		} else {
+			texture = path.join(fontsDir, `${name}.png`)
+			texture = this.getRelativeToRootPath(texture)
 		}
 		
-		let format = exportConfig.type
-		return {
-			configPath: path.join(fontsDir, `${name}.${format}`),
-			texturePath: path.join(fontsDir, `${name}.png`),
-		}
-	}
-	
-	private getCustomExportPath(config: BitmapFontProjectConfig['export']): { configPath: string, texturePath: string } {
-		let gameDir = this.gameDir
-		let configPath = config.config
-		let texturePath = config.texture
-		
-		if (!path.isAbsolute(configPath)) {
-			configPath = path.join(gameDir, configPath)
-		}
-		
-		let configExtname = path.extname(configPath)
-		if (!configExtname) {
-			configPath = path.join(configPath, `${config.name}.${config.type}`)
-		}
-		
-		if (!path.isAbsolute(texturePath)) {
-			texturePath = path.join(gameDir, texturePath)
-		}
-		
-		let textureExtname = path.extname(texturePath)
-		if (!textureExtname) {
-			texturePath = path.join(texturePath, `${config.name}.png`)
-		}
-		
-		return { configPath: configPath, texturePath: texturePath }
+		this.config.export.config = config
+		this.config.export.texture = texture
 	}
 	
 	private async export(configPath: string, texturePath: string) {
@@ -743,9 +743,9 @@ export class BitmapFontEditor extends BaseScene {
 		
 		BrowserSyncService.saveBitmapFont({
 			config: JSON.stringify(fontData),
-			configPath: configPath,
+			configPath: path.join(this.gameDir, configPath),
 			texture: texture.blob,
-			texturePath: texturePath,
+			texturePath: path.join(this.gameDir, texturePath),
 			project: this.getProjectConfigToExport(this.config),
 		})
 			.then(response => this.onExportComplete(response))
@@ -918,6 +918,8 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private async getTexturePackerExePath(): Promise<string> {
+		// TODO check via nodejs if TexturePackers exists in path
+		
 		let path = this.game.store.getValue("texture_packer_exe")
 		if (path) {
 			return path
@@ -1010,6 +1012,11 @@ export class BitmapFontEditor extends BaseScene {
 			.then(response => response.json())
 			.then((result: BitmapFontProjectConfig) => {
 				result.import.project = projectFilepath
+				
+				if (result.export.texturePacker) {
+					result.export.texturePacker = path.join(this.gameDir, result.export.texturePacker)
+				}
+				
 				this.applyProjectConfig(result)
 			})
 			.catch(error => console.log(`Can't load bitmap font projects!`, error))
