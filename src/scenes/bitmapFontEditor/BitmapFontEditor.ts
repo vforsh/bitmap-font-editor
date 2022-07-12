@@ -918,20 +918,29 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private async getTexturePackerExePath(): Promise<string> {
-		// TODO check via nodejs if TexturePackers exists in path
-		
 		let path = this.game.store.getValue("texture_packer_exe")
 		if (path) {
 			return path
 		}
 		
-		path = await this.promptTexturePackerExePath()
+		path = await (this.getDefaultTexturePackerExePath() || this.promptTexturePackerExePath())
 		
 		if (path) {
 			this.game.store.saveValue("texture_packer_exe", slash(path))
 		}
 		
 		return path
+	}
+	
+	private async getDefaultTexturePackerExePath(): Promise<string|undefined> {
+		let defaultPath = 'TexturePacker'
+		let response = await BrowserSyncService.command(`${defaultPath} --version`)
+		let json = await response.json() as ExecaReturnValue
+		if (json.failed) {
+			return
+		}
+		
+		return defaultPath
 	}
 	
 	private promptTexturePackerExePath(): Promise<string> {
