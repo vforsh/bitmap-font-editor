@@ -23,6 +23,12 @@ export class LayoutPanel extends EditorPanel {
 		this.panel.addInput(this.config, "bgColor", { input: "color.rgb" })
 			.on("change", event => this.emit("change", this.config, event.presetKey))
 		
+		this.panel.addInput(this.config, "padding", {
+			step: 1,
+			min: 0,
+			max: 20,
+		}).on("change", () => this.emit("change", this.config))
+		
 		this.panel.addInput(this.config, "method", {
 			options: this.createOptions(),
 			label: "packing method",

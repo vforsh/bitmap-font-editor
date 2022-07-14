@@ -464,7 +464,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private doGlyphsFitIntoCanvas(): boolean {
-		let { width, height } = this.getTextureSize()
+		let { width, height } = this.getTextureSize(0)
 		let { width: canvasWidth, height: canvasHeight } = this.game.canvas
 		
 		return width <= canvasWidth && height <= canvasHeight
@@ -797,22 +797,26 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	private async createTexture(): Promise<BitmapFontTexture> {
-		let { width, height } = this.getTextureSize()
-		let blob = await this.makeSnapshot(0, 0, width, height)
+		let padding = this.config.layout.padding
+		let { width, height } = this.getTextureSize(padding)
+		let blob = await this.makeSnapshot(0, 0, width, height, padding)
 		
 		return { blob, width, height }
 	}
 	
-	private getTextureSize(): { width: number, height: number } {
+	private getTextureSize(padding: number): { width: number; height: number } {
+		let width = Math.max(...this.glyphs.map(glyph => glyph.x + glyph.displayWidth))
+		let height = Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight))
+		
 		return {
-			width: Math.max(...this.glyphs.map(glyph => glyph.x + glyph.displayWidth)),
-			height: Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight)),
+			width: width + padding * 2,
+			height: height + padding * 2,
 		}
 	}
 	
-	private makeSnapshot(x: number, y: number, width: number, height: number): Promise<Blob> {
+	private makeSnapshot(x: number, y: number, width: number, height: number, padding = 0): Promise<Blob> {
 		return new Promise((resolve, reject) => {
-			this.beforeSnapshot()
+			this.beforeSnapshot(padding)
 			
 			this.renderer.once(Phaser.Renderer.Events.POST_RENDER, () => {
 				let canvas = document.createElement("canvas")
@@ -829,17 +833,23 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
-	private beforeSnapshot(): void {
+	private beforeSnapshot(padding: number): void {
 		this.background.kill()
 		this.previewBack.kill()
 		this.preview?.kill()
 		this.previewDebug.kill()
+		
+		this.glyphsContainer.x = padding
+		this.glyphsContainer.y = padding
 	}
 	
 	private afterSnapshot(): void {
 		this.background.revive()
 		this.previewBack.revive()
 		this.preview?.revive()
+		
+		this.glyphsContainer.x = 0
+		this.glyphsContainer.y = 0
 		
 		if (this.config.preview.debug) {
 			this.previewDebug.revive()
