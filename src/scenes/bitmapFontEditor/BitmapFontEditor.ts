@@ -209,7 +209,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.game.store.saveValue("recent_projects", projects)
 	}
 	
-	private doCreate() {
+	private async doCreate() {
 		this.addPanels()
 		this.addBackground()
 		this.addGlyphBack()
@@ -230,8 +230,10 @@ export class BitmapFontEditor extends BaseScene {
 		
 		let projectPath = UrlParams.get("project")
 		if (projectPath) {
-			this.loadProject(projectPath)
+			await this.loadProject(projectPath)
 		}
+		
+		this.game.loadingScreen.fadeOut()
 	}
 	
 	private addPanels() {
@@ -1023,10 +1025,10 @@ export class BitmapFontEditor extends BaseScene {
 			})
 	}
 	
-	private loadProject(projectFilepath: string) {
+	private loadProject(projectFilepath: string): Promise<unknown> {
 		this.panels.importPanel.projectInput.disabled = true
 		
-		BrowserSyncService.readFile(projectFilepath)
+		return BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
 			.then((result: BitmapFontProjectConfig) => {
 				result.import.project = projectFilepath

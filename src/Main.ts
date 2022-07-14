@@ -21,7 +21,6 @@ import { NotificationsManager } from "./NotificationsManager"
 export class Main extends Phaser.Game {
 	
 	public static development = true
-	public static editorEnabled = true
 	public rendererType: RendererType
 	public audioType: AudioType
 	public audio: HowlerWrapper
@@ -85,8 +84,7 @@ export class Main extends Phaser.Game {
 	
 	public injectIntoScenes(obj: any, key: string): void {
 		this.scene.scenes.forEach((scene) => {
-			let isKeyTaken: boolean = scene.hasOwnProperty(key)
-			if (isKeyTaken) {
+			if (key in scene) {
 				console.warn(`Key ${key} is taken in ${scene.scene.key} scene!`)
 				return
 			}

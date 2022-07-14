@@ -67,6 +67,6 @@ export class Preloader extends BaseScene {
 	public onShutdown() {
 		super.onShutdown()
 		
-		this.game.loadingScreen.fadeOut()
+		// this.game.loadingScreen.fadeOut()
 	}
 }
