@@ -87,8 +87,8 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 	let baselines = getFontBaselines(font, fontSize)
 	
 	let lineHeight = Math.max(...glyphs.map(g => g.displayHeight))
-	let fullLineHeight = lineHeight * config.font.lineHeight
-	let yOffset = (fullLineHeight - lineHeight) / 2
+	let fullLineHeight = Math.ceil(lineHeight * config.font.lineHeight)
+	let yOffset = Math.round((fullLineHeight - lineHeight) / 2)
 	
 	// http://www.angelcode.com/products/bmfont/doc/file_format.html
 	return {
@@ -111,8 +111,8 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			base: Math.round(baselines.alphabetic - baselines.top),
 			pages: 1,
 			packed: 0,
-			scaleW: texture.width,
-			scaleH: texture.height,
+			scaleW: Math.ceil(texture.width),
+			scaleH: Math.ceil(texture.height),
 		},
 		pages: [{
 			id: 0,
@@ -140,7 +140,7 @@ function getFontBaselines(font: Font, fontSize: number) {
 	}
 }
 
-function createChars(glyphs: Phaser.GameObjects.Text[], height, xOffset = 0, yOffset = 0): BmFontChars {
+function createChars(glyphs: Phaser.GameObjects.Text[], height: number, xOffset = 0, yOffset = 0): BmFontChars {
 	let list: BmFontChar[] = glyphs.map((text) => {
 		return {
 			char: text.text,
@@ -148,7 +148,7 @@ function createChars(glyphs: Phaser.GameObjects.Text[], height, xOffset = 0, yOf
 			y: text.y,
 			id: text.text.charCodeAt(0),
 			chnl: 15,
-			width: text.width,
+			width: Math.ceil(text.width),
 			height: height,
 			page: 0,
 			xadvance: text.width, // TODO how to calculate xadvance ???

@@ -431,7 +431,7 @@ export class BitmapFontEditor extends BaseScene {
 		for (let i = 1; i < this.glyphs.length; i++) {
 			let prev = this.glyphs[i - 1]
 			let current = this.glyphs[i]
-			current.x = prev.x + prev.displayWidth
+			current.x = Math.ceil(prev.x + prev.displayWidth)
 			current.y = 0
 		}
 	}
@@ -441,15 +441,15 @@ export class BitmapFontEditor extends BaseScene {
 			let prev = this.glyphs[i - 1]
 			let current = this.glyphs[i]
 			current.x = 0
-			current.y = prev.y + prev.displayHeight
+			current.y = Math.ceil(prev.y + prev.displayHeight)
 		}
 	}
 	
 	private packGlyphsInSquare() {
 		let boxes = this.glyphs.map((glyph) => {
 			return {
-				w: glyph.width,
-				h: glyph.height,
+				w: Math.ceil(glyph.width),
+				h: Math.ceil(glyph.height),
 				glyph,
 			}
 		})
