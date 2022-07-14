@@ -246,8 +246,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.gamePanel.openGameButton.on("click", this.onOpenGameButtonClick.bind(this))
 		
 		this.panels.importPanel.on("project-change", this.onProjectChange.bind(this))
-		this.panels.importPanel.loadProjectsButton.on("click", this.onLoadProjectsButtonClick.bind(this))
-		this.panels.importPanel.loadButton.on("click", this.onLoadCustomProjectButtonClick.bind(this))
+		this.panels.importPanel.reloadProjectsButton.on("click", this.onReloadProjectsButtonClick.bind(this))
 		
 		this.panels.exportPanel.openTpProjectButton.on("click", this.onOpenTpProjectButtonClick.bind(this, this.panels.exportPanel.openTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
@@ -987,15 +986,15 @@ export class BitmapFontEditor extends BaseScene {
 		this.loadProject(config.project)
 	}
 	
-	private onLoadProjectsButtonClick(): void {
+	private onReloadProjectsButtonClick(): void {
 		if (!this.fontsDir) {
 			console.warn("Can't load projects list because fonts directory is not set!")
 			return
 		}
 		
-		let { loadProjectsButton, projectInput } = this.panels.importPanel
+		let { reloadProjectsButton, projectInput } = this.panels.importPanel
 		projectInput.disabled = true
-		loadProjectsButton.disabled = true
+		reloadProjectsButton.disabled = true
 		
 		BrowserSyncService.projects(this.fontsDir)
 			.then(response => response.json())
@@ -1008,24 +1007,12 @@ export class BitmapFontEditor extends BaseScene {
 			})
 			.finally(() => {
 				projectInput.disabled = false
-				loadProjectsButton.disabled = false
+				reloadProjectsButton.disabled = false
 			})
 	}
 	
-	private onLoadCustomProjectButtonClick(): void {
-		let { custom: projectFilepath } = this.config.import
-		if (!projectFilepath) {
-			console.warn("Path to custom project file is not set!")
-			return
-		}
-		
-		this.loadProject(projectFilepath)
-	}
-	
 	private loadProject(projectFilepath: string) {
-		let { projectInput, loadButton } = this.panels.importPanel
-		projectInput.disabled = true
-		loadButton.disabled = true
+		this.panels.importPanel.projectInput.disabled = true
 		
 		BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
@@ -1038,10 +1025,11 @@ export class BitmapFontEditor extends BaseScene {
 				
 				this.applyProjectConfig(result)
 			})
-			.catch(error => console.log(`Can't load bitmap font projects!`, error))
+			.catch(error => {
+				console.log(`Can't load bitmap font project!`, error)
+			})
 			.finally(() => {
-				projectInput.disabled = false
-				loadButton.disabled = false
+				this.panels.importPanel.projectInput.disabled = false
 			})
 	}
 	
