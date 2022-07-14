@@ -28,6 +28,7 @@ import type { ExecaReturnValue } from "execa"
 import * as potpack from "potpack"
 import slash from "slash"
 import path from "path-browserify"
+import { NotyfEvent } from "notyf"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
 export type BitmapFontTexture = { blob: Blob, width: number, height: number }
@@ -748,7 +749,7 @@ export class BitmapFontEditor extends BaseScene {
 			project: this.getProjectConfigToExport(this.config),
 		})
 			.then(response => this.onExportComplete(response))
-			.catch(error => console.log(`Can't save bitmap font!`, error))
+			.catch(error => this.onExportFail(error))
 			.finally(() => {
 			})
 	}
@@ -888,17 +889,28 @@ export class BitmapFontEditor extends BaseScene {
 		console.log(`Texture: ${texture}`)
 		console.log(`Project: ${project}`)
 		
+		this.game.notifications.notyf
+			.success(`<b>${this.config.export.name}</b> was exported!`)
+			.on(NotyfEvent.Click, () => BrowserSyncService.open(path.dirname(project.slice(6))))
+		
 		let texturePacker = this.config.export.texturePacker
 		if (texturePacker) {
 			let { error } = await this.updateTexturePackerProject(texturePacker)
 			if (error) {
 				console.warn("Can't update Texture Packer project!\n", error)
+				this.game.notifications.notyf.error(`Can't update Texture Packer project! ${error}`)
 			} else {
 				console.log(`Texture Packer Project: file:///${texturePacker}`)
+				this.game.notifications.notyf.success(`<b>${path.basename(texturePacker)}</b> was exported!`)
 			}
 		}
 		
 		console.groupEnd()
+	}
+	
+	private onExportFail(error) {
+		console.log(`Can't save bitmap font!`, error)
+		this.game.notifications.notyf.error(error.message)
 	}
 	
 	private async updateTexturePackerProject(texturePackerProjectPath: string): Promise<{ error? }> {

@@ -16,6 +16,7 @@ import { Howler } from "howler"
 import { BitmapFontEditor } from "./scenes/bitmapFontEditor/BitmapFontEditor"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 import { GameStash } from "./stash/GameStash"
+import { NotificationsManager } from "./NotificationsManager"
 
 export class Main extends Phaser.Game {
 	
@@ -45,6 +46,7 @@ export class Main extends Phaser.Game {
 		this.stash = new GameStash()
 		this.loadingScreen = new LoadingOverlay(this)
 		this.audio = new HowlerWrapper(this, { muteTrigger: "hidden" })
+		this.notifications = new NotificationsManager()
 		this.addScenes()
 	}
 	

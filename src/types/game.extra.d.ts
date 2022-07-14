@@ -17,6 +17,7 @@ declare module Phaser {
 		scaler: import("../scale/GameScaler").GameScaler
 		fpsTracker: import("../FpsTracker").FpsTracker
 		stash: import("../stash/GameStash").GameStash
+		notifications: import("../NotificationsManager").NotificationsManager
 		webp: boolean
 		avif: boolean
 		
