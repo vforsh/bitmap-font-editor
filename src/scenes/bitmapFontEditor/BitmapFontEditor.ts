@@ -793,7 +793,7 @@ export class BitmapFontEditor extends BaseScene {
 			let dataFile = /<struct type="DataFile">((.|\n)*?)<\/struct>/.exec(text)[1]
 			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
 			
-			return path.join(pathToTpConfig, filename)
+			return path.join(path.dirname(pathToTpConfig), filename)
 		} catch (e) {
 			return
 		}
