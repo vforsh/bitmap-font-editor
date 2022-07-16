@@ -249,7 +249,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.gamePanel.openGameButton.on("click", this.onOpenGameButtonClick.bind(this))
 		
 		this.panels.importPanel.on("project-change", this.onProjectChange.bind(this))
-		this.panels.importPanel.reloadProjectsButton.on("click", this.onReloadProjectsButtonClick.bind(this))
+		this.panels.importPanel.reloadProjectsButton.on("click", this.reloadProjectsList.bind(this))
 		
 		this.panels.exportPanel.openTpProjectButton.on("click", this.onOpenTpProjectButtonClick.bind(this, this.panels.exportPanel.openTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
@@ -907,6 +907,12 @@ export class BitmapFontEditor extends BaseScene {
 			}
 		}
 		
+		if (!this.config.import.project) {
+			await this.reloadProjectsList()
+			this.config.import.project = project.slice('file://'.length)
+			this.panels.importPanel.refresh()
+		}
+		
 		console.groupEnd()
 	}
 	
@@ -1000,7 +1006,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.loadProject(config.project)
 	}
 	
-	private onReloadProjectsButtonClick(): void {
+	private reloadProjectsList(): Promise<unknown> {
 		if (!this.fontsDir) {
 			console.warn("Can't load projects list because fonts directory is not set!")
 			return
@@ -1010,7 +1016,7 @@ export class BitmapFontEditor extends BaseScene {
 		projectInput.disabled = true
 		reloadProjectsButton.disabled = true
 		
-		BrowserSyncService.projects(this.fontsDir)
+		return BrowserSyncService.projects(this.fontsDir)
 			.then(response => response.json())
 			.then((projects) => {
 				this.projectsList = projects

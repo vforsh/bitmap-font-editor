@@ -35,7 +35,7 @@ export class ImportPanel extends EditorPanel {
 		}))
 		
 		options.unshift({
-			text: "-",
+			text: '-- [new font] --',
 			value: "",
 		})
 		
