@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="start" type="CompoundRunConfigurationType">
     <toRun name="serve-dev" type="js.build_tools.npm" />
-    <toRun name="ts-complile" type="js.build_tools.npm" />
+    <toRun name="ts-compile" type="js.build_tools.npm" />
     <toRun name="ts-typecheck" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>
