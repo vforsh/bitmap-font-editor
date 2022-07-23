@@ -658,8 +658,9 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	
-	private onExportButtonClick(button: ButtonApi): void {
-		this.normalizeExportPaths()
+	private async onExportButtonClick(button: ButtonApi): Promise<void> {
+		await this.normalizeExportPaths()
+		
 		this.panels.exportPanel.refresh()
 		
 		if (this.glyphs.length === 0) {
@@ -679,10 +680,14 @@ export class BitmapFontEditor extends BaseScene {
 			return
 		}
 		
-		button.disabled = true
+		this.panels.importPanel.disableInput()
+		this.panels.exportPanel.disableInput()
 		
 		this.export(configPath, texturePath)
-			.finally(() => button.disabled = false)
+			.finally(() => {
+				this.panels.importPanel.enableInput()
+				this.panels.exportPanel.enableInput()
+			})
 	}
 	
 	private async normalizeExportPaths(): Promise<void> {
@@ -1047,7 +1052,8 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private loadProject(projectFilepath: string): Promise<unknown> {
-		this.panels.importPanel.projectInput.disabled = true
+		this.panels.importPanel.disableInput()
+		this.panels.exportPanel.disableInput()
 		
 		return BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
@@ -1064,7 +1070,8 @@ export class BitmapFontEditor extends BaseScene {
 				console.log(`Can't load bitmap font project!`, error)
 			})
 			.finally(() => {
-				this.panels.importPanel.projectInput.disabled = false
+				this.panels.importPanel.enableInput()
+				this.panels.exportPanel.enableInput()
 			})
 	}
 	
