@@ -810,10 +810,9 @@ export class BitmapFontEditor extends BaseScene {
 			let text = await response.text() // TP config file is a XML file
 			let dataFile = /<struct type="DataFile">((.|\n)*?)<\/struct>/.exec(text)[1]
 			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
+			let dirname = await this.resolveSymlink(path.dirname(pathToTpConfig))
 			
-			// no idea why we need to put '..' in the middle but without it doesn't work otherwise
-			// TODO test on windows
-			return path.join(path.dirname(pathToTpConfig), "..", filename)
+			return path.join(dirname, filename)
 		} catch (e) {
 			return
 		}
@@ -915,7 +914,7 @@ export class BitmapFontEditor extends BaseScene {
 			.success(`<b>${this.config.export.name}</b> was exported!`)
 			.on(NotyfEvent.Click, () => BrowserSyncService.open(path.dirname(project.slice(6))))
 		
-		let texturePacker = this.config.export.texturePacker
+		let texturePacker = await this.resolveSymlink(this.config.export.texturePacker)
 		if (texturePacker) {
 			let { error } = await this.updateTexturePackerProject(texturePacker)
 			if (error) {
@@ -939,6 +938,12 @@ export class BitmapFontEditor extends BaseScene {
 	private onExportFail(error) {
 		console.log(`Can't save bitmap font!`, error)
 		this.game.notifications.notyf.error(error.message)
+	}
+	
+	private async resolveSymlink(path: string): Promise<string> {
+	    let response = await BrowserSyncService.realPath(path)
+		let result = await response.json()
+		return result.result
 	}
 	
 	private async updateTexturePackerProject(texturePackerProjectPath: string): Promise<{ error? }> {

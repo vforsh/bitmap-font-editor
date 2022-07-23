@@ -80,5 +80,9 @@ module.exports = {
 			route: "/path-relative",
 			handle: require("./middleware/path-relative"),
 		},
+		{
+			route: "/fs-realpath",
+			handle: require("./middleware/fs-realpath"),
+		},
 	],
 }
