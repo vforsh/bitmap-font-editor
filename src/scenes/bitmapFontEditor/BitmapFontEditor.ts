@@ -727,10 +727,10 @@ export class BitmapFontEditor extends BaseScene {
 		let fontData = createBmfontData(this.config, this.glyphs, texture, font)
 		
 		if (this.config.export.texturePacker) {
-			let atlas = await this.getAtlasDataPathFromTpConfig(this.config.export.texturePacker)
-			if (atlas) {
+			let atlasJson = await this.getAtlasDataPathFromTpConfig(this.config.export.texturePacker)
+			if (atlasJson) {
 				fontData.extra = {
-					atlas: await this.getRelativeToRootPath(atlas),
+					atlas: await this.getRelativeToRootPath(atlasJson),
 					texture: texturePath,
 					texturePacker: await this.getRelativeToRootPath(this.config.export.texturePacker),
 				}
@@ -804,7 +804,9 @@ export class BitmapFontEditor extends BaseScene {
 			let dataFile = /<struct type="DataFile">((.|\n)*?)<\/struct>/.exec(text)[1]
 			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
 			
-			return path.join(path.dirname(pathToTpConfig), filename)
+			// no idea why we need to put '..' in the middle but without it doesn't work otherwise
+			// TODO test on windows
+			return path.join(path.dirname(pathToTpConfig), "..", filename)
 		} catch (e) {
 			return
 		}
