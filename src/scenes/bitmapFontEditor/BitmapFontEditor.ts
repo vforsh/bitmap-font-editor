@@ -685,13 +685,13 @@ export class BitmapFontEditor extends BaseScene {
 			.finally(() => button.disabled = false)
 	}
 	
-	private normalizeExportPaths(): void {
+	private async normalizeExportPaths(): Promise<void> {
 		let fontsDir = this.fontsDir
 		let { name, type, config, texture } = this.config.export
 		
 		if (config) {
-			if (path.isAbsolute(config)) {
-				config = this.getRelativeToRootPath(config)
+			if (this.isAbsolutePath(config)) {
+				config = await this.getRelativeToRootPath(config)
 			}
 			
 			let configExtname = path.extname(config)
@@ -700,12 +700,12 @@ export class BitmapFontEditor extends BaseScene {
 			}
 		} else {
 			config = path.join(fontsDir, `${name}.${type}`)
-			config = this.getRelativeToRootPath(config)
+			config = await this.getRelativeToRootPath(config)
 		}
 		
 		if (texture) {
-			if (path.isAbsolute(texture)) {
-				texture = this.getRelativeToRootPath(texture)
+			if (this.isAbsolutePath(texture)) {
+				texture = await this.getRelativeToRootPath(texture)
 			}
 			
 			let textureExtname = path.extname(texture)
@@ -714,7 +714,7 @@ export class BitmapFontEditor extends BaseScene {
 			}
 		} else {
 			texture = path.join(fontsDir, `${name}.png`)
-			texture = this.getRelativeToRootPath(texture)
+			texture = await this.getRelativeToRootPath(texture)
 		}
 		
 		this.config.export.config = config
@@ -730,9 +730,9 @@ export class BitmapFontEditor extends BaseScene {
 			let atlas = await this.getAtlasDataPathFromTpConfig(this.config.export.texturePacker)
 			if (atlas) {
 				fontData.extra = {
-					atlas: this.getRelativeToRootPath(atlas),
+					atlas: await this.getRelativeToRootPath(atlas),
 					texture: texturePath,
-					texturePacker: this.getRelativeToRootPath(this.config.export.texturePacker),
+					texturePacker: await this.getRelativeToRootPath(this.config.export.texturePacker),
 				}
 			}
 		}
@@ -748,7 +748,7 @@ export class BitmapFontEditor extends BaseScene {
 			configPath: path.join(this.gameDir, configPath),
 			texture: texture.blob,
 			texturePath: path.join(this.gameDir, texturePath),
-			project: this.getProjectConfigToExport(this.config),
+			project: await this.getProjectConfigToExport(this.config),
 		})
 			.then(response => this.onExportComplete(response))
 			.catch(error => this.onExportFail(error))
@@ -756,33 +756,44 @@ export class BitmapFontEditor extends BaseScene {
 			})
 	}
 	
-	private getProjectConfigToExport(config: BitmapFontProjectConfig): string {
+	private async getProjectConfigToExport(config: BitmapFontProjectConfig): Promise<string> {
 		let configCopy = cloneDeep(config)
 		
-		this.adjustProjectConfigPaths(configCopy)
+		await this.adjustProjectConfigPaths(configCopy)
 		
 		return JSON.stringify(configCopy, null, "\t")
 	}
 	
-	private adjustProjectConfigPaths(configCopy: BitmapFontProjectConfig): void {
+	private async adjustProjectConfigPaths(config: BitmapFontProjectConfig): Promise<void> {
 		let propertyPaths = [
 			"import.project",
 			"import.custom",
 			"export.config",
 			"export.texture",
 			"export.texturePacker",
-		]
+		] as const
 		
-		propertyPaths.forEach((propertyPath) => {
-			let filepath = get(configCopy, propertyPath)
-			if (filepath && path.isAbsolute(filepath)) {
-				set(configCopy, propertyPath, slash(this.getRelativeToRootPath(filepath)))
+		for await (const propertyPath of propertyPaths) {
+			let filepath = get(config, propertyPath) as string
+			if (filepath && this.isAbsolutePath(filepath)) {
+				set(config, propertyPath, await this.getRelativeToRootPath(filepath))
 			}
-		})
+		}
 	}
 	
-	private getRelativeToRootPath(filepath: string): string {
-		return path.relative(this.gameDir, filepath)
+	private isAbsolutePath(filepath: string): boolean {
+	    if (path.isAbsolute(filepath)) {
+			return true
+	    }
+		
+		// windows paths are like C:/ or D:\\
+		return filepath.search(/[A-Z]:\\/g) === 0 || filepath.search(/[A-Z]:\//g) === 0
+	}
+	
+	private async getRelativeToRootPath(filepath: string): Promise<string> {
+		let response = await BrowserSyncService.pathRelative(this.gameDir, filepath)
+		let result = await response.json()
+		return slash(result.result);
 	}
 	
 	// TP config = TexturePacker XML config (.tps)
