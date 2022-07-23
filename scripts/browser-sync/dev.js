@@ -76,5 +76,9 @@ module.exports = {
 			route: "/globby",
 			handle: require("./middleware/globby"),
 		},
+		{
+			route: "/path-relative",
+			handle: require("./middleware/path-relative"),
+		},
 	],
 }

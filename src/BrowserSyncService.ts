@@ -16,6 +16,7 @@ export type BrowserSyncApiEndpoint =
 	| "open"
 	| "command"
 	| "globby"
+	| "path-relative"
 
 export type SaveBitmapFontParams = {
 	project: string,
@@ -139,6 +140,17 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("globby"), {
 			method: "POST",
 			body: JSON.stringify({ patterns, options }),
+		})
+	},
+	
+	pathRelative(from: string, to: string): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("path-relative"), {
+			method: "POST",
+			body: JSON.stringify({ from, to }),
 		})
 	},
 	
