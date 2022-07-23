@@ -740,7 +740,9 @@ export class BitmapFontEditor extends BaseScene {
 		let { width: textureW, height: textureH } = texture
 		let { width: canvasW, height: canvasH } = this.game.canvas
 		if (textureW > canvasW || textureH > canvasH) {
-			console.warn(`Texture size is bigger than canvas size. Font texture will be cropped! [texture ${textureW}x${textureH}, canvas ${canvasW}x${canvasH}]`)
+			let message = `Texture size is bigger than canvas size. Font texture will be cropped!`
+			this.game.notifications.warn(message)
+			console.warn(message, `[texture ${textureW}x${textureH}, canvas ${canvasW}x${canvasH}]`)
 		}
 		
 		BrowserSyncService.saveBitmapFont({

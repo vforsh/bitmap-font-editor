@@ -1,4 +1,6 @@
 import { Notyf } from "notyf"
+import { NotyfNotification } from "notyf/notyf.models"
+import { DeepPartial, INotyfNotificationOptions } from "notyf/notyf.options"
 
 export class NotificationsManager extends Phaser.Events.EventEmitter {
 	
@@ -17,23 +19,25 @@ export class NotificationsManager extends Phaser.Events.EventEmitter {
 					type: "disabled",
 					background: "gray",
 					className: "notif",
-					icon: {
+					// TODO add material-icons css
+					/*icon: {
 						color: "white",
 						className: "material-icons",
 						tagName: "span",
 						text: "cancel",
-					},
+					},*/
 				},
 				{
 					type: "warning",
 					background: "orange",
 					className: "notif",
-					icon: {
+					// TODO add material-icons css
+					/*icon: {
 						color: "white",
 						className: "material-icons",
 						tagName: "span",
 						text: "warning",
-					},
+					},*/
 				},
 				{
 					type: "success",
@@ -49,6 +53,14 @@ export class NotificationsManager extends Phaser.Events.EventEmitter {
 				},
 			],
 		})
+	}
+	
+	public warn(message: string | DeepPartial<INotyfNotificationOptions>): NotyfNotification {
+		if (typeof message === 'string') {
+			return this.notyf.open({ message, type: 'warning' })
+		}
+		
+		return this.notyf.open({ ...message, type: 'warning' })
 	}
 	
 }
