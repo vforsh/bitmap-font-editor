@@ -4,7 +4,7 @@
 	"main": "src/startup/Startup.ts",
 	"private": true,
 	"scripts": {
-		"ts-complile": "cd scripts/build/ && node dev.js",
+		"ts-compile": "node scripts/build/dev.js --watch",
 		"ts-typecheck": "tsc --project ./tsconfig.json",
 		"ts-typecheck-clean": "del-cli ./tsconfig.tsbuildinfo && npm run ts-typecheck",
 		"serve-dev": "browser-sync start --config scripts/browser-sync/dev.js",
@@ -24,7 +24,8 @@
 		"compress-graphics": "grunt compress-graphics",
 		"compress-graphics-clear": "grunt clean:compressed_graphics && grunt compress-graphics",
 		"bump-build-version": "grunt update-build-version",
-		"clear-dotenv": "del-cli .env"
+		"clear-dotenv": "del-cli .env",
+		"postinstall": "node scripts/build/dev.js"
 	},
 	"engines": {
 		"node": ">=14.16",
