@@ -943,7 +943,7 @@ export class BitmapFontEditor extends BaseScene {
 	private async resolveSymlink(path: string): Promise<string> {
 	    let response = await BrowserSyncService.realPath(path)
 		let result = await response.json()
-		return result.result
+		return slash(result.result)
 	}
 	
 	private async updateTexturePackerProject(texturePackerProjectPath: string): Promise<{ error? }> {
@@ -1063,10 +1063,10 @@ export class BitmapFontEditor extends BaseScene {
 		return BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
 			.then((result: BitmapFontProjectConfig) => {
-				result.import.project = projectFilepath
+				result.import.project = slash(projectFilepath)
 				
 				if (result.export.texturePacker) {
-					result.export.texturePacker = path.join(this.gameDir, result.export.texturePacker)
+					result.export.texturePacker = slash(path.join(this.gameDir, result.export.texturePacker))
 				}
 				
 				this.applyProjectConfig(result)
