@@ -914,15 +914,17 @@ export class BitmapFontEditor extends BaseScene {
 			.success(`<b>${this.config.export.name}</b> was exported!`)
 			.on(NotyfEvent.Click, () => BrowserSyncService.open(path.dirname(project.slice(6))))
 		
-		let texturePacker = await this.resolveSymlink(this.config.export.texturePacker)
-		if (texturePacker) {
-			let { error } = await this.updateTexturePackerProject(texturePacker)
-			if (error) {
-				console.warn("Can't update Texture Packer project!\n", error)
-				this.game.notifications.notyf.error(`Can't update Texture Packer project! ${error}`)
-			} else {
-				console.log(`Texture Packer Project: file:///${texturePacker}`)
-				this.game.notifications.notyf.success(`<b>${path.basename(texturePacker)}</b> was exported!`)
+		if (this.config.export.texturePacker) {
+			let texturePacker = await this.resolveSymlink(this.config.export.texturePacker)
+			if (texturePacker) {
+				let { error } = await this.updateTexturePackerProject(texturePacker)
+				if (error) {
+					console.warn("Can't update Texture Packer project!\n", error)
+					this.game.notifications.notyf.error(`Can't update Texture Packer project! ${error}`)
+				} else {
+					console.log(`Texture Packer Project: file:///${texturePacker}`)
+					this.game.notifications.notyf.success(`<b>${path.basename(texturePacker)}</b> was exported!`)
+				}
 			}
 		}
 		
