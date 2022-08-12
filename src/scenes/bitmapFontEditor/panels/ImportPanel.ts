@@ -1,7 +1,8 @@
-import { EditorPanel } from "./EditorPanel"
+import { EditorPanel, EditorPanelEvent } from "./EditorPanel"
 import { ButtonApi, InputBindingApi, ListParamsOptions } from "@tweakpane/core"
 import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 import { getBmfontProjectName } from "../../../utils/get-bmfont-project-name"
+import path from "path-browserify"
 
 export type ImportPanelConfig = BitmapFontProjectConfig["import"]
 
@@ -22,10 +23,18 @@ export class ImportPanel extends EditorPanel {
 	}
 	
 	private createProjectInput(projects: string[]): InputBindingApi<unknown, string> {
-		return this.panel.addInput(this.config, "project", {
+		let input = this.panel.addInput(this.config, "project", {
 			index: 0,
 			options: this.createProjectsListOptions(projects),
-		}).on("change", (e) => this.emit("project-change", this.config, e))
+		})
+		
+		input.on("change", (e) => this.emit("project-change", this.config, e))
+		
+		input.controller_.view.element.addEventListener('dblclick', () => {
+			this.emit(EditorPanelEvent.OPEN_DIRECTORY, path.dirname(this.config.project))
+		})
+		
+		return input
 	}
 	
 	private createProjectsListOptions(projects: string[]): ListParamsOptions<string> {

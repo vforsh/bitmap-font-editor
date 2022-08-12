@@ -794,7 +794,7 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	
-	private isAbsolutePath(filepath: string): boolean {
+	public isAbsolutePath(filepath: string): boolean {
 	    if (path.isAbsolute(filepath)) {
 			return true
 	    }

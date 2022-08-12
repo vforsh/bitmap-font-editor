@@ -9,6 +9,9 @@ import { PreviewPanel } from "./PreviewPanel"
 import { ImportPanel } from "./ImportPanel"
 import { GlowPanel } from "./GlowPanel"
 import { GamePanel, GamePanelConfig } from "./GamePanel"
+import { BrowserSyncService } from "../../../BrowserSyncService"
+import path from "path-browserify"
+import { EditorPanelEvent } from "./EditorPanel"
 
 export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	
@@ -52,6 +55,8 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		this.exportPanel = new ExportPanel(this.scene, this.rightPanels, config.export)
 		this.previewPanel = new PreviewPanel(this.scene, this.rightPanels, config.preview)
 		
+		this.addOpenDirectoryCallbacks()
+		
 		this.addKeyboardCallbacks()
 	}
 	
@@ -94,6 +99,24 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		this.scene.game.canvas.parentNode.insertBefore(container, this.scene.game.canvas.nextSibling)
 		
 		return container
+	}
+	
+	private addOpenDirectoryCallbacks() {
+		[this.gamePanel, this.importPanel, this.exportPanel].forEach(panel => {
+			panel.on(EditorPanelEvent.OPEN_DIRECTORY, this.openDirectory, this)
+		})
+	}
+	
+	private openDirectory(dirpath: string): void {
+	    if (!dirpath) {
+			return
+	    }
+		
+		if (!this.scene.isAbsolutePath(dirpath)) {
+			dirpath = path.join(this.scene.gameDir, dirpath)
+		}
+		
+		BrowserSyncService.open(dirpath)
 	}
 	
 	public enablePanels(): void {

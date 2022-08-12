@@ -1,4 +1,4 @@
-import { EditorPanel } from "./EditorPanel"
+import { EditorPanel, EditorPanelEvent } from "./EditorPanel"
 import { ButtonApi, InputBindingApi, ListParamsOptions } from "@tweakpane/core"
 import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 import slash from "slash"
@@ -25,11 +25,15 @@ export class ExportPanel extends EditorPanel {
 		this.panel.addInput(this.config, "config").on("change", event => {
 			this.config[event.presetKey] = slash(event.value)
 			this.refresh()
+		}).controller_.view.element.addEventListener('dblclick', () => {
+			this.emit(EditorPanelEvent.OPEN_DIRECTORY, path.dirname(this.config.config))
 		})
 		
 		this.panel.addInput(this.config, "texture").on("change", event => {
 			this.config[event.presetKey] = slash(event.value)
 			this.refresh()
+		}).controller_.view.element.addEventListener('dblclick', () => {
+			this.emit(EditorPanelEvent.OPEN_DIRECTORY, path.dirname(this.config.texture))
 		})
 		
 		let atlases = this.config.texturePacker ? [this.config.texturePacker] : []
@@ -50,10 +54,18 @@ export class ExportPanel extends EditorPanel {
 	}
 	
 	private createTexturePackerInput(atlases: string[]): InputBindingApi<unknown, string> {
-		return this.panel.addInput(this.config, "texturePacker", {
+		let input = this.panel.addInput(this.config, "texturePacker", {
 			index: 5,
 			options: this.createAtlasesListOptions(atlases),
 		})
+		
+		input.controller_.view.element.addEventListener('dblclick', () => {
+			if (this.config.texturePacker) {
+				this.emit(EditorPanelEvent.OPEN_DIRECTORY, path.dirname(this.config.texturePacker))
+			}
+		})
+		
+		return input
 	}
 	
 	private createAtlasesListOptions(atlases: string[]): ListParamsOptions<string> {

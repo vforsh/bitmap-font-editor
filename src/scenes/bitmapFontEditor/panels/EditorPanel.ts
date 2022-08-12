@@ -2,6 +2,10 @@ import EventEmitter = Phaser.Events.EventEmitter
 import { Pane } from "tweakpane"
 import * as EssentialsPlugin from "@tweakpane/plugin-essentials"
 
+export enum EditorPanelEvent {
+	OPEN_DIRECTORY = "EditorPanel_OPEN_DIRECTORY",
+}
+
 export class EditorPanel extends EventEmitter {
 	
 	protected scene: Phaser.Scene
