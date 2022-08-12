@@ -31,7 +31,12 @@ import path from "path-browserify"
 import { NotyfEvent } from "notyf"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 
-export type BitmapFontTexture = { blob: Blob, width: number, height: number }
+export type BitmapFontTexture = {
+	blob: Blob,
+	width: number,
+	height: number,
+	padding: number,
+}
 
 export type GameSettings = {
 	name: string
@@ -65,6 +70,7 @@ export class BitmapFontEditor extends BaseScene {
 	public config: BitmapFontProjectConfig
 	private panels: BitmapFontEditorPanelsManager
 	private background: Phaser.GameObjects.Image
+	private glyphsBorder: Phaser.GameObjects.Graphics
 	private glyphsContainer: Phaser.GameObjects.Container
 	private glyphDebug: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
@@ -818,11 +824,12 @@ export class BitmapFontEditor extends BaseScene {
 		}
 	}
 	private async createTexture(): Promise<BitmapFontTexture> {
-		let padding = this.config.layout.padding
+		let addTextureBorder = !!this.config.export.texturePacker
+		let padding = addTextureBorder ? 2 : 0
 		let { width, height } = this.getTextureSize(padding)
 		let blob = await this.makeSnapshot(0, 0, width, height, padding)
 		
-		return { blob, width, height }
+		return { blob, width, height, padding }
 	}
 	
 	private getTextureSize(padding: number): { width: number; height: number } {
@@ -837,7 +844,7 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private makeSnapshot(x: number, y: number, width: number, height: number, padding = 0): Promise<Blob> {
 		return new Promise((resolve, reject) => {
-			this.beforeSnapshot(padding)
+			this.beforeSnapshot(width, height, padding)
 			
 			this.renderer.once(Phaser.Renderer.Events.POST_RENDER, () => {
 				let canvas = document.createElement("canvas")
@@ -854,14 +861,33 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
-	private beforeSnapshot(padding: number): void {
+	private beforeSnapshot(width: number, height: number, padding = 0): void {
 		this.background.kill()
 		this.previewBack.kill()
 		this.preview?.kill()
 		this.previewDebug.kill()
 		
+		if (padding > 0) {
+			this.addGlyphsBorder(width, height, padding)
+		}
+		
 		this.glyphsContainer.x = padding
 		this.glyphsContainer.y = padding
+	}
+	
+	private addGlyphsBorder(width: number, height: number, thickness: number) {
+		if (this.glyphsBorder) {
+			this.removeGlyphsBorder()
+		}
+		
+		this.glyphsBorder = this.add.graphics({
+			lineStyle: {
+				width: thickness,
+				color: 0xff0000,
+			}
+		})
+		
+		this.glyphsBorder.strokeRect(0, 0, width, height)
 	}
 	
 	private afterSnapshot(): void {
@@ -869,12 +895,23 @@ export class BitmapFontEditor extends BaseScene {
 		this.previewBack.revive()
 		this.preview?.revive()
 		
+		this.removeGlyphsBorder()
+
 		this.glyphsContainer.x = 0
 		this.glyphsContainer.y = 0
 		
 		if (this.config.preview.debug) {
 			this.previewDebug.revive()
 		}
+	}
+	
+	private removeGlyphsBorder() {
+		if (!this.glyphsBorder) {
+			return
+		}
+		
+		this.glyphsBorder.destroy()
+		this.glyphsBorder = null
 	}
 	
 	private async loadFont(name: string): Promise<Font> {

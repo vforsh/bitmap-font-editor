@@ -47,7 +47,6 @@ export interface BitmapFontProjectConfig {
 	},
 	layout: {
 		bgColor: RGB
-		padding: number
 		method: PackingMethod
 	},
 	import: {
@@ -108,7 +107,6 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 	},
 	layout: {
 		bgColor: { r: 104, g: 104, b: 104 },
-		padding: 0,
 		method: PackingMethod.ROW,
 	},
 	import: {
