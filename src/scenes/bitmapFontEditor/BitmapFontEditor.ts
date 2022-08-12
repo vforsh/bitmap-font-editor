@@ -837,8 +837,8 @@ export class BitmapFontEditor extends BaseScene {
 		let height = Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight))
 		
 		return {
-			width: width + padding * 2,
-			height: height + padding * 2,
+			width: Math.ceil(width + padding * 2),
+			height: Math.ceil(height + padding * 2),
 		}
 	}
 	
