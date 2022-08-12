@@ -810,7 +810,7 @@ export class BitmapFontEditor extends BaseScene {
 			let text = await response.text() // TP config file is a XML file
 			let dataFile = /<struct type="DataFile">((.|\n)*?)<\/struct>/.exec(text)[1]
 			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
-			let dirname = await this.resolveSymlink(path.dirname(pathToTpConfig))
+			let dirname = path.dirname(pathToTpConfig)
 			
 			return path.join(dirname, filename)
 		} catch (e) {
