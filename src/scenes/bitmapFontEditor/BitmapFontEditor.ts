@@ -30,6 +30,7 @@ import slash from "slash"
 import path from "path-browserify"
 import { NotyfEvent } from "notyf"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
+import { copyToClipboard } from "../../robowhale/utils/copy-to-clipboard"
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -246,6 +247,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels = new BitmapFontEditorPanelsManager(this)
 		this.panels.contentPanel.on(ContentPanelEvent.CONTENT_CHANGE, this.onContentChange, this)
 		this.panels.fontPanel.reloadButton.on("click", this.onReloadFontsButtonClick.bind(this))
+		this.panels.fontPanel.copyTextStyleButton.on("click", this.onCopyTextStyleButtonClick.bind(this))
 		this.panels.fontPanel.on("change", this.onFontChange, this)
 		this.panels.strokePanel.on("change", this.onStrokeChange, this)
 		this.panels.shadowPanel.on("change", this.onShadowChange, this)
@@ -330,6 +332,45 @@ export class BitmapFontEditor extends BaseScene {
 				reloadButton.disabled = false
 				familyInput.disabled = false
 			})
+	}
+	
+	private onCopyTextStyleButtonClick(): void {
+		let { font, stroke, shadow } = this.config
+		
+	    let style: Phaser.Types.GameObjects.Text.TextStyle = {
+	    	fontFamily: font.family,
+	    	fontStyle: font.weight.toString(),
+	    	fontSize: font.size + "px",
+	    	color: this.rgbaToString(font.color),
+	    	align: "center",
+	    }
+		
+		if (font.padding.x !== 0 || font.padding.y !== 0) {
+			style.padding = cloneDeep(font.padding)
+		}
+		
+		if (stroke.thickness > 0) {
+			style.stroke = this.rgbaToString(stroke.color)
+			style.strokeThickness = stroke.thickness
+		}
+		
+		if (shadow.x !== 0 || shadow.y !== 0) {
+			style.shadow = {
+				offsetX: shadow.x,
+				offsetY: shadow.y,
+				blur: shadow.blur,
+				color: this.rgbaToString(shadow.color),
+				stroke: shadow.shadowStroke,
+				fill: shadow.shadowFill,
+			}
+		}
+		
+		let content = JSON.stringify(style, null, '\t')
+		content = content.replace(/"(\w+)": /gm, "$1: ") // remove double quotes from props
+		
+		copyToClipboard(content)
+			.then(() => this.game.notifications.notyf.success('Text style was copied to the clipboard.'))
+			.catch(() => this.game.notifications.notyf.error(`Can't copy text style to the clipboard!`))
 	}
 	
 	private onFontChange(config: TextFontConfig) {

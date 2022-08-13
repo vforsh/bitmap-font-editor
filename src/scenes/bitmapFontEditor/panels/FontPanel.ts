@@ -20,6 +20,7 @@ export class FontPanel extends EditorPanel {
 	public config: FontPanelConfig
 	public familyInput: InputBindingApi<unknown, string>
 	public reloadButton: ButtonApi
+	public copyTextStyleButton: ButtonApi
 	
 	constructor(scene: Phaser.Scene, container: HTMLElement, config: FontPanelConfig) {
 		super(scene, container, "Font")
@@ -68,6 +69,8 @@ export class FontPanel extends EditorPanel {
 		})
 		
 		this.reloadButton = this.panel.addButton({ title: "Reload fonts" })
+		
+		this.copyTextStyleButton = this.panel.addButton({ title: "Copy text style" })
 	}
 	
 	private createFamilyInput(fonts: string[]): InputBindingApi<unknown, string> {
