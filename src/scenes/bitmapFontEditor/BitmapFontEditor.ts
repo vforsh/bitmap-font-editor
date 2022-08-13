@@ -14,7 +14,6 @@ import { GlowPanelConfig } from "./panels/GlowPanel"
 import { GlowPostFX } from "../../robowhale/phaser3/fx/GlowPostFX"
 import { PreviewPanelConfig } from "./panels/PreviewPanel"
 import { ButtonApi } from "@tweakpane/core"
-import { UrlParams } from "../../UrlParams"
 import { ImportPanelConfig } from "./panels/ImportPanel"
 import { blobToImage } from "../../robowhale/phaser3/utils/blob-to-json"
 import { parseJsonBitmapFont } from "../../robowhale/phaser3/gameObjects/bitmap-text/parse-json-bitmap-font"
@@ -31,6 +30,8 @@ import path from "path-browserify"
 import { NotyfEvent } from "notyf"
 import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 import { copyToClipboard } from "../../robowhale/utils/copy-to-clipboard"
+import { IStartProjectConfig } from "../../IStartProjectConfig"
+import { getBmfontProjectName } from "../../utils/get-bmfont-project-name"
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -107,7 +108,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
-		let gameDir = UrlParams.get("game") ?? await this.showOpenGameWindow()
+		let gameDir = this.game.stash.get('startProject').game || await this.showOpenGameWindow()
 		if (gameDir) {
 			gameDir = slash(gameDir)
 		}
@@ -235,7 +236,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.isReady = true
 		this.resize()
 		
-		let projectPath = UrlParams.get("project")
+		let projectPath = this.game.stash.get('startProject').project
 		if (projectPath) {
 			await this.loadProject(projectPath)
 		}
@@ -258,6 +259,7 @@ export class BitmapFontEditor extends BaseScene {
 		
 		this.panels.importPanel.on("project-change", this.onProjectChange.bind(this))
 		this.panels.importPanel.reloadProjectsButton.on("click", this.reloadProjectsList.bind(this))
+		this.panels.importPanel.startProjectButton.on("click", this.onStartProjectButtonClick.bind(this))
 		
 		this.panels.exportPanel.openTpProjectButton.on("click", this.onOpenTpProjectButtonClick.bind(this, this.panels.exportPanel.openTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
@@ -696,6 +698,31 @@ export class BitmapFontEditor extends BaseScene {
 	private onGlyphPointerOut(pointer): void {
 		this.glyphDebug.kill()
 		this.glyphsInfo.kill()
+	}
+	
+	private onStartProjectButtonClick(): void {
+	    let config: IStartProjectConfig = {
+			game: this.gameDir,
+		    project: this.config.import.project,
+	    }
+		
+		this.panels.importPanel.startProjectButton.disabled = true
+		
+		let projectName = getBmfontProjectName(this.panels.importPanel.config.project)
+		
+		BrowserSyncService.writeJson('dev/assets/start_project.json', config, true)
+			.then(() => this.onStartProjectConfigUpdateComplete(projectName))
+			.catch((error) => this.onStartProjectConfigUpdateFail(projectName, error))
+			.finally(() => this.panels.importPanel.startProjectButton.disabled = false)
+	}
+	
+	private onStartProjectConfigUpdateComplete(projectName: string) {
+		this.game.notifications.notyf.success(`<b>${projectName}</b> is a start project now.`)
+	}
+	
+	private onStartProjectConfigUpdateFail(projectName: string, error: unknown) {
+		this.game.notifications.notyf.error(`Can't set <b>${projectName}</b> as a start project!`)
+		console.error(error)
 	}
 	
 	private async onOpenTpProjectButtonClick(button: ButtonApi) {

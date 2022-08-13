@@ -1,8 +1,6 @@
 const bodyParser = require('body-parser')
-require("dotenv").config()
 
 const files = [
-	"dev/assets/configs/shop_offers.json",
 	"dev/assets/graphics/*.json",
 	"dev/assets/graphics/*.jpg",
 	"dev/assets/audio/**",
@@ -15,10 +13,8 @@ const files = [
 
 const ignore = []
 
-const { game, project } = process.env
 const queryString = new URLSearchParams({
-	...(game && { game }),
-	...(project && { project }),
+
 })
 
 /**
@@ -63,6 +59,10 @@ module.exports = {
 		{
 			route: "/write-file",
 			handle: require("./middleware/write-file"),
+		},
+		{
+			route: "/write-json",
+			handle: require("./middleware/write-json"),
 		},
 		{
 			route: "/open",

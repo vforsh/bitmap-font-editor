@@ -11,6 +11,7 @@ export class ImportPanel extends EditorPanel {
 	public config: ImportPanelConfig
 	public projectInput: InputBindingApi<unknown, string>
 	public reloadProjectsButton: ButtonApi
+	public startProjectButton: ButtonApi
 	
 	constructor(scene: Phaser.Scene, container: HTMLElement, config: ImportPanelConfig) {
 		super(scene, container, "Import")
@@ -19,7 +20,10 @@ export class ImportPanel extends EditorPanel {
 		
 		let projects = this.config.project ? [this.config.project] : []
 		this.projectInput = this.createProjectInput(projects)
-		this.reloadProjectsButton = this.panel.addButton({ title: "Reload Projects" })
+		
+		this.reloadProjectsButton = this.panel.addButton({ title: "Reload projects" })
+		
+		this.startProjectButton = this.panel.addButton({ title: "Set as a start project" })
 	}
 	
 	private createProjectInput(projects: string[]): InputBindingApi<unknown, string> {

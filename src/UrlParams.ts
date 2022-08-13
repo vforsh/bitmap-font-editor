@@ -17,8 +17,6 @@ export type UrlParam =
 	| "storage"
 	| "quality"
 	| "throttle"
-	| "game"
-	| "project"
 
 export type UrlParamType = UrlParam /*| string*/
 

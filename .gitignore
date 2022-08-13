@@ -9,6 +9,7 @@ dev/assets/graphics/jpg
 dev/assets/graphics/png-compressed
 dev/assets/graphics/webp
 dev/assets/fonts/test
+dev/assets/start_project.json
 dev/js/game.js
 dev/js/game.js.map
 dev/js/temp

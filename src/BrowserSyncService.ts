@@ -13,6 +13,7 @@ export type BrowserSyncApiEndpoint =
 	| "projects"
 	| "read-file"
 	| "write-file"
+	| "write-json"
 	| "open"
 	| "command"
 	| "globby"
@@ -97,6 +98,21 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("write-file"), {
 			method: "POST",
 			body: formData,
+		})
+	},
+	
+	writeJson(filepath: string, content: unknown, overwrite = true): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("write-json"), {
+			method: "POST",
+			body: JSON.stringify({
+				filepath,
+				content,
+				overwrite,
+			})
 		})
 	},
 	

@@ -1,12 +1,15 @@
 import type { Font } from "opentype.js"
+import { IStartProjectConfig } from "../IStartProjectConfig"
 
 const GAME_STASH = {
 	webp: false,
 	avif: false,
 	development: false,
 	editorEnabled: false,
-	num: 1,
 	fonts: new Map<string, Font>(),
+	startProject: {} as IStartProjectConfig,
+	//
+	__num: 1,
 }
 
 type GameStashType = Partial<typeof GAME_STASH>

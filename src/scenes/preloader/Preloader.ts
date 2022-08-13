@@ -3,6 +3,9 @@ import { ISceneTransition } from "../../sceneTransition/ISceneTransition"
 import { CanvasSceneTransition } from "../../sceneTransition/CanvasSceneTransition"
 import { BaseScene } from "../../robowhale/phaser3/scenes/BaseScene"
 import { GameStore } from "../../store/GameStore"
+import { IStartProjectConfig } from "../../IStartProjectConfig"
+import { BrowserSyncService } from "../../BrowserSyncService"
+import { cloneDeep } from "lodash-es"
 
 export class Preloader extends BaseScene {
 	
@@ -14,6 +17,7 @@ export class Preloader extends BaseScene {
 	
 	public preload() {
 		this.loadSaveData()
+		this.loadStartProjectConfig()
 	}
 	
 	private loadSaveData() {
@@ -32,8 +36,13 @@ export class Preloader extends BaseScene {
 		})
 	}
 	
+	private loadStartProjectConfig() {
+		this.load.json('start_project', 'assets/start_project.json')
+	}
+	
 	public create() {
 		this.initStore()
+		this.initStartProjectConfig()
 		this.addScenesTransition()
 		this.addToasts()
 		
@@ -42,6 +51,13 @@ export class Preloader extends BaseScene {
 	
 	private initStore() {
 		this.game.store.changeNumber("login_num", 1)
+	}
+	
+	private initStartProjectConfig() {
+		let config: IStartProjectConfig = this.cache.json.get('start_project')
+		if (config) {
+			this.game.stash.set('startProject', cloneDeep(config))
+		}
 	}
 	
 	private addScenesTransition() {
