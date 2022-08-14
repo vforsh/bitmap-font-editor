@@ -260,6 +260,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.importPanel.on("project-change", this.onProjectChange.bind(this))
 		this.panels.importPanel.reloadProjectsButton.on("click", this.reloadProjectsList.bind(this))
 		this.panels.importPanel.startProjectButton.on("click", this.onStartProjectButtonClick.bind(this))
+		this.panels.importPanel.deleteProjectButton.on("click", this.onDeleteProjectButtonClick.bind(this))
 		
 		this.panels.exportPanel.openTpProjectButton.on("click", this.onOpenTpProjectButtonClick.bind(this, this.panels.exportPanel.openTpProjectButton))
 		this.panels.exportPanel.exportButton.on("click", this.onExportButtonClick.bind(this, this.panels.exportPanel.exportButton))
@@ -747,6 +748,43 @@ export class BitmapFontEditor extends BaseScene {
 	private onStartProjectConfigUpdateFail(projectName: string, error: unknown) {
 		this.game.notifications.notyf.error(`Can't set <b>${projectName}</b> as a start project!`)
 		console.error(error)
+	}
+	
+	private async onDeleteProjectButtonClick() {
+		if (!this.config.import.project) {
+			return
+		}
+		
+		let projectName = getBmfontProjectName(this.config.import.project)
+	    let doDelete = window.confirm(`Delete '${projectName}'?`)
+		if (!doDelete) {
+			return
+		}
+		
+		this.panels.importPanel.disableInput()
+		
+		Promise.all([
+			BrowserSyncService.rmFile(this.config.import.project),
+			BrowserSyncService.rmFile(path.join(this.gameDir, this.config.export.texture)),
+			BrowserSyncService.rmFile(path.join(this.gameDir, this.config.export.config)),
+		])
+			.then(() => this.onProjectDeleteComplete(projectName))
+			.catch(err => this.onProjectDeleteFail(projectName, err))
+			.finally(() => this.panels.importPanel.enableInput())
+	}
+	
+	private async onProjectDeleteComplete(projectName: string) {
+		// TODO if font texture is embed into the texture atlas
+		// then we need to remove it from there too
+		
+		await this.reloadProjectsList()
+		this.applyProjectConfig(cloneDeep(DEFAULT_CONFIG))
+		this.game.notifications.notyf.success(`<b>${projectName}</b> was deleted.`)
+	}
+	
+	private onProjectDeleteFail(projectName: string, error: unknown): void {
+		console.error(error)
+		this.game.notifications.notyf.error(`Can't delete <b>${projectName}</b>!`)
 	}
 	
 	private async onOpenTpProjectButtonClick(button: ButtonApi) {
