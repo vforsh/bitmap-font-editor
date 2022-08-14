@@ -8,7 +8,7 @@
 
 #app {
     display: grid;
-    grid-template-columns: 340px auto 340px;
+    grid-template-columns: 360px auto 360px;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -85,4 +85,12 @@
 
 .tp-rotv {
     --font-family: Verdana, sans-serif !important;
+}
+
+.tp-lblv_v {
+    width: 180px !important;
+}
+
+.tp-lblv.tp-lblv-nol .tp-lblv_v {
+    width: 100% !important;
 }
