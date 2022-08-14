@@ -77,7 +77,7 @@ export class BitmapFontEditor extends BaseScene {
 	private glyphDebug: Phaser.GameObjects.Image
 	private glyphs: Phaser.GameObjects.Text[]
 	private glyphsInfo: Phaser.GameObjects.Text
-	private previewBack: Phaser.GameObjects.Image
+	private previewBack: Phaser.GameObjects.Image & { lastClickTs?: number }
 	private previewDebug: Phaser.GameObjects.Image
 	private preview: Phaser.GameObjects.BitmapText
 	private glowPipelineKey = "GlowPostFX" as const
@@ -566,6 +566,7 @@ export class BitmapFontEditor extends BaseScene {
 	
 	private addPreviewBack() {
 		this.previewBack = this.add.image(0, 0, "__WHITE")
+		this.previewBack.lastClickTs = 0
 		this.previewBack.setTintFill(0x4D4D4D)
 		this.previewBack.setOrigin(0, 0)
 		this.previewBack.setInteractive()
@@ -595,6 +596,29 @@ export class BitmapFontEditor extends BaseScene {
 			this.preview.setScale(1)
 			this.updatePreviewDebug()
 		}
+		
+		let timeBetweenClicks = Date.now() - this.previewBack.lastClickTs
+		let isDoubleClick = timeBetweenClicks < 300
+		if (isDoubleClick) {
+			this.scalePreviewOnDoubleClick()
+			this.previewBack.lastClickTs = 0
+		} else {
+			this.previewBack.lastClickTs = Date.now()
+		}
+	}
+	
+	private scalePreviewOnDoubleClick(): void {
+		if (this.preview.scale !== 1) {
+			this.preview.setScale(1)
+			this.updatePreviewDebug()
+			return
+		}
+		
+		let scaleX = this.previewBack.displayWidth / this.preview.width
+		let scaleY = this.previewBack.displayHeight / this.preview.height
+		let scale = Math.min(scaleX, scaleY)
+		this.preview.setScale(scale)
+		this.updatePreviewDebug()
 	}
 	
 	private addPreviewDebug() {
