@@ -1114,7 +1114,7 @@ export class BitmapFontEditor extends BaseScene {
 		
 		if (!this.config.import.project) {
 			await this.reloadProjectsList()
-			this.config.import.project = project.slice('file://'.length)
+			this.config.import.project = project.slice('file:///'.length)
 			this.panels.importPanel.refresh()
 		}
 		
