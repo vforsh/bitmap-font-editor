@@ -20,6 +20,7 @@ export type BrowserSyncApiEndpoint =
 	| "path-relative"
 	| "fs-realpath"
 	| "rm-file"
+	| "stat"
 
 export type SaveBitmapFontParams = {
 	project: string,
@@ -191,6 +192,17 @@ export const BrowserSyncService = {
 		return fetch(this.getUrl("rm-file"), {
 			method: "POST",
 			body: JSON.stringify({ filepath, force }),
+		})
+	},
+	
+	stat(filepath: string): Promise<Response> {
+		if (this.isAvailable() === false) {
+			throw new Error("BrowserSync is not available!")
+		}
+		
+		return fetch(this.getUrl("stat"), {
+			method: "POST",
+			body: JSON.stringify({ filepath }),
 		})
 	},
 	

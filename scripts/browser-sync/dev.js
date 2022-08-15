@@ -88,5 +88,9 @@ module.exports = {
 			route: "/rm-file",
 			handle: require("./middleware/rm-file"),
 		},
+		{
+			route: "/stat",
+			handle: require("./middleware/stat"),
+		},
 	],
 }
