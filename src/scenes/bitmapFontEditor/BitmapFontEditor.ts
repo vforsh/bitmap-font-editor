@@ -113,6 +113,12 @@ export class BitmapFontEditor extends BaseScene {
 			gameDir = slash(gameDir)
 		}
 		
+		let gameDirExists = await this.doesDirExist(gameDir)
+		if (!gameDirExists) {
+			console.warn(`'${gameDir}' doesn't exist or not a valid directory!`)
+			gameDir = ""
+		}
+		
 		this.gameDir = gameDir
 		this.fontsSettingsPath = this.gameDir && await this.getPathToFontsSettings(this.gameDir)
 		this.fontsSettings = this.fontsSettingsPath && await this.loadFontsSettings(this.fontsSettingsPath)
@@ -143,6 +149,16 @@ export class BitmapFontEditor extends BaseScene {
 			
 			panel.show()
 		})
+	}
+	
+	private async doesDirExist(dirpath: string): Promise<boolean> {
+		try {
+			let response = await BrowserSyncService.stat(dirpath)
+			let stats = (await response.json()).result
+			return stats && stats.isDirectory
+		} catch (e) {
+			return false
+		}
 	}
 	
 	private async getPathToFontsSettings(dirpath: string, file = '.bmfontsrc'): Promise<string> {
@@ -237,7 +253,8 @@ export class BitmapFontEditor extends BaseScene {
 		this.resize()
 		
 		let projectPath = this.game.stash.get('startProject').project
-		if (projectPath) {
+		let projectPathExists = projectPath && await this.doestProjectExist(projectPath)
+		if (projectPathExists) {
 			await this.loadProject(projectPath)
 		}
 		
@@ -1223,6 +1240,16 @@ export class BitmapFontEditor extends BaseScene {
 				projectInput.disabled = false
 				reloadProjectsButton.disabled = false
 			})
+	}
+	
+	private async doestProjectExist(projectPath: string): Promise<boolean> {
+		try {
+			let response = await BrowserSyncService.stat(projectPath)
+			let stats = (await response.json()).result
+			return stats && stats.isFile
+		} catch (e) {
+			return false
+		}
 	}
 	
 	private loadProject(projectFilepath: string): Promise<unknown> {
