@@ -65,14 +65,14 @@ export class Phaser3Extensions {
 			
 			return this.addCounter({
 				...config,
-				onUpdate: (tween, target, param) => {
+				onUpdate: (tween: Phaser.Tweens.Tween, target: any, key: string, current: number, previous: number) => {
 					let angle = config.startAngle + (config.endAngle - config.startAngle) * target.value
 					let angleRad = Phaser.Math.DegToRad(angle)
 					config.target.x = config.centerX + Math.cos(angleRad) * config.radius
 					config.target.y = config.centerY + Math.sin(angleRad) * config.radius
 					
 					if (config.onUpdate) {
-						config.onUpdate(tween, target, param)
+						config.onUpdate(tween, target, key, current, previous)
 					}
 				},
 			} as Phaser.Types.Tweens.NumberTweenBuilderConfig)
@@ -88,7 +88,7 @@ export class Phaser3Extensions {
 			
 			return this.addCounter({
 				...config,
-				onUpdate: (tween, target, param) => {
+				onUpdate: (tween: Phaser.Tweens.Tween, target: any, key: string, current: number, previous: number) => {
 					config.curve.getPoint(target.value, position)
 					config.target.x = position.x
 					config.target.y = position.y
@@ -99,7 +99,7 @@ export class Phaser3Extensions {
 					}
 					
 					if (config.onUpdate) {
-						config.onUpdate(tween, target, param)
+						config.onUpdate(tween, target, key, current, previous)
 					}
 				},
 			} as Phaser.Types.Tweens.NumberTweenBuilderConfig)
@@ -181,7 +181,6 @@ export class Phaser3Extensions {
 			Phaser.GameObjects.Text,
 			Phaser.GameObjects.BitmapText,
 			Phaser.GameObjects.Particles.ParticleEmitter,
-			Phaser.GameObjects.Particles.ParticleEmitterManager,
 		].forEach((clazz) => {
 			clazz.prototype.kill = kill
 			clazz.prototype.revive = revive

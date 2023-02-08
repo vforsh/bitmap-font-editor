@@ -1,5 +1,19 @@
 declare module Phaser {
 	
+	namespace Events {
+		
+		type EventListener = { fn: Function, context: unknown, once: boolean }
+		
+		interface EventEmitter {
+			readonly _events: Record<string | symbol, EventListener | EventListener[]>
+			has(event: string | symbol, fn: Function, context?: unknown): boolean
+			ensureOn(event: string | symbol, fn: Function, context?: unknown): boolean
+			ensureOnce(event: string | symbol, fn: Function, context?: unknown): boolean
+			removeByContext(context: unknown): void
+			offByContext(context: unknown): void
+		}
+	}
+	
 	namespace Renderer {
 		namespace WebGL {
 			interface WebGLRenderer {
@@ -99,7 +113,7 @@ declare module Phaser {
 	}
 	
 	namespace Math {
-		function Sign(value: Number): number
+		function Sign(value: number): 1 | -1
 		
 		function Map(value: number, a1: number, a2: number, b1: number, b2: number, ease: (n?: number) => number): number
 		
@@ -118,10 +132,9 @@ declare module Phaser {
 	namespace GameObjects {
 		
 		namespace Particles {
-			interface ParticleEmitter extends IKillable {
-			}
-			
-			interface ParticleEmitterManager extends IKillable {
+			interface ParticleEmitter extends IKillable, IDisplayObject {
+				syncDeathZones(offsetX?: number, offsetY?: number): void
+				setEmitZonesPosition(x: number, y: number): void
 			}
 		}
 		
@@ -133,6 +146,8 @@ declare module Phaser {
 			graphics(config?: object, addToScene?: boolean): Phaser.GameObjects.Graphics
 			image(config: Phaser.Types.GameObjects.GameObjectConfig & { key: string; frame: string }, addToScene?: boolean): Phaser.GameObjects.Image
 			text(config: Phaser.Types.GameObjects.GameObjectConfig & { text?: string; style?: Phaser.Types.GameObjects.Text.TextStyle }, addToScene?: boolean): Phaser.GameObjects.Text
+			rectTexture(width: number, height: number, color: number, textureKey = Phaser.Math.RND.uuid()): string
+			roundedRectTexture(width: number, height: number, radius: Phaser.Types.GameObjects.Graphics.RoundedRectRadius | number, color: number, textureKey = Phaser.Math.RND.uuid()): string
 		}
 		
 		type AutoSizeText = import("../robowhale/phaser3/gameObjects/text/AutoSizeText").AutoSizeText
@@ -153,8 +168,29 @@ declare module Phaser {
 			complexButton(backTexture: string, backFrame?: string, parent?: Container): ComplexButton
 		}
 		
+		type DebugLineParams = import('../robowhale/phaser3/gameObjects/debug/DebugLine').DebugLineParams
+		
+		type DebugBoundsParams = {
+			thickness?: number,
+			color?: number,
+		}
+		
+		interface ISizeable {
+			width: number
+			height: number
+			displayWidth?: number
+			displayHeight?: number
+		}
+		
+		interface IHasBounds {
+			getBounds<O extends Phaser.Geom.Rectangle>(output?: O): O
+		}
+		
 		interface Container extends IKillable, IDisplayObject {
+			setSizeFrom(source: ISizeable): this
 			gridAlign(options: Phaser.Types.Actions.GridAlignConfig, startIndex?: integer, endIndex?: integer): Phaser.GameObjects.Container
+			debugLine(options: DebugLineParams): Phaser.GameObjects.Graphics
+			debugBounds(child: IHasBounds, options: DebugBoundsParams): Phaser.GameObjects.Graphics
 		}
 		
 		interface Sprite extends IKillable, IDisplayObject {
@@ -218,11 +254,18 @@ declare module Phaser {
 	}
 	
 	namespace Loader {
+		type AssetsTextureKey = keyof typeof import('../assets/Textures').TEXTURES
+		
 		interface LoaderPlugin {
 			cacheBuster: string
 			bitmapFontJson(key: string, textureURL: string | string[], fontDataURL: string, addToTexture?: string): Phaser.Loader.LoaderPlugin
 			bitmapFontFromAtlas(key: string, atlasKey: string, atlasFrame: string, dataURL: string, xSpacing?: number, ySpacing?: number): Phaser.Loader.LoaderPlugin
 			scriptTag(key: string, url: string, onSuccess?: Function, onFail?: Function): Phaser.Loader.LoaderPlugin
+			
+			imageFromAssets(key: AssetsTextureKey)
+			imagesFromAssets(key: AssetsTextureKey[]): void
+			atlasFromAssets(key: keyof typeof import("../assets/Atlases").ATLASES)
+			bitmapFontFromAssets(key: keyof typeof import("../assets/Fonts").FONTS)
 		}
 	}
 	
@@ -268,14 +311,17 @@ declare module Phaser {
 		}
 		
 		interface TweenManager {
-			_active: Phaser.Tweens.Tween[]
-			_pending: Phaser.Tweens.Tween[]
-			
 			stagger(value: number | number[], config?: Phaser.Types.Tweens.StaggerConfig): Function;
 			killTweensByProperty(item: any, ...properties: string[]): this
 			addYoyoTween(config: ShakeTweenConfig): Phaser.Tweens.Tween
 			addCircleTween(config: CircleTweenConfig): Phaser.Tweens.Tween
 			addCurveTween(config: CurveTweenConfig): Phaser.Tweens.Tween
+		}
+	}
+	
+	namespace Time {
+		interface Clock {
+			repeatedCall(delay: number, callsNum: number, callback: Function, args?: any[], callbackScope?: any): Phaser.Time.TimerEvent | null
 		}
 	}
 	

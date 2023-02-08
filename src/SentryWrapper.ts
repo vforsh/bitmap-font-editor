@@ -60,14 +60,6 @@ export class SentryWrapper {
 		events.on(Phaser.Core.Events.VISIBLE, () => {
 			Sentry.addBreadcrumb({ category, message: "document visible" })
 		})
-		
-		events.on(Phaser.Core.Events.CONTEXT_LOST, () => {
-			Sentry.addBreadcrumb({ category, message: "WebGL context lost", level: Severity.Warning })
-		})
-		
-		events.on(Phaser.Core.Events.CONTEXT_RESTORED, () => {
-			Sentry.addBreadcrumb({ category, message: "WebGL context restored" })
-		})
 	}
 	
 	public addInitialBreadcrumb() {

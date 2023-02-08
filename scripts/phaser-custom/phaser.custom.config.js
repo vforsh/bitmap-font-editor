@@ -69,7 +69,7 @@ var Phaser = {
 			Sprite: require('phaser/src/gameobjects/sprite/SpriteFactory'),
 			Text: require('phaser/src/gameobjects/text/TextFactory'),
 			BitmapText: require('phaser/src/gameobjects/bitmaptext/static/BitmapTextFactory'),
-			Particles: require('phaser/src/gameobjects/particles/ParticleManagerFactory'),
+			Particles: require('phaser/src/gameobjects/particles/ParticleEmitterFactory.js'),
 			RenderTexture: require('phaser/src/gameobjects/rendertexture/RenderTextureFactory.js'),
 			Line: require('phaser/src/gameobjects/shape/line/LineFactory'),
 			Rectangle: require('phaser/src/gameobjects/shape/rectangle/RectangleFactory'),

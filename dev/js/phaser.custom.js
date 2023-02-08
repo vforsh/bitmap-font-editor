@@ -1,7 +1,18 @@
 var Phaser = (function() {
   var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __require = /* @__PURE__ */ function(x) {
+    return typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+      get: function(a, b) {
+        return (typeof require !== "undefined" ? require : a)[b];
+      }
+    }) : x;
+  }(function(x) {
+    if (typeof require !== "undefined")
+      return require.apply(this, arguments);
+    throw new Error('Dynamic require of "' + x + '" is not supported');
+  });
   var __commonJS = function(cb, mod) {
-    return function __require() {
+    return function __require2() {
       return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
     };
   };
@@ -350,7 +361,7 @@ var Phaser = (function() {
   var require_const = __commonJS({
     "../../node_modules/phaser/src/const.js": function(exports, module) {
       var CONST = {
-        VERSION: "3.60.0-beta.10",
+        VERSION: "3.60.0-beta.19",
         BlendModes: require_BlendModes(),
         ScaleModes: require_ScaleModes(),
         AUTO: 0,
@@ -372,7 +383,7 @@ var Phaser = (function() {
   var require_IsPlainObject = __commonJS({
     "../../node_modules/phaser/src/utils/object/IsPlainObject.js": function(exports, module) {
       var IsPlainObject = function(obj) {
-        if (typeof obj !== "object" || obj.nodeType || obj === obj.window) {
+        if (!obj || typeof obj !== "object" || obj.nodeType || obj === obj.window) {
           return false;
         }
         try {
@@ -2430,179 +2441,306 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/BLUR_EVENT.js
-  var require_BLUR_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/BLUR_EVENT.js": function(exports, module) {
-      module.exports = "blur";
+  // ../../node_modules/phaser/src/plugins/PluginCache.js
+  var require_PluginCache = __commonJS({
+    "../../node_modules/phaser/src/plugins/PluginCache.js": function(exports, module) {
+      var corePlugins = {};
+      var customPlugins = {};
+      var PluginCache = {};
+      PluginCache.register = function(key, plugin, mapping, custom) {
+        if (custom === void 0) {
+          custom = false;
+        }
+        corePlugins[key] = { plugin: plugin, mapping: mapping, custom: custom };
+      };
+      PluginCache.registerCustom = function(key, plugin, mapping, data) {
+        customPlugins[key] = { plugin: plugin, mapping: mapping, data: data };
+      };
+      PluginCache.hasCore = function(key) {
+        return corePlugins.hasOwnProperty(key);
+      };
+      PluginCache.hasCustom = function(key) {
+        return customPlugins.hasOwnProperty(key);
+      };
+      PluginCache.getCore = function(key) {
+        return corePlugins[key];
+      };
+      PluginCache.getCustom = function(key) {
+        return customPlugins[key];
+      };
+      PluginCache.getCustomClass = function(key) {
+        return customPlugins.hasOwnProperty(key) ? customPlugins[key].plugin : null;
+      };
+      PluginCache.remove = function(key) {
+        if (corePlugins.hasOwnProperty(key)) {
+          delete corePlugins[key];
+        }
+      };
+      PluginCache.removeCustom = function(key) {
+        if (customPlugins.hasOwnProperty(key)) {
+          delete customPlugins[key];
+        }
+      };
+      PluginCache.destroyCorePlugins = function() {
+        for (var key in corePlugins) {
+          if (corePlugins.hasOwnProperty(key)) {
+            delete corePlugins[key];
+          }
+        }
+      };
+      PluginCache.destroyCustomPlugins = function() {
+        for (var key in customPlugins) {
+          if (customPlugins.hasOwnProperty(key)) {
+            delete customPlugins[key];
+          }
+        }
+      };
+      module.exports = PluginCache;
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/BOOT_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js
+  var require_ADDED_TO_SCENE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js": function(exports, module) {
+      module.exports = "addedtoscene";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/BOOT_EVENT.js
   var require_BOOT_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/BOOT_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/BOOT_EVENT.js": function(exports, module) {
       module.exports = "boot";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js
-  var require_CONTEXT_LOST_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js": function(exports, module) {
-      module.exports = "contextlost";
+  // ../../node_modules/phaser/src/scene/events/CREATE_EVENT.js
+  var require_CREATE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/CREATE_EVENT.js": function(exports, module) {
+      module.exports = "create";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/CONTEXT_RESTORED_EVENT.js
-  var require_CONTEXT_RESTORED_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/CONTEXT_RESTORED_EVENT.js": function(exports, module) {
-      module.exports = "contextrestored";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/DESTROY_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js
   var require_DESTROY_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/DESTROY_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js": function(exports, module) {
       module.exports = "destroy";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/FOCUS_EVENT.js
-  var require_FOCUS_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/FOCUS_EVENT.js": function(exports, module) {
-      module.exports = "focus";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js
-  var require_HIDDEN_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js": function(exports, module) {
-      module.exports = "hidden";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/PAUSE_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js
   var require_PAUSE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/PAUSE_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js": function(exports, module) {
       module.exports = "pause";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js
-  var require_POST_RENDER_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js": function(exports, module) {
-      module.exports = "postrender";
+  // ../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js
+  var require_POST_UPDATE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js": function(exports, module) {
+      module.exports = "postupdate";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js
-  var require_POST_STEP_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js": function(exports, module) {
-      module.exports = "poststep";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js
   var require_PRE_RENDER_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js": function(exports, module) {
       module.exports = "prerender";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js
-  var require_PRE_STEP_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js": function(exports, module) {
-      module.exports = "prestep";
+  // ../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js
+  var require_PRE_UPDATE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js": function(exports, module) {
+      module.exports = "preupdate";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/READY_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/READY_EVENT.js
   var require_READY_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/READY_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/READY_EVENT.js": function(exports, module) {
       module.exports = "ready";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/RESUME_EVENT.js
-  var require_RESUME_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/RESUME_EVENT.js": function(exports, module) {
-      module.exports = "resume";
+  // ../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js
+  var require_REMOVED_FROM_SCENE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js": function(exports, module) {
+      module.exports = "removedfromscene";
     }
   });
 
-  // ../../node_modules/phaser/src/core/events/STEP_EVENT.js
-  var require_STEP_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/STEP_EVENT.js": function(exports, module) {
-      module.exports = "step";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js
-  var require_VISIBLE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js": function(exports, module) {
-      module.exports = "visible";
-    }
-  });
-
-  // ../../node_modules/phaser/src/core/events/index.js
-  var require_events = __commonJS({
-    "../../node_modules/phaser/src/core/events/index.js": function(exports, module) {
-      module.exports = {
-        BLUR: require_BLUR_EVENT(),
-        BOOT: require_BOOT_EVENT(),
-        CONTEXT_LOST: require_CONTEXT_LOST_EVENT(),
-        CONTEXT_RESTORED: require_CONTEXT_RESTORED_EVENT(),
-        DESTROY: require_DESTROY_EVENT(),
-        FOCUS: require_FOCUS_EVENT(),
-        HIDDEN: require_HIDDEN_EVENT(),
-        PAUSE: require_PAUSE_EVENT(),
-        POST_RENDER: require_POST_RENDER_EVENT(),
-        POST_STEP: require_POST_STEP_EVENT(),
-        PRE_RENDER: require_PRE_RENDER_EVENT(),
-        PRE_STEP: require_PRE_STEP_EVENT(),
-        READY: require_READY_EVENT(),
-        RESUME: require_RESUME_EVENT(),
-        STEP: require_STEP_EVENT(),
-        VISIBLE: require_VISIBLE_EVENT()
-      };
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js
-  var require_POST_RENDER_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js": function(exports, module) {
-      module.exports = "postrender";
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js
-  var require_PRE_RENDER_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js": function(exports, module) {
-      module.exports = "prerender";
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js
+  // ../../node_modules/phaser/src/scene/events/RENDER_EVENT.js
   var require_RENDER_EVENT = __commonJS({
-    "../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js": function(exports, module) {
+    "../../node_modules/phaser/src/scene/events/RENDER_EVENT.js": function(exports, module) {
       module.exports = "render";
     }
   });
 
-  // ../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js
-  var require_RESIZE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js": function(exports, module) {
-      module.exports = "resize";
+  // ../../node_modules/phaser/src/scene/events/RESUME_EVENT.js
+  var require_RESUME_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/RESUME_EVENT.js": function(exports, module) {
+      module.exports = "resume";
     }
   });
 
-  // ../../node_modules/phaser/src/renderer/events/index.js
-  var require_events2 = __commonJS({
-    "../../node_modules/phaser/src/renderer/events/index.js": function(exports, module) {
+  // ../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js
+  var require_SHUTDOWN_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js": function(exports, module) {
+      module.exports = "shutdown";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js
+  var require_SLEEP_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js": function(exports, module) {
+      module.exports = "sleep";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/START_EVENT.js
+  var require_START_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/START_EVENT.js": function(exports, module) {
+      module.exports = "start";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js
+  var require_TRANSITION_COMPLETE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js": function(exports, module) {
+      module.exports = "transitioncomplete";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js
+  var require_TRANSITION_INIT_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js": function(exports, module) {
+      module.exports = "transitioninit";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js
+  var require_TRANSITION_OUT_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js": function(exports, module) {
+      module.exports = "transitionout";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js
+  var require_TRANSITION_START_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js": function(exports, module) {
+      module.exports = "transitionstart";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js
+  var require_TRANSITION_WAKE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js": function(exports, module) {
+      module.exports = "transitionwake";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js
+  var require_UPDATE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js": function(exports, module) {
+      module.exports = "update";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/WAKE_EVENT.js
+  var require_WAKE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/scene/events/WAKE_EVENT.js": function(exports, module) {
+      module.exports = "wake";
+    }
+  });
+
+  // ../../node_modules/phaser/src/scene/events/index.js
+  var require_events = __commonJS({
+    "../../node_modules/phaser/src/scene/events/index.js": function(exports, module) {
       module.exports = {
-        POST_RENDER: require_POST_RENDER_EVENT2(),
-        PRE_RENDER: require_PRE_RENDER_EVENT2(),
+        ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT(),
+        BOOT: require_BOOT_EVENT(),
+        CREATE: require_CREATE_EVENT(),
+        DESTROY: require_DESTROY_EVENT(),
+        PAUSE: require_PAUSE_EVENT(),
+        POST_UPDATE: require_POST_UPDATE_EVENT(),
+        PRE_RENDER: require_PRE_RENDER_EVENT(),
+        PRE_UPDATE: require_PRE_UPDATE_EVENT(),
+        READY: require_READY_EVENT(),
+        REMOVED_FROM_SCENE: require_REMOVED_FROM_SCENE_EVENT(),
         RENDER: require_RENDER_EVENT(),
-        RESIZE: require_RESIZE_EVENT()
+        RESUME: require_RESUME_EVENT(),
+        SHUTDOWN: require_SHUTDOWN_EVENT(),
+        SLEEP: require_SLEEP_EVENT(),
+        START: require_START_EVENT(),
+        TRANSITION_COMPLETE: require_TRANSITION_COMPLETE_EVENT(),
+        TRANSITION_INIT: require_TRANSITION_INIT_EVENT(),
+        TRANSITION_OUT: require_TRANSITION_OUT_EVENT(),
+        TRANSITION_START: require_TRANSITION_START_EVENT(),
+        TRANSITION_WAKE: require_TRANSITION_WAKE_EVENT(),
+        UPDATE: require_UPDATE_EVENT(),
+        WAKE: require_WAKE_EVENT()
       };
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/GameObjectFactory.js
+  var require_GameObjectFactory = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/GameObjectFactory.js": function(exports, module) {
+      var Class = require_Class();
+      var PluginCache = require_PluginCache();
+      var SceneEvents = require_events();
+      var GameObjectFactory = new Class({
+        initialize: function GameObjectFactory2(scene) {
+          this.scene = scene;
+          this.systems = scene.sys;
+          this.events = scene.sys.events;
+          this.displayList;
+          this.updateList;
+          this.events.once(SceneEvents.BOOT, this.boot, this);
+          this.events.on(SceneEvents.START, this.start, this);
+        },
+        boot: function() {
+          this.displayList = this.systems.displayList;
+          this.updateList = this.systems.updateList;
+          this.events.once(SceneEvents.DESTROY, this.destroy, this);
+        },
+        start: function() {
+          this.events.once(SceneEvents.SHUTDOWN, this.shutdown, this);
+        },
+        existing: function(child) {
+          if (child.renderCanvas || child.renderWebGL) {
+            this.displayList.add(child);
+          }
+          if (child.preUpdate) {
+            this.updateList.add(child);
+          }
+          return child;
+        },
+        shutdown: function() {
+          this.events.off(SceneEvents.SHUTDOWN, this.shutdown, this);
+        },
+        destroy: function() {
+          this.shutdown();
+          this.events.off(SceneEvents.START, this.start, this);
+          this.scene = null;
+          this.systems = null;
+          this.events = null;
+          this.displayList = null;
+          this.updateList = null;
+        }
+      });
+      GameObjectFactory.register = function(factoryType, factoryFunction) {
+        if (!GameObjectFactory.prototype.hasOwnProperty(factoryType)) {
+          GameObjectFactory.prototype[factoryType] = factoryFunction;
+        }
+      };
+      GameObjectFactory.remove = function(factoryType) {
+        if (GameObjectFactory.prototype.hasOwnProperty(factoryType)) {
+          delete GameObjectFactory.prototype[factoryType];
+        }
+      };
+      PluginCache.register("GameObjectFactory", GameObjectFactory, "add");
+      module.exports = GameObjectFactory;
     }
   });
 
@@ -2610,83 +2748,35 @@ var Phaser = (function() {
   var require_BitmapMask = __commonJS({
     "../../node_modules/phaser/src/display/mask/BitmapMask.js": function(exports, module) {
       var Class = require_Class();
-      var GameEvents = require_events();
-      var RenderEvents = require_events2();
+      var GameObjectFactory = require_GameObjectFactory();
       var BitmapMask = new Class({
-        initialize: function BitmapMask2(scene, renderable) {
-          var renderer = scene.sys.renderer;
-          this.renderer = renderer;
-          this.bitmapMask = renderable;
-          this.maskTexture = null;
-          this.mainTexture = null;
-          this.dirty = true;
-          this.mainFramebuffer = null;
-          this.maskFramebuffer = null;
+        initialize: function BitmapMask2(scene, maskObject, x, y, texture, frame) {
+          if (!maskObject) {
+            maskObject = scene.sys.make.image({ x: x, y: y, key: texture, frame: frame, add: false });
+          }
+          this.bitmapMask = maskObject;
           this.invertAlpha = false;
           this.isStencil = false;
-          this.scene = scene;
-          this.createMask();
-          scene.sys.game.events.on(GameEvents.CONTEXT_RESTORED, this.createMask, this);
-          if (renderer) {
-            renderer.on(RenderEvents.RESIZE, this.createMask, this);
-          }
         },
-        createMask: function() {
-          var renderer = this.renderer;
-          if (!renderer || !renderer.gl) {
-            return;
-          }
-          if (this.mainTexture) {
-            this.clearMask();
-          }
-          var width = renderer.width;
-          var height = renderer.height;
-          var pot = (width & width - 1) === 0 && (height & height - 1) === 0;
-          var gl = renderer.gl;
-          var wrap = pot ? gl.REPEAT : gl.CLAMP_TO_EDGE;
-          var filter = gl.LINEAR;
-          this.mainTexture = renderer.createTexture2D(0, filter, filter, wrap, wrap, gl.RGBA, null, width, height);
-          this.maskTexture = renderer.createTexture2D(0, filter, filter, wrap, wrap, gl.RGBA, null, width, height);
-          this.mainFramebuffer = renderer.createFramebuffer(width, height, this.mainTexture, true);
-          this.maskFramebuffer = renderer.createFramebuffer(width, height, this.maskTexture, true);
-        },
-        clearMask: function() {
-          var renderer = this.renderer;
-          if (!renderer || !renderer.gl || !this.mainTexture) {
-            return;
-          }
-          renderer.deleteTexture(this.mainTexture);
-          renderer.deleteTexture(this.maskTexture);
-          renderer.deleteFramebuffer(this.mainFramebuffer);
-          renderer.deleteFramebuffer(this.maskFramebuffer);
-          this.mainTexture = null;
-          this.maskTexture = null;
-          this.mainFramebuffer = null;
-          this.maskFramebuffer = null;
-        },
-        setBitmap: function(renderable) {
-          this.bitmapMask = renderable;
+        setBitmap: function(maskObject) {
+          this.bitmapMask = maskObject;
         },
         preRenderWebGL: function(renderer, maskedObject, camera) {
           renderer.pipelines.BITMAPMASK_PIPELINE.beginMask(this, maskedObject, camera);
         },
-        postRenderWebGL: function(renderer, camera) {
-          renderer.pipelines.BITMAPMASK_PIPELINE.endMask(this, camera);
+        postRenderWebGL: function(renderer, camera, renderTarget) {
+          renderer.pipelines.BITMAPMASK_PIPELINE.endMask(this, camera, renderTarget);
         },
         preRenderCanvas: function() {
         },
         postRenderCanvas: function() {
         },
         destroy: function() {
-          this.clearMask();
-          this.scene.sys.game.events.off(GameEvents.CONTEXT_RESTORED, this.createMask, this);
-          if (this.renderer) {
-            this.renderer.off(RenderEvents.RESIZE, this.createMask, this);
-          }
           this.bitmapMask = null;
-          this.prevFramebuffer = null;
-          this.renderer = null;
         }
+      });
+      GameObjectFactory.register("bitmapMask", function(maskObject, x, y, key, frame) {
+        return new BitmapMask(this.scene, maskObject, x, y, key, frame);
       });
       module.exports = BitmapMask;
     }
@@ -2815,14 +2905,14 @@ var Phaser = (function() {
           this.mask = null;
           return this;
         },
-        createBitmapMask: function(renderable) {
-          if (renderable === void 0 && (this.texture || this.shader)) {
-            renderable = this;
+        createBitmapMask: function(maskObject, x, y, texture, frame) {
+          if (maskObject === void 0 && (this.texture || this.shader || this.geom)) {
+            maskObject = this;
           }
-          return new BitmapMask(this.scene, renderable);
+          return new BitmapMask(this.scene, maskObject, x, y, texture, frame);
         },
         createGeometryMask: function(graphics) {
-          if (graphics === void 0 && (this instanceof Phaser.GameObjects.Graphics || this instanceof Phaser.GameObjects.Shape)) {
+          if (graphics === void 0 && (this.type === "Graphics" || this.geom)) {
             graphics = this;
           }
           return new GeometryMask(this.scene, graphics);
@@ -2979,22 +3069,23 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/tweens/tween/const.js": function(exports, module) {
       var TWEEN_CONST = {
         CREATED: 0,
-        INIT: 1,
         DELAY: 2,
-        OFFSET_DELAY: 3,
         PENDING_RENDER: 4,
         PLAYING_FORWARD: 5,
         PLAYING_BACKWARD: 6,
         HOLD_DELAY: 7,
         REPEAT_DELAY: 8,
         COMPLETE: 9,
-        PENDING_ADD: 20,
-        PAUSED: 21,
+        PENDING: 20,
+        ACTIVE: 21,
         LOOP_DELAY: 22,
-        ACTIVE: 23,
-        COMPLETE_DELAY: 24,
+        COMPLETE_DELAY: 23,
+        START_DELAY: 24,
         PENDING_REMOVE: 25,
-        REMOVED: 26
+        REMOVED: 26,
+        FINISHED: 27,
+        DESTROYED: 28,
+        MAX: 999999999999
       };
       module.exports = TWEEN_CONST;
     }
@@ -3071,7 +3162,7 @@ var Phaser = (function() {
               tweenData.elapsed = tweenData.duration * seek;
               var v = tweenData.ease(tweenData.progress);
               tweenData.current = tweenData.start + (tweenData.end - tweenData.start) * v;
-              tweenData.target[tweenData.key] = tweenData.current;
+              tweenData.setTargetValue();
             };
           }
           if (!this.pathOffset) {
@@ -3084,6 +3175,7 @@ var Phaser = (function() {
             this.pathDelta = new Vector2();
           }
           this.pathDelta.reset();
+          config.persist = true;
           this.pathTween = this.scene.sys.tweens.addCounter(config);
           this.path.getStartPoint(this.pathOffset);
           if (positionOnPath) {
@@ -3183,67 +3275,25 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/renderer/webgl/pipelines/const.js
-  var require_const6 = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/pipelines/const.js": function(exports, module) {
-      var PIPELINE_CONST = {
-        BITMAPMASK_PIPELINE: "BitmapMaskPipeline",
-        LIGHT_PIPELINE: "Light2D",
-        POINTLIGHT_PIPELINE: "PointLightPipeline",
-        SINGLE_PIPELINE: "SinglePipeline",
-        MULTI_PIPELINE: "MultiPipeline",
-        ROPE_PIPELINE: "RopePipeline",
-        GRAPHICS_PIPELINE: "GraphicsPipeline",
-        POSTFX_PIPELINE: "PostFXPipeline",
-        UTILITY_PIPELINE: "UtilityPipeline"
-      };
-      module.exports = PIPELINE_CONST;
-    }
-  });
-
-  // ../../node_modules/phaser/src/utils/array/SpliceOne.js
-  var require_SpliceOne = __commonJS({
-    "../../node_modules/phaser/src/utils/array/SpliceOne.js": function(exports, module) {
-      var SpliceOne = function(array, index) {
-        if (index >= array.length) {
-          return;
-        }
-        var len = array.length - 1;
-        var item = array[index];
-        for (var i = index; i < len; i++) {
-          array[i] = array[i + 1];
-        }
-        array.length = len;
-        return item;
-      };
-      module.exports = SpliceOne;
-    }
-  });
-
   // ../../node_modules/phaser/src/gameobjects/components/Pipeline.js
   var require_Pipeline = __commonJS({
     "../../node_modules/phaser/src/gameobjects/components/Pipeline.js": function(exports, module) {
       var DeepCopy = require_DeepCopy();
-      var PIPELINE_CONST = require_const6();
-      var SpliceOne = require_SpliceOne();
       var Pipeline = {
         defaultPipeline: null,
         pipeline: null,
-        hasPostPipeline: false,
-        postPipelines: null,
         pipelineData: null,
         initPipeline: function(pipeline) {
-          if (pipeline === void 0) {
-            pipeline = PIPELINE_CONST.MULTI_PIPELINE;
-          }
+          this.pipelineData = {};
           var renderer = this.scene.sys.renderer;
           if (!renderer) {
             return false;
           }
           var pipelines = renderer.pipelines;
-          this.postPipelines = [];
-          this.pipelineData = {};
           if (pipelines) {
+            if (pipeline === void 0) {
+              pipeline = pipelines.default;
+            }
             var instance = pipelines.get(pipeline);
             if (instance) {
               this.defaultPipeline = instance;
@@ -3270,6 +3320,65 @@ var Phaser = (function() {
           }
           return this;
         },
+        setPipelineData: function(key, value) {
+          var data = this.pipelineData;
+          if (value === void 0) {
+            delete data[key];
+          } else {
+            data[key] = value;
+          }
+          return this;
+        },
+        resetPipeline: function(resetData) {
+          if (resetData === void 0) {
+            resetData = false;
+          }
+          this.pipeline = this.defaultPipeline;
+          if (resetData) {
+            this.pipelineData = {};
+          }
+          return this.pipeline !== null;
+        },
+        getPipelineName: function() {
+          return this.pipeline.name;
+        }
+      };
+      module.exports = Pipeline;
+    }
+  });
+
+  // ../../node_modules/phaser/src/utils/array/SpliceOne.js
+  var require_SpliceOne = __commonJS({
+    "../../node_modules/phaser/src/utils/array/SpliceOne.js": function(exports, module) {
+      var SpliceOne = function(array, index) {
+        if (index >= array.length) {
+          return;
+        }
+        var len = array.length - 1;
+        var item = array[index];
+        for (var i = index; i < len; i++) {
+          array[i] = array[i + 1];
+        }
+        array.length = len;
+        return item;
+      };
+      module.exports = SpliceOne;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/components/PostPipeline.js
+  var require_PostPipeline = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/components/PostPipeline.js": function(exports, module) {
+      var DeepCopy = require_DeepCopy();
+      var SpliceOne = require_SpliceOne();
+      var PostPipeline = {
+        hasPostPipeline: false,
+        postPipelines: null,
+        postPipelineData: null,
+        initPostPipeline: function() {
+          this.postPipelines = [];
+          this.postPipelineData = {};
+        },
         setPostPipeline: function(pipelines, pipelineData, copyData) {
           var renderer = this.scene.sys.renderer;
           if (!renderer) {
@@ -3287,14 +3396,14 @@ var Phaser = (function() {
               }
             }
             if (pipelineData) {
-              this.pipelineData = copyData ? DeepCopy(pipelineData) : pipelineData;
+              this.postPipelineData = copyData ? DeepCopy(pipelineData) : pipelineData;
             }
           }
           this.hasPostPipeline = this.postPipelines.length > 0;
           return this;
         },
-        setPipelineData: function(key, value) {
-          var data = this.pipelineData;
+        setPostPipelineData: function(key, value) {
+          var data = this.postPipelineData;
           if (value === void 0) {
             delete data[key];
           } else {
@@ -3303,32 +3412,16 @@ var Phaser = (function() {
           return this;
         },
         getPostPipeline: function(pipeline) {
+          var isString = typeof pipeline === "string";
           var pipelines = this.postPipelines;
           var results = [];
           for (var i = 0; i < pipelines.length; i++) {
             var instance = pipelines[i];
-            if (typeof pipeline === "string" && instance.name === pipeline || instance instanceof pipeline) {
+            if (isString && instance.name === pipeline || !isString && instance instanceof pipeline) {
               results.push(instance);
             }
           }
           return results.length === 1 ? results[0] : results;
-        },
-        resetPipeline: function(resetPostPipelines, resetData) {
-          if (resetPostPipelines === void 0) {
-            resetPostPipelines = false;
-          }
-          if (resetData === void 0) {
-            resetData = false;
-          }
-          this.pipeline = this.defaultPipeline;
-          if (resetPostPipelines) {
-            this.postPipelines = [];
-            this.hasPostPipeline = false;
-          }
-          if (resetData) {
-            this.pipelineData = {};
-          }
-          return this.pipeline !== null;
         },
         resetPostPipeline: function(resetData) {
           if (resetData === void 0) {
@@ -3341,7 +3434,7 @@ var Phaser = (function() {
           this.postPipelines = [];
           this.hasPostPipeline = false;
           if (resetData) {
-            this.pipelineData = {};
+            this.postPipelineData = {};
           }
         },
         removePostPipeline: function(pipeline) {
@@ -3355,12 +3448,9 @@ var Phaser = (function() {
           }
           this.hasPostPipeline = this.postPipelines.length > 0;
           return this;
-        },
-        getPipelineName: function() {
-          return this.pipeline.name;
         }
       };
-      module.exports = Pipeline;
+      module.exports = PostPipeline;
     }
   });
 
@@ -3434,9 +3524,306 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/textures/Frame.js
+  var require_Frame = __commonJS({
+    "../../node_modules/phaser/src/textures/Frame.js": function(exports, module) {
+      var Class = require_Class();
+      var Clamp = require_Clamp();
+      var Extend = require_Extend();
+      var Frame = new Class({
+        initialize: function Frame2(texture, name, sourceIndex, x, y, width, height) {
+          this.texture = texture;
+          this.name = name;
+          this.source = texture.source[sourceIndex];
+          this.sourceIndex = sourceIndex;
+          this.glTexture = this.source.glTexture;
+          this.cutX;
+          this.cutY;
+          this.cutWidth;
+          this.cutHeight;
+          this.x = 0;
+          this.y = 0;
+          this.width;
+          this.height;
+          this.halfWidth;
+          this.halfHeight;
+          this.centerX;
+          this.centerY;
+          this.pivotX = 0;
+          this.pivotY = 0;
+          this.customPivot = false;
+          this.rotated = false;
+          this.autoRound = -1;
+          this.customData = {};
+          this.u0 = 0;
+          this.v0 = 0;
+          this.u1 = 0;
+          this.v1 = 0;
+          this.data = {
+            cut: {
+              x: 0,
+              y: 0,
+              w: 0,
+              h: 0,
+              r: 0,
+              b: 0
+            },
+            trim: false,
+            sourceSize: {
+              w: 0,
+              h: 0
+            },
+            spriteSourceSize: {
+              x: 0,
+              y: 0,
+              w: 0,
+              h: 0,
+              r: 0,
+              b: 0
+            },
+            radius: 0,
+            drawImage: {
+              x: 0,
+              y: 0,
+              width: 0,
+              height: 0
+            }
+          };
+          this.setSize(width, height, x, y);
+        },
+        setSize: function(width, height, x, y) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          this.cutX = x;
+          this.cutY = y;
+          this.cutWidth = width;
+          this.cutHeight = height;
+          this.width = width;
+          this.height = height;
+          this.halfWidth = Math.floor(width * 0.5);
+          this.halfHeight = Math.floor(height * 0.5);
+          this.centerX = Math.floor(width / 2);
+          this.centerY = Math.floor(height / 2);
+          var data = this.data;
+          var cut = data.cut;
+          cut.x = x;
+          cut.y = y;
+          cut.w = width;
+          cut.h = height;
+          cut.r = x + width;
+          cut.b = y + height;
+          data.sourceSize.w = width;
+          data.sourceSize.h = height;
+          data.spriteSourceSize.w = width;
+          data.spriteSourceSize.h = height;
+          data.radius = 0.5 * Math.sqrt(width * width + height * height);
+          var drawImage = data.drawImage;
+          drawImage.x = x;
+          drawImage.y = y;
+          drawImage.width = width;
+          drawImage.height = height;
+          return this.updateUVs();
+        },
+        setTrim: function(actualWidth, actualHeight, destX, destY, destWidth, destHeight) {
+          var data = this.data;
+          var ss = data.spriteSourceSize;
+          data.trim = true;
+          data.sourceSize.w = actualWidth;
+          data.sourceSize.h = actualHeight;
+          ss.x = destX;
+          ss.y = destY;
+          ss.w = destWidth;
+          ss.h = destHeight;
+          ss.r = destX + destWidth;
+          ss.b = destY + destHeight;
+          this.x = destX;
+          this.y = destY;
+          this.width = destWidth;
+          this.height = destHeight;
+          this.halfWidth = destWidth * 0.5;
+          this.halfHeight = destHeight * 0.5;
+          this.centerX = Math.floor(destWidth / 2);
+          this.centerY = Math.floor(destHeight / 2);
+          return this.updateUVs();
+        },
+        setCropUVs: function(crop, x, y, width, height, flipX, flipY) {
+          var cx = this.cutX;
+          var cy = this.cutY;
+          var cw = this.cutWidth;
+          var ch = this.cutHeight;
+          var rw = this.realWidth;
+          var rh = this.realHeight;
+          x = Clamp(x, 0, rw);
+          y = Clamp(y, 0, rh);
+          width = Clamp(width, 0, rw - x);
+          height = Clamp(height, 0, rh - y);
+          var ox = cx + x;
+          var oy = cy + y;
+          var ow = width;
+          var oh = height;
+          var data = this.data;
+          if (data.trim) {
+            var ss = data.spriteSourceSize;
+            width = Clamp(width, 0, cw - x);
+            height = Clamp(height, 0, ch - y);
+            var cropRight = x + width;
+            var cropBottom = y + height;
+            var intersects = !(ss.r < x || ss.b < y || ss.x > cropRight || ss.y > cropBottom);
+            if (intersects) {
+              var ix = Math.max(ss.x, x);
+              var iy = Math.max(ss.y, y);
+              var iw = Math.min(ss.r, cropRight) - ix;
+              var ih = Math.min(ss.b, cropBottom) - iy;
+              ow = iw;
+              oh = ih;
+              if (flipX) {
+                ox = cx + (cw - (ix - ss.x) - iw);
+              } else {
+                ox = cx + (ix - ss.x);
+              }
+              if (flipY) {
+                oy = cy + (ch - (iy - ss.y) - ih);
+              } else {
+                oy = cy + (iy - ss.y);
+              }
+              x = ix;
+              y = iy;
+              width = iw;
+              height = ih;
+            } else {
+              ox = 0;
+              oy = 0;
+              ow = 0;
+              oh = 0;
+            }
+          } else {
+            if (flipX) {
+              ox = cx + (cw - x - width);
+            }
+            if (flipY) {
+              oy = cy + (ch - y - height);
+            }
+          }
+          var tw = this.source.width;
+          var th = this.source.height;
+          crop.u0 = Math.max(0, ox / tw);
+          crop.v0 = Math.max(0, oy / th);
+          crop.u1 = Math.min(1, (ox + ow) / tw);
+          crop.v1 = Math.min(1, (oy + oh) / th);
+          crop.x = x;
+          crop.y = y;
+          crop.cx = ox;
+          crop.cy = oy;
+          crop.cw = ow;
+          crop.ch = oh;
+          crop.width = width;
+          crop.height = height;
+          crop.flipX = flipX;
+          crop.flipY = flipY;
+          return crop;
+        },
+        updateCropUVs: function(crop, flipX, flipY) {
+          return this.setCropUVs(crop, crop.x, crop.y, crop.width, crop.height, flipX, flipY);
+        },
+        setUVs: function(width, height, u0, v0, u1, v1) {
+          var cd = this.data.drawImage;
+          cd.width = width;
+          cd.height = height;
+          this.u0 = u0;
+          this.v0 = v0;
+          this.u1 = u1;
+          this.v1 = v1;
+          return this;
+        },
+        updateUVs: function() {
+          var cx = this.cutX;
+          var cy = this.cutY;
+          var cw = this.cutWidth;
+          var ch = this.cutHeight;
+          var cd = this.data.drawImage;
+          cd.width = cw;
+          cd.height = ch;
+          var tw = this.source.width;
+          var th = this.source.height;
+          this.u0 = cx / tw;
+          this.v0 = cy / th;
+          this.u1 = (cx + cw) / tw;
+          this.v1 = (cy + ch) / th;
+          return this;
+        },
+        updateUVsInverted: function() {
+          var tw = this.source.width;
+          var th = this.source.height;
+          this.u0 = (this.cutX + this.cutHeight) / tw;
+          this.v0 = this.cutY / th;
+          this.u1 = this.cutX / tw;
+          this.v1 = (this.cutY + this.cutWidth) / th;
+          return this;
+        },
+        clone: function() {
+          var clone = new Frame(this.texture, this.name, this.sourceIndex);
+          clone.cutX = this.cutX;
+          clone.cutY = this.cutY;
+          clone.cutWidth = this.cutWidth;
+          clone.cutHeight = this.cutHeight;
+          clone.x = this.x;
+          clone.y = this.y;
+          clone.width = this.width;
+          clone.height = this.height;
+          clone.halfWidth = this.halfWidth;
+          clone.halfHeight = this.halfHeight;
+          clone.centerX = this.centerX;
+          clone.centerY = this.centerY;
+          clone.rotated = this.rotated;
+          clone.data = Extend(true, clone.data, this.data);
+          clone.updateUVs();
+          return clone;
+        },
+        destroy: function() {
+          this.source = null;
+          this.texture = null;
+          this.glTexture = null;
+          this.customData = null;
+          this.data = null;
+        },
+        realWidth: {
+          get: function() {
+            return this.data.sourceSize.w;
+          }
+        },
+        realHeight: {
+          get: function() {
+            return this.data.sourceSize.h;
+          }
+        },
+        radius: {
+          get: function() {
+            return this.data.radius;
+          }
+        },
+        trimmed: {
+          get: function() {
+            return this.data.trim;
+          }
+        },
+        canvasData: {
+          get: function() {
+            return this.data.drawImage;
+          }
+        }
+      });
+      module.exports = Frame;
+    }
+  });
+
   // ../../node_modules/phaser/src/gameobjects/components/Texture.js
   var require_Texture = __commonJS({
     "../../node_modules/phaser/src/gameobjects/components/Texture.js": function(exports, module) {
+      var Frame = require_Frame();
       var _FLAG = 8;
       var Texture = {
         texture: null,
@@ -3453,7 +3840,12 @@ var Phaser = (function() {
           if (updateOrigin === void 0) {
             updateOrigin = true;
           }
-          this.frame = this.texture.get(frame);
+          if (frame instanceof Frame) {
+            this.texture = this.scene.sys.textures.get(frame.texture.key);
+            this.frame = frame;
+          } else {
+            this.frame = this.texture.get(frame);
+          }
           if (!this.frame.cutWidth || !this.frame.cutHeight) {
             this.renderFlags &= ~_FLAG;
           } else {
@@ -3479,6 +3871,7 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/components/TextureCrop.js
   var require_TextureCrop = __commonJS({
     "../../node_modules/phaser/src/gameobjects/components/TextureCrop.js": function(exports, module) {
+      var Frame = require_Frame();
       var _FLAG = 8;
       var TextureCrop = {
         texture: null,
@@ -3509,7 +3902,12 @@ var Phaser = (function() {
           if (updateOrigin === void 0) {
             updateOrigin = true;
           }
-          this.frame = this.texture.get(frame);
+          if (frame instanceof Frame) {
+            this.texture = this.scene.sys.textures.get(frame.texture.key);
+            this.frame = frame;
+          } else {
+            this.frame = this.texture.get(frame);
+          }
           if (!this.frame.cutWidth || !this.frame.cutHeight) {
             this.renderFlags &= ~_FLAG;
           } else {
@@ -3660,6 +4058,7 @@ var Phaser = (function() {
             scaleY: 1,
             rotation: 0
           };
+          this.quad = new Float32Array(8);
         },
         a: {
           get: function() {
@@ -3809,13 +4208,13 @@ var Phaser = (function() {
           var sourceD = source[3];
           var sourceE = source[4];
           var sourceF = source[5];
-          var destinationMatrix = out === void 0 ? this : out;
-          destinationMatrix.a = sourceA * localA + sourceB * localC;
-          destinationMatrix.b = sourceA * localB + sourceB * localD;
-          destinationMatrix.c = sourceC * localA + sourceD * localC;
-          destinationMatrix.d = sourceC * localB + sourceD * localD;
-          destinationMatrix.e = sourceE * localA + sourceF * localC + localE;
-          destinationMatrix.f = sourceE * localB + sourceF * localD + localF;
+          var destinationMatrix = out === void 0 ? matrix : out.matrix;
+          destinationMatrix[0] = sourceA * localA + sourceB * localC;
+          destinationMatrix[1] = sourceA * localB + sourceB * localD;
+          destinationMatrix[2] = sourceC * localA + sourceD * localC;
+          destinationMatrix[3] = sourceC * localB + sourceD * localD;
+          destinationMatrix[4] = sourceE * localA + sourceF * localC + localE;
+          destinationMatrix[5] = sourceE * localB + sourceF * localD + localF;
           return destinationMatrix;
         },
         multiplyWithOffset: function(src, offsetX, offsetY) {
@@ -4000,6 +4399,32 @@ var Phaser = (function() {
           output.y = a * id * y + -b * id * x + (-ty * a + tx * b) * id;
           return output;
         },
+        setQuad: function(x, y, xw, yh, roundPixels, quad) {
+          if (quad === void 0) {
+            quad = this.quad;
+          }
+          var matrix = this.matrix;
+          var a = matrix[0];
+          var b = matrix[1];
+          var c = matrix[2];
+          var d = matrix[3];
+          var e = matrix[4];
+          var f = matrix[5];
+          quad[0] = x * a + y * c + e;
+          quad[1] = x * b + y * d + f;
+          quad[2] = x * a + yh * c + e;
+          quad[3] = x * b + yh * d + f;
+          quad[4] = xw * a + yh * c + e;
+          quad[5] = xw * b + yh * d + f;
+          quad[6] = xw * a + y * c + e;
+          quad[7] = xw * b + y * d + f;
+          if (roundPixels) {
+            quad.forEach(function(value, index) {
+              quad[index] = Math.round(value);
+            });
+          }
+          return quad;
+        },
         getX: function(x, y) {
           return x * this.a + y * this.c + this.e;
         },
@@ -4026,6 +4451,7 @@ var Phaser = (function() {
         },
         destroy: function() {
           this.matrix = null;
+          this.quad = null;
           this.decomposedMatrix = null;
         }
       });
@@ -4060,6 +4486,9 @@ var Phaser = (function() {
   var require_Wrap = __commonJS({
     "../../node_modules/phaser/src/math/Wrap.js": function(exports, module) {
       var Wrap = function(value, min, max) {
+        if (value >= min && value <= max) {
+          return value;
+        }
         var range = max - min;
         return min + ((value - min) % range + range) % range;
       };
@@ -4278,12 +4707,12 @@ var Phaser = (function() {
           if (tempMatrix === void 0) {
             tempMatrix = new TransformMatrix();
           }
-          if (parentMatrix === void 0) {
-            parentMatrix = new TransformMatrix();
-          }
           var parent = this.parentContainer;
           if (!parent) {
             return this.getLocalTransformMatrix(tempMatrix);
+          }
+          if (!parentMatrix) {
+            parentMatrix = new TransformMatrix();
           }
           tempMatrix.applyITRS(this.x, this.y, this._rotation, this._scaleX, this._scaleY);
           while (parent) {
@@ -4375,6 +4804,7 @@ var Phaser = (function() {
         Origin: require_Origin(),
         PathFollower: require_PathFollower(),
         Pipeline: require_Pipeline(),
+        PostPipeline: require_PostPipeline(),
         ScrollFactor: require_ScrollFactor(),
         Size: require_Size(),
         Texture: require_Texture(),
@@ -4424,7 +4854,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/data/events/index.js
-  var require_events3 = __commonJS({
+  var require_events2 = __commonJS({
     "../../node_modules/phaser/src/data/events/index.js": function(exports, module) {
       module.exports = {
         CHANGE_DATA: require_CHANGE_DATA_EVENT(),
@@ -4440,7 +4870,7 @@ var Phaser = (function() {
   var require_DataManager = __commonJS({
     "../../node_modules/phaser/src/data/DataManager.js": function(exports, module) {
       var Class = require_Class();
-      var Events = require_events3();
+      var Events = require_events2();
       var DataManager = new Class({
         initialize: function DataManager2(parent, eventEmitter) {
           this.parent = parent;
@@ -4651,9 +5081,9 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/eventemitter3/index.js
+  // ../../node_modules/phaser/node_modules/eventemitter3/index.js
   var require_eventemitter3 = __commonJS({
-    "../../node_modules/eventemitter3/index.js": function(exports, module) {
+    "../../node_modules/phaser/node_modules/eventemitter3/index.js": function(exports, module) {
       "use strict";
       var has = Object.prototype.hasOwnProperty;
       var prefix = "~";
@@ -4834,7 +5264,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/gameobjects/events/ADDED_TO_SCENE_EVENT.js
-  var require_ADDED_TO_SCENE_EVENT = __commonJS({
+  var require_ADDED_TO_SCENE_EVENT2 = __commonJS({
     "../../node_modules/phaser/src/gameobjects/events/ADDED_TO_SCENE_EVENT.js": function(exports, module) {
       module.exports = "addedtoscene";
     }
@@ -4848,7 +5278,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/gameobjects/events/REMOVED_FROM_SCENE_EVENT.js
-  var require_REMOVED_FROM_SCENE_EVENT = __commonJS({
+  var require_REMOVED_FROM_SCENE_EVENT2 = __commonJS({
     "../../node_modules/phaser/src/gameobjects/events/REMOVED_FROM_SCENE_EVENT.js": function(exports, module) {
       module.exports = "removedfromscene";
     }
@@ -4925,12 +5355,12 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/gameobjects/events/index.js
-  var require_events4 = __commonJS({
+  var require_events3 = __commonJS({
     "../../node_modules/phaser/src/gameobjects/events/index.js": function(exports, module) {
       module.exports = {
-        ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT(),
+        ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT2(),
         DESTROY: require_DESTROY_EVENT3(),
-        REMOVED_FROM_SCENE: require_REMOVED_FROM_SCENE_EVENT(),
+        REMOVED_FROM_SCENE: require_REMOVED_FROM_SCENE_EVENT2(),
         VIDEO_COMPLETE: require_VIDEO_COMPLETE_EVENT(),
         VIDEO_CREATED: require_VIDEO_CREATED_EVENT(),
         VIDEO_ERROR: require_VIDEO_ERROR_EVENT(),
@@ -4945,190 +5375,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js
-  var require_ADDED_TO_SCENE_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js": function(exports, module) {
-      module.exports = "addedtoscene";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/BOOT_EVENT.js
-  var require_BOOT_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/BOOT_EVENT.js": function(exports, module) {
-      module.exports = "boot";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/CREATE_EVENT.js
-  var require_CREATE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/CREATE_EVENT.js": function(exports, module) {
-      module.exports = "create";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js
-  var require_DESTROY_EVENT4 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js": function(exports, module) {
-      module.exports = "destroy";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js
-  var require_PAUSE_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js": function(exports, module) {
-      module.exports = "pause";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js
-  var require_POST_UPDATE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js": function(exports, module) {
-      module.exports = "postupdate";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js
-  var require_PRE_RENDER_EVENT3 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js": function(exports, module) {
-      module.exports = "prerender";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js
-  var require_PRE_UPDATE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js": function(exports, module) {
-      module.exports = "preupdate";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/READY_EVENT.js
-  var require_READY_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/READY_EVENT.js": function(exports, module) {
-      module.exports = "ready";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js
-  var require_REMOVED_FROM_SCENE_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js": function(exports, module) {
-      module.exports = "removedfromscene";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/RENDER_EVENT.js
-  var require_RENDER_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/RENDER_EVENT.js": function(exports, module) {
-      module.exports = "render";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/RESUME_EVENT.js
-  var require_RESUME_EVENT2 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/RESUME_EVENT.js": function(exports, module) {
-      module.exports = "resume";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js
-  var require_SHUTDOWN_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js": function(exports, module) {
-      module.exports = "shutdown";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js
-  var require_SLEEP_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js": function(exports, module) {
-      module.exports = "sleep";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/START_EVENT.js
-  var require_START_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/START_EVENT.js": function(exports, module) {
-      module.exports = "start";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js
-  var require_TRANSITION_COMPLETE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js": function(exports, module) {
-      module.exports = "transitioncomplete";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js
-  var require_TRANSITION_INIT_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js": function(exports, module) {
-      module.exports = "transitioninit";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js
-  var require_TRANSITION_OUT_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js": function(exports, module) {
-      module.exports = "transitionout";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js
-  var require_TRANSITION_START_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js": function(exports, module) {
-      module.exports = "transitionstart";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js
-  var require_TRANSITION_WAKE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js": function(exports, module) {
-      module.exports = "transitionwake";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js
-  var require_UPDATE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js": function(exports, module) {
-      module.exports = "update";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/WAKE_EVENT.js
-  var require_WAKE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/scene/events/WAKE_EVENT.js": function(exports, module) {
-      module.exports = "wake";
-    }
-  });
-
-  // ../../node_modules/phaser/src/scene/events/index.js
-  var require_events5 = __commonJS({
-    "../../node_modules/phaser/src/scene/events/index.js": function(exports, module) {
-      module.exports = {
-        ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT2(),
-        BOOT: require_BOOT_EVENT2(),
-        CREATE: require_CREATE_EVENT(),
-        DESTROY: require_DESTROY_EVENT4(),
-        PAUSE: require_PAUSE_EVENT2(),
-        POST_UPDATE: require_POST_UPDATE_EVENT(),
-        PRE_RENDER: require_PRE_RENDER_EVENT3(),
-        PRE_UPDATE: require_PRE_UPDATE_EVENT(),
-        READY: require_READY_EVENT2(),
-        REMOVED_FROM_SCENE: require_REMOVED_FROM_SCENE_EVENT2(),
-        RENDER: require_RENDER_EVENT2(),
-        RESUME: require_RESUME_EVENT2(),
-        SHUTDOWN: require_SHUTDOWN_EVENT(),
-        SLEEP: require_SLEEP_EVENT(),
-        START: require_START_EVENT(),
-        TRANSITION_COMPLETE: require_TRANSITION_COMPLETE_EVENT(),
-        TRANSITION_INIT: require_TRANSITION_INIT_EVENT(),
-        TRANSITION_OUT: require_TRANSITION_OUT_EVENT(),
-        TRANSITION_START: require_TRANSITION_START_EVENT(),
-        TRANSITION_WAKE: require_TRANSITION_WAKE_EVENT(),
-        UPDATE: require_UPDATE_EVENT(),
-        WAKE: require_WAKE_EVENT()
-      };
-    }
-  });
-
   // ../../node_modules/phaser/src/gameobjects/GameObject.js
   var require_GameObject = __commonJS({
     "../../node_modules/phaser/src/gameobjects/GameObject.js": function(exports, module) {
@@ -5136,8 +5382,8 @@ var Phaser = (function() {
       var ComponentsToJSON = require_ToJSON();
       var DataManager = require_DataManager();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events4();
-      var SceneEvents = require_events5();
+      var Events = require_events3();
+      var SceneEvents = require_events();
       var GameObject = new Class({
         Extends: EventEmitter,
         initialize: function GameObject2(scene, type) {
@@ -5275,7 +5521,7 @@ var Phaser = (function() {
         },
         removeFromDisplayList: function() {
           var displayList = this.displayList || this.scene.sys.displayList;
-          if (displayList.exists(this)) {
+          if (displayList && displayList.exists(this)) {
             displayList.remove(this, true);
             displayList.queueDepthSort();
             this.displayList = null;
@@ -5435,7 +5681,7 @@ var Phaser = (function() {
       var GetFastValue = require_GetFastValue();
       var NOOP = require_NOOP();
       var Zone = require_Zone();
-      var tempZone = new Zone({ sys: { queueDepthSort: NOOP, events: { once: NOOP } } }, 0, 0, 1, 1);
+      var tempZone = new Zone({ sys: { queueDepthSort: NOOP, events: { once: NOOP } } }, 0, 0, 1, 1).setOrigin(0, 0);
       var GridAlign = function(items, options) {
         if (options === void 0) {
           options = {};
@@ -5616,7 +5862,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/cache/events/index.js
-  var require_events6 = __commonJS({
+  var require_events4 = __commonJS({
     "../../node_modules/phaser/src/cache/events/index.js": function(exports, module) {
       module.exports = {
         ADD: require_ADD_EVENT(),
@@ -5631,7 +5877,7 @@ var Phaser = (function() {
       var Class = require_Class();
       var CustomMap = require_Map();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events6();
+      var Events = require_events4();
       var BaseCache = new Class({
         initialize: function BaseCache2() {
           this.entries = new CustomMap();
@@ -5673,12 +5919,140 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/core/events/BLUR_EVENT.js
+  var require_BLUR_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/BLUR_EVENT.js": function(exports, module) {
+      module.exports = "blur";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/BOOT_EVENT.js
+  var require_BOOT_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/core/events/BOOT_EVENT.js": function(exports, module) {
+      module.exports = "boot";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js
+  var require_CONTEXT_LOST_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js": function(exports, module) {
+      module.exports = "contextlost";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/DESTROY_EVENT.js
+  var require_DESTROY_EVENT4 = __commonJS({
+    "../../node_modules/phaser/src/core/events/DESTROY_EVENT.js": function(exports, module) {
+      module.exports = "destroy";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/FOCUS_EVENT.js
+  var require_FOCUS_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/FOCUS_EVENT.js": function(exports, module) {
+      module.exports = "focus";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js
+  var require_HIDDEN_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js": function(exports, module) {
+      module.exports = "hidden";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/PAUSE_EVENT.js
+  var require_PAUSE_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/core/events/PAUSE_EVENT.js": function(exports, module) {
+      module.exports = "pause";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js
+  var require_POST_RENDER_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js": function(exports, module) {
+      module.exports = "postrender";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js
+  var require_POST_STEP_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js": function(exports, module) {
+      module.exports = "poststep";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js
+  var require_PRE_RENDER_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js": function(exports, module) {
+      module.exports = "prerender";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js
+  var require_PRE_STEP_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js": function(exports, module) {
+      module.exports = "prestep";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/READY_EVENT.js
+  var require_READY_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/core/events/READY_EVENT.js": function(exports, module) {
+      module.exports = "ready";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/RESUME_EVENT.js
+  var require_RESUME_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/core/events/RESUME_EVENT.js": function(exports, module) {
+      module.exports = "resume";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/STEP_EVENT.js
+  var require_STEP_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/STEP_EVENT.js": function(exports, module) {
+      module.exports = "step";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js
+  var require_VISIBLE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js": function(exports, module) {
+      module.exports = "visible";
+    }
+  });
+
+  // ../../node_modules/phaser/src/core/events/index.js
+  var require_events5 = __commonJS({
+    "../../node_modules/phaser/src/core/events/index.js": function(exports, module) {
+      module.exports = {
+        BLUR: require_BLUR_EVENT(),
+        BOOT: require_BOOT_EVENT2(),
+        CONTEXT_LOST: require_CONTEXT_LOST_EVENT(),
+        DESTROY: require_DESTROY_EVENT4(),
+        FOCUS: require_FOCUS_EVENT(),
+        HIDDEN: require_HIDDEN_EVENT(),
+        PAUSE: require_PAUSE_EVENT2(),
+        POST_RENDER: require_POST_RENDER_EVENT(),
+        POST_STEP: require_POST_STEP_EVENT(),
+        PRE_RENDER: require_PRE_RENDER_EVENT2(),
+        PRE_STEP: require_PRE_STEP_EVENT(),
+        READY: require_READY_EVENT2(),
+        RESUME: require_RESUME_EVENT2(),
+        STEP: require_STEP_EVENT(),
+        VISIBLE: require_VISIBLE_EVENT()
+      };
+    }
+  });
+
   // ../../node_modules/phaser/src/cache/CacheManager.js
   var require_CacheManager = __commonJS({
     "../../node_modules/phaser/src/cache/CacheManager.js": function(exports, module) {
       var BaseCache = require_BaseCache();
       var Class = require_Class();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var CacheManager = new Class({
         initialize: function CacheManager2(game) {
           this.game = game;
@@ -5739,7 +6113,7 @@ var Phaser = (function() {
       module.exports = {
         BaseCache: require_BaseCache(),
         CacheManager: require_CacheManager(),
-        Events: require_events6()
+        Events: require_events4()
       };
     }
   });
@@ -6063,14 +6437,14 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/cameras/2d/events/POST_RENDER_EVENT.js
-  var require_POST_RENDER_EVENT3 = __commonJS({
+  var require_POST_RENDER_EVENT2 = __commonJS({
     "../../node_modules/phaser/src/cameras/2d/events/POST_RENDER_EVENT.js": function(exports, module) {
       module.exports = "postrender";
     }
   });
 
   // ../../node_modules/phaser/src/cameras/2d/events/PRE_RENDER_EVENT.js
-  var require_PRE_RENDER_EVENT4 = __commonJS({
+  var require_PRE_RENDER_EVENT3 = __commonJS({
     "../../node_modules/phaser/src/cameras/2d/events/PRE_RENDER_EVENT.js": function(exports, module) {
       module.exports = "prerender";
     }
@@ -6119,7 +6493,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/cameras/2d/events/index.js
-  var require_events7 = __commonJS({
+  var require_events6 = __commonJS({
     "../../node_modules/phaser/src/cameras/2d/events/index.js": function(exports, module) {
       module.exports = {
         DESTROY: require_DESTROY_EVENT5(),
@@ -6132,8 +6506,8 @@ var Phaser = (function() {
         FOLLOW_UPDATE: require_FOLLOW_UPDATE_EVENT(),
         PAN_COMPLETE: require_PAN_COMPLETE_EVENT(),
         PAN_START: require_PAN_START_EVENT(),
-        POST_RENDER: require_POST_RENDER_EVENT3(),
-        PRE_RENDER: require_PRE_RENDER_EVENT4(),
+        POST_RENDER: require_POST_RENDER_EVENT2(),
+        PRE_RENDER: require_PRE_RENDER_EVENT3(),
         ROTATE_COMPLETE: require_ROTATE_COMPLETE_EVENT(),
         ROTATE_START: require_ROTATE_START_EVENT(),
         SHAKE_COMPLETE: require_SHAKE_COMPLETE_EVENT(),
@@ -6186,7 +6560,7 @@ var Phaser = (function() {
         if (!out) {
           return { r: r, g: g, b: b, color: GetColor(r, g, b) };
         } else if (out.setTo) {
-          return out.setTo(r, g, b, out.alpha, false);
+          return out.setTo(r, g, b, out.alpha, true);
         } else {
           out.r = r;
           out.g = g;
@@ -6659,7 +7033,7 @@ var Phaser = (function() {
       var Components = require_components();
       var DegToRad = require_DegToRad();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events7();
+      var Events = require_events6();
       var Rectangle = require_Rectangle();
       var TransformMatrix = require_TransformMatrix();
       var ValueToColor = require_ValueToColor();
@@ -6667,7 +7041,7 @@ var Phaser = (function() {
       var BaseCamera = new Class({
         Extends: EventEmitter,
         Mixins: [
-          Components.Alpha,
+          Components.AlphaSingle,
           Components.Visible
         ],
         initialize: function BaseCamera2(x, y, width, height) {
@@ -6716,6 +7090,7 @@ var Phaser = (function() {
           this.mask = null;
           this._maskCamera = null;
           this.renderList = [];
+          this.isSceneCamera = true;
         },
         addToRenderList: function(child) {
           this.renderList.push(child);
@@ -7010,11 +7385,15 @@ var Phaser = (function() {
           this.roundPixels = value;
           return this;
         },
-        setScene: function(scene) {
+        setScene: function(scene, isSceneCamera) {
+          if (isSceneCamera === void 0) {
+            isSceneCamera = true;
+          }
           if (this.scene && this._customViewport) {
             this.sceneManager.customViewports--;
           }
           this.scene = scene;
+          this.isSceneCamera = isSceneCamera;
           var sys = scene.sys;
           this.sceneManager = sys.game.scene;
           this.scaleManager = sys.scale;
@@ -7106,8 +7485,12 @@ var Phaser = (function() {
         },
         update: function() {
         },
+        setIsSceneCamera: function(value) {
+          this.isSceneCamera = value;
+          return this;
+        },
         updateSystem: function() {
-          if (!this.scaleManager) {
+          if (!this.scaleManager || !this.isSceneCamera) {
             return;
           }
           var custom = this._x !== 0 || this._y !== 0 || this.scaleManager.width !== this._width || this.scaleManager.height !== this._height;
@@ -7176,8 +7559,10 @@ var Phaser = (function() {
             return this._scrollX;
           },
           set: function(value) {
-            this._scrollX = value;
-            this.dirty = true;
+            if (value !== this._scrollX) {
+              this._scrollX = value;
+              this.dirty = true;
+            }
           }
         },
         scrollY: {
@@ -7185,8 +7570,10 @@ var Phaser = (function() {
             return this._scrollY;
           },
           set: function(value) {
-            this._scrollY = value;
-            this.dirty = true;
+            if (value !== this._scrollY) {
+              this._scrollY = value;
+              this.dirty = true;
+            }
           }
         },
         zoom: {
@@ -7268,7 +7655,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/cameras/2d/effects/Fade.js": function(exports, module) {
       var Clamp = require_Clamp();
       var Class = require_Class();
-      var Events = require_events7();
+      var Events = require_events6();
       var Fade = new Class({
         initialize: function Fade2(camera) {
           this.camera = camera;
@@ -7393,7 +7780,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/cameras/2d/effects/Flash.js": function(exports, module) {
       var Clamp = require_Clamp();
       var Class = require_Class();
-      var Events = require_events7();
+      var Events = require_events6();
       var Flash = new Class({
         initialize: function Flash2(camera) {
           this.camera = camera;
@@ -8180,7 +8567,7 @@ var Phaser = (function() {
       var Clamp = require_Clamp();
       var Class = require_Class();
       var EaseMap = require_EaseMap();
-      var Events = require_events7();
+      var Events = require_events6();
       var Vector2 = require_Vector2();
       var Pan = new Class({
         initialize: function Pan2(camera) {
@@ -8285,7 +8672,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/cameras/2d/effects/Shake.js": function(exports, module) {
       var Clamp = require_Clamp();
       var Class = require_Class();
-      var Events = require_events7();
+      var Events = require_events6();
       var Vector2 = require_Vector2();
       var Shake = new Class({
         initialize: function Shake2(camera) {
@@ -8394,7 +8781,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/cameras/2d/effects/RotateTo.js": function(exports, module) {
       var Clamp = require_Clamp();
       var Class = require_Class();
-      var Events = require_events7();
+      var Events = require_events6();
       var EaseMap = require_EaseMap();
       var RotateTo = new Class({
         initialize: function RotateTo2(camera) {
@@ -8550,7 +8937,7 @@ var Phaser = (function() {
       var Clamp = require_Clamp();
       var Class = require_Class();
       var EaseMap = require_EaseMap();
-      var Events = require_events7();
+      var Events = require_events6();
       var Zoom = new Class({
         initialize: function Zoom2(camera) {
           this.camera = camera;
@@ -8672,19 +9059,18 @@ var Phaser = (function() {
       var Class = require_Class();
       var Components = require_components();
       var Effects = require_effects();
-      var Events = require_events7();
+      var Events = require_events6();
       var Linear = require_Linear2();
       var Rectangle = require_Rectangle();
       var Vector2 = require_Vector2();
       var Camera = new Class({
         Extends: BaseCamera,
         Mixins: [
-          Components.Pipeline
+          Components.PostPipeline
         ],
         initialize: function Camera2(x, y, width, height) {
           BaseCamera.call(this, x, y, width, height);
-          this.postPipelines = [];
-          this.pipelineData = {};
+          this.initPostPipeline();
           this.inputEnabled = true;
           this.fadeEffect = new Effects.Fade(this);
           this.flashEffect = new Effects.Flash(this);
@@ -8765,23 +9151,32 @@ var Phaser = (function() {
             CenterOn(deadzone, this.midPoint.x, this.midPoint.y);
           }
           var emitFollowEvent = false;
+          if (this.roundPixels) {
+            originX = Math.floor(originX);
+            originY = Math.floor(originY);
+          }
           if (follow && !this.panEffect.isRunning) {
+            var lerp = this.lerp;
             var fx = follow.x - this.followOffset.x;
             var fy = follow.y - this.followOffset.y;
+            if (this.roundPixels) {
+              fx = Math.floor(fx);
+              fy = Math.floor(fy);
+            }
             if (deadzone) {
               if (fx < deadzone.x) {
-                sx = Linear(sx, sx - (deadzone.x - fx), this.lerp.x);
+                sx = Linear(sx, sx - (deadzone.x - fx), lerp.x);
               } else if (fx > deadzone.right) {
-                sx = Linear(sx, sx + (fx - deadzone.right), this.lerp.x);
+                sx = Linear(sx, sx + (fx - deadzone.right), lerp.x);
               }
               if (fy < deadzone.y) {
-                sy = Linear(sy, sy - (deadzone.y - fy), this.lerp.y);
+                sy = Linear(sy, sy - (deadzone.y - fy), lerp.y);
               } else if (fy > deadzone.bottom) {
-                sy = Linear(sy, sy + (fy - deadzone.bottom), this.lerp.y);
+                sy = Linear(sy, sy + (fy - deadzone.bottom), lerp.y);
               }
             } else {
-              sx = Linear(sx, fx - originX, this.lerp.x);
-              sy = Linear(sy, fy - originY, this.lerp.y);
+              sx = Linear(sx, fx - originX, lerp.x);
+              sy = Linear(sy, fy - originY, lerp.y);
             }
             emitFollowEvent = true;
           }
@@ -8790,10 +9185,8 @@ var Phaser = (function() {
             sy = this.clampY(sy);
           }
           if (this.roundPixels) {
-            originX = Math.round(originX);
-            originY = Math.round(originY);
-            sx = Math.round(sx);
-            sy = Math.round(sy);
+            sx = Math.floor(sx);
+            sy = Math.floor(sy);
           }
           this.scrollX = sx;
           this.scrollY = sy;
@@ -8805,11 +9198,11 @@ var Phaser = (function() {
           var vwx = midX - displayWidth / 2;
           var vwy = midY - displayHeight / 2;
           if (this.roundPixels) {
-            vwx = Math.round(vwx);
-            vwy = Math.round(vwy);
+            vwx = Math.floor(vwx);
+            vwy = Math.floor(vwy);
           }
           this.worldView.setTo(vwx, vwy, displayWidth, displayHeight);
-          matrix.applyITRS(this.x + originX, this.y + originY, this.rotation, zoom, zoom);
+          matrix.applyITRS(Math.floor(this.x + originX), Math.floor(this.y + originY), this.rotation, zoom, zoom);
           matrix.translate(-originX, -originY);
           this.shakeEffect.preRender();
           if (emitFollowEvent) {
@@ -8904,64 +9297,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/plugins/PluginCache.js
-  var require_PluginCache = __commonJS({
-    "../../node_modules/phaser/src/plugins/PluginCache.js": function(exports, module) {
-      var corePlugins = {};
-      var customPlugins = {};
-      var PluginCache = {};
-      PluginCache.register = function(key, plugin, mapping, custom) {
-        if (custom === void 0) {
-          custom = false;
-        }
-        corePlugins[key] = { plugin: plugin, mapping: mapping, custom: custom };
-      };
-      PluginCache.registerCustom = function(key, plugin, mapping, data) {
-        customPlugins[key] = { plugin: plugin, mapping: mapping, data: data };
-      };
-      PluginCache.hasCore = function(key) {
-        return corePlugins.hasOwnProperty(key);
-      };
-      PluginCache.hasCustom = function(key) {
-        return customPlugins.hasOwnProperty(key);
-      };
-      PluginCache.getCore = function(key) {
-        return corePlugins[key];
-      };
-      PluginCache.getCustom = function(key) {
-        return customPlugins[key];
-      };
-      PluginCache.getCustomClass = function(key) {
-        return customPlugins.hasOwnProperty(key) ? customPlugins[key].plugin : null;
-      };
-      PluginCache.remove = function(key) {
-        if (corePlugins.hasOwnProperty(key)) {
-          delete corePlugins[key];
-        }
-      };
-      PluginCache.removeCustom = function(key) {
-        if (customPlugins.hasOwnProperty(key)) {
-          delete customPlugins[key];
-        }
-      };
-      PluginCache.destroyCorePlugins = function() {
-        for (var key in corePlugins) {
-          if (corePlugins.hasOwnProperty(key)) {
-            delete corePlugins[key];
-          }
-        }
-      };
-      PluginCache.destroyCustomPlugins = function() {
-        for (var key in customPlugins) {
-          if (customPlugins.hasOwnProperty(key)) {
-            delete customPlugins[key];
-          }
-        }
-      };
-      module.exports = PluginCache;
-    }
-  });
-
   // ../../node_modules/phaser/src/scale/events/ENTER_FULLSCREEN_EVENT.js
   var require_ENTER_FULLSCREEN_EVENT = __commonJS({
     "../../node_modules/phaser/src/scale/events/ENTER_FULLSCREEN_EVENT.js": function(exports, module) {
@@ -8998,14 +9333,14 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/scale/events/RESIZE_EVENT.js
-  var require_RESIZE_EVENT2 = __commonJS({
+  var require_RESIZE_EVENT = __commonJS({
     "../../node_modules/phaser/src/scale/events/RESIZE_EVENT.js": function(exports, module) {
       module.exports = "resize";
     }
   });
 
   // ../../node_modules/phaser/src/scale/events/index.js
-  var require_events8 = __commonJS({
+  var require_events7 = __commonJS({
     "../../node_modules/phaser/src/scale/events/index.js": function(exports, module) {
       module.exports = {
         ENTER_FULLSCREEN: require_ENTER_FULLSCREEN_EVENT(),
@@ -9013,7 +9348,7 @@ var Phaser = (function() {
         FULLSCREEN_UNSUPPORTED: require_FULLSCREEN_UNSUPPORTED_EVENT(),
         LEAVE_FULLSCREEN: require_LEAVE_FULLSCREEN_EVENT(),
         ORIENTATION_CHANGE: require_ORIENTATION_CHANGE_EVENT(),
-        RESIZE: require_RESIZE_EVENT2()
+        RESIZE: require_RESIZE_EVENT()
       };
     }
   });
@@ -9026,8 +9361,8 @@ var Phaser = (function() {
       var GetFastValue = require_GetFastValue();
       var PluginCache = require_PluginCache();
       var RectangleContains = require_Contains2();
-      var ScaleEvents = require_events8();
-      var SceneEvents = require_events5();
+      var ScaleEvents = require_events7();
+      var SceneEvents = require_events();
       var CameraManager = new Class({
         initialize: function CameraManager2(scene) {
           this.scene = scene;
@@ -9231,7 +9566,7 @@ var Phaser = (function() {
         render: function(renderer, displayList) {
           var scene = this.scene;
           var cameras = this.cameras;
-          for (var i = 0; i < this.cameras.length; i++) {
+          for (var i = 0; i < cameras.length; i++) {
             var camera = cameras[i];
             if (camera.visible && camera.alpha > 0) {
               camera.preRender();
@@ -9241,14 +9576,9 @@ var Phaser = (function() {
           }
         },
         getVisibleChildren: function(children, camera) {
-          var visible = [];
-          for (var i = 0; i < children.length; i++) {
-            var child = children[i];
-            if (child.willRender(camera)) {
-              visible.push(child);
-            }
-          }
-          return visible;
+          return children.filter(function(child) {
+            return child.willRender(camera);
+          });
         },
         resetAll: function() {
           for (var i = 0; i < this.cameras.length; i++) {
@@ -9309,7 +9639,7 @@ var Phaser = (function() {
         BaseCamera: require_BaseCamera(),
         CameraManager: require_CameraManager(),
         Effects: require_effects(),
-        Events: require_events7()
+        Events: require_events6()
       };
     }
   });
@@ -9321,6 +9651,49 @@ var Phaser = (function() {
         Controls: require_controls(),
         Scene2D: require_d()
       };
+    }
+  });
+
+  // ../../node_modules/phaser/src/plugins/DefaultPlugins.js
+  var require_DefaultPlugins = __commonJS({
+    "../../node_modules/phaser/src/plugins/DefaultPlugins.js": function(exports, module) {
+      var DefaultPlugins = {
+        Global: [
+          "game",
+          "anims",
+          "cache",
+          "plugins",
+          "registry",
+          "scale",
+          "sound",
+          "textures",
+          "renderer"
+        ],
+        CoreScene: [
+          "EventEmitter",
+          "CameraManager",
+          "GameObjectCreator",
+          "GameObjectFactory",
+          "ScenePlugin",
+          "DisplayList",
+          "UpdateList"
+        ],
+        DefaultScene: [
+          "Clock",
+          "DataManagerPlugin",
+          "InputPlugin",
+          "Loader",
+          "TweenManager",
+          "LightsPlugin"
+        ]
+      };
+      if (false) {
+        DefaultPlugins.DefaultScene.push("CameraManager3D");
+      }
+      if (false) {
+        DefaultPlugins.Global.push("facebook");
+      }
+      module.exports = DefaultPlugins;
     }
   });
 
@@ -9440,27 +9813,34 @@ var Phaser = (function() {
         safariVersion: 0,
         silk: false,
         trident: false,
-        tridentVersion: 0
+        tridentVersion: 0,
+        es2019: false
       };
       function init() {
         var ua = navigator.userAgent;
-        if (/Edge\/\d+/.test(ua)) {
+        if (/Edg\/\d+/.test(ua)) {
           Browser.edge = true;
+          Browser.es2019 = true;
+        } else if (/OPR/.test(ua)) {
+          Browser.opera = true;
+          Browser.es2019 = true;
         } else if (/Chrome\/(\d+)/.test(ua) && !OS.windowsPhone) {
           Browser.chrome = true;
           Browser.chromeVersion = parseInt(RegExp.$1, 10);
+          Browser.es2019 = Browser.chromeVersion > 69;
         } else if (/Firefox\D+(\d+)/.test(ua)) {
           Browser.firefox = true;
           Browser.firefoxVersion = parseInt(RegExp.$1, 10);
+          Browser.es2019 = Browser.firefoxVersion > 10;
         } else if (/AppleWebKit/.test(ua) && OS.iOS) {
           Browser.mobileSafari = true;
         } else if (/MSIE (\d+\.\d+);/.test(ua)) {
           Browser.ie = true;
           Browser.ieVersion = parseInt(RegExp.$1, 10);
-        } else if (/Opera/.test(ua)) {
-          Browser.opera = true;
-        } else if (/Safari/.test(ua) && !OS.windowsPhone) {
+        } else if (/Version\/(\d+\.\d+) Safari/.test(ua) && !OS.windowsPhone) {
           Browser.safari = true;
+          Browser.safariVersion = parseInt(RegExp.$1, 10);
+          Browser.es2019 = Browser.safariVersion > 10;
         } else if (/Trident\/(\d+\.\d+)(.*)rv:(\d+\.\d+)/.test(ua)) {
           Browser.ie = true;
           Browser.trident = true;
@@ -9651,6 +10031,7 @@ var Phaser = (function() {
         littleEndian: false,
         localStorage: false,
         pointerLock: false,
+        stableSort: false,
         support32bit: false,
         vibration: false,
         webGL: false,
@@ -9692,7 +10073,7 @@ var Phaser = (function() {
               var canvas = CanvasPool.createWebGL(this);
               var ctx = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
               var canvas2D = CanvasPool.create2D(this);
-              var ctx2D = canvas2D.getContext("2d");
+              var ctx2D = canvas2D.getContext("2d", { willReadFrequently: true });
               var image = ctx2D.createImageData(1, 1);
               isUint8 = image.data instanceof Uint8ClampedArray;
               CanvasPool.remove(canvas);
@@ -9774,6 +10155,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/device/Audio.js": function(exports, module) {
       var Browser = require_Browser();
       var Audio = {
+        flac: false,
+        aac: false,
         audioData: false,
         dolby: false,
         m4a: false,
@@ -9792,28 +10175,25 @@ var Phaser = (function() {
         Audio.webAudio = !!(window["AudioContext"] || window["webkitAudioContext"]);
         var audioElement = document.createElement("audio");
         var result = !!audioElement.canPlayType;
-        var no = /^no$/;
         try {
           if (result) {
-            if (audioElement.canPlayType('audio/ogg; codecs="vorbis"').replace(no, "")) {
-              Audio.ogg = true;
-            }
-            if (audioElement.canPlayType('audio/ogg; codecs="opus"').replace(no, "") || audioElement.canPlayType("audio/opus;").replace(no, "")) {
-              Audio.opus = true;
-            }
-            if (audioElement.canPlayType("audio/mpeg;").replace(no, "")) {
-              Audio.mp3 = true;
-            }
-            if (audioElement.canPlayType("audio/wav").replace(no, "")) {
-              Audio.wav = true;
-            }
-            if (audioElement.canPlayType("audio/x-m4a;") || audioElement.canPlayType("audio/aac;").replace(no, "")) {
-              Audio.m4a = true;
-            }
-            if (audioElement.canPlayType('audio/webm; codecs="vorbis"').replace(no, "")) {
-              Audio.webm = true;
-            }
-            if (audioElement.canPlayType('audio/mp4;codecs="ec-3"') !== "") {
+            var CanPlay = function(type1, type2) {
+              var canPlayType1 = audioElement.canPlayType("audio/" + type1).replace(/^no$/, "");
+              if (type2) {
+                return Boolean(canPlayType1 || audioElement.canPlayType("audio/" + type2).replace(/^no$/, ""));
+              } else {
+                return Boolean(canPlayType1);
+              }
+            };
+            Audio.ogg = CanPlay('ogg; codecs="vorbis"');
+            Audio.opus = CanPlay('ogg; codecs="opus"', "opus");
+            Audio.mp3 = CanPlay("mpeg");
+            Audio.wav = CanPlay("wav");
+            Audio.m4a = CanPlay("x-m4a");
+            Audio.aac = CanPlay("aac");
+            Audio.flac = CanPlay("flac", "x-flac");
+            Audio.webm = CanPlay('webm; codecs="vorbis"');
+            if (audioElement.canPlayType('audio/mp4; codecs="ec-3"') !== "") {
               if (Browser.edge) {
                 Audio.dolby = true;
               } else if (Browser.safari && Browser.safariVersion >= 9) {
@@ -9962,8 +10342,8 @@ var Phaser = (function() {
         magenta.onload = function() {
           var yellow = new Image();
           yellow.onload = function() {
-            var canvas = CanvasPool.create(yellow, 6, 1);
-            var context = canvas.getContext("2d");
+            var canvas = CanvasPool.create2D(yellow, 6);
+            var context = canvas.getContext("2d", { willReadFrequently: true });
             context.globalCompositeOperation = "multiply";
             context.drawImage(magenta, 0, 0);
             context.drawImage(yellow, 2, 0);
@@ -9980,8 +10360,8 @@ var Phaser = (function() {
         return false;
       }
       function checkInverseAlpha() {
-        var canvas = CanvasPool.create(this, 2, 1);
-        var context = canvas.getContext("2d");
+        var canvas = CanvasPool.create2D(this, 2);
+        var context = canvas.getContext("2d", { willReadFrequently: true });
         context.fillStyle = "rgba(10, 20, 30, 0.5)";
         context.fillRect(0, 0, 1, 1);
         var s1 = context.getImageData(0, 0, 1, 1);
@@ -9990,7 +10370,9 @@ var Phaser = (function() {
         }
         context.putImageData(s1, 1, 0);
         var s2 = context.getImageData(1, 0, 1, 1);
-        return s2.data[0] === s1.data[0] && s2.data[1] === s1.data[1] && s2.data[2] === s1.data[2] && s2.data[3] === s1.data[3];
+        var result = s2.data[0] === s1.data[0] && s2.data[1] === s1.data[1] && s2.data[2] === s1.data[2] && s2.data[3] === s1.data[3];
+        CanvasPool.remove(this);
+        return result;
       }
       function init() {
         if (typeof importScripts !== "function" && document !== void 0) {
@@ -13426,46 +13808,22 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/plugins/DefaultPlugins.js
-  var require_DefaultPlugins = __commonJS({
-    "../../node_modules/phaser/src/plugins/DefaultPlugins.js": function(exports, module) {
-      var DefaultPlugins = {
-        Global: [
-          "game",
-          "anims",
-          "cache",
-          "plugins",
-          "registry",
-          "scale",
-          "sound",
-          "textures",
-          "renderer"
-        ],
-        CoreScene: [
-          "EventEmitter",
-          "CameraManager",
-          "GameObjectCreator",
-          "GameObjectFactory",
-          "ScenePlugin",
-          "DisplayList",
-          "UpdateList"
-        ],
-        DefaultScene: [
-          "Clock",
-          "DataManagerPlugin",
-          "InputPlugin",
-          "Loader",
-          "TweenManager",
-          "LightsPlugin"
-        ]
+  // ../../node_modules/phaser/src/renderer/webgl/pipelines/const.js
+  var require_const6 = __commonJS({
+    "../../node_modules/phaser/src/renderer/webgl/pipelines/const.js": function(exports, module) {
+      var PIPELINE_CONST = {
+        BITMAPMASK_PIPELINE: "BitmapMaskPipeline",
+        LIGHT_PIPELINE: "Light2D",
+        POINTLIGHT_PIPELINE: "PointLightPipeline",
+        SINGLE_PIPELINE: "SinglePipeline",
+        MULTI_PIPELINE: "MultiPipeline",
+        ROPE_PIPELINE: "RopePipeline",
+        GRAPHICS_PIPELINE: "GraphicsPipeline",
+        POSTFX_PIPELINE: "PostFXPipeline",
+        UTILITY_PIPELINE: "UtilityPipeline",
+        MOBILE_PIPELINE: "MobilePipeline"
       };
-      if (false) {
-        DefaultPlugins.DefaultScene.push("CameraManager3D");
-      }
-      if (false) {
-        DefaultPlugins.Global.push("facebook");
-      }
-      module.exports = DefaultPlugins;
+      module.exports = PIPELINE_CONST;
     }
   });
 
@@ -13474,13 +13832,14 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/core/Config.js": function(exports, module) {
       var Class = require_Class();
       var CONST = require_const();
+      var DefaultPlugins = require_DefaultPlugins();
       var Device = require_device();
       var GetFastValue = require_GetFastValue();
       var GetValue = require_GetValue();
       var IsPlainObject = require_IsPlainObject();
-      var PhaserMath = require_math();
       var NOOP = require_NOOP();
-      var DefaultPlugins = require_DefaultPlugins();
+      var PhaserMath = require_math();
+      var PIPELINE_CONST = require_const6();
       var ValueToColor = require_ValueToColor();
       var Config = new Class({
         initialize: function Config2(config) {
@@ -13522,6 +13881,11 @@ var Phaser = (function() {
           this.gameURL = GetValue(config, "url", "https://phaser.io");
           this.gameVersion = GetValue(config, "version", "");
           this.autoFocus = GetValue(config, "autoFocus", true);
+          this.stableSort = GetValue(config, "stableSort", -1);
+          if (this.stableSort === -1) {
+            this.stableSort = Device.browser.es2019 ? 1 : 0;
+          }
+          Device.features.stableSort = this.stableSort;
           this.domCreateContainer = GetValue(config, "dom.createContainer", false);
           this.domPointerEvents = GetValue(config, "dom.pointerEvents", "none");
           this.inputKeyboard = GetValue(config, "input.keyboard", true);
@@ -13553,9 +13917,11 @@ var Phaser = (function() {
           this.fps = GetValue(config, "fps", null);
           var renderConfig = GetValue(config, "render", null);
           this.pipeline = GetValue(renderConfig, "pipeline", null, config);
+          this.autoMobilePipeline = GetValue(renderConfig, "autoMobilePipeline", true, config);
+          this.defaultPipeline = GetValue(renderConfig, "defaultPipeline", PIPELINE_CONST.MULTI_PIPELINE, config);
           this.antialias = GetValue(renderConfig, "antialias", true, config);
           this.antialiasGL = GetValue(renderConfig, "antialiasGL", true, config);
-          this.mipmapFilter = GetValue(renderConfig, "mipmapFilter", "LINEAR", config);
+          this.mipmapFilter = GetValue(renderConfig, "mipmapFilter", "", config);
           this.desynchronized = GetValue(renderConfig, "desynchronized", false, config);
           this.roundPixels = GetValue(renderConfig, "roundPixels", false, config);
           this.pixelArt = GetValue(renderConfig, "pixelArt", this.zoom !== 1, config);
@@ -13671,7 +14037,7 @@ var Phaser = (function() {
           var context = canvas.getContext("2d");
           var imageData = context.getImageData(x, y, 1, 1);
           var data = imageData.data;
-          callback.call(null, new Color(data[0], data[1], data[2], data[3] / 255));
+          callback.call(null, new Color(data[0], data[1], data[2], data[3]));
         } else if (x !== 0 || y !== 0 || width !== canvas.width || height !== canvas.height) {
           var copyCanvas = CanvasPool.createWebGL(this, width, height);
           var ctx = copyCanvas.getContext("2d");
@@ -13700,6 +14066,46 @@ var Phaser = (function() {
         }
       };
       module.exports = CanvasSnapshot;
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js
+  var require_POST_RENDER_EVENT3 = __commonJS({
+    "../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js": function(exports, module) {
+      module.exports = "postrender";
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js
+  var require_PRE_RENDER_EVENT4 = __commonJS({
+    "../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js": function(exports, module) {
+      module.exports = "prerender";
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js
+  var require_RENDER_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js": function(exports, module) {
+      module.exports = "render";
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js
+  var require_RESIZE_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js": function(exports, module) {
+      module.exports = "resize";
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/events/index.js
+  var require_events8 = __commonJS({
+    "../../node_modules/phaser/src/renderer/events/index.js": function(exports, module) {
+      module.exports = {
+        POST_RENDER: require_POST_RENDER_EVENT3(),
+        PRE_RENDER: require_PRE_RENDER_EVENT4(),
+        RENDER: require_RENDER_EVENT2(),
+        RESIZE: require_RESIZE_EVENT2()
+      };
     }
   });
 
@@ -13753,6 +14159,13 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/textures/events/ADD_KEY_EVENT.js
+  var require_ADD_KEY_EVENT = __commonJS({
+    "../../node_modules/phaser/src/textures/events/ADD_KEY_EVENT.js": function(exports, module) {
+      module.exports = "addtexture-";
+    }
+  });
+
   // ../../node_modules/phaser/src/textures/events/ERROR_EVENT.js
   var require_ERROR_EVENT = __commonJS({
     "../../node_modules/phaser/src/textures/events/ERROR_EVENT.js": function(exports, module) {
@@ -13781,15 +14194,24 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/textures/events/REMOVE_KEY_EVENT.js
+  var require_REMOVE_KEY_EVENT = __commonJS({
+    "../../node_modules/phaser/src/textures/events/REMOVE_KEY_EVENT.js": function(exports, module) {
+      module.exports = "removetexture-";
+    }
+  });
+
   // ../../node_modules/phaser/src/textures/events/index.js
   var require_events9 = __commonJS({
     "../../node_modules/phaser/src/textures/events/index.js": function(exports, module) {
       module.exports = {
         ADD: require_ADD_EVENT2(),
+        ADD_KEY: require_ADD_KEY_EVENT(),
         ERROR: require_ERROR_EVENT(),
         LOAD: require_LOAD_EVENT(),
         READY: require_READY_EVENT3(),
-        REMOVE: require_REMOVE_EVENT2()
+        REMOVE: require_REMOVE_EVENT2(),
+        REMOVE_KEY: require_REMOVE_KEY_EVENT()
       };
     }
   });
@@ -13797,14 +14219,14 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/renderer/canvas/CanvasRenderer.js
   var require_CanvasRenderer = __commonJS({
     "../../node_modules/phaser/src/renderer/canvas/CanvasRenderer.js": function(exports, module) {
-      var CameraEvents = require_events7();
+      var CameraEvents = require_events6();
       var CanvasSnapshot = require_CanvasSnapshot();
       var Class = require_Class();
       var CONST = require_const();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events2();
+      var Events = require_events8();
       var GetBlendModes = require_GetBlendModes();
-      var ScaleEvents = require_events8();
+      var ScaleEvents = require_events7();
       var TextureEvents = require_events9();
       var TransformMatrix = require_TransformMatrix();
       var CanvasRenderer = new Class({
@@ -13826,7 +14248,8 @@ var Phaser = (function() {
           this.gameCanvas = game.canvas;
           var contextOptions = {
             alpha: game.config.transparent,
-            desynchronized: game.config.desynchronized
+            desynchronized: game.config.desynchronized,
+            willReadFrequently: false
           };
           this.gameContext = gameConfig.context ? gameConfig.context : this.gameCanvas.getContext("2d", contextOptions);
           this.currentContext = this.gameContext;
@@ -14063,12 +14486,18 @@ var Phaser = (function() {
             }
             flipY = -1;
           }
-          spriteMatrix.applyITRS(sprite.x, sprite.y, sprite.rotation, sprite.scaleX * flipX, sprite.scaleY * flipY);
+          var gx = sprite.x;
+          var gy = sprite.y;
+          if (camera.roundPixels) {
+            gx = Math.floor(gx);
+            gy = Math.floor(gy);
+          }
+          spriteMatrix.applyITRS(gx, gy, sprite.rotation, sprite.scaleX * flipX, sprite.scaleY * flipY);
           camMatrix.copyFrom(camera.matrix);
           if (parentTransformMatrix) {
             camMatrix.multiplyWithOffset(parentTransformMatrix, -camera.scrollX * sprite.scrollFactorX, -camera.scrollY * sprite.scrollFactorY);
-            spriteMatrix.e = sprite.x;
-            spriteMatrix.f = sprite.y;
+            spriteMatrix.e = gx;
+            spriteMatrix.f = gy;
           } else {
             spriteMatrix.e -= camera.scrollX * sprite.scrollFactorX;
             spriteMatrix.f -= camera.scrollY * sprite.scrollFactorY;
@@ -14082,7 +14511,7 @@ var Phaser = (function() {
           camMatrix.setToContext(ctx);
           ctx.globalCompositeOperation = this.blendModes[sprite.blendMode];
           ctx.globalAlpha = alpha;
-          ctx.imageSmoothingEnabled = !(!this.antialias || frame.source.scaleMode);
+          ctx.imageSmoothingEnabled = !frame.source.scaleMode;
           if (sprite.mask) {
             sprite.mask.preRenderCanvas(this, sprite, camera);
           }
@@ -14150,7 +14579,7 @@ var Phaser = (function() {
   var require_RenderTarget = __commonJS({
     "../../node_modules/phaser/src/renderer/webgl/RenderTarget.js": function(exports, module) {
       var Class = require_Class();
-      var Events = require_events2();
+      var Events = require_events8();
       var RenderTarget = new Class({
         initialize: function RenderTarget2(renderer, width, height, scale, minFilter, autoClear, autoResize) {
           if (scale === void 0) {
@@ -14207,7 +14636,7 @@ var Phaser = (function() {
               height = 1;
             }
             this.texture = renderer.createTextureFromSource(null, width, height, this.minFilter, true);
-            this.framebuffer = renderer.createFramebuffer(width, height, this.texture, false);
+            this.framebuffer = renderer.createFramebuffer(width, height, this.texture, true);
             this.width = width;
             this.height = height;
           }
@@ -14436,7 +14865,7 @@ var Phaser = (function() {
           return [ur / 255, ug / 255, ub / 255];
         },
         checkShaderMax: function(gl, maxTextures) {
-          var gpuMax = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+          var gpuMax = Math.min(16, gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS));
           if (!maxTextures || maxTextures === -1) {
             return gpuMax;
           } else {
@@ -14447,16 +14876,20 @@ var Phaser = (function() {
           if (!fragmentShaderSource) {
             return "";
           }
-          var src = "vec4 getSampler (int index, vec2 uv) {";
+          var src = "";
           for (var i = 0; i < maxTextures; i++) {
-            if (i > 0 && i < maxTextures) {
-              src += "\nelse ";
+            if (i > 0) {
+              src += "\n	else ";
             }
-            src += "if (index == " + i + ") { return texture2D(uMainSampler[" + i + "], uv); }";
+            if (i < maxTextures - 1) {
+              src += "if (outTexId < " + i + ".5)";
+            }
+            src += "\n	{";
+            src += "\n		texture = texture2D(uMainSampler[" + i + "], outTexCoord);";
+            src += "\n	}";
           }
-          src += "\nreturn vec4(0);\n}";
-          fragmentShaderSource = fragmentShaderSource.replace(/%getSampler%/gi, src);
-          return fragmentShaderSource.replace(/%count%/gi, maxTextures.toString());
+          fragmentShaderSource = fragmentShaderSource.replace(/%count%/gi, maxTextures.toString());
+          return fragmentShaderSource.replace(/%forloop%/gi, src);
         }
       };
     }
@@ -14788,7 +15221,7 @@ var Phaser = (function() {
       var Events = require_events10();
       var GetFastValue = require_GetFastValue();
       var Matrix4 = require_Matrix4();
-      var RendererEvents = require_events2();
+      var RendererEvents = require_events8();
       var RenderTarget = require_RenderTarget();
       var Utils = require_Utils();
       var WebGLShader = require_WebGLShader();
@@ -14811,12 +15244,12 @@ var Phaser = (function() {
           this.vertexCapacity = 0;
           this.vertexData;
           this.vertexBuffer;
+          this.activeBuffer;
           this.topology = GetFastValue(config, "topology", gl.TRIANGLES);
           this.bytes;
           this.vertexViewF32;
           this.vertexViewU32;
           this.active = true;
-          this.currentUnit = 0;
           this.forceZero = GetFastValue(config, "forceZero", false);
           this.hasBooted = false;
           this.isPostFX = false;
@@ -14830,6 +15263,11 @@ var Phaser = (function() {
           this.projectionHeight = 0;
           this.config = config;
           this.glReset = false;
+          this.batch = [];
+          this.currentBatch = null;
+          this.currentTexture = null;
+          this.currentUnit = 0;
+          this.activeTextures = [];
         },
         boot: function() {
           var i;
@@ -14909,7 +15347,6 @@ var Phaser = (function() {
           var renderer = this.renderer;
           if (shader !== this.currentShader || renderer.currentProgram !== this.currentShader.program) {
             this.flush();
-            renderer.resetTextures();
             var wasBound = this.setVertexBuffer(vertexBuffer);
             if (wasBound && !setAttributes) {
               setAttributes = true;
@@ -14967,18 +15404,68 @@ var Phaser = (function() {
           }
           return this;
         },
+        createBatch: function(texture) {
+          this.currentBatch = {
+            start: this.vertexCount,
+            count: 0,
+            texture: [texture],
+            unit: 0,
+            maxUnit: 0
+          };
+          this.currentUnit = 0;
+          this.currentTexture = texture;
+          this.batch.push(this.currentBatch);
+          return 0;
+        },
+        addTextureToBatch: function(texture) {
+          var batch = this.currentBatch;
+          if (batch) {
+            batch.texture.push(texture);
+            batch.unit++;
+            batch.maxUnit++;
+          }
+        },
+        pushBatch: function(texture) {
+          if (!this.currentBatch || this.forceZero && texture !== this.currentTexture) {
+            return this.createBatch(texture);
+          }
+          if (texture === this.currentTexture) {
+            return this.currentUnit;
+          } else {
+            var current = this.currentBatch;
+            var idx = current.texture.indexOf(texture);
+            if (idx === -1) {
+              if (current.texture.length === this.renderer.maxTextures) {
+                return this.createBatch(texture);
+              } else {
+                current.unit++;
+                current.maxUnit++;
+                current.texture.push(texture);
+                this.currentUnit = current.unit;
+                this.currentTexture = texture;
+                return current.unit;
+              }
+            } else {
+              this.currentUnit = idx;
+              this.currentTexture = texture;
+              return idx;
+            }
+          }
+        },
         setGameObject: function(gameObject, frame) {
           if (frame === void 0) {
             frame = gameObject.frame;
           }
-          this.currentUnit = this.renderer.setTextureSource(frame.source);
-          return this.currentUnit;
+          return this.pushBatch(frame.source.glTexture);
         },
         shouldFlush: function(amount) {
           if (amount === void 0) {
             amount = 0;
           }
           return this.vertexCount + amount > this.vertexCapacity;
+        },
+        vertexAvailable: function() {
+          return this.vertexCapacity - this.vertexCount;
         },
         resize: function(width, height) {
           if (width !== this.width || height !== this.height) {
@@ -15047,14 +15534,22 @@ var Phaser = (function() {
           if (this.glReset) {
             return this.rebind(currentShader);
           }
-          var wasBound = this.setVertexBuffer();
+          var wasBound = false;
+          var gl = this.gl;
+          if (gl.getParameter(gl.ARRAY_BUFFER_BINDING) !== this.vertexBuffer) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+            this.activeBuffer = this.vertexBuffer;
+            wasBound = true;
+          }
           currentShader.bind(wasBound);
           this.currentShader = currentShader;
+          this.activeTextures.length = 0;
           this.emit(Events.BIND, this, currentShader);
           this.onActive(currentShader);
           return this;
         },
         rebind: function(currentShader) {
+          this.activeBuffer = null;
           this.setVertexBuffer();
           var shaders = this.shaders;
           for (var i = shaders.length - 1; i >= 0; i--) {
@@ -15063,6 +15558,7 @@ var Phaser = (function() {
               this.currentShader = shader;
             }
           }
+          this.activeTextures.length = 0;
           this.emit(Events.REBIND, this.currentShader);
           this.onActive(this.currentShader);
           this.onRebind();
@@ -15073,9 +15569,10 @@ var Phaser = (function() {
           if (buffer === void 0) {
             buffer = this.vertexBuffer;
           }
-          var gl = this.gl;
-          if (gl.getParameter(gl.ARRAY_BUFFER_BINDING) !== buffer) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+          if (buffer !== this.activeBuffer) {
+            var gl = this.gl;
+            this.gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            this.activeBuffer = buffer;
             return true;
           }
           return false;
@@ -15109,6 +15606,7 @@ var Phaser = (function() {
             var gl = this.gl;
             var vertexCount = this.vertexCount;
             var vertexSize = this.currentShader.vertexSize;
+            var topology = this.topology;
             if (this.active) {
               this.setVertexBuffer();
               if (vertexCount === this.vertexCapacity) {
@@ -15116,9 +15614,44 @@ var Phaser = (function() {
               } else {
                 gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.bytes.subarray(0, vertexCount * vertexSize));
               }
-              gl.drawArrays(this.topology, 0, vertexCount);
+              var i;
+              var entry;
+              var texture;
+              var batch = this.batch;
+              var activeTextures = this.activeTextures;
+              if (this.forceZero) {
+                if (!activeTextures[0]) {
+                  gl.activeTexture(gl.TEXTURE0);
+                }
+                for (i = 0; i < batch.length; i++) {
+                  entry = batch[i];
+                  texture = entry.texture[0];
+                  if (activeTextures[0] !== texture) {
+                    gl.bindTexture(gl.TEXTURE_2D, texture);
+                    activeTextures[0] = texture;
+                  }
+                  gl.drawArrays(topology, entry.start, entry.count);
+                }
+              } else {
+                for (i = 0; i < batch.length; i++) {
+                  entry = batch[i];
+                  for (var t = 0; t <= entry.maxUnit; t++) {
+                    texture = entry.texture[t];
+                    if (activeTextures[t] !== texture) {
+                      gl.activeTexture(gl.TEXTURE0 + t);
+                      gl.bindTexture(gl.TEXTURE_2D, texture);
+                      activeTextures[t] = texture;
+                    }
+                  }
+                  gl.drawArrays(topology, entry.start, entry.count);
+                }
+              }
             }
             this.vertexCount = 0;
+            this.batch.length = 0;
+            this.currentBatch = null;
+            this.currentTexture = null;
+            this.currentUnit = 0;
             this.emit(Events.AFTER_FLUSH, this, isPostFlush);
             this.onAfterFlush(isPostFlush);
           }
@@ -15158,6 +15691,7 @@ var Phaser = (function() {
           vertexViewF32[++vertexOffset] = tintEffect;
           vertexViewU32[++vertexOffset] = tint;
           this.vertexCount++;
+          this.currentBatch.count = this.vertexCount - this.currentBatch.start;
         },
         batchQuad: function(gameObject, x0, y0, x1, y1, x2, y2, x3, y3, u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, tintEffect, texture, unit) {
           if (unit === void 0) {
@@ -15167,14 +15701,57 @@ var Phaser = (function() {
           if (this.shouldFlush(6)) {
             this.flush();
             hasFlushed = true;
+          }
+          if (!this.currentBatch) {
             unit = this.setTexture2D(texture);
           }
-          this.batchVert(x0, y0, u0, v0, unit, tintEffect, tintTL);
-          this.batchVert(x1, y1, u0, v1, unit, tintEffect, tintBL);
-          this.batchVert(x2, y2, u1, v1, unit, tintEffect, tintBR);
-          this.batchVert(x0, y0, u0, v0, unit, tintEffect, tintTL);
-          this.batchVert(x2, y2, u1, v1, unit, tintEffect, tintBR);
-          this.batchVert(x3, y3, u1, v0, unit, tintEffect, tintTR);
+          var vertexViewF32 = this.vertexViewF32;
+          var vertexViewU32 = this.vertexViewU32;
+          var vertexOffset = this.vertexCount * this.currentShader.vertexComponentCount - 1;
+          vertexViewF32[++vertexOffset] = x0;
+          vertexViewF32[++vertexOffset] = y0;
+          vertexViewF32[++vertexOffset] = u0;
+          vertexViewF32[++vertexOffset] = v0;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintTL;
+          vertexViewF32[++vertexOffset] = x1;
+          vertexViewF32[++vertexOffset] = y1;
+          vertexViewF32[++vertexOffset] = u0;
+          vertexViewF32[++vertexOffset] = v1;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintBL;
+          vertexViewF32[++vertexOffset] = x2;
+          vertexViewF32[++vertexOffset] = y2;
+          vertexViewF32[++vertexOffset] = u1;
+          vertexViewF32[++vertexOffset] = v1;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintBR;
+          vertexViewF32[++vertexOffset] = x0;
+          vertexViewF32[++vertexOffset] = y0;
+          vertexViewF32[++vertexOffset] = u0;
+          vertexViewF32[++vertexOffset] = v0;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintTL;
+          vertexViewF32[++vertexOffset] = x2;
+          vertexViewF32[++vertexOffset] = y2;
+          vertexViewF32[++vertexOffset] = u1;
+          vertexViewF32[++vertexOffset] = v1;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintBR;
+          vertexViewF32[++vertexOffset] = x3;
+          vertexViewF32[++vertexOffset] = y3;
+          vertexViewF32[++vertexOffset] = u1;
+          vertexViewF32[++vertexOffset] = v0;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintTR;
+          this.vertexCount += 6;
+          this.currentBatch.count = this.vertexCount - this.currentBatch.start;
           this.onBatch(gameObject);
           return hasFlushed;
         },
@@ -15186,17 +15763,42 @@ var Phaser = (function() {
           if (this.shouldFlush(3)) {
             this.flush();
             hasFlushed = true;
+          }
+          if (!this.currentBatch) {
             unit = this.setTexture2D(texture);
           }
-          this.batchVert(x0, y0, u0, v0, unit, tintEffect, tintTL);
-          this.batchVert(x1, y1, u0, v1, unit, tintEffect, tintTR);
-          this.batchVert(x2, y2, u1, v1, unit, tintEffect, tintBL);
+          var vertexViewF32 = this.vertexViewF32;
+          var vertexViewU32 = this.vertexViewU32;
+          var vertexOffset = this.vertexCount * this.currentShader.vertexComponentCount - 1;
+          vertexViewF32[++vertexOffset] = x0;
+          vertexViewF32[++vertexOffset] = y0;
+          vertexViewF32[++vertexOffset] = u0;
+          vertexViewF32[++vertexOffset] = v0;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintTL;
+          vertexViewF32[++vertexOffset] = x1;
+          vertexViewF32[++vertexOffset] = y1;
+          vertexViewF32[++vertexOffset] = u0;
+          vertexViewF32[++vertexOffset] = v1;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintTR;
+          vertexViewF32[++vertexOffset] = x2;
+          vertexViewF32[++vertexOffset] = y2;
+          vertexViewF32[++vertexOffset] = u1;
+          vertexViewF32[++vertexOffset] = v1;
+          vertexViewF32[++vertexOffset] = unit;
+          vertexViewF32[++vertexOffset] = tintEffect;
+          vertexViewU32[++vertexOffset] = tintBL;
+          this.vertexCount += 3;
+          this.currentBatch.count = this.vertexCount - this.currentBatch.start;
           this.onBatch(gameObject);
           return hasFlushed;
         },
         drawFillRect: function(x, y, width, height, color, alpha, texture, flipUV) {
           if (texture === void 0) {
-            texture = this.renderer.whiteTexture.glTexture;
+            texture = this.renderer.whiteTexture;
           }
           if (flipUV === void 0) {
             flipUV = true;
@@ -15219,10 +15821,9 @@ var Phaser = (function() {
         },
         setTexture2D: function(texture) {
           if (texture === void 0) {
-            texture = this.renderer.whiteTexture.glTexture;
+            texture = this.renderer.whiteTexture;
           }
-          this.currentUnit = this.renderer.setTexture2D(texture);
-          return this.currentUnit;
+          return this.pushBatch(texture);
         },
         bindTexture: function(texture, unit) {
           if (unit === void 0) {
@@ -15412,6 +16013,7 @@ var Phaser = (function() {
           this.vertexBuffer = null;
           this.currentShader = null;
           this.currentRenderTarget = null;
+          this.activeTextures = null;
           return this;
         }
       });
@@ -15450,53 +16052,108 @@ var Phaser = (function() {
           this.set2f("uResolution", width, height);
         },
         beginMask: function(mask, maskedObject, camera) {
-          var gl = this.gl;
-          if (mask.bitmapMask && gl) {
-            var renderer = this.renderer;
-            renderer.flush();
-            renderer.pushFramebuffer(mask.mainFramebuffer);
-            gl.disable(gl.STENCIL_TEST);
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            if (renderer.currentCameraMask.mask !== mask) {
-              renderer.currentMask.mask = mask;
-              renderer.currentMask.camera = camera;
-            }
-          }
+          this.renderer.beginBitmapMask(mask, camera);
         },
-        endMask: function(mask, camera) {
+        endMask: function(mask, camera, renderTarget) {
           var gl = this.gl;
           var renderer = this.renderer;
           var bitmapMask = mask.bitmapMask;
           if (bitmapMask && gl) {
-            renderer.flush();
-            renderer.pushFramebuffer(mask.maskFramebuffer);
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            renderer.setBlendMode(0, true);
-            bitmapMask.renderWebGL(renderer, bitmapMask, camera);
-            renderer.flush();
-            renderer.popFramebuffer();
-            renderer.popFramebuffer();
-            var prev = renderer.getCurrentStencilMask();
-            if (prev) {
-              gl.enable(gl.STENCIL_TEST);
-              prev.mask.applyStencil(renderer, prev.camera, true);
-            } else {
-              renderer.currentMask.mask = null;
+            renderer.drawBitmapMask(bitmapMask, camera, this);
+            if (renderTarget) {
+              this.set2f("uResolution", renderTarget.width, renderTarget.height);
             }
-            renderer.pipelines.set(this);
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, mask.maskTexture);
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, mask.mainTexture);
             this.set1i("uInvertMaskAlpha", mask.invertAlpha);
             gl.drawArrays(this.topology, 0, 3);
-            renderer.resetTextures();
+            if (renderTarget) {
+              this.set2f("uResolution", this.width, this.height);
+            }
+            gl.bindTexture(gl.TEXTURE_2D, null);
           }
         }
       });
       module.exports = BitmapMaskPipeline;
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js
+  var require_Light_frag = __commonJS({
+    "../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js": function(exports, module) {
+      module.exports = [
+        "#define SHADER_NAME PHASER_LIGHT_FS",
+        "",
+        "precision mediump float;",
+        "",
+        "struct Light",
+        "{",
+        "    vec2 position;",
+        "    vec3 color;",
+        "    float intensity;",
+        "    float radius;",
+        "};",
+        "",
+        "const int kMaxLights = %LIGHT_COUNT%;",
+        "",
+        "uniform vec4 uCamera; /* x, y, rotation, zoom */",
+        "uniform vec2 uResolution;",
+        "uniform sampler2D uMainSampler;",
+        "uniform sampler2D uNormSampler;",
+        "uniform vec3 uAmbientLightColor;",
+        "uniform Light uLights[kMaxLights];",
+        "uniform mat3 uInverseRotationMatrix;",
+        "uniform int uLightCount;",
+        "",
+        "varying vec2 outTexCoord;",
+        "varying float outTexId;",
+        "varying float outTintEffect;",
+        "varying vec4 outTint;",
+        "",
+        "void main ()",
+        "{",
+        "    vec3 finalColor = vec3(0.0, 0.0, 0.0);",
+        "",
+        "    vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);",
+        "    vec4 texture = texture2D(uMainSampler, outTexCoord);",
+        "    //  Multiply texture tint",
+        "    vec4 color = texture * texel;",
+        "",
+        "    if (outTintEffect == 1.0)",
+        "    {",
+        "        //  Solid color + texture alpha",
+        "        color.rgb = mix(texture.rgb, outTint.bgr * outTint.a, texture.a);",
+        "    }",
+        "    else if (outTintEffect == 2.0)",
+        "    {",
+        "        //  Solid color, no texture",
+        "        color = texel;",
+        "    }",
+        "",
+        "    vec3 normalMap = texture2D(uNormSampler, outTexCoord).rgb;",
+        "    vec3 normal = normalize(uInverseRotationMatrix * vec3(normalMap * 2.0 - 1.0));",
+        "    vec2 res = vec2(min(uResolution.x, uResolution.y)) * uCamera.w;",
+        "",
+        "    for (int index = 0; index < kMaxLights; ++index)",
+        "    {",
+        "        if (index < uLightCount)",
+        "        {",
+        "            Light light = uLights[index];",
+        "            vec3 lightDir = vec3((light.position.xy / res) - (gl_FragCoord.xy / res), 0.1);",
+        "            vec3 lightNormal = normalize(lightDir);",
+        "            float distToSurf = length(lightDir) * uCamera.w;",
+        "            float diffuseFactor = max(dot(normal, lightNormal), 0.0);",
+        "            float radius = (light.radius / res.x * uCamera.w) * uCamera.w;",
+        "            float attenuation = clamp(1.0 - distToSurf * distToSurf / (radius * radius), 0.0, 1.0);",
+        "            vec3 diffuse = light.color * diffuseFactor;",
+        "            finalColor += (attenuation * diffuse) * light.intensity;",
+        "        }",
+        "    }",
+        "",
+        "    vec4 colorOutput = vec4(uAmbientLightColor + finalColor, 1.0);",
+        "",
+        "    gl_FragColor = color * vec4(colorOutput.rgb * colorOutput.a, colorOutput.a);",
+        "}",
+        ""
+      ].join("\n");
     }
   });
 
@@ -15528,9 +16185,9 @@ var Phaser = (function() {
               maxY = y;
           }
           invSize = Math.max(maxX - minX, maxY - minY);
-          invSize = invSize !== 0 ? 1 / invSize : 0;
+          invSize = invSize !== 0 ? 32767 / invSize : 0;
         }
-        earcutLinked(outerNode, triangles, dim, minX, minY, invSize);
+        earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
         return triangles;
       }
       function linkedList(data, start, end, dim, clockwise) {
@@ -15578,9 +16235,9 @@ var Phaser = (function() {
           prev = ear.prev;
           next = ear.next;
           if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
-            triangles.push(prev.i / dim);
-            triangles.push(ear.i / dim);
-            triangles.push(next.i / dim);
+            triangles.push(prev.i / dim | 0);
+            triangles.push(ear.i / dim | 0);
+            triangles.push(next.i / dim | 0);
             removeNode(ear);
             ear = next.next;
             stop = next.next;
@@ -15604,9 +16261,11 @@ var Phaser = (function() {
         var a = ear.prev, b = ear, c = ear.next;
         if (area(a, b, c) >= 0)
           return false;
-        var p = ear.next.next;
-        while (p !== ear.prev) {
-          if (pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+        var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
+        var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx, y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy, x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx, y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
+        var p = c.next;
+        while (p !== a) {
+          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0)
             return false;
           p = p.next;
         }
@@ -15616,24 +16275,25 @@ var Phaser = (function() {
         var a = ear.prev, b = ear, c = ear.next;
         if (area(a, b, c) >= 0)
           return false;
-        var minTX = a.x < b.x ? a.x < c.x ? a.x : c.x : b.x < c.x ? b.x : c.x, minTY = a.y < b.y ? a.y < c.y ? a.y : c.y : b.y < c.y ? b.y : c.y, maxTX = a.x > b.x ? a.x > c.x ? a.x : c.x : b.x > c.x ? b.x : c.x, maxTY = a.y > b.y ? a.y > c.y ? a.y : c.y : b.y > c.y ? b.y : c.y;
-        var minZ = zOrder(minTX, minTY, minX, minY, invSize), maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
+        var ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
+        var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx, y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy, x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx, y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
+        var minZ = zOrder(x0, y0, minX, minY, invSize), maxZ = zOrder(x1, y1, minX, minY, invSize);
         var p = ear.prevZ, n = ear.nextZ;
         while (p && p.z >= minZ && n && n.z <= maxZ) {
-          if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0)
             return false;
           p = p.prevZ;
-          if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
+          if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0)
             return false;
           n = n.nextZ;
         }
         while (p && p.z >= minZ) {
-          if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+          if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0)
             return false;
           p = p.prevZ;
         }
         while (n && n.z <= maxZ) {
-          if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
+          if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0)
             return false;
           n = n.nextZ;
         }
@@ -15644,9 +16304,9 @@ var Phaser = (function() {
         do {
           var a = p.prev, b = p.next.next;
           if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
-            triangles.push(a.i / dim);
-            triangles.push(p.i / dim);
-            triangles.push(b.i / dim);
+            triangles.push(a.i / dim | 0);
+            triangles.push(p.i / dim | 0);
+            triangles.push(b.i / dim | 0);
             removeNode(p);
             removeNode(p.next);
             p = start = b;
@@ -15664,8 +16324,8 @@ var Phaser = (function() {
               var c = splitPolygon(a, b);
               a = filterPoints(a, a.next);
               c = filterPoints(c, c.next);
-              earcutLinked(a, triangles, dim, minX, minY, invSize);
-              earcutLinked(c, triangles, dim, minX, minY, invSize);
+              earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
+              earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
               return;
             }
             b = b.next;
@@ -15685,8 +16345,7 @@ var Phaser = (function() {
         }
         queue.sort(compareX);
         for (i = 0; i < queue.length; i++) {
-          eliminateHole(queue[i], outerNode);
-          outerNode = filterPoints(outerNode, outerNode.next);
+          outerNode = eliminateHole(queue[i], outerNode);
         }
         return outerNode;
       }
@@ -15694,12 +16353,13 @@ var Phaser = (function() {
         return a.x - b.x;
       }
       function eliminateHole(hole, outerNode) {
-        outerNode = findHoleBridge(hole, outerNode);
-        if (outerNode) {
-          var b = splitPolygon(outerNode, hole);
-          filterPoints(outerNode, outerNode.next);
-          filterPoints(b, b.next);
+        var bridge = findHoleBridge(hole, outerNode);
+        if (!bridge) {
+          return outerNode;
         }
+        var bridgeReverse = splitPolygon(bridge, hole);
+        filterPoints(bridgeReverse, bridgeReverse.next);
+        return filterPoints(bridge, bridge.next);
       }
       function findHoleBridge(hole, outerNode) {
         var p = outerNode, hx = hole.x, hy = hole.y, qx = -Infinity, m;
@@ -15708,21 +16368,15 @@ var Phaser = (function() {
             var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
             if (x <= hx && x > qx) {
               qx = x;
-              if (x === hx) {
-                if (hy === p.y)
-                  return p;
-                if (hy === p.next.y)
-                  return p.next;
-              }
               m = p.x < p.next.x ? p : p.next;
+              if (x === hx)
+                return m;
             }
           }
           p = p.next;
         } while (p !== outerNode);
         if (!m)
           return null;
-        if (hx === qx)
-          return m;
         var stop = m, mx = m.x, my = m.y, tanMin = Infinity, tan;
         p = m;
         do {
@@ -15743,7 +16397,7 @@ var Phaser = (function() {
       function indexCurve(start, minX, minY, invSize) {
         var p = start;
         do {
-          if (p.z === null)
+          if (p.z === 0)
             p.z = zOrder(p.x, p.y, minX, minY, invSize);
           p.prevZ = p.prev;
           p.nextZ = p.next;
@@ -15796,8 +16450,8 @@ var Phaser = (function() {
         return list;
       }
       function zOrder(x, y, minX, minY, invSize) {
-        x = 32767 * (x - minX) * invSize;
-        y = 32767 * (y - minY) * invSize;
+        x = (x - minX) * invSize | 0;
+        y = (y - minY) * invSize | 0;
         x = (x | x << 8) & 16711935;
         x = (x | x << 4) & 252645135;
         x = (x | x << 2) & 858993459;
@@ -15818,7 +16472,7 @@ var Phaser = (function() {
         return leftmost;
       }
       function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
-        return (cx - px) * (ay - py) - (ax - px) * (cy - py) >= 0 && (ax - px) * (by - py) - (bx - px) * (ay - py) >= 0 && (bx - px) * (cy - py) - (cx - px) * (by - py) >= 0;
+        return (cx - px) * (ay - py) >= (ax - px) * (cy - py) && (ax - px) * (by - py) >= (bx - px) * (ay - py) && (bx - px) * (cy - py) >= (cx - px) * (by - py);
       }
       function isValidDiagonal(a, b) {
         return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && (area(a.prev, a, b.prev) || area(a, b.prev, b)) || equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0);
@@ -15912,7 +16566,7 @@ var Phaser = (function() {
         this.y = y;
         this.prev = null;
         this.next = null;
-        this.z = null;
+        this.z = 0;
         this.prevZ = null;
         this.nextZ = null;
         this.steiner = false;
@@ -15963,364 +16617,17 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/renderer/webgl/shaders/Graphics-frag.js
-  var require_Graphics_frag = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/shaders/Graphics-frag.js": function(exports, module) {
-      module.exports = [
-        "#define SHADER_NAME PHASER_GRAPHICS_FS",
-        "",
-        "precision mediump float;",
-        "",
-        "varying vec4 outColor;",
-        "",
-        "void main ()",
-        "{",
-        "    gl_FragColor = vec4(outColor.bgr * outColor.a, outColor.a);",
-        "}",
-        ""
-      ].join("\n");
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/webgl/shaders/Graphics-vert.js
-  var require_Graphics_vert = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/shaders/Graphics-vert.js": function(exports, module) {
-      module.exports = [
-        "#define SHADER_NAME PHASER_GRAPHICS_VS",
-        "",
-        "precision mediump float;",
-        "",
-        "uniform mat4 uProjectionMatrix;",
-        "",
-        "attribute vec2 inPosition;",
-        "attribute vec4 inColor;",
-        "",
-        "varying vec4 outColor;",
-        "",
-        "void main ()",
-        "{",
-        "    gl_Position = uProjectionMatrix * vec4(inPosition, 1.0, 1.0);",
-        "",
-        "    outColor = inColor;",
-        "}",
-        ""
-      ].join("\n");
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/webgl/pipelines/GraphicsPipeline.js
-  var require_GraphicsPipeline = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/pipelines/GraphicsPipeline.js": function(exports, module) {
-      var Class = require_Class();
-      var Earcut = require_Earcut();
-      var GetFastValue = require_GetFastValue();
-      var ShaderSourceFS = require_Graphics_frag();
-      var ShaderSourceVS = require_Graphics_vert();
-      var TransformMatrix = require_TransformMatrix();
-      var WEBGL_CONST = require_const7();
-      var WebGLPipeline = require_WebGLPipeline();
-      var GraphicsPipeline = new Class({
-        Extends: WebGLPipeline,
-        initialize: function GraphicsPipeline2(config) {
-          config.fragShader = GetFastValue(config, "fragShader", ShaderSourceFS);
-          config.vertShader = GetFastValue(config, "vertShader", ShaderSourceVS);
-          config.attributes = GetFastValue(config, "attributes", [
-            {
-              name: "inPosition",
-              size: 2
-            },
-            {
-              name: "inColor",
-              size: 4,
-              type: WEBGL_CONST.UNSIGNED_BYTE,
-              normalized: true
-            }
-          ]);
-          WebGLPipeline.call(this, config);
-          this.calcMatrix = new TransformMatrix();
-          this.tempTriangle = [
-            { x: 0, y: 0, width: 0 },
-            { x: 0, y: 0, width: 0 },
-            { x: 0, y: 0, width: 0 },
-            { x: 0, y: 0, width: 0 }
-          ];
-          this.strokeTint = { TL: 0, TR: 0, BL: 0, BR: 0 };
-          this.fillTint = { TL: 0, TR: 0, BL: 0, BR: 0 };
-          this.currentFrame = { u0: 0, v0: 0, u1: 1, v1: 1 };
-          this.firstQuad = [0, 0, 0, 0, 0];
-          this.prevQuad = [0, 0, 0, 0, 0];
-          this.polygonCache = [];
-        },
-        batchFillRect: function(x, y, width, height, currentMatrix, parentMatrix) {
-          this.renderer.pipelines.set(this);
-          var calcMatrix = this.calcMatrix;
-          if (parentMatrix) {
-            parentMatrix.multiply(currentMatrix, calcMatrix);
-          }
-          var xw = x + width;
-          var yh = y + height;
-          var x0 = calcMatrix.getX(x, y);
-          var y0 = calcMatrix.getY(x, y);
-          var x1 = calcMatrix.getX(x, yh);
-          var y1 = calcMatrix.getY(x, yh);
-          var x2 = calcMatrix.getX(xw, yh);
-          var y2 = calcMatrix.getY(xw, yh);
-          var x3 = calcMatrix.getX(xw, y);
-          var y3 = calcMatrix.getY(xw, y);
-          var tint = this.fillTint;
-          this.batchQuad(x0, y0, x1, y1, x2, y2, x3, y3, tint.TL, tint.TR, tint.BL, tint.BR);
-        },
-        batchFillTriangle: function(x0, y0, x1, y1, x2, y2, currentMatrix, parentMatrix) {
-          this.renderer.pipelines.set(this);
-          var calcMatrix = this.calcMatrix;
-          if (parentMatrix) {
-            parentMatrix.multiply(currentMatrix, calcMatrix);
-          }
-          var tx0 = calcMatrix.getX(x0, y0);
-          var ty0 = calcMatrix.getY(x0, y0);
-          var tx1 = calcMatrix.getX(x1, y1);
-          var ty1 = calcMatrix.getY(x1, y1);
-          var tx2 = calcMatrix.getX(x2, y2);
-          var ty2 = calcMatrix.getY(x2, y2);
-          var tint = this.fillTint;
-          this.batchTri(tx0, ty0, tx1, ty1, tx2, ty2, tint.TL, tint.TR, tint.BL);
-        },
-        batchStrokeTriangle: function(x0, y0, x1, y1, x2, y2, lineWidth, currentMatrix, parentMatrix) {
-          var tempTriangle = this.tempTriangle;
-          tempTriangle[0].x = x0;
-          tempTriangle[0].y = y0;
-          tempTriangle[0].width = lineWidth;
-          tempTriangle[1].x = x1;
-          tempTriangle[1].y = y1;
-          tempTriangle[1].width = lineWidth;
-          tempTriangle[2].x = x2;
-          tempTriangle[2].y = y2;
-          tempTriangle[2].width = lineWidth;
-          tempTriangle[3].x = x0;
-          tempTriangle[3].y = y0;
-          tempTriangle[3].width = lineWidth;
-          this.batchStrokePath(tempTriangle, lineWidth, false, currentMatrix, parentMatrix);
-        },
-        batchFillPath: function(path, currentMatrix, parentMatrix) {
-          this.renderer.pipelines.set(this);
-          var calcMatrix = this.calcMatrix;
-          if (parentMatrix) {
-            parentMatrix.multiply(currentMatrix, calcMatrix);
-          }
-          var length = path.length;
-          var polygonCache = this.polygonCache;
-          var polygonIndexArray;
-          var point;
-          var tintTL = this.fillTint.TL;
-          var tintTR = this.fillTint.TR;
-          var tintBL = this.fillTint.BL;
-          for (var pathIndex = 0; pathIndex < length; ++pathIndex) {
-            point = path[pathIndex];
-            polygonCache.push(point.x, point.y);
-          }
-          polygonIndexArray = Earcut(polygonCache);
-          length = polygonIndexArray.length;
-          for (var index = 0; index < length; index += 3) {
-            var p0 = polygonIndexArray[index + 0] * 2;
-            var p1 = polygonIndexArray[index + 1] * 2;
-            var p2 = polygonIndexArray[index + 2] * 2;
-            var x0 = polygonCache[p0 + 0];
-            var y0 = polygonCache[p0 + 1];
-            var x1 = polygonCache[p1 + 0];
-            var y1 = polygonCache[p1 + 1];
-            var x2 = polygonCache[p2 + 0];
-            var y2 = polygonCache[p2 + 1];
-            var tx0 = calcMatrix.getX(x0, y0);
-            var ty0 = calcMatrix.getY(x0, y0);
-            var tx1 = calcMatrix.getX(x1, y1);
-            var ty1 = calcMatrix.getY(x1, y1);
-            var tx2 = calcMatrix.getX(x2, y2);
-            var ty2 = calcMatrix.getY(x2, y2);
-            this.batchTri(tx0, ty0, tx1, ty1, tx2, ty2, tintTL, tintTR, tintBL);
-          }
-          polygonCache.length = 0;
-        },
-        batchStrokePath: function(path, lineWidth, pathOpen, currentMatrix, parentMatrix) {
-          this.renderer.pipelines.set(this);
-          this.prevQuad[4] = 0;
-          this.firstQuad[4] = 0;
-          var pathLength = path.length - 1;
-          for (var pathIndex = 0; pathIndex < pathLength; pathIndex++) {
-            var point0 = path[pathIndex];
-            var point1 = path[pathIndex + 1];
-            this.batchLine(point0.x, point0.y, point1.x, point1.y, point0.width / 2, point1.width / 2, lineWidth, pathIndex, !pathOpen && pathIndex === pathLength - 1, currentMatrix, parentMatrix);
-          }
-        },
-        batchLine: function(ax, ay, bx, by, aLineWidth, bLineWidth, lineWidth, index, closePath, currentMatrix, parentMatrix) {
-          this.renderer.pipelines.set(this);
-          var calcMatrix = this.calcMatrix;
-          if (parentMatrix) {
-            parentMatrix.multiply(currentMatrix, calcMatrix);
-          }
-          var dx = bx - ax;
-          var dy = by - ay;
-          var len = Math.sqrt(dx * dx + dy * dy);
-          var al0 = aLineWidth * (by - ay) / len;
-          var al1 = aLineWidth * (ax - bx) / len;
-          var bl0 = bLineWidth * (by - ay) / len;
-          var bl1 = bLineWidth * (ax - bx) / len;
-          var lx0 = bx - bl0;
-          var ly0 = by - bl1;
-          var lx1 = ax - al0;
-          var ly1 = ay - al1;
-          var lx2 = bx + bl0;
-          var ly2 = by + bl1;
-          var lx3 = ax + al0;
-          var ly3 = ay + al1;
-          var brX = calcMatrix.getX(lx0, ly0);
-          var brY = calcMatrix.getY(lx0, ly0);
-          var blX = calcMatrix.getX(lx1, ly1);
-          var blY = calcMatrix.getY(lx1, ly1);
-          var trX = calcMatrix.getX(lx2, ly2);
-          var trY = calcMatrix.getY(lx2, ly2);
-          var tlX = calcMatrix.getX(lx3, ly3);
-          var tlY = calcMatrix.getY(lx3, ly3);
-          var tint = this.strokeTint;
-          var tintTL = tint.TL;
-          var tintTR = tint.TR;
-          var tintBL = tint.BL;
-          var tintBR = tint.BR;
-          this.batchQuad(tlX, tlY, blX, blY, brX, brY, trX, trY, tintTL, tintTR, tintBL, tintBR);
-          if (lineWidth <= 2) {
-            return;
-          }
-          var prev = this.prevQuad;
-          var first = this.firstQuad;
-          if (index > 0 && prev[4]) {
-            this.batchQuad(tlX, tlY, blX, blY, prev[0], prev[1], prev[2], prev[3], tintTL, tintTR, tintBL, tintBR);
-          } else {
-            first[0] = tlX;
-            first[1] = tlY;
-            first[2] = blX;
-            first[3] = blY;
-            first[4] = 1;
-          }
-          if (closePath && first[4]) {
-            this.batchQuad(brX, brY, trX, trY, first[0], first[1], first[2], first[3], tintTL, tintTR, tintBL, tintBR);
-          } else {
-            prev[0] = brX;
-            prev[1] = brY;
-            prev[2] = trX;
-            prev[3] = trY;
-            prev[4] = 1;
-          }
-        },
-        batchVert: function(x, y, tint) {
-          var vertexViewF32 = this.vertexViewF32;
-          var vertexViewU32 = this.vertexViewU32;
-          var vertexOffset = this.vertexCount * this.currentShader.vertexComponentCount - 1;
-          vertexViewF32[++vertexOffset] = x;
-          vertexViewF32[++vertexOffset] = y;
-          vertexViewU32[++vertexOffset] = tint;
-          this.vertexCount++;
-        },
-        batchQuad: function(x0, y0, x1, y1, x2, y2, x3, y3, tintTL, tintTR, tintBL, tintBR) {
-          var hasFlushed = false;
-          if (this.shouldFlush(6)) {
-            this.flush();
-            hasFlushed = true;
-          }
-          this.batchVert(x0, y0, tintTL);
-          this.batchVert(x1, y1, tintBL);
-          this.batchVert(x2, y2, tintBR);
-          this.batchVert(x0, y0, tintTL);
-          this.batchVert(x2, y2, tintBR);
-          this.batchVert(x3, y3, tintTR);
-          return hasFlushed;
-        },
-        batchTri: function(x0, y0, x1, y1, x2, y2, tintTL, tintTR, tintBL) {
-          var hasFlushed = false;
-          if (this.shouldFlush(3)) {
-            this.flush();
-            hasFlushed = true;
-          }
-          this.batchVert(x0, y0, tintTL);
-          this.batchVert(x1, y1, tintTR);
-          this.batchVert(x2, y2, tintBL);
-          return hasFlushed;
-        },
-        destroy: function() {
-          WebGLPipeline.prototype.destroy.call(this);
-          this.polygonCache = null;
-          return this;
-        }
-      });
-      module.exports = GraphicsPipeline;
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js
-  var require_Light_frag = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js": function(exports, module) {
-      module.exports = [
-        "#define SHADER_NAME PHASER_LIGHT_FS",
-        "",
-        "precision mediump float;",
-        "",
-        "struct Light",
-        "{",
-        "    vec2 position;",
-        "    vec3 color;",
-        "    float intensity;",
-        "    float radius;",
-        "};",
-        "",
-        "const int kMaxLights = %LIGHT_COUNT%;",
-        "",
-        "uniform vec4 uCamera; /* x, y, rotation, zoom */",
-        "uniform vec2 uResolution;",
-        "uniform sampler2D uMainSampler;",
-        "uniform sampler2D uNormSampler;",
-        "uniform vec3 uAmbientLightColor;",
-        "uniform Light uLights[kMaxLights];",
-        "uniform mat3 uInverseRotationMatrix;",
-        "",
-        "varying vec2 outTexCoord;",
-        "varying vec4 outTint;",
-        "",
-        "void main()",
-        "{",
-        "    vec3 finalColor = vec3(0.0, 0.0, 0.0);",
-        "    vec4 color = texture2D(uMainSampler, outTexCoord) * vec4(outTint.bgr * outTint.a, outTint.a);",
-        "    vec3 normalMap = texture2D(uNormSampler, outTexCoord).rgb;",
-        "    vec3 normal = normalize(uInverseRotationMatrix * vec3(normalMap * 2.0 - 1.0));",
-        "    vec2 res = vec2(min(uResolution.x, uResolution.y)) * uCamera.w;",
-        "",
-        "    for (int index = 0; index < kMaxLights; ++index)",
-        "    {",
-        "        Light light = uLights[index];",
-        "        vec3 lightDir = vec3((light.position.xy / res) - (gl_FragCoord.xy / res), 0.1);",
-        "        vec3 lightNormal = normalize(lightDir);",
-        "        float distToSurf = length(lightDir) * uCamera.w;",
-        "        float diffuseFactor = max(dot(normal, lightNormal), 0.0);",
-        "        float radius = (light.radius / res.x * uCamera.w) * uCamera.w;",
-        "        float attenuation = clamp(1.0 - distToSurf * distToSurf / (radius * radius), 0.0, 1.0);",
-        "        vec3 diffuse = light.color * diffuseFactor;",
-        "        finalColor += (attenuation * diffuse) * light.intensity;",
-        "    }",
-        "",
-        "    vec4 colorOutput = vec4(uAmbientLightColor + finalColor, 1.0);",
-        "",
-        "    gl_FragColor = color * vec4(colorOutput.rgb * colorOutput.a, colorOutput.a);",
-        "}",
-        ""
-      ].join("\n");
-    }
-  });
-
   // ../../node_modules/phaser/src/renderer/webgl/shaders/Multi-frag.js
   var require_Multi_frag = __commonJS({
     "../../node_modules/phaser/src/renderer/webgl/shaders/Multi-frag.js": function(exports, module) {
       module.exports = [
-        "#define SHADER_NAME PHASER_MULTI_V2_FS",
-        "#define numTextures %count%",
+        "#define SHADER_NAME PHASER_MULTI_FS",
         "",
+        "#ifdef GL_FRAGMENT_PRECISION_HIGH",
         "precision highp float;",
+        "#else",
+        "precision mediump float;",
+        "#endif",
         "",
         "uniform sampler2D uMainSampler[%count%];",
         "",
@@ -16329,13 +16636,13 @@ var Phaser = (function() {
         "varying float outTintEffect;",
         "varying vec4 outTint;",
         "",
-        "%getSampler%",
-        "",
         "void main ()",
         "{",
-        "    vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);",
+        "    vec4 texture;",
         "",
-        "    vec4 texture = getSampler(int(outTexId), outTexCoord);",
+        "    %forloop%",
+        "",
+        "    vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);",
         "",
         "    //  Multiply texture tint",
         "    vec4 color = texture * texel;",
@@ -16364,7 +16671,11 @@ var Phaser = (function() {
       module.exports = [
         "#define SHADER_NAME PHASER_MULTI_VS",
         "",
+        "#ifdef GL_FRAGMENT_PRECISION_HIGH",
         "precision highp float;",
+        "#else",
+        "precision mediump float;",
+        "#endif",
         "",
         "uniform mat4 uProjectionMatrix;",
         "",
@@ -16506,28 +16817,24 @@ var Phaser = (function() {
             }
             flipY = -1;
           }
-          spriteMatrix.applyITRS(gameObject.x, gameObject.y, gameObject.rotation, gameObject.scaleX * flipX, gameObject.scaleY * flipY);
+          var gx = gameObject.x;
+          var gy = gameObject.y;
+          if (camera.roundPixels) {
+            gx = Math.floor(gx);
+            gy = Math.floor(gy);
+          }
+          spriteMatrix.applyITRS(gx, gy, gameObject.rotation, gameObject.scaleX * flipX, gameObject.scaleY * flipY);
           camMatrix.copyFrom(camera.matrix);
           if (parentTransformMatrix) {
             camMatrix.multiplyWithOffset(parentTransformMatrix, -camera.scrollX * gameObject.scrollFactorX, -camera.scrollY * gameObject.scrollFactorY);
-            spriteMatrix.e = gameObject.x;
-            spriteMatrix.f = gameObject.y;
+            spriteMatrix.e = gx;
+            spriteMatrix.f = gy;
           } else {
             spriteMatrix.e -= camera.scrollX * gameObject.scrollFactorX;
             spriteMatrix.f -= camera.scrollY * gameObject.scrollFactorY;
           }
           camMatrix.multiply(spriteMatrix, calcMatrix);
-          var xw = x + frameWidth;
-          var yh = y + frameHeight;
-          var roundPixels = camera.roundPixels;
-          var tx0 = calcMatrix.getXRound(x, y, roundPixels);
-          var tx1 = calcMatrix.getXRound(x, yh, roundPixels);
-          var tx2 = calcMatrix.getXRound(xw, yh, roundPixels);
-          var tx3 = calcMatrix.getXRound(xw, y, roundPixels);
-          var ty0 = calcMatrix.getYRound(x, y, roundPixels);
-          var ty1 = calcMatrix.getYRound(x, yh, roundPixels);
-          var ty2 = calcMatrix.getYRound(xw, yh, roundPixels);
-          var ty3 = calcMatrix.getYRound(xw, y, roundPixels);
+          var quad = calcMatrix.setQuad(x, y, x + frameWidth, y + frameHeight, false);
           var getTint = Utils.getTintAppendFloatAlpha;
           var cameraAlpha = camera.alpha;
           var tintTL = getTint(gameObject.tintTopLeft, cameraAlpha * gameObject._alphaTL);
@@ -16539,7 +16846,7 @@ var Phaser = (function() {
           }
           var unit = this.setGameObject(gameObject, frame);
           this.manager.preBatch(gameObject);
-          this.batchQuad(gameObject, tx0, ty0, tx1, ty1, tx2, ty2, tx3, ty3, u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, gameObject.tintFill, texture, unit);
+          this.batchQuad(gameObject, quad[0], quad[1], quad[2], quad[3], quad[4], quad[5], quad[6], quad[7], u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, gameObject.tintFill, texture, unit);
           this.manager.postBatch(gameObject);
         },
         batchTexture: function(gameObject, texture, textureWidth, textureHeight, srcX, srcY, srcWidth, srcHeight, scaleX, scaleY, rotation, flipX, flipY, scrollFactorX, scrollFactorY, displayOriginX, displayOriginY, frameX, frameY, frameWidth, frameHeight, tintTL, tintTR, tintBL, tintBR, tintEffect, uOffset, vOffset, camera, parentTransformMatrix, skipFlip, textureUnit) {
@@ -16589,8 +16896,10 @@ var Phaser = (function() {
             height *= -1;
             y += srcHeight;
           }
-          var xw = x + width;
-          var yh = y + height;
+          if (camera.roundPixels) {
+            srcX = Math.floor(srcX);
+            srcY = Math.floor(srcY);
+          }
           spriteMatrix.applyITRS(srcX, srcY, rotation, scaleX, scaleY);
           camMatrix.copyFrom(camera.matrix);
           if (parentTransformMatrix) {
@@ -16602,22 +16911,14 @@ var Phaser = (function() {
             spriteMatrix.f -= camera.scrollY * scrollFactorY;
           }
           camMatrix.multiply(spriteMatrix, calcMatrix);
-          var roundPixels = camera.roundPixels;
-          var tx0 = calcMatrix.getXRound(x, y, roundPixels);
-          var ty0 = calcMatrix.getYRound(x, y, roundPixels);
-          var tx1 = calcMatrix.getXRound(x, yh, roundPixels);
-          var ty1 = calcMatrix.getYRound(x, yh, roundPixels);
-          var tx2 = calcMatrix.getXRound(xw, yh, roundPixels);
-          var ty2 = calcMatrix.getYRound(xw, yh, roundPixels);
-          var tx3 = calcMatrix.getXRound(xw, y, roundPixels);
-          var ty3 = calcMatrix.getYRound(xw, y, roundPixels);
+          var quad = calcMatrix.setQuad(x, y, x + width, y + height, false);
           if (textureUnit === void 0) {
-            textureUnit = this.renderer.setTexture2D(texture);
+            textureUnit = this.setTexture2D(texture);
           }
           if (gameObject) {
             this.manager.preBatch(gameObject);
           }
-          this.batchQuad(gameObject, tx0, ty0, tx1, ty1, tx2, ty2, tx3, ty3, u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, tintEffect, texture, textureUnit);
+          this.batchQuad(gameObject, quad[0], quad[1], quad[2], quad[3], quad[4], quad[5], quad[6], quad[7], u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, tintEffect, texture, textureUnit);
           if (gameObject) {
             this.manager.postBatch(gameObject);
           }
@@ -16626,24 +16927,15 @@ var Phaser = (function() {
           this.manager.set(this);
           var spriteMatrix = this._tempMatrix1.copyFrom(transformMatrix);
           var calcMatrix = this._tempMatrix2;
-          var xw = x + frame.width;
-          var yh = y + frame.height;
           if (parentTransformMatrix) {
             spriteMatrix.multiply(parentTransformMatrix, calcMatrix);
           } else {
             calcMatrix = spriteMatrix;
           }
-          var tx0 = calcMatrix.getX(x, y);
-          var ty0 = calcMatrix.getY(x, y);
-          var tx1 = calcMatrix.getX(x, yh);
-          var ty1 = calcMatrix.getY(x, yh);
-          var tx2 = calcMatrix.getX(xw, yh);
-          var ty2 = calcMatrix.getY(xw, yh);
-          var tx3 = calcMatrix.getX(xw, y);
-          var ty3 = calcMatrix.getY(xw, y);
-          var unit = this.renderer.setTextureSource(frame.source);
+          var quad = calcMatrix.setQuad(x, y, x + frame.width, y + frame.height, false);
+          var unit = this.setTexture2D(frame.source.glTexture);
           tint = Utils.getTintAppendFloatAlpha(tint, alpha);
-          this.batchQuad(null, tx0, ty0, tx1, ty1, tx2, ty2, tx3, ty3, frame.u0, frame.v0, frame.u1, frame.v1, tint, tint, tint, tint, 0, frame.glTexture, unit);
+          this.batchQuad(null, quad[0], quad[1], quad[2], quad[3], quad[4], quad[5], quad[6], quad[7], frame.u0, frame.v0, frame.u1, frame.v1, tint, tint, tint, tint, 0, frame.glTexture, unit);
         },
         batchFillRect: function(x, y, width, height, currentMatrix, parentMatrix) {
           this.renderer.pipelines.set(this);
@@ -16651,18 +16943,9 @@ var Phaser = (function() {
           if (parentMatrix) {
             parentMatrix.multiply(currentMatrix, calcMatrix);
           }
-          var xw = x + width;
-          var yh = y + height;
-          var x0 = calcMatrix.getX(x, y);
-          var y0 = calcMatrix.getY(x, y);
-          var x1 = calcMatrix.getX(x, yh);
-          var y1 = calcMatrix.getY(x, yh);
-          var x2 = calcMatrix.getX(xw, yh);
-          var y2 = calcMatrix.getY(xw, yh);
-          var x3 = calcMatrix.getX(xw, y);
-          var y3 = calcMatrix.getY(xw, y);
+          var quad = calcMatrix.setQuad(x, y, x + width, y + height, false);
           var tint = this.fillTint;
-          this.batchQuad(null, x0, y0, x1, y1, x2, y2, x3, y3, 0, 0, 1, 1, tint.TL, tint.TR, tint.BL, tint.BR, 2);
+          this.batchQuad(null, quad[0], quad[1], quad[2], quad[3], quad[4], quad[5], quad[6], quad[7], 0, 0, 1, 1, tint.TL, tint.TR, tint.BL, tint.BR, 2);
         },
         batchFillTriangle: function(x0, y0, x1, y1, x2, y2, currentMatrix, parentMatrix) {
           this.renderer.pipelines.set(this);
@@ -16754,6 +17037,9 @@ var Phaser = (function() {
           var dx = bx - ax;
           var dy = by - ay;
           var len = Math.sqrt(dx * dx + dy * dy);
+          if (len === 0) {
+            return;
+          }
           var al0 = aLineWidth * (by - ay) / len;
           var al1 = aLineWidth * (ax - bx) / len;
           var bl0 = bLineWidth * (by - ay) / len;
@@ -16803,6 +17089,16 @@ var Phaser = (function() {
             prev[3] = trY;
             prev[4] = 1;
           }
+        },
+        destroy: function() {
+          this._tempMatrix1.destroy();
+          this._tempMatrix2.destroy();
+          this._tempMatrix3.destroy();
+          this._tempMatrix1 = null;
+          this._tempMatrix1 = null;
+          this._tempMatrix1 = null;
+          WebGLPipeline.prototype.destroy.call(this);
+          return this;
         }
       });
       module.exports = MultiPipeline;
@@ -16816,23 +17112,14 @@ var Phaser = (function() {
       var GetFastValue = require_GetFastValue();
       var LightShaderSourceFS = require_Light_frag();
       var MultiPipeline = require_MultiPipeline();
+      var TransformMatrix = require_TransformMatrix();
       var Vec2 = require_Vector2();
       var WebGLPipeline = require_WebGLPipeline();
-      var LIGHT_COUNT = 10;
-      var tempVec2 = new Vec2();
       var LightPipeline = new Class({
         Extends: MultiPipeline,
         initialize: function LightPipeline2(config) {
-          LIGHT_COUNT = config.game.renderer.config.maxLights;
           var fragShader = GetFastValue(config, "fragShader", LightShaderSourceFS);
-          var shaders = [];
-          for (var i = 1; i <= LIGHT_COUNT; i++) {
-            shaders.push({
-              name: "lights" + i,
-              fragShader: fragShader.replace("%LIGHT_COUNT%", i.toString())
-            });
-          }
-          config.shaders = shaders;
+          config.fragShader = fragShader.replace("%LIGHT_COUNT%", config.game.renderer.config.maxLights);
           MultiPipeline.call(this, config);
           this.inverseRotationMatrix = new Float32Array([
             1,
@@ -16846,7 +17133,11 @@ var Phaser = (function() {
             1
           ]);
           this.defaultNormalMap;
+          this.currentNormalMap;
           this.lightsActive = true;
+          this.tempVec2 = new Vec2();
+          this._tempMatrix = new TransformMatrix();
+          this._tempMatrix2 = new TransformMatrix();
         },
         boot: function() {
           WebGLPipeline.prototype.boot.call(this);
@@ -16856,9 +17147,6 @@ var Phaser = (function() {
           gl.bindTexture(gl.TEXTURE_2D, tempTexture);
           gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([127, 127, 255, 255]));
           this.defaultNormalMap = { glTexture: tempTexture };
-          for (var i = 0; i < this.shaders.length; i++) {
-            this["lightShader" + (i + 1)] = this.shaders[i];
-          }
         },
         onRender: function(scene, camera) {
           var lightManager = scene.sys.lights;
@@ -16868,20 +17156,18 @@ var Phaser = (function() {
           }
           var lights = lightManager.getLights(camera);
           var lightsCount = lights.length;
-          if (lightsCount === 0) {
-            return;
-          }
           this.lightsActive = true;
-          this.setShader(this["lightShader" + lightsCount], true);
           var i;
           var renderer = this.renderer;
           var height = renderer.height;
           var cameraMatrix = camera.matrix;
+          var tempVec2 = this.tempVec2;
           this.set1i("uMainSampler", 0);
           this.set1i("uNormSampler", 1);
           this.set2f("uResolution", this.width / 2, this.height / 2);
           this.set4f("uCamera", camera.x, camera.y, camera.rotation, camera.zoom);
           this.set3f("uAmbientLightColor", lightManager.ambientColor.r, lightManager.ambientColor.g, lightManager.ambientColor.b);
+          this.set1i("uLightCount", lightsCount);
           for (i = 0; i < lightsCount; i++) {
             var light = lights[i].light;
             var color = light.color;
@@ -16918,54 +17204,67 @@ var Phaser = (function() {
         setTexture2D: function(texture, gameObject) {
           var renderer = this.renderer;
           if (texture === void 0) {
-            texture = renderer.tempTextures[0];
+            texture = renderer.whiteTexture;
           }
-          var normalTexture = this.getNormalMap(gameObject);
-          if (renderer.isNewNormalMap(texture, normalTexture)) {
+          var normalMap = this.getNormalMap(gameObject);
+          if (this.isNewNormalMap(texture, normalMap)) {
             this.flush();
-            renderer.setTextureZero(texture);
-            renderer.setNormalMap(normalTexture);
+            this.createBatch(texture);
+            this.addTextureToBatch(normalMap);
+            this.currentNormalMap = normalMap;
           }
-          var rotation = gameObject ? gameObject.rotation : 0;
+          var rotation = 0;
+          if (gameObject && gameObject.parentContainer) {
+            var matrix = gameObject.getWorldTransformMatrix(this._tempMatrix, this._tempMatrix2);
+            rotation = matrix.rotationNormalized;
+          } else if (gameObject) {
+            rotation = gameObject.rotation;
+          }
           this.setNormalMapRotation(rotation);
-          this.currentUnit = 0;
           return 0;
         },
         setGameObject: function(gameObject, frame) {
           if (frame === void 0) {
             frame = gameObject.frame;
           }
-          var renderer = this.renderer;
           var texture = frame.glTexture;
-          var normalTexture = this.getNormalMap(gameObject);
-          if (renderer.isNewNormalMap()) {
+          var normalMap = this.getNormalMap(gameObject);
+          if (this.isNewNormalMap(texture, normalMap)) {
             this.flush();
-            renderer.setTextureZero(texture);
-            renderer.setNormalMap(normalTexture);
+            this.createBatch(texture);
+            this.addTextureToBatch(normalMap);
+            this.currentNormalMap = normalMap;
           }
-          this.setNormalMapRotation(gameObject.rotation);
-          this.currentUnit = 0;
+          if (gameObject.parentContainer) {
+            var matrix = gameObject.getWorldTransformMatrix(this._tempMatrix, this._tempMatrix2);
+            this.setNormalMapRotation(matrix.rotationNormalized);
+          } else {
+            this.setNormalMapRotation(gameObject.rotation);
+          }
           return 0;
         },
+        isNewNormalMap: function(texture, normalMap) {
+          return this.currentTexture !== texture || this.currentNormalMap !== normalMap;
+        },
         getNormalMap: function(gameObject) {
-          var normalTexture;
+          var normalMap;
           if (!gameObject) {
-            normalTexture = this.defaultNormalMap;
+            normalMap = this.defaultNormalMap;
           } else if (gameObject.displayTexture) {
-            normalTexture = gameObject.displayTexture.dataSource[gameObject.displayFrame.sourceIndex];
+            normalMap = gameObject.displayTexture.dataSource[gameObject.displayFrame.sourceIndex];
           } else if (gameObject.texture) {
-            normalTexture = gameObject.texture.dataSource[gameObject.frame.sourceIndex];
+            normalMap = gameObject.texture.dataSource[gameObject.frame.sourceIndex];
           } else if (gameObject.tileset) {
             if (Array.isArray(gameObject.tileset)) {
-              normalTexture = gameObject.tileset[0].image.dataSource[0];
+              normalMap = gameObject.tileset[0].image.dataSource[0];
             } else {
-              normalTexture = gameObject.tileset.image.dataSource[0];
+              normalMap = gameObject.tileset.image.dataSource[0];
             }
           }
-          if (!normalTexture) {
-            normalTexture = this.defaultNormalMap;
+          if (!normalMap) {
+            normalMap = this.defaultNormalMap;
           }
-          return normalTexture.glTexture;
+          return normalMap.glTexture;
         },
         batchSprite: function(gameObject, camera, parentTransformMatrix) {
           if (this.lightsActive) {
@@ -16983,8 +17282,133 @@ var Phaser = (function() {
           }
         }
       });
-      LightPipeline.LIGHT_COUNT = LIGHT_COUNT;
       module.exports = LightPipeline;
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js
+  var require_Single_frag = __commonJS({
+    "../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js": function(exports, module) {
+      module.exports = [
+        "#define SHADER_NAME PHASER_SINGLE_FS",
+        "",
+        "#ifdef GL_FRAGMENT_PRECISION_HIGH",
+        "precision highp float;",
+        "#else",
+        "precision mediump float;",
+        "#endif",
+        "",
+        "uniform sampler2D uMainSampler;",
+        "",
+        "varying vec2 outTexCoord;",
+        "varying float outTintEffect;",
+        "varying vec4 outTint;",
+        "",
+        "void main ()",
+        "{",
+        "    vec4 texture = texture2D(uMainSampler, outTexCoord);",
+        "    vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);",
+        "",
+        "    //  Multiply texture tint",
+        "    vec4 color = texture * texel;",
+        "",
+        "    if (outTintEffect == 1.0)",
+        "    {",
+        "        //  Solid color + texture alpha",
+        "        color.rgb = mix(texture.rgb, outTint.bgr * outTint.a, texture.a);",
+        "    }",
+        "    else if (outTintEffect == 2.0)",
+        "    {",
+        "        //  Solid color, no texture",
+        "        color = texel;",
+        "    }",
+        "",
+        "    gl_FragColor = color;",
+        "}",
+        ""
+      ].join("\n");
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js
+  var require_Single_vert = __commonJS({
+    "../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js": function(exports, module) {
+      module.exports = [
+        "#define SHADER_NAME PHASER_SINGLE_VS",
+        "",
+        "precision mediump float;",
+        "",
+        "uniform mat4 uProjectionMatrix;",
+        "",
+        "attribute vec2 inPosition;",
+        "attribute vec2 inTexCoord;",
+        "attribute float inTexId;",
+        "attribute float inTintEffect;",
+        "attribute vec4 inTint;",
+        "",
+        "varying vec2 outTexCoord;",
+        "varying float outTintEffect;",
+        "varying vec4 outTint;",
+        "",
+        "void main ()",
+        "{",
+        "    gl_Position = uProjectionMatrix * vec4(inPosition, 1.0, 1.0);",
+        "",
+        "    outTexCoord = inTexCoord;",
+        "    outTint = inTint;",
+        "    outTintEffect = inTintEffect;",
+        "}",
+        ""
+      ].join("\n");
+    }
+  });
+
+  // ../../node_modules/phaser/src/renderer/webgl/pipelines/MobilePipeline.js
+  var require_MobilePipeline = __commonJS({
+    "../../node_modules/phaser/src/renderer/webgl/pipelines/MobilePipeline.js": function(exports, module) {
+      var Class = require_Class();
+      var GetFastValue = require_GetFastValue();
+      var MultiPipeline = require_MultiPipeline();
+      var ShaderSourceFS = require_Single_frag();
+      var ShaderSourceVS = require_Single_vert();
+      var WEBGL_CONST = require_const7();
+      var WebGLPipeline = require_WebGLPipeline();
+      var MobilePipeline = new Class({
+        Extends: MultiPipeline,
+        initialize: function MobilePipeline2(config) {
+          config.fragShader = GetFastValue(config, "fragShader", ShaderSourceFS);
+          config.vertShader = GetFastValue(config, "vertShader", ShaderSourceVS);
+          config.attributes = GetFastValue(config, "attributes", [
+            {
+              name: "inPosition",
+              size: 2
+            },
+            {
+              name: "inTexCoord",
+              size: 2
+            },
+            {
+              name: "inTexId"
+            },
+            {
+              name: "inTintEffect"
+            },
+            {
+              name: "inTint",
+              size: 4,
+              type: WEBGL_CONST.UNSIGNED_BYTE,
+              normalized: true
+            }
+          ]);
+          config.forceZero = true;
+          MultiPipeline.call(this, config);
+        },
+        boot: function() {
+          WebGLPipeline.prototype.boot.call(this);
+          this.set1i("uMainSampler", 0);
+        }
+      });
+      module.exports = MobilePipeline;
     }
   });
 
@@ -17109,12 +17533,16 @@ var Phaser = (function() {
           if (this.shouldFlush(6)) {
             this.flush();
           }
+          if (!this.currentBatch) {
+            this.setTexture2D();
+          }
           this.batchLightVert(x0, y0, lightX, lightY, radius, attenuation, r, g, b, a);
           this.batchLightVert(x1, y1, lightX, lightY, radius, attenuation, r, g, b, a);
           this.batchLightVert(x2, y2, lightX, lightY, radius, attenuation, r, g, b, a);
           this.batchLightVert(x0, y0, lightX, lightY, radius, attenuation, r, g, b, a);
           this.batchLightVert(x2, y2, lightX, lightY, radius, attenuation, r, g, b, a);
           this.batchLightVert(x3, y3, lightX, lightY, radius, attenuation, r, g, b, a);
+          this.currentBatch.count = this.vertexCount - this.currentBatch.start;
         },
         batchLightVert: function(x, y, lightX, lightY, radius, attenuation, r, g, b, a) {
           var vertexViewF32 = this.vertexViewF32;
@@ -17151,79 +17579,6 @@ var Phaser = (function() {
         }
       });
       module.exports = RopePipeline;
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js
-  var require_Single_frag = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js": function(exports, module) {
-      module.exports = [
-        "#define SHADER_NAME PHASER_SINGLE_FS",
-        "",
-        "precision mediump float;",
-        "",
-        "uniform sampler2D uMainSampler;",
-        "",
-        "varying vec2 outTexCoord;",
-        "varying float outTintEffect;",
-        "varying vec4 outTint;",
-        "",
-        "void main ()",
-        "{",
-        "    vec4 texture = texture2D(uMainSampler, outTexCoord);",
-        "    vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);",
-        "",
-        "    //  Multiply texture tint",
-        "    vec4 color = texture * texel;",
-        "",
-        "    if (outTintEffect == 1.0)",
-        "    {",
-        "        //  Solid color + texture alpha",
-        "        color.rgb = mix(texture.rgb, outTint.bgr * outTint.a, texture.a);",
-        "    }",
-        "    else if (outTintEffect == 2.0)",
-        "    {",
-        "        //  Solid color, no texture",
-        "        color = texel;",
-        "    }",
-        "",
-        "    gl_FragColor = color;",
-        "}",
-        ""
-      ].join("\n");
-    }
-  });
-
-  // ../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js
-  var require_Single_vert = __commonJS({
-    "../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js": function(exports, module) {
-      module.exports = [
-        "#define SHADER_NAME PHASER_SINGLE_VS",
-        "",
-        "precision mediump float;",
-        "",
-        "uniform mat4 uProjectionMatrix;",
-        "",
-        "attribute vec2 inPosition;",
-        "attribute vec2 inTexCoord;",
-        "attribute float inTexId;",
-        "attribute float inTintEffect;",
-        "attribute vec4 inTint;",
-        "",
-        "varying vec2 outTexCoord;",
-        "varying float outTintEffect;",
-        "varying vec4 outTint;",
-        "",
-        "void main ()",
-        "{",
-        "    gl_Position = uProjectionMatrix * vec4(inPosition, 1.0, 1.0);",
-        "",
-        "    outTexCoord = inTexCoord;",
-        "    outTint = inTint;",
-        "    outTintEffect = inTintEffect;",
-        "}",
-        ""
-      ].join("\n");
     }
   });
 
@@ -17281,75 +17636,42 @@ var Phaser = (function() {
   var require_ColorMatrix = __commonJS({
     "../../node_modules/phaser/src/display/ColorMatrix.js": function(exports, module) {
       var Class = require_Class();
+      var tempMatrix = new Float32Array(20);
       var ColorMatrix = new Class({
         initialize: function ColorMatrix2() {
-          this._matrix = [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ];
+          this._matrix = new Float32Array(20);
           this.alpha = 1;
           this._dirty = true;
-          this._data;
+          this._data = new Float32Array(20);
+          this.reset();
         },
         set: function(value) {
-          this._matrix = value;
+          this._matrix.set(value);
           this._dirty = true;
           return this;
         },
         reset: function() {
           var m = this._matrix;
+          m.fill(0);
           m[0] = 1;
-          m[1] = 0;
-          m[2] = 0;
-          m[3] = 0;
-          m[4] = 0;
-          m[5] = 0;
           m[6] = 1;
-          m[7] = 0;
-          m[8] = 0;
-          m[9] = 0;
-          m[10] = 0;
-          m[11] = 0;
           m[12] = 1;
-          m[13] = 0;
-          m[14] = 0;
-          m[15] = 0;
-          m[16] = 0;
-          m[17] = 0;
           m[18] = 1;
-          m[19] = 0;
+          this.alpha = 1;
           this._dirty = true;
           return this;
         },
         getData: function() {
+          var data = this._data;
           if (this._dirty) {
-            var f32 = new Float32Array(this._matrix);
-            f32[4] /= 255;
-            f32[9] /= 255;
-            f32[14] /= 255;
-            f32[19] /= 255;
-            this._data = f32;
+            data.set(this._matrix);
+            data[4] /= 255;
+            data[9] /= 255;
+            data[14] /= 255;
+            data[19] /= 255;
             this._dirty = false;
           }
-          return this._data;
+          return data;
         },
         brightness: function(value, multiply) {
           if (value === void 0) {
@@ -17469,28 +17791,7 @@ var Phaser = (function() {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.BLACK_WHITE, multiply);
         },
         contrast: function(value, multiply) {
           if (value === void 0) {
@@ -17528,82 +17829,19 @@ var Phaser = (function() {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            -1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            -1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            -1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.NEGATIVE, multiply);
         },
         desaturateLuminance: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0.2764723,
-            0.929708,
-            0.0938197,
-            0,
-            -37.1,
-            0.2764723,
-            0.929708,
-            0.0938197,
-            0,
-            -37.1,
-            0.2764723,
-            0.929708,
-            0.0938197,
-            0,
-            -37.1,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.DESATURATE_LUMINANCE, multiply);
         },
         sepia: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0.393,
-            0.7689999,
-            0.18899999,
-            0,
-            0,
-            0.349,
-            0.6859999,
-            0.16799999,
-            0,
-            0,
-            0.272,
-            0.5339999,
-            0.13099999,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.SEPIA, multiply);
         },
         night: function(intensity, multiply) {
           if (intensity === void 0) {
@@ -17639,224 +17877,91 @@ var Phaser = (function() {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            2,
-            -0.4,
-            0.5,
-            0,
-            0,
-            -0.5,
-            2,
-            -0.4,
-            0,
-            0,
-            -0.4,
-            -0.5,
-            3,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.LSD, multiply);
         },
         brown: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0.5997023498159715,
-            0.34553243048391263,
-            -0.2708298674538042,
-            0,
-            47.43192855600873,
-            -0.037703249837783157,
-            0.8609577587992641,
-            0.15059552388459913,
-            0,
-            -36.96841498319127,
-            0.24113635128153335,
-            -0.07441037908422492,
-            0.44972182064877153,
-            0,
-            -7.562075277591283,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.BROWN, multiply);
         },
         vintagePinhole: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0.6279345635605994,
-            0.3202183420819367,
-            -0.03965408211312453,
-            0,
-            9.651285835294123,
-            0.02578397704808868,
-            0.6441188644374771,
-            0.03259127616149294,
-            0,
-            7.462829176470591,
-            0.0466055556782719,
-            -0.0851232987247891,
-            0.5241648018700465,
-            0,
-            5.159190588235296,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.VINTAGE, multiply);
         },
         kodachrome: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            1.1285582396593525,
-            -0.3967382283601348,
-            -0.03992559172921793,
-            0,
-            63.72958762196502,
-            -0.16404339962244616,
-            1.0835251566291304,
-            -0.05498805115633132,
-            0,
-            24.732407896706203,
-            -0.16786010706155763,
-            -0.5603416277695248,
-            1.6014850761964943,
-            0,
-            35.62982807460946,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.KODACHROME, multiply);
         },
         technicolor: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            1.9125277891456083,
-            -0.8545344976951645,
-            -0.09155508482755585,
-            0,
-            11.793603434377337,
-            -0.3087833385928097,
-            1.7658908555458428,
-            -0.10601743074722245,
-            0,
-            -70.35205161461398,
-            -0.231103377548616,
-            -0.7501899197440212,
-            1.847597816108189,
-            0,
-            30.950940869491138,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.TECHNICOLOR, multiply);
         },
         polaroid: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            1.438,
-            -0.062,
-            -0.062,
-            0,
-            0,
-            -0.122,
-            1.378,
-            -0.122,
-            0,
-            0,
-            -0.016,
-            -0.016,
-            1.483,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.POLAROID, multiply);
         },
         shiftToBGR: function(multiply) {
           if (multiply === void 0) {
             multiply = false;
           }
-          return this.multiply([
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ], multiply);
+          return this.multiply(ColorMatrix.SHIFT_BGR, multiply);
         },
         multiply: function(a, multiply) {
+          if (multiply === void 0) {
+            multiply = false;
+          }
           if (!multiply) {
             this.reset();
           }
           var m = this._matrix;
-          var c = [];
-          for (var i = 0; i < 20; i++) {
-            c[i] = m[i];
-          }
-          m[0] = c[0] * a[0] + c[1] * a[5] + c[2] * a[10] + c[3] * a[15];
-          m[1] = c[0] * a[1] + c[1] * a[6] + c[2] * a[11] + c[3] * a[16];
-          m[2] = c[0] * a[2] + c[1] * a[7] + c[2] * a[12] + c[3] * a[17];
-          m[3] = c[0] * a[3] + c[1] * a[8] + c[2] * a[13] + c[3] * a[18];
-          m[4] = c[0] * a[4] + c[1] * a[9] + c[2] * a[14] + c[3] * a[19] + c[4];
-          m[5] = c[5] * a[0] + c[6] * a[5] + c[7] * a[10] + c[8] * a[15];
-          m[6] = c[5] * a[1] + c[6] * a[6] + c[7] * a[11] + c[8] * a[16];
-          m[7] = c[5] * a[2] + c[6] * a[7] + c[7] * a[12] + c[8] * a[17];
-          m[8] = c[5] * a[3] + c[6] * a[8] + c[7] * a[13] + c[8] * a[18];
-          m[9] = c[5] * a[4] + c[6] * a[9] + c[7] * a[14] + c[8] * a[19] + c[9];
-          m[10] = c[10] * a[0] + c[11] * a[5] + c[12] * a[10] + c[13] * a[15];
-          m[11] = c[10] * a[1] + c[11] * a[6] + c[12] * a[11] + c[13] * a[16];
-          m[12] = c[10] * a[2] + c[11] * a[7] + c[12] * a[12] + c[13] * a[17];
-          m[13] = c[10] * a[3] + c[11] * a[8] + c[12] * a[13] + c[13] * a[18];
-          m[14] = c[10] * a[4] + c[11] * a[9] + c[12] * a[14] + c[13] * a[19] + c[14];
-          m[15] = c[15] * a[0] + c[16] * a[5] + c[17] * a[10] + c[18] * a[15];
-          m[16] = c[15] * a[1] + c[16] * a[6] + c[17] * a[11] + c[18] * a[16];
-          m[17] = c[15] * a[2] + c[16] * a[7] + c[17] * a[12] + c[18] * a[17];
-          m[18] = c[15] * a[3] + c[16] * a[8] + c[17] * a[13] + c[18] * a[18];
-          m[19] = c[15] * a[4] + c[16] * a[9] + c[17] * a[14] + c[18] * a[19] + c[19];
+          var c = tempMatrix;
+          c.set(m);
+          m.set([
+            c[0] * a[0] + c[1] * a[5] + c[2] * a[10] + c[3] * a[15],
+            c[0] * a[1] + c[1] * a[6] + c[2] * a[11] + c[3] * a[16],
+            c[0] * a[2] + c[1] * a[7] + c[2] * a[12] + c[3] * a[17],
+            c[0] * a[3] + c[1] * a[8] + c[2] * a[13] + c[3] * a[18],
+            c[0] * a[4] + c[1] * a[9] + c[2] * a[14] + c[3] * a[19] + c[4],
+            c[5] * a[0] + c[6] * a[5] + c[7] * a[10] + c[8] * a[15],
+            c[5] * a[1] + c[6] * a[6] + c[7] * a[11] + c[8] * a[16],
+            c[5] * a[2] + c[6] * a[7] + c[7] * a[12] + c[8] * a[17],
+            c[5] * a[3] + c[6] * a[8] + c[7] * a[13] + c[8] * a[18],
+            c[5] * a[4] + c[6] * a[9] + c[7] * a[14] + c[8] * a[19] + c[9],
+            c[10] * a[0] + c[11] * a[5] + c[12] * a[10] + c[13] * a[15],
+            c[10] * a[1] + c[11] * a[6] + c[12] * a[11] + c[13] * a[16],
+            c[10] * a[2] + c[11] * a[7] + c[12] * a[12] + c[13] * a[17],
+            c[10] * a[3] + c[11] * a[8] + c[12] * a[13] + c[13] * a[18],
+            c[10] * a[4] + c[11] * a[9] + c[12] * a[14] + c[13] * a[19] + c[14],
+            c[15] * a[0] + c[16] * a[5] + c[17] * a[10] + c[18] * a[15],
+            c[15] * a[1] + c[16] * a[6] + c[17] * a[11] + c[18] * a[16],
+            c[15] * a[2] + c[16] * a[7] + c[17] * a[12] + c[18] * a[17],
+            c[15] * a[3] + c[16] * a[8] + c[17] * a[13] + c[18] * a[18],
+            c[15] * a[4] + c[16] * a[9] + c[17] * a[14] + c[18] * a[19] + c[19]
+          ]);
           this._dirty = true;
           return this;
         }
       });
+      ColorMatrix.BLACK_WHITE = [0.3, 0.6, 0.1, 0, 0, 0.3, 0.6, 0.1, 0, 0, 0.3, 0.6, 0.1, 0, 0, 0, 0, 0, 1, 0];
+      ColorMatrix.NEGATIVE = [-1, 0, 0, 1, 0, 0, -1, 0, 1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, 0];
+      ColorMatrix.DESATURATE_LUMINANCE = [0.2764723, 0.929708, 0.0938197, 0, -37.1, 0.2764723, 0.929708, 0.0938197, 0, -37.1, 0.2764723, 0.929708, 0.0938197, 0, -37.1, 0, 0, 0, 1, 0];
+      ColorMatrix.SEPIA = [0.393, 0.7689999, 0.18899999, 0, 0, 0.349, 0.6859999, 0.16799999, 0, 0, 0.272, 0.5339999, 0.13099999, 0, 0, 0, 0, 0, 1, 0];
+      ColorMatrix.LSD = [2, -0.4, 0.5, 0, 0, -0.5, 2, -0.4, 0, 0, -0.4, -0.5, 3, 0, 0, 0, 0, 0, 1, 0];
+      ColorMatrix.BROWN = [0.5997023498159715, 0.34553243048391263, -0.2708298674538042, 0, 47.43192855600873, -0.037703249837783157, 0.8609577587992641, 0.15059552388459913, 0, -36.96841498319127, 0.24113635128153335, -0.07441037908422492, 0.44972182064877153, 0, -7.562075277591283, 0, 0, 0, 1, 0];
+      ColorMatrix.VINTAGE = [0.6279345635605994, 0.3202183420819367, -0.03965408211312453, 0, 9.651285835294123, 0.02578397704808868, 0.6441188644374771, 0.03259127616149294, 0, 7.462829176470591, 0.0466055556782719, -0.0851232987247891, 0.5241648018700465, 0, 5.159190588235296, 0, 0, 0, 1, 0];
+      ColorMatrix.KODACHROME = [1.1285582396593525, -0.3967382283601348, -0.03992559172921793, 0, 63.72958762196502, -0.16404339962244616, 1.0835251566291304, -0.05498805115633132, 0, 24.732407896706203, -0.16786010706155763, -0.5603416277695248, 1.6014850761964943, 0, 35.62982807460946, 0, 0, 0, 1, 0];
+      ColorMatrix.TECHNICOLOR = [1.9125277891456083, -0.8545344976951645, -0.09155508482755585, 0, 11.793603434377337, -0.3087833385928097, 1.7658908555458428, -0.10601743074722245, 0, -70.35205161461398, -0.231103377548616, -0.7501899197440212, 1.847597816108189, 0, 30.950940869491138, 0, 0, 0, 1, 0];
+      ColorMatrix.POLAROID = [1.438, -0.062, -0.062, 0, 0, -0.122, 1.378, -0.122, 0, 0, -0.016, -0.016, 1.483, 0, 0, 0, 0, 0, 1, 0];
+      ColorMatrix.SHIFT_BGR = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0];
       module.exports = ColorMatrix;
     }
   });
@@ -18218,7 +18323,6 @@ var Phaser = (function() {
           gl.bindTexture(gl.TEXTURE_2D, source.texture);
           gl.bufferData(gl.ARRAY_BUFFER, this.vertexData, gl.STATIC_DRAW);
           gl.drawArrays(gl.TRIANGLES, 0, 6);
-          this.renderer.resetTextures();
         },
         drawFrame: function(source, target, clearAlpha, colorMatrix) {
           if (clearAlpha === void 0) {
@@ -18352,12 +18456,13 @@ var Phaser = (function() {
       var Class = require_Class();
       var CONST = require_const6();
       var CustomMap = require_Map();
+      var Device = require_device();
       var GetFastValue = require_GetFastValue();
       var RenderTarget = require_RenderTarget();
       var SnapCeil = require_SnapCeil();
       var BitmapMaskPipeline = require_BitmapMaskPipeline();
-      var GraphicsPipeline = require_GraphicsPipeline();
       var LightPipeline = require_LightPipeline();
+      var MobilePipeline = require_MobilePipeline();
       var MultiPipeline = require_MultiPipeline();
       var PointLightPipeline = require_PointLightPipeline();
       var RopePipeline = require_RopePipeline();
@@ -18375,15 +18480,17 @@ var Phaser = (function() {
             [CONST.ROPE_PIPELINE, RopePipeline],
             [CONST.LIGHT_PIPELINE, LightPipeline],
             [CONST.POINTLIGHT_PIPELINE, PointLightPipeline],
-            [CONST.GRAPHICS_PIPELINE, GraphicsPipeline]
+            [CONST.MOBILE_PIPELINE, MobilePipeline]
           ]);
           this.postPipelineClasses = new CustomMap();
           this.pipelines = new CustomMap();
+          this.default = null;
           this.current = null;
           this.previous = null;
           this.MULTI_PIPELINE = null;
           this.BITMAPMASK_PIPELINE = null;
           this.UTILITY_PIPELINE = null;
+          this.MOBILE_PIPELINE = null;
           this.fullFrame1;
           this.fullFrame2;
           this.halfFrame1;
@@ -18393,7 +18500,7 @@ var Phaser = (function() {
           this.frameInc = 32;
           this.targetIndex = 0;
         },
-        boot: function(pipelineConfig) {
+        boot: function(pipelineConfig, defaultPipeline, autoMobilePipeline) {
           var renderer = this.renderer;
           var targets = this.renderTargets;
           this.frameInc = Math.floor(GetFastValue(pipelineConfig, "frameInc", 32));
@@ -18427,10 +18534,12 @@ var Phaser = (function() {
           });
           this.MULTI_PIPELINE = this.get(CONST.MULTI_PIPELINE);
           this.BITMAPMASK_PIPELINE = this.get(CONST.BITMAPMASK_PIPELINE);
+          this.MOBILE_PIPELINE = this.get(CONST.MOBILE_PIPELINE);
           if (pipelineConfig) {
             for (pipelineName in pipelineConfig) {
               var pipelineClass = pipelineConfig[pipelineName];
               instance = new pipelineClass(game);
+              instance.name = pipelineName;
               if (instance.isPostFX) {
                 this.postPipelineClasses.set(pipelineName, pipelineClass);
               } else if (!this.has(pipelineName)) {
@@ -18439,6 +18548,17 @@ var Phaser = (function() {
               }
             }
           }
+          this.default = this.get(defaultPipeline);
+          if (autoMobilePipeline && !Device.os.desktop) {
+            this.default = this.MOBILE_PIPELINE;
+          }
+        },
+        setDefaultPipeline: function(pipeline) {
+          var instance = this.get(pipeline);
+          if (instance) {
+            this.default = instance;
+          }
+          return instance;
         },
         add: function(name, pipeline) {
           if (pipeline.isPostFX) {
@@ -18492,17 +18612,22 @@ var Phaser = (function() {
         getPostPipeline: function(pipeline, gameObject) {
           var pipelineClasses = this.postPipelineClasses;
           var instance;
+          var pipelineName = "";
           if (typeof pipeline === "string") {
             instance = pipelineClasses.get(pipeline);
+            pipelineName = pipeline;
           } else if (typeof pipeline === "function") {
             if (pipelineClasses.contains(pipeline)) {
               instance = pipeline;
             }
+            pipelineName = pipeline.name;
           } else if (typeof pipeline === "object") {
             instance = pipelineClasses.get(pipeline.name);
+            pipelineName = pipeline.name;
           }
           if (instance) {
             var newPipeline = new instance(this.game);
+            newPipeline.name = pipelineName;
             if (gameObject) {
               newPipeline.gameObject = gameObject;
             }
@@ -18654,6 +18779,10 @@ var Phaser = (function() {
           gl.viewport(0, 0, renderer.width, renderer.height);
           renderer.currentProgram = null;
           renderer.setBlendMode(0, true);
+          var vao = renderer.vaoExtension;
+          if (vao) {
+            vao.bindVertexArrayOES(null);
+          }
           var entries = this.pipelines.entries;
           for (var key in entries) {
             entries[key].glReset = true;
@@ -18662,7 +18791,6 @@ var Phaser = (function() {
             this.current = pipeline;
             pipeline.rebind();
           }
-          renderer.resetTextures();
         },
         clear: function() {
           var renderer = this.renderer;
@@ -18676,6 +18804,10 @@ var Phaser = (function() {
           }
           renderer.currentProgram = null;
           renderer.setBlendMode(0, true);
+          var vao = renderer.vaoExtension;
+          if (vao) {
+            vao.bindVertexArrayOES(null);
+          }
         },
         getRenderTarget: function(size) {
           var targets = this.renderTargets;
@@ -18705,6 +18837,7 @@ var Phaser = (function() {
           this.classes = null;
           this.postPipelineClasses = null;
           this.pipelines = null;
+          this.default = null;
           this.current = null;
           this.previous = null;
         }
@@ -18734,7 +18867,7 @@ var Phaser = (function() {
           var pixel = new Uint8Array(4);
           var destY = isFramebuffer ? y : bufferHeight - y;
           gl.readPixels(x, destY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
-          callback.call(null, new Color(pixel[0], pixel[1], pixel[2], pixel[3] / 255));
+          callback.call(null, new Color(pixel[0], pixel[1], pixel[2], pixel[3]));
         } else {
           var width = Math.floor(GetFastValue(config, "width", bufferWidth));
           var height = Math.floor(GetFastValue(config, "height", bufferHeight));
@@ -18742,13 +18875,13 @@ var Phaser = (function() {
           var pixels = new Uint8Array(total);
           gl.readPixels(x, bufferHeight - y - height, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
           var canvas = CanvasPool.createWebGL(this, width, height);
-          var ctx = canvas.getContext("2d");
+          var ctx = canvas.getContext("2d", { willReadFrequently: true });
           var imageData = ctx.getImageData(0, 0, width, height);
           var data = imageData.data;
           for (var py = 0; py < height; py++) {
             for (var px = 0; px < width; px++) {
               var sourceIndex = ((height - py - 1) * width + px) * 4;
-              var destIndex = (py * width + px) * 4;
+              var destIndex = isFramebuffer ? total - (py * width + (width - px)) * 4 : (py * width + px) * 4;
               data[destIndex + 0] = pixels[sourceIndex + 0];
               data[destIndex + 1] = pixels[sourceIndex + 1];
               data[destIndex + 2] = pixels[sourceIndex + 2];
@@ -18776,21 +18909,26 @@ var Phaser = (function() {
   var require_WebGLRenderer = __commonJS({
     "../../node_modules/phaser/src/renderer/webgl/WebGLRenderer.js": function(exports, module) {
       var ArrayRemove = require_Remove();
-      var CameraEvents = require_events7();
+      var CameraEvents = require_events6();
       var Class = require_Class();
       var CONST = require_const();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events2();
-      var GameEvents = require_events();
+      var Events = require_events8();
       var IsSizePowerOfTwo = require_IsSizePowerOfTwo();
       var Matrix4 = require_Matrix4();
       var NOOP = require_NOOP();
       var PipelineManager = require_PipelineManager();
       var RenderTarget = require_RenderTarget();
-      var ScaleEvents = require_events8();
+      var ScaleEvents = require_events7();
       var TextureEvents = require_events9();
       var Utils = require_Utils();
       var WebGLSnapshot = require_WebGLSnapshot();
+      var DEBUG = false;
+      if (false) {
+        SPECTOR = __require("phaser3spectorjs");
+        DEBUG = true;
+      }
+      var SPECTOR;
       var WebGLRenderer = new Class({
         Extends: EventEmitter,
         initialize: function WebGLRenderer2(game) {
@@ -18805,7 +18943,8 @@ var Phaser = (function() {
             stencil: true,
             failIfMajorPerformanceCaveat: gameConfig.failIfMajorPerformanceCaveat,
             powerPreference: gameConfig.powerPreference,
-            preserveDrawingBuffer: gameConfig.preserveDrawingBuffer
+            preserveDrawingBuffer: gameConfig.preserveDrawingBuffer,
+            willReadFrequently: false
           };
           this.config = {
             clearBeforeRender: gameConfig.clearBeforeRender,
@@ -18840,13 +18979,8 @@ var Phaser = (function() {
             bufferWidth: 0,
             bufferHeight: 0
           };
-          this.currentActiveTexture = 0;
-          this.startActiveTexture = 0;
           this.maxTextures = 0;
           this.textureIndexes;
-          this.tempTextures;
-          this.textureZero;
-          this.normalTexture;
           this.currentFramebuffer = null;
           this.fboStack = [];
           this.currentProgram = null;
@@ -18861,7 +18995,7 @@ var Phaser = (function() {
           this.instancedArraysExtension = null;
           this.vaoExtension = null;
           this.extensions = {};
-          this.glFormats = [];
+          this.glFormats;
           this.compression;
           this.drawingBufferHeight = 0;
           this.blankTexture = null;
@@ -18876,14 +19010,16 @@ var Phaser = (function() {
           this.nextTypeMatch = false;
           this.finalType = false;
           this.mipmapFilter = null;
-          this.textureFlush = 0;
-          this.isTextureClean = false;
           this.defaultScissor = [0, 0, 0, 0];
           this.isBooted = false;
           this.renderTarget = null;
           this.projectionMatrix;
           this.projectionWidth = 0;
           this.projectionHeight = 0;
+          this.maskSource = null;
+          this.maskTarget = null;
+          this.spector = null;
+          this._debugCapture = false;
           this.init(this.config);
         },
         init: function(config) {
@@ -18891,6 +19027,10 @@ var Phaser = (function() {
           var game = this.game;
           var canvas = this.canvas;
           var clearColor = config.backgroundColor;
+          if (DEBUG) {
+            this.spector = new SPECTOR.Spector();
+            this.spector.onCapture.add(this.onCapture.bind(this));
+          }
           if (game.config.context) {
             gl = game.config.context;
           } else {
@@ -18904,16 +19044,12 @@ var Phaser = (function() {
           var _this = this;
           this.contextLostHandler = function(event) {
             _this.contextLost = true;
-            _this.game.events.emit(GameEvents.CONTEXT_LOST, _this);
+            if (console) {
+              console.warn("WebGL Context lost. Renderer disabled");
+            }
             event.preventDefault();
           };
-          this.contextRestoredHandler = function() {
-            _this.contextLost = false;
-            _this.init(_this.config);
-            _this.game.events.emit(GameEvents.CONTEXT_RESTORED, _this);
-          };
           canvas.addEventListener("webglcontextlost", this.contextLostHandler, false);
-          canvas.addEventListener("webglcontextrestored", this.contextRestoredHandler, false);
           game.context = gl;
           for (var i = 0; i <= 27; i++) {
             this.blendModes.push({ func: [gl.ONE, gl.ONE_MINUS_SRC_ALPHA], equation: gl.FUNC_ADD });
@@ -18922,11 +19058,7 @@ var Phaser = (function() {
           this.blendModes[2].func = [gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA];
           this.blendModes[3].func = [gl.ONE, gl.ONE_MINUS_SRC_COLOR];
           this.blendModes[17] = { func: [gl.ZERO, gl.ONE_MINUS_SRC_ALPHA], equation: gl.FUNC_REVERSE_SUBTRACT };
-          this.glFormats[0] = gl.BYTE;
-          this.glFormats[1] = gl.SHORT;
-          this.glFormats[2] = gl.UNSIGNED_BYTE;
-          this.glFormats[3] = gl.UNSIGNED_SHORT;
-          this.glFormats[4] = gl.FLOAT;
+          this.glFormats = [gl.BYTE, gl.SHORT, gl.UNSIGNED_BYTE, gl.UNSIGNED_SHORT, gl.FLOAT];
           this.glFuncMap = {
             mat2: { func: gl.uniformMatrix2fv, length: 1, matrix: true },
             mat3: { func: gl.uniformMatrix3fv, length: 1, matrix: true },
@@ -18965,29 +19097,18 @@ var Phaser = (function() {
           gl.disable(gl.CULL_FACE);
           gl.enable(gl.BLEND);
           gl.clearColor(clearColor.redGL, clearColor.greenGL, clearColor.blueGL, clearColor.alphaGL);
-          this.mipmapFilter = gl[config.mipmapFilter];
+          if (config.mipmapFilter !== "") {
+            this.mipmapFilter = gl[config.mipmapFilter];
+          }
           this.maxTextures = Utils.checkShaderMax(gl, config.maxTextures);
           this.textureIndexes = [];
-          var tempTextures = this.tempTextures;
-          if (Array.isArray(tempTextures)) {
-            for (var t = 0; i < this.maxTextures; t++) {
-              gl.deleteTexture(tempTextures[t]);
-            }
-          } else {
-            tempTextures = new Array(this.maxTextures);
-          }
           for (var index = 0; index < this.maxTextures; index++) {
             var tempTexture = gl.createTexture();
             gl.activeTexture(gl.TEXTURE0 + index);
             gl.bindTexture(gl.TEXTURE_2D, tempTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]));
-            tempTextures[index] = tempTexture;
             this.textureIndexes.push(index);
           }
-          this.tempTextures = tempTextures;
-          this.currentActiveTexture = 1;
-          this.startActiveTexture++;
-          gl.activeTexture(gl.TEXTURE1);
           this.pipelines = new PipelineManager(this);
           this.setBlendMode(CONST.BlendModes.NORMAL);
           this.projectionMatrix = new Matrix4().identity();
@@ -18998,18 +19119,73 @@ var Phaser = (function() {
           var game = this.game;
           var pipelineManager = this.pipelines;
           var baseSize = game.scale.baseSize;
-          this.width = baseSize.width;
-          this.height = baseSize.height;
+          var width = baseSize.width;
+          var height = baseSize.height;
+          this.width = width;
+          this.height = height;
           this.isBooted = true;
-          this.renderTarget = new RenderTarget(this, this.width, this.height, 1, 0, true, true);
-          pipelineManager.boot(game.config.pipeline);
-          this.blankTexture = game.textures.getFrame("__DEFAULT");
-          this.whiteTexture = game.textures.getFrame("__WHITE");
+          this.renderTarget = new RenderTarget(this, width, height, 1, 0, true, true);
+          this.maskTarget = new RenderTarget(this, width, height, 1, 0, true, true);
+          this.maskSource = new RenderTarget(this, width, height, 1, 0, true, true);
+          var config = game.config;
+          pipelineManager.boot(config.pipeline, config.defaultPipeline, config.autoMobilePipeline);
+          this.blankTexture = game.textures.getFrame("__DEFAULT").glTexture;
+          this.whiteTexture = game.textures.getFrame("__WHITE").glTexture;
           var gl = this.gl;
           gl.bindFramebuffer(gl.FRAMEBUFFER, null);
           gl.enable(gl.SCISSOR_TEST);
           game.scale.on(ScaleEvents.RESIZE, this.onResize, this);
-          this.resize(baseSize.width, baseSize.height);
+          this.resize(width, height);
+        },
+        captureFrame: function(quickCapture, fullCapture) {
+          if (quickCapture === void 0) {
+            quickCapture = false;
+          }
+          if (fullCapture === void 0) {
+            fullCapture = false;
+          }
+          if (DEBUG && this.spector && !this._debugCapture) {
+            this.spector.captureCanvas(this.canvas, 0, quickCapture, fullCapture);
+            this._debugCapture = true;
+          }
+        },
+        captureNextFrame: function() {
+          if (DEBUG && this.spector && !this._debugCapture) {
+            this._debugCapture = true;
+            this.spector.captureNextFrame(this.canvas);
+          }
+        },
+        getFps: function() {
+          if (DEBUG && this.spector) {
+            return this.spector.getFps();
+          }
+        },
+        startCapture: function(commandCount, quickCapture, fullCapture) {
+          if (commandCount === void 0) {
+            commandCount = 0;
+          }
+          if (quickCapture === void 0) {
+            quickCapture = false;
+          }
+          if (fullCapture === void 0) {
+            fullCapture = false;
+          }
+          if (DEBUG && this.spector && !this._debugCapture) {
+            this.spector.startCapture(this.canvas, commandCount, quickCapture, fullCapture);
+            this._debugCapture = true;
+          }
+        },
+        stopCapture: function() {
+          if (DEBUG && this.spector && this._debugCapture) {
+            this.spector.stopCapture();
+          }
+        },
+        onCapture: function(capture) {
+          if (DEBUG) {
+            var view = this.spector.getResultUI();
+            view.display(capture);
+            this._debugCapture = false;
+          }
         },
         onResize: function(gameSize, baseSize) {
           if (baseSize.width !== this.width || baseSize.height !== this.height) {
@@ -19025,7 +19201,6 @@ var Phaser = (function() {
           }
           this.renderTarget.bind(true, width, height);
           this.setProjectionMatrix(width, height);
-          this.resetTextures();
         },
         endCapture: function() {
           this.renderTarget.unbind(true);
@@ -19101,9 +19276,7 @@ var Phaser = (function() {
           return this;
         },
         resetProjectionMatrix: function() {
-          this.projectionWidth = this.width;
-          this.projectionHeight = this.height;
-          this.projectionMatrix.ortho(0, this.width, this.height, 0, -1e3, 1e3);
+          return this.setProjectionMatrix(this.width, this.height);
         },
         hasExtension: function(extensionName) {
           return this.supportedExtensions ? this.supportedExtensions.indexOf(extensionName) : false;
@@ -19222,155 +19395,16 @@ var Phaser = (function() {
           }
           return this;
         },
-        setBlankTexture: function() {
-          this.setTexture2D(this.blankTexture.glTexture);
-        },
-        setTextureSource: function(textureSource) {
-          if (this.pipelines.forceZero()) {
-            this.setTextureZero(textureSource.glTexture, true);
-            return 0;
-          }
-          var gl = this.gl;
-          var currentActiveTexture = this.currentActiveTexture;
-          if (textureSource.glIndexCounter < this.startActiveTexture) {
-            textureSource.glIndexCounter = this.startActiveTexture;
-            if (currentActiveTexture < this.maxTextures) {
-              textureSource.glIndex = currentActiveTexture;
-              gl.activeTexture(gl.TEXTURE0 + currentActiveTexture);
-              gl.bindTexture(gl.TEXTURE_2D, textureSource.glTexture);
-              this.currentActiveTexture++;
-            } else {
-              this.flush();
-              this.startActiveTexture++;
-              this.textureFlush++;
-              textureSource.glIndexCounter = this.startActiveTexture;
-              textureSource.glIndex = 1;
-              gl.activeTexture(gl.TEXTURE1);
-              gl.bindTexture(gl.TEXTURE_2D, textureSource.glTexture);
-              this.currentActiveTexture = 2;
-            }
-          }
-          this.isTextureClean = false;
-          return textureSource.glIndex;
-        },
-        isNewNormalMap: function(texture, normalMap) {
-          return this.textureZero !== texture || this.normalTexture !== normalMap;
-        },
-        setTextureZero: function(texture, flush) {
-          if (this.textureZero !== texture) {
-            if (flush) {
-              this.flush();
-            }
-            var gl = this.gl;
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            this.textureZero = texture;
-          }
-        },
-        clearTextureZero: function() {
-          this.textureZero = null;
-        },
-        setNormalMap: function(texture) {
-          if (this.normalTexture !== texture) {
-            var gl = this.gl;
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            this.normalTexture = texture;
-            if (this.currentActiveTexture === 1) {
-              this.currentActiveTexture = 2;
-            }
-          }
-        },
-        clearNormalMap: function() {
-          this.normalTexture = null;
-          this.startActiveTexture++;
-          this.currentActiveTexture = 1;
-          this.textureFlush++;
-        },
-        unbindTextures: function() {
-          var gl = this.gl;
-          var temp = this.tempTextures;
-          for (var i = 0; i < temp.length; i++) {
-            gl.activeTexture(gl.TEXTURE0 + i);
-            gl.bindTexture(gl.TEXTURE_2D, null);
-          }
-          this.normalTexture = null;
-          this.textureZero = null;
-          this.currentActiveTexture = 1;
-          this.startActiveTexture++;
-          this.textureFlush++;
-        },
-        resetTextures: function(all) {
-          if (all === void 0) {
-            all = false;
-          }
-          if (this.isTextureClean) {
-            return;
-          }
-          this.flush();
-          var gl = this.gl;
-          var temp = this.tempTextures;
-          if (all) {
-            for (var i = 0; i < temp.length; i++) {
-              gl.activeTexture(gl.TEXTURE0 + i);
-              gl.bindTexture(gl.TEXTURE_2D, temp[i]);
-            }
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, temp[1]);
-            this.isTextureClean = true;
-          } else {
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, temp[0]);
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, temp[1]);
-          }
-          this.normalTexture = null;
-          this.textureZero = null;
-          this.currentActiveTexture = 1;
-          this.startActiveTexture++;
-          this.textureFlush++;
-        },
-        setTexture2D: function(texture) {
-          if (this.pipelines.forceZero()) {
-            this.setTextureZero(texture, true);
-            return 0;
-          }
-          var gl = this.gl;
-          var currentActiveTexture = this.currentActiveTexture;
-          if (texture.glIndexCounter < this.startActiveTexture) {
-            texture.glIndexCounter = this.startActiveTexture;
-            if (currentActiveTexture < this.maxTextures) {
-              texture.glIndex = currentActiveTexture;
-              gl.activeTexture(gl.TEXTURE0 + currentActiveTexture);
-              gl.bindTexture(gl.TEXTURE_2D, texture);
-              this.currentActiveTexture++;
-            } else {
-              this.flush();
-              this.startActiveTexture++;
-              this.textureFlush++;
-              texture.glIndexCounter = this.startActiveTexture;
-              texture.glIndex = 1;
-              gl.activeTexture(gl.TEXTURE1);
-              gl.bindTexture(gl.TEXTURE_2D, texture);
-              this.currentActiveTexture = 2;
-            }
-          }
-          this.isTextureClean = false;
-          return texture.glIndex;
-        },
-        pushFramebuffer: function(framebuffer, updateScissor, resetTextures, setViewport) {
+        pushFramebuffer: function(framebuffer, updateScissor, setViewport) {
           if (framebuffer === this.currentFramebuffer) {
             return this;
           }
           this.fboStack.push(framebuffer);
-          return this.setFramebuffer(framebuffer, updateScissor, resetTextures, setViewport);
+          return this.setFramebuffer(framebuffer, updateScissor, setViewport);
         },
-        setFramebuffer: function(framebuffer, updateScissor, resetTextures, setViewport) {
+        setFramebuffer: function(framebuffer, updateScissor, setViewport) {
           if (updateScissor === void 0) {
             updateScissor = false;
-          }
-          if (resetTextures === void 0) {
-            resetTextures = false;
           }
           if (setViewport === void 0) {
             setViewport = true;
@@ -19401,17 +19435,11 @@ var Phaser = (function() {
             }
           }
           this.currentFramebuffer = framebuffer;
-          if (resetTextures) {
-            this.resetTextures();
-          }
           return this;
         },
-        popFramebuffer: function(updateScissor, resetTextures, setViewport) {
+        popFramebuffer: function(updateScissor, setViewport) {
           if (updateScissor === void 0) {
             updateScissor = false;
-          }
-          if (resetTextures === void 0) {
-            resetTextures = false;
           }
           if (setViewport === void 0) {
             setViewport = true;
@@ -19422,7 +19450,7 @@ var Phaser = (function() {
           if (!framebuffer) {
             framebuffer = null;
           }
-          this.setFramebuffer(framebuffer, updateScissor, resetTextures, setViewport);
+          this.setFramebuffer(framebuffer, updateScissor, setViewport);
           return framebuffer;
         },
         setProgram: function(program) {
@@ -19454,7 +19482,7 @@ var Phaser = (function() {
             wrap = gl.REPEAT;
           }
           if (scaleMode === CONST.ScaleModes.LINEAR && this.config.antialias) {
-            minFilter = pow ? this.mipmapFilter : gl.LINEAR;
+            minFilter = pow && this.mipmapFilter ? this.mipmapFilter : gl.LINEAR;
             magFilter = gl.LINEAR;
           }
           if (source && source.compressed) {
@@ -19518,8 +19546,6 @@ var Phaser = (function() {
           texture.isRenderTexture = false;
           texture.width = width;
           texture.height = height;
-          texture.glIndex = 0;
-          texture.glIndexCounter = -1;
           return texture;
         },
         createFramebuffer: function(width, height, renderTexture, addDepthStencilBuffer) {
@@ -19544,12 +19570,43 @@ var Phaser = (function() {
               36057: "Incomplete Dimensions",
               36061: "Framebuffer Unsupported"
             };
-            throw new Error("Framebuffer status: " + errors[complete]);
+            throw new Error("Framebuffer status: " + (errors[complete] || complete));
           }
           framebuffer.renderTexture = renderTexture;
           this.setFramebuffer(null);
-          this.resetTextures();
           return framebuffer;
+        },
+        beginBitmapMask: function(bitmapMask, camera) {
+          var gl = this.gl;
+          if (gl) {
+            this.flush();
+            this.maskTarget.bind();
+            if (this.currentCameraMask.mask !== bitmapMask) {
+              this.currentMask.mask = bitmapMask;
+              this.currentMask.camera = camera;
+            }
+          }
+        },
+        drawBitmapMask: function(bitmapMask, camera, bitmapMaskPipeline) {
+          this.flush();
+          this.maskSource.bind();
+          this.setBlendMode(0, true);
+          bitmapMask.renderWebGL(this, bitmapMask, camera);
+          this.maskSource.unbind(true);
+          this.maskTarget.unbind();
+          var gl = this.gl;
+          var prev = this.getCurrentStencilMask();
+          if (prev) {
+            gl.enable(gl.STENCIL_TEST);
+            prev.mask.applyStencil(this, prev.camera, true);
+          } else {
+            this.currentMask.mask = null;
+          }
+          this.pipelines.set(bitmapMaskPipeline);
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, this.maskTarget.texture);
+          gl.activeTexture(gl.TEXTURE1);
+          gl.bindTexture(gl.TEXTURE_2D, this.maskSource.texture);
         },
         createProgram: function(vertexShader, fragmentShader) {
           var gl = this.gl;
@@ -19560,17 +19617,18 @@ var Phaser = (function() {
           gl.shaderSource(fs, fragmentShader);
           gl.compileShader(vs);
           gl.compileShader(fs);
+          var failed = "Shader failed:\n";
           if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
-            throw new Error("Vertex Shader failed:\n" + gl.getShaderInfoLog(vs));
+            throw new Error("Vertex " + failed + gl.getShaderInfoLog(vs));
           }
           if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-            throw new Error("Fragment Shader failed:\n" + gl.getShaderInfoLog(fs));
+            throw new Error("Fragment " + failed + gl.getShaderInfoLog(fs));
           }
           gl.attachShader(program, vs);
           gl.attachShader(program, fs);
           gl.linkProgram(program);
           if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            throw new Error("Link Program failed:\n" + gl.getProgramInfoLog(program));
+            throw new Error("Link " + failed + gl.getProgramInfoLog(program));
           }
           gl.useProgram(program);
           return program;
@@ -19591,10 +19649,7 @@ var Phaser = (function() {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
           return indexBuffer;
         },
-        deleteTexture: function(texture, reset) {
-          if (reset) {
-            this.resetTextures(true);
-          }
+        deleteTexture: function(texture) {
           if (texture) {
             this.gl.deleteTexture(texture);
           }
@@ -19602,7 +19657,14 @@ var Phaser = (function() {
         },
         deleteFramebuffer: function(framebuffer) {
           if (framebuffer) {
-            this.gl.deleteFramebuffer(framebuffer);
+            var gl = this.gl;
+            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+            var renderBuffer = gl.getParameter(gl.RENDERBUFFER_BINDING);
+            if (renderBuffer) {
+              gl.deleteRenderbuffer(renderBuffer);
+            }
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.deleteFramebuffer(framebuffer);
             ArrayRemove(this.fboStack, framebuffer);
             if (this.currentFramebuffer === framebuffer) {
               this.currentFramebuffer = null;
@@ -19688,7 +19750,6 @@ var Phaser = (function() {
           this.currentMask.mask = null;
           this.currentCameraMask.mask = null;
           this.maskStack.length = 0;
-          this.textureFlush = 0;
           this.emit(Events.PRE_RENDER);
         },
         render: function(scene, children, camera) {
@@ -19750,10 +19811,6 @@ var Phaser = (function() {
             WebGLSnapshot(this.gl, state);
             state.callback = null;
           }
-          if (this.textureFlush > 0) {
-            this.startActiveTexture++;
-            this.currentActiveTexture = 1;
-          }
         },
         snapshot: function(callback, type, encoderOptions) {
           return this.snapshotArea(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight, callback, type, encoderOptions);
@@ -19766,8 +19823,8 @@ var Phaser = (function() {
           state.getPixel = false;
           state.x = x;
           state.y = y;
-          state.width = Math.min(width, this.gl.drawingBufferWidth);
-          state.height = Math.min(height, this.gl.drawingBufferHeight);
+          state.width = width;
+          state.height = height;
           return this;
         },
         snapshotPixel: function(x, y, callback) {
@@ -19791,6 +19848,10 @@ var Phaser = (function() {
           if (height === void 0) {
             height = bufferHeight;
           }
+          if (type === "pixel") {
+            getPixel = true;
+            type = "image/png";
+          }
           var currentFramebuffer = this.currentFramebuffer;
           this.snapshotArea(x, y, width, height, callback, type, encoderOptions);
           var state = this.snapshotState;
@@ -19798,6 +19859,8 @@ var Phaser = (function() {
           state.isFramebuffer = true;
           state.bufferWidth = bufferWidth;
           state.bufferHeight = bufferHeight;
+          state.width = Math.min(state.width, bufferWidth);
+          state.height = Math.min(state.height, bufferHeight);
           this.setFramebuffer(framebuffer);
           WebGLSnapshot(this.gl, state);
           this.setFramebuffer(currentFramebuffer);
@@ -19836,7 +19899,7 @@ var Phaser = (function() {
             wrapping = gl.REPEAT;
           }
           if (this.config.antialias) {
-            minFilter = pow ? this.mipmapFilter : gl.LINEAR;
+            minFilter = pow && this.mipmapFilter ? this.mipmapFilter : gl.LINEAR;
             magFilter = gl.LINEAR;
           }
           return this.createTexture2D(0, minFilter, magFilter, wrapping, wrapping, gl.RGBA, srcCanvas, width, height, true, false, flipY);
@@ -19883,7 +19946,7 @@ var Phaser = (function() {
             wrapping = gl.REPEAT;
           }
           if (this.config.antialias) {
-            minFilter = pow ? this.mipmapFilter : gl.LINEAR;
+            minFilter = pow && this.mipmapFilter ? this.mipmapFilter : gl.LINEAR;
             magFilter = gl.LINEAR;
           }
           return this.createTexture2D(0, minFilter, magFilter, wrapping, wrapping, gl.RGBA, srcVideo, width, height, true, true, flipY);
@@ -19927,12 +19990,8 @@ var Phaser = (function() {
         },
         destroy: function() {
           this.canvas.removeEventListener("webglcontextlost", this.contextLostHandler, false);
-          this.canvas.removeEventListener("webglcontextrestored", this.contextRestoredHandler, false);
-          var gl = this.gl;
-          var temp = this.tempTextures;
-          for (var i = 0; i < temp.length; i++) {
-            gl.deleteTexture(temp[i]);
-          }
+          this.maskTarget.destroy();
+          this.maskSource.destroy();
           this.pipelines.destroy();
           this.removeAllListeners();
           this.fboStack = [];
@@ -20103,35 +20162,30 @@ var Phaser = (function() {
         initialize: function RequestAnimationFrame2() {
           this.isRunning = false;
           this.callback = NOOP;
-          this.tick = 0;
           this.isSetTimeOut = false;
           this.timeOutID = null;
-          this.lastTime = 0;
-          this.target = 0;
+          this.delay = 0;
           var _this = this;
-          this.step = function step() {
-            var timestamp = window.performance.now();
-            _this.lastTime = _this.tick;
-            _this.tick = timestamp;
-            _this.callback(timestamp);
-            _this.timeOutID = window.requestAnimationFrame(step);
+          this.step = function step(time) {
+            _this.callback(time);
+            if (_this.isRunning) {
+              _this.timeOutID = window.requestAnimationFrame(step);
+            }
           };
           this.stepTimeout = function stepTimeout() {
-            var d = Date.now();
-            var delay = Math.min(Math.max(_this.target * 2 + _this.tick - d, 0), _this.target);
-            _this.lastTime = _this.tick;
-            _this.tick = d;
-            _this.callback(d);
-            _this.timeOutID = window.setTimeout(stepTimeout, delay);
+            if (_this.isRunning) {
+              _this.timeOutID = window.setTimeout(stepTimeout, _this.delay);
+            }
+            _this.callback(window.performance.now());
           };
         },
-        start: function(callback, forceSetTimeOut, targetFPS) {
+        start: function(callback, forceSetTimeOut, delay) {
           if (this.isRunning) {
             return;
           }
           this.callback = callback;
           this.isSetTimeOut = forceSetTimeOut;
-          this.target = targetFPS;
+          this.delay = delay;
           this.isRunning = true;
           this.timeOutID = forceSetTimeOut ? window.setTimeout(this.stepTimeout, 0) : window.requestAnimationFrame(this.step);
         },
@@ -20167,6 +20221,9 @@ var Phaser = (function() {
           this.running = false;
           this.minFps = GetValue(config, "min", 5);
           this.targetFps = GetValue(config, "target", 60);
+          this.fpsLimit = GetValue(config, "limit", 0);
+          this.hasFpsLimit = this.fpsLimit > 0;
+          this._limitRate = this.hasFpsLimit ? 1e3 / this.fpsLimit : 0;
           this._min = 1e3 / this.minFps;
           this._target = 1e3 / this.targetFps;
           this.actualFps = this.targetFps;
@@ -20229,56 +20286,82 @@ var Phaser = (function() {
           this.resetDelta();
           this.startTime = window.performance.now();
           this.callback = callback;
-          this.raf.start(this.step.bind(this), this.forceSetTimeOut, this._target);
+          var step = this.hasFpsLimit ? this.stepLimitFPS.bind(this) : this.step.bind(this);
+          this.raf.start(step, this.forceSetTimeOut, this._target);
         },
-        step: function() {
-          var time = window.performance.now();
-          this.now = time;
-          var before = time - this.lastTime;
-          if (before < 0) {
-            before = 0;
-          }
-          this.rawDelta = before;
+        smoothDelta: function(delta) {
           var idx = this.deltaIndex;
           var history = this.deltaHistory;
           var max = this.deltaSmoothingMax;
-          var dt = before;
-          var avg = before;
-          if (this.smoothStep) {
-            if (this._coolDown > 0 || !this.inFocus) {
-              this._coolDown--;
-              dt = Math.min(dt, this._target);
-            }
-            if (dt > this._min) {
-              dt = history[idx];
-              dt = Math.min(dt, this._min);
-            }
-            history[idx] = dt;
-            this.deltaIndex++;
-            if (this.deltaIndex > max) {
-              this.deltaIndex = 0;
-            }
-            avg = 0;
-            for (var i = 0; i < max; i++) {
-              avg += history[i];
-            }
-            avg /= max;
+          if (this._coolDown > 0 || !this.inFocus) {
+            this._coolDown--;
+            delta = Math.min(delta, this._target);
           }
-          this.delta = avg;
+          if (delta > this._min) {
+            delta = history[idx];
+            delta = Math.min(delta, this._min);
+          }
+          history[idx] = delta;
+          this.deltaIndex++;
+          if (this.deltaIndex >= max) {
+            this.deltaIndex = 0;
+          }
+          var avg = 0;
+          for (var i = 0; i < max; i++) {
+            avg += history[i];
+          }
+          avg /= max;
+          return avg;
+        },
+        updateFPS: function(time) {
+          this.actualFps = 0.25 * this.framesThisSecond + 0.75 * this.actualFps;
+          this.nextFpsUpdate = time + 1e3;
+          this.framesThisSecond = 0;
+        },
+        stepLimitFPS: function(time) {
+          this.now = time;
+          var delta = Math.max(0, time - this.lastTime);
+          this.rawDelta = delta;
           this.time += this.rawDelta;
-          if (time > this.nextFpsUpdate) {
-            this.actualFps = 0.25 * this.framesThisSecond + 0.75 * this.actualFps;
-            this.nextFpsUpdate = time + 1e3;
-            this.framesThisSecond = 0;
+          if (this.smoothStep) {
+            delta = this.smoothDelta(delta);
+          }
+          this.delta += delta;
+          if (time >= this.nextFpsUpdate) {
+            this.updateFPS(time);
           }
           this.framesThisSecond++;
-          var interpolation = avg / this._target;
-          this.callback(time, avg, interpolation);
+          if (this.delta >= this._limitRate) {
+            this.callback(time, this.delta);
+            this.delta = 0;
+          }
+          this.lastTime = time;
+          this.frame++;
+        },
+        step: function(time) {
+          this.now = time;
+          var delta = Math.max(0, time - this.lastTime);
+          this.rawDelta = delta;
+          this.time += this.rawDelta;
+          if (this.smoothStep) {
+            delta = this.smoothDelta(delta);
+          }
+          this.delta = delta;
+          if (time >= this.nextFpsUpdate) {
+            this.updateFPS(time);
+          }
+          this.framesThisSecond++;
+          this.callback(time, delta);
           this.lastTime = time;
           this.frame++;
         },
         tick: function() {
-          this.step();
+          var now = window.performance.now();
+          if (this.hasFpsLimit) {
+            this.stepLimitFPS(now);
+          } else {
+            this.step(now);
+          }
         },
         sleep: function() {
           if (this.running) {
@@ -20287,14 +20370,22 @@ var Phaser = (function() {
           }
         },
         wake: function(seamless) {
+          if (seamless === void 0) {
+            seamless = false;
+          }
+          var now = window.performance.now();
           if (this.running) {
             return;
           } else if (seamless) {
-            this.startTime += -this.lastTime + (this.lastTime + window.performance.now());
+            this.startTime += -this.lastTime + (this.lastTime + now);
           }
-          this.raf.start(this.step.bind(this), this.forceSetTimeOut, this._target);
+          var step = this.hasFpsLimit ? this.stepLimitFPS.bind(this) : this.step.bind(this);
+          this.raf.start(step, this.forceSetTimeOut, this._target);
           this.running = true;
-          this.step();
+          this.nextFpsUpdate = now + 1e3;
+          this.framesThisSecond = 0;
+          this.fpsLimitTriggered = false;
+          this.tick();
         },
         getDuration: function() {
           return Math.round(this.lastTime - this.startTime) / 1e3;
@@ -20310,9 +20401,10 @@ var Phaser = (function() {
         },
         destroy: function() {
           this.stop();
-          this.callback = NOOP;
+          this.raf.destroy();
           this.raf = null;
           this.game = null;
+          this.callback = null;
         }
       });
       module.exports = TimeStep;
@@ -20322,7 +20414,7 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/core/VisibilityHandler.js
   var require_VisibilityHandler = __commonJS({
     "../../node_modules/phaser/src/core/VisibilityHandler.js": function(exports, module) {
-      var Events = require_events();
+      var Events = require_events5();
       var VisibilityHandler = function(game) {
         var hiddenVar;
         var eventEmitter = game.events;
@@ -20370,7 +20462,7 @@ var Phaser = (function() {
         Config: require_Config(),
         CreateRenderer: require_CreateRenderer(),
         DebugHeader: require_DebugHeader(),
-        Events: require_events(),
+        Events: require_events5(),
         TimeStep: require_TimeStep(),
         VisibilityHandler: require_VisibilityHandler()
       };
@@ -20925,7 +21017,7 @@ var Phaser = (function() {
       var Class = require_Class();
       var DataManager = require_DataManager();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var DataManagerPlugin = new Class({
         Extends: DataManager,
         initialize: function DataManagerPlugin2(scene) {
@@ -20963,7 +21055,7 @@ var Phaser = (function() {
       module.exports = {
         DataManager: require_DataManager(),
         DataManagerPlugin: require_DataManagerPlugin(),
-        Events: require_events3()
+        Events: require_events2()
       };
     }
   });
@@ -21962,6 +22054,7 @@ var Phaser = (function() {
           this.repeat = GetValue(config, "repeat", 0);
           this.repeatDelay = GetValue(config, "repeatDelay", 0);
           this.yoyo = GetValue(config, "yoyo", false);
+          this.showBeforeDelay = GetValue(config, "showBeforeDelay", false);
           this.showOnStart = GetValue(config, "showOnStart", false);
           this.hideOnComplete = GetValue(config, "hideOnComplete", false);
           this.paused = false;
@@ -22028,6 +22121,10 @@ var Phaser = (function() {
           var textureKey;
           if (typeof frames === "string") {
             textureKey = frames;
+            if (!textureManager.exists(textureKey)) {
+              console.warn('Texture "%s" not found', textureKey);
+              return out;
+            }
             var texture = textureManager.get(textureKey);
             var frameKeys = texture.getFrameNames();
             if (sortFrames) {
@@ -22049,6 +22146,10 @@ var Phaser = (function() {
             }
             var frame = GetValue(item, "frame", 0);
             var textureFrame = textureManager.getFrame(key, frame);
+            if (!textureFrame) {
+              console.warn('Texture "%s" not found', key);
+              continue;
+            }
             animationFrame = new Frame(key, frame, index, textureFrame);
             animationFrame.duration = GetValue(item, "duration", 0);
             animationFrame.isFirst = !prev;
@@ -22191,6 +22292,7 @@ var Phaser = (function() {
             repeat: this.repeat,
             repeatDelay: this.repeatDelay,
             yoyo: this.yoyo,
+            showBeforeDelay: this.showBeforeDelay,
             showOnStart: this.showOnStart,
             hideOnComplete: this.hideOnComplete
           };
@@ -22256,42 +22358,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/utils/string/Pad.js
-  var require_Pad = __commonJS({
-    "../../node_modules/phaser/src/utils/string/Pad.js": function(exports, module) {
-      var Pad = function(str, len, pad, dir) {
-        if (len === void 0) {
-          len = 0;
-        }
-        if (pad === void 0) {
-          pad = " ";
-        }
-        if (dir === void 0) {
-          dir = 3;
-        }
-        str = str.toString();
-        var padlen = 0;
-        if (len + 1 >= str.length) {
-          switch (dir) {
-            case 1:
-              str = new Array(len + 1 - str.length).join(pad) + str;
-              break;
-            case 3:
-              var right = Math.ceil((padlen = len - str.length) / 2);
-              var left = padlen - right;
-              str = new Array(left + 1).join(pad) + str + new Array(right + 1).join(pad);
-              break;
-            default:
-              str = str + new Array(len + 1 - str.length).join(pad);
-              break;
-          }
-        }
-        return str;
-      };
-      module.exports = Pad;
-    }
-  });
-
   // ../../node_modules/phaser/src/utils/array/NumberArray.js
   var require_NumberArray = __commonJS({
     "../../node_modules/phaser/src/utils/array/NumberArray.js": function(exports, module) {
@@ -22331,6 +22397,42 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/utils/string/Pad.js
+  var require_Pad = __commonJS({
+    "../../node_modules/phaser/src/utils/string/Pad.js": function(exports, module) {
+      var Pad = function(str, len, pad, dir) {
+        if (len === void 0) {
+          len = 0;
+        }
+        if (pad === void 0) {
+          pad = " ";
+        }
+        if (dir === void 0) {
+          dir = 3;
+        }
+        str = str.toString();
+        var padlen = 0;
+        if (len + 1 >= str.length) {
+          switch (dir) {
+            case 1:
+              str = new Array(len + 1 - str.length).join(pad) + str;
+              break;
+            case 3:
+              var right = Math.ceil((padlen = len - str.length) / 2);
+              var left = padlen - right;
+              str = new Array(left + 1).join(pad) + str + new Array(right + 1).join(pad);
+              break;
+            default:
+              str = str + new Array(len + 1 - str.length).join(pad);
+              break;
+          }
+        }
+        return str;
+      };
+      module.exports = Pad;
+    }
+  });
+
   // ../../node_modules/phaser/src/animations/AnimationManager.js
   var require_AnimationManager = __commonJS({
     "../../node_modules/phaser/src/animations/AnimationManager.js": function(exports, module) {
@@ -22339,11 +22441,12 @@ var Phaser = (function() {
       var CustomMap = require_Map();
       var EventEmitter = require_eventemitter3();
       var Events = require_events12();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var GetFastValue = require_GetFastValue();
       var GetValue = require_GetValue();
-      var Pad = require_Pad();
+      var MATH_CONST = require_const4();
       var NumberArray = require_NumberArray();
+      var Pad = require_Pad();
       var AnimationManager = new Class({
         Extends: EventEmitter,
         initialize: function AnimationManager2(game) {
@@ -22442,7 +22545,7 @@ var Phaser = (function() {
                   var frameKey = i.toString();
                   var frame = frames[frameKey];
                   if (frame) {
-                    var frameDuration = GetFastValue(frame, "duration", Number.MAX_SAFE_INTEGER);
+                    var frameDuration = GetFastValue(frame, "duration", MATH_CONST.MAX_SAFE_INTEGER);
                     animFrames.push({ key: key, frame: frameKey, duration: frameDuration });
                     totalDuration += frameDuration;
                   }
@@ -22520,6 +22623,10 @@ var Phaser = (function() {
           var zeroPad = GetValue(config, "zeroPad", 0);
           var out = GetValue(config, "outputArray", []);
           var frames = GetValue(config, "frames", false);
+          if (!this.textureManager.exists(key)) {
+            console.warn('Texture "%s" not found', key);
+            return out;
+          }
           var texture = this.textureManager.get(key);
           if (!texture) {
             return out;
@@ -22539,7 +22646,7 @@ var Phaser = (function() {
               if (texture.has(frame)) {
                 out.push({ key: key, frame: frame });
               } else {
-                console.warn("generateFrameNames: Frame missing: " + frame + " from texture: " + key);
+                console.warn('Frame "%s" not found in texture "%s"', frame, key);
               }
             }
           }
@@ -22551,6 +22658,10 @@ var Phaser = (function() {
           var first = GetValue(config, "first", false);
           var out = GetValue(config, "outputArray", []);
           var frames = GetValue(config, "frames", false);
+          if (!this.textureManager.exists(key)) {
+            console.warn('Texture "%s" not found', key);
+            return out;
+          }
           var texture = this.textureManager.get(key);
           if (!texture) {
             return out;
@@ -22565,16 +22676,34 @@ var Phaser = (function() {
             frames = NumberArray(start, end);
           }
           for (var i = 0; i < frames.length; i++) {
-            if (texture.has(frames[i])) {
-              out.push({ key: key, frame: frames[i] });
+            var frameName = frames[i];
+            if (texture.has(frameName)) {
+              out.push({ key: key, frame: frameName });
             } else {
-              console.warn("generateFrameNumbers: Frame " + i + " missing from texture: " + key);
+              console.warn('Frame "%s" not found in texture "%s"', frameName, key);
             }
           }
           return out;
         },
         get: function(key) {
           return this.anims.get(key);
+        },
+        getAnimsFromTexture: function(key) {
+          var texture = this.textureManager.get(key);
+          var match = texture.key;
+          var anims = this.anims.getArray();
+          var out = [];
+          for (var i = 0; i < anims.length; i++) {
+            var anim = anims[i];
+            var frames = anim.frames;
+            for (var c = 0; c < frames.length; c++) {
+              if (frames[c].textureKey === match) {
+                out.push(anim.key);
+                break;
+              }
+            }
+          }
+          return out;
         },
         pauseAll: function() {
           if (!this.paused) {
@@ -23215,7 +23344,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/input/keyboard/KeyboardManager.js": function(exports, module) {
       var ArrayRemove = require_Remove();
       var Class = require_Class();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var InputEvents = require_events13();
       var KeyCodes = require_KeyCodes();
       var NOOP = require_NOOP();
@@ -23824,6 +23953,40 @@ var Phaser = (function() {
           }
           return out;
         },
+        reset: function() {
+          this.event = null;
+          this.downElement = null;
+          this.upElement = null;
+          this.button = 0;
+          this.buttons = 0;
+          this.position.set(0, 0);
+          this.prevPosition.set(0, 0);
+          this.midPoint.set(-1, -1);
+          this.velocity.set(0, 0);
+          this.angle = 0;
+          this.distance = 0;
+          this.worldX = 0;
+          this.worldY = 0;
+          this.downX = 0;
+          this.downY = 0;
+          this.upX = 0;
+          this.upY = 0;
+          this.moveTime = 0;
+          this.upTime = 0;
+          this.downTime = 0;
+          this.primaryDown = false;
+          this.isDown = false;
+          this.wasTouch = false;
+          this.wasCanceled = false;
+          this.movementX = 0;
+          this.movementY = 0;
+          this.identifier = 0;
+          this.pointerId = null;
+          this.deltaX = 0;
+          this.deltaY = 0;
+          this.deltaZ = 0;
+          this.active = this.id === 0 ? true : false;
+        },
         destroy: function() {
           this.camera = null;
           this.manager = null;
@@ -24012,7 +24175,7 @@ var Phaser = (function() {
       var CONST = require_const8();
       var EventEmitter = require_eventemitter3();
       var Events = require_events13();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var Keyboard = require_KeyboardManager();
       var Mouse = require_MouseManager();
       var Pointer = require_Pointer();
@@ -24119,7 +24282,7 @@ var Phaser = (function() {
           return output;
         },
         updateInputPlugins: function(type, pointers) {
-          var scenes = this.game.scene.getScenes(true, true);
+          var scenes = this.game.scene.getScenes(false, true);
           this._tempSkip = false;
           for (var i = 0; i < scenes.length; i++) {
             var scene = scenes[i];
@@ -24240,7 +24403,7 @@ var Phaser = (function() {
         },
         inputCandidate: function(gameObject, camera) {
           var input = gameObject.input;
-          if (!input || !input.enabled || !input.alwaysEnabled && !gameObject.willRender(camera)) {
+          if (!input || !input.enabled || !gameObject.willRender(camera)) {
             return false;
           }
           var visible = true;
@@ -24381,7 +24544,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/GameObjectCreator.js": function(exports, module) {
       var Class = require_Class();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var GameObjectCreator = new Class({
         initialize: function GameObjectCreator2(scene) {
           this.scene = scene;
@@ -24428,72 +24591,11 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/gameobjects/GameObjectFactory.js
-  var require_GameObjectFactory = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/GameObjectFactory.js": function(exports, module) {
-      var Class = require_Class();
-      var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
-      var GameObjectFactory = new Class({
-        initialize: function GameObjectFactory2(scene) {
-          this.scene = scene;
-          this.systems = scene.sys;
-          this.events = scene.sys.events;
-          this.displayList;
-          this.updateList;
-          this.events.once(SceneEvents.BOOT, this.boot, this);
-          this.events.on(SceneEvents.START, this.start, this);
-        },
-        boot: function() {
-          this.displayList = this.systems.displayList;
-          this.updateList = this.systems.updateList;
-          this.events.once(SceneEvents.DESTROY, this.destroy, this);
-        },
-        start: function() {
-          this.events.once(SceneEvents.SHUTDOWN, this.shutdown, this);
-        },
-        existing: function(child) {
-          if (child.renderCanvas || child.renderWebGL) {
-            this.displayList.add(child);
-          }
-          if (child.preUpdate) {
-            this.updateList.add(child);
-          }
-          return child;
-        },
-        shutdown: function() {
-          this.events.off(SceneEvents.SHUTDOWN, this.shutdown, this);
-        },
-        destroy: function() {
-          this.shutdown();
-          this.events.off(SceneEvents.START, this.start, this);
-          this.scene = null;
-          this.systems = null;
-          this.events = null;
-          this.displayList = null;
-          this.updateList = null;
-        }
-      });
-      GameObjectFactory.register = function(factoryType, factoryFunction) {
-        if (!GameObjectFactory.prototype.hasOwnProperty(factoryType)) {
-          GameObjectFactory.prototype[factoryType] = factoryFunction;
-        }
-      };
-      GameObjectFactory.remove = function(factoryType) {
-        if (GameObjectFactory.prototype.hasOwnProperty(factoryType)) {
-          delete GameObjectFactory.prototype[factoryType];
-        }
-      };
-      PluginCache.register("GameObjectFactory", GameObjectFactory, "add");
-      module.exports = GameObjectFactory;
-    }
-  });
-
   // ../../node_modules/phaser/src/plugins/PluginManager.js
   var require_PluginManager = __commonJS({
     "../../node_modules/phaser/src/plugins/PluginManager.js": function(exports, module) {
       var Class = require_Class();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var EventEmitter = require_eventemitter3();
       var FileTypesManager = require_FileTypesManager();
       var GameObjectCreator = require_GameObjectCreator();
@@ -25174,8 +25276,8 @@ var Phaser = (function() {
       var CONST = require_const9();
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events8();
-      var GameEvents = require_events();
+      var Events = require_events7();
+      var GameEvents = require_events5();
       var GetInnerHeight = require_GetInnerHeight();
       var GetTarget = require_GetTarget();
       var GetScreenOrientation = require_GetScreenOrientation();
@@ -25184,6 +25286,7 @@ var Phaser = (function() {
       var Size = require_Size2();
       var SnapFloor = require_SnapFloor();
       var Vector2 = require_Vector2();
+      var Camera = require_Camera();
       var ScaleManager = new Class({
         Extends: EventEmitter,
         initialize: function ScaleManager2(game) {
@@ -25211,7 +25314,7 @@ var Phaser = (function() {
           this.resizeInterval = 500;
           this._lastCheck = 0;
           this._checkOrientation = false;
-          this.listeners = {
+          this.domlisteners = {
             orientationChange: NOOP,
             windowResize: NOOP,
             fullScreenChange: NOOP,
@@ -25611,7 +25714,7 @@ var Phaser = (function() {
         },
         startListeners: function() {
           var _this = this;
-          var listeners = this.listeners;
+          var listeners = this.domlisteners;
           listeners.orientationChange = function() {
             _this.updateBounds();
             _this._checkOrientation = true;
@@ -25649,7 +25752,11 @@ var Phaser = (function() {
         onFullScreenError: function() {
           this.removeFullscreenTarget();
         },
-        getViewPort: function(out) {
+        getViewPort: function(camera, out) {
+          if (!(camera instanceof Camera)) {
+            out = camera;
+            camera = void 0;
+          }
           if (out === void 0) {
             out = new Rectangle();
           }
@@ -25672,6 +25779,12 @@ var Phaser = (function() {
             height = baseSize.height - (canvasBounds.height - parentSize.height) * displayScale.y;
           }
           out.setTo(x, y, width, height);
+          if (camera) {
+            out.width /= camera.zoomX;
+            out.height /= camera.zoomY;
+            out.centerX = camera.centerX + camera.scrollX;
+            out.centerY = camera.centerY + camera.scrollY;
+          }
           return out;
         },
         step: function(time, delta) {
@@ -25688,7 +25801,7 @@ var Phaser = (function() {
           }
         },
         stopListeners: function() {
-          var listeners = this.listeners;
+          var listeners = this.domlisteners;
           window.removeEventListener("orientationchange", listeners.orientationChange, false);
           window.removeEventListener("resize", listeners.windowResize, false);
           var vendors = ["webkit", "moz", ""];
@@ -26036,10 +26149,9 @@ var Phaser = (function() {
       var Class = require_Class();
       var CONST = require_const10();
       var DefaultPlugins = require_DefaultPlugins();
-      var Events = require_events5();
+      var Events = require_events();
       var GetPhysicsPlugins = require_GetPhysicsPlugins();
       var GetScenePlugins = require_GetScenePlugins();
-      var GLOBAL_CONST = require_const();
       var NOOP = require_NOOP();
       var Settings = require_Settings();
       var Systems = new Class({
@@ -26156,6 +26268,10 @@ var Phaser = (function() {
         getStatus: function() {
           return this.settings.status;
         },
+        canInput: function() {
+          var status = this.settings.status;
+          return status > CONST.PENDING && status <= CONST.RUNNING;
+        },
         isSleeping: function() {
           return this.settings.status === CONST.SLEEPING;
         },
@@ -26210,9 +26326,6 @@ var Phaser = (function() {
           settings.status = CONST.SHUTDOWN;
           settings.active = false;
           settings.visible = false;
-          if (this.renderer === GLOBAL_CONST.WEBGL) {
-            this.renderer.resetTextures(true);
-          }
           events.emit(Events.SHUTDOWN, this, data);
         },
         destroy: function() {
@@ -26280,8 +26393,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/scene/SceneManager.js": function(exports, module) {
       var Class = require_Class();
       var CONST = require_const10();
-      var Events = require_events5();
-      var GameEvents = require_events();
+      var Events = require_events();
+      var GameEvents = require_events5();
       var GetValue = require_GetValue();
       var LoaderEvents = require_events14();
       var NOOP = require_NOOP();
@@ -26299,6 +26412,7 @@ var Phaser = (function() {
           this.isProcessing = false;
           this.isBooted = false;
           this.customViewports = 0;
+          this.systemScene;
           if (sceneConfig) {
             if (!Array.isArray(sceneConfig)) {
               sceneConfig = [sceneConfig];
@@ -26318,6 +26432,7 @@ var Phaser = (function() {
           if (this.isBooted) {
             return;
           }
+          this.systemScene = this.createSceneFromInstance("__SYSTEM", new Scene());
           var i;
           var entry;
           var key;
@@ -26375,7 +26490,6 @@ var Phaser = (function() {
             }
             this._start.length = 0;
             this._pending.length = 0;
-            return;
           }
           for (i = 0; i < this._queue.length; i++) {
             entry = this._queue[i];
@@ -26488,6 +26602,9 @@ var Phaser = (function() {
             var sys = this.scenes[i].sys;
             if (sys.settings.status > CONST.START && sys.settings.status <= CONST.RUNNING) {
               sys.step(time, delta);
+            }
+            if (sys.scenePlugin._target) {
+              sys.scenePlugin.step(time, delta);
             }
           }
         },
@@ -26901,311 +27018,17 @@ var Phaser = (function() {
             var sys = this.scenes[i].sys;
             sys.destroy();
           }
+          this.systemScene.sys.destroy();
           this.update = NOOP;
           this.scenes = [];
           this._pending = [];
           this._start = [];
           this._queue = [];
           this.game = null;
+          this.systemScene = null;
         }
       });
       module.exports = SceneManager;
-    }
-  });
-
-  // ../../node_modules/phaser/src/textures/Frame.js
-  var require_Frame = __commonJS({
-    "../../node_modules/phaser/src/textures/Frame.js": function(exports, module) {
-      var Class = require_Class();
-      var Clamp = require_Clamp();
-      var Extend = require_Extend();
-      var Frame = new Class({
-        initialize: function Frame2(texture, name, sourceIndex, x, y, width, height) {
-          this.texture = texture;
-          this.name = name;
-          this.source = texture.source[sourceIndex];
-          this.sourceIndex = sourceIndex;
-          this.glTexture = this.source.glTexture;
-          this.cutX;
-          this.cutY;
-          this.cutWidth;
-          this.cutHeight;
-          this.x = 0;
-          this.y = 0;
-          this.width;
-          this.height;
-          this.halfWidth;
-          this.halfHeight;
-          this.centerX;
-          this.centerY;
-          this.pivotX = 0;
-          this.pivotY = 0;
-          this.customPivot = false;
-          this.rotated = false;
-          this.autoRound = -1;
-          this.customData = {};
-          this.u0 = 0;
-          this.v0 = 0;
-          this.u1 = 0;
-          this.v1 = 0;
-          this.data = {
-            cut: {
-              x: 0,
-              y: 0,
-              w: 0,
-              h: 0,
-              r: 0,
-              b: 0
-            },
-            trim: false,
-            sourceSize: {
-              w: 0,
-              h: 0
-            },
-            spriteSourceSize: {
-              x: 0,
-              y: 0,
-              w: 0,
-              h: 0,
-              r: 0,
-              b: 0
-            },
-            radius: 0,
-            drawImage: {
-              x: 0,
-              y: 0,
-              width: 0,
-              height: 0
-            }
-          };
-          this.setSize(width, height, x, y);
-        },
-        setSize: function(width, height, x, y) {
-          if (x === void 0) {
-            x = 0;
-          }
-          if (y === void 0) {
-            y = 0;
-          }
-          this.cutX = x;
-          this.cutY = y;
-          this.cutWidth = width;
-          this.cutHeight = height;
-          this.width = width;
-          this.height = height;
-          this.halfWidth = Math.floor(width * 0.5);
-          this.halfHeight = Math.floor(height * 0.5);
-          this.centerX = Math.floor(width / 2);
-          this.centerY = Math.floor(height / 2);
-          var data = this.data;
-          var cut = data.cut;
-          cut.x = x;
-          cut.y = y;
-          cut.w = width;
-          cut.h = height;
-          cut.r = x + width;
-          cut.b = y + height;
-          data.sourceSize.w = width;
-          data.sourceSize.h = height;
-          data.spriteSourceSize.w = width;
-          data.spriteSourceSize.h = height;
-          data.radius = 0.5 * Math.sqrt(width * width + height * height);
-          var drawImage = data.drawImage;
-          drawImage.x = x;
-          drawImage.y = y;
-          drawImage.width = width;
-          drawImage.height = height;
-          return this.updateUVs();
-        },
-        setTrim: function(actualWidth, actualHeight, destX, destY, destWidth, destHeight) {
-          var data = this.data;
-          var ss = data.spriteSourceSize;
-          data.trim = true;
-          data.sourceSize.w = actualWidth;
-          data.sourceSize.h = actualHeight;
-          ss.x = destX;
-          ss.y = destY;
-          ss.w = destWidth;
-          ss.h = destHeight;
-          ss.r = destX + destWidth;
-          ss.b = destY + destHeight;
-          this.x = destX;
-          this.y = destY;
-          this.width = destWidth;
-          this.height = destHeight;
-          this.halfWidth = destWidth * 0.5;
-          this.halfHeight = destHeight * 0.5;
-          this.centerX = Math.floor(destWidth / 2);
-          this.centerY = Math.floor(destHeight / 2);
-          return this.updateUVs();
-        },
-        setCropUVs: function(crop, x, y, width, height, flipX, flipY) {
-          var cx = this.cutX;
-          var cy = this.cutY;
-          var cw = this.cutWidth;
-          var ch = this.cutHeight;
-          var rw = this.realWidth;
-          var rh = this.realHeight;
-          x = Clamp(x, 0, rw);
-          y = Clamp(y, 0, rh);
-          width = Clamp(width, 0, rw - x);
-          height = Clamp(height, 0, rh - y);
-          var ox = cx + x;
-          var oy = cy + y;
-          var ow = width;
-          var oh = height;
-          var data = this.data;
-          if (data.trim) {
-            var ss = data.spriteSourceSize;
-            width = Clamp(width, 0, cw - x);
-            height = Clamp(height, 0, ch - y);
-            var cropRight = x + width;
-            var cropBottom = y + height;
-            var intersects = !(ss.r < x || ss.b < y || ss.x > cropRight || ss.y > cropBottom);
-            if (intersects) {
-              var ix = Math.max(ss.x, x);
-              var iy = Math.max(ss.y, y);
-              var iw = Math.min(ss.r, cropRight) - ix;
-              var ih = Math.min(ss.b, cropBottom) - iy;
-              ow = iw;
-              oh = ih;
-              if (flipX) {
-                ox = cx + (cw - (ix - ss.x) - iw);
-              } else {
-                ox = cx + (ix - ss.x);
-              }
-              if (flipY) {
-                oy = cy + (ch - (iy - ss.y) - ih);
-              } else {
-                oy = cy + (iy - ss.y);
-              }
-              x = ix;
-              y = iy;
-              width = iw;
-              height = ih;
-            } else {
-              ox = 0;
-              oy = 0;
-              ow = 0;
-              oh = 0;
-            }
-          } else {
-            if (flipX) {
-              ox = cx + (cw - x - width);
-            }
-            if (flipY) {
-              oy = cy + (ch - y - height);
-            }
-          }
-          var tw = this.source.width;
-          var th = this.source.height;
-          crop.u0 = Math.max(0, ox / tw);
-          crop.v0 = Math.max(0, oy / th);
-          crop.u1 = Math.min(1, (ox + ow) / tw);
-          crop.v1 = Math.min(1, (oy + oh) / th);
-          crop.x = x;
-          crop.y = y;
-          crop.cx = ox;
-          crop.cy = oy;
-          crop.cw = ow;
-          crop.ch = oh;
-          crop.width = width;
-          crop.height = height;
-          crop.flipX = flipX;
-          crop.flipY = flipY;
-          return crop;
-        },
-        updateCropUVs: function(crop, flipX, flipY) {
-          return this.setCropUVs(crop, crop.x, crop.y, crop.width, crop.height, flipX, flipY);
-        },
-        setUVs: function(width, height, u0, v0, u1, v1) {
-          var cd = this.data.drawImage;
-          cd.width = width;
-          cd.height = height;
-          this.u0 = u0;
-          this.v0 = v0;
-          this.u1 = u1;
-          this.v1 = v1;
-          return this;
-        },
-        updateUVs: function() {
-          var cx = this.cutX;
-          var cy = this.cutY;
-          var cw = this.cutWidth;
-          var ch = this.cutHeight;
-          var cd = this.data.drawImage;
-          cd.width = cw;
-          cd.height = ch;
-          var tw = this.source.width;
-          var th = this.source.height;
-          this.u0 = cx / tw;
-          this.v0 = cy / th;
-          this.u1 = (cx + cw) / tw;
-          this.v1 = (cy + ch) / th;
-          return this;
-        },
-        updateUVsInverted: function() {
-          var tw = this.source.width;
-          var th = this.source.height;
-          this.u0 = (this.cutX + this.cutHeight) / tw;
-          this.v0 = this.cutY / th;
-          this.u1 = this.cutX / tw;
-          this.v1 = (this.cutY + this.cutWidth) / th;
-          return this;
-        },
-        clone: function() {
-          var clone = new Frame(this.texture, this.name, this.sourceIndex);
-          clone.cutX = this.cutX;
-          clone.cutY = this.cutY;
-          clone.cutWidth = this.cutWidth;
-          clone.cutHeight = this.cutHeight;
-          clone.x = this.x;
-          clone.y = this.y;
-          clone.width = this.width;
-          clone.height = this.height;
-          clone.halfWidth = this.halfWidth;
-          clone.halfHeight = this.halfHeight;
-          clone.centerX = this.centerX;
-          clone.centerY = this.centerY;
-          clone.rotated = this.rotated;
-          clone.data = Extend(true, clone.data, this.data);
-          clone.updateUVs();
-          return clone;
-        },
-        destroy: function() {
-          this.source = null;
-          this.texture = null;
-          this.glTexture = null;
-          this.customData = null;
-          this.data = null;
-        },
-        realWidth: {
-          get: function() {
-            return this.data.sourceSize.w;
-          }
-        },
-        realHeight: {
-          get: function() {
-            return this.data.sourceSize.h;
-          }
-        },
-        radius: {
-          get: function() {
-            return this.data.radius;
-          }
-        },
-        trimmed: {
-          get: function() {
-            return this.data.trim;
-          }
-        },
-        canvasData: {
-          get: function() {
-            return this.data.drawImage;
-          }
-        }
-      });
-      module.exports = Frame;
     }
   });
 
@@ -27233,35 +27056,41 @@ var Phaser = (function() {
           this.scaleMode = ScaleModes.DEFAULT;
           this.isCanvas = source instanceof HTMLCanvasElement;
           this.isVideo = window.hasOwnProperty("HTMLVideoElement") && source instanceof HTMLVideoElement;
-          this.isRenderTexture = source.type === "RenderTexture";
+          this.isRenderTexture = source.type === "RenderTexture" || source.type === "DynamicTexture";
           this.isGLTexture = window.hasOwnProperty("WebGLTexture") && source instanceof WebGLTexture;
           this.isPowerOf2 = IsSizePowerOfTwo(this.width, this.height);
           this.glTexture = null;
-          this.glIndex = 0;
-          this.glIndexCounter = -1;
           this.flipY = flipY;
           this.init(game);
         },
         init: function(game) {
           var renderer = this.renderer;
           if (renderer) {
+            var source = this.source;
             if (renderer.gl) {
+              var image = this.image;
+              var flipY = this.flipY;
+              var width = this.width;
+              var height = this.height;
+              var scaleMode = this.scaleMode;
               if (this.isCanvas) {
-                this.glTexture = renderer.createCanvasTexture(this.image, false, this.flipY);
+                this.glTexture = renderer.createCanvasTexture(image, false, flipY);
               } else if (this.isVideo) {
-                this.glTexture = renderer.createVideoTexture(this.image, false, this.flipY);
+                this.glTexture = renderer.createVideoTexture(image, false, flipY);
               } else if (this.isRenderTexture) {
-                this.image = this.source.canvas;
-                this.glTexture = renderer.createTextureFromSource(null, this.width, this.height, this.scaleMode);
+                this.glTexture = renderer.createTextureFromSource(null, width, height, scaleMode);
               } else if (this.isGLTexture) {
-                this.glTexture = this.source;
+                this.glTexture = source;
               } else if (this.compressionAlgorithm) {
-                this.glTexture = renderer.createTextureFromSource(this.source);
+                this.glTexture = renderer.createTextureFromSource(source);
               } else {
-                this.glTexture = renderer.createTextureFromSource(this.image, this.width, this.height, this.scaleMode);
+                this.glTexture = renderer.createTextureFromSource(image, width, height, scaleMode);
+              }
+              if (false) {
+                this.glTexture.__SPECTOR_Metadata = { textureKey: this.texture.key };
               }
             } else if (this.isRenderTexture) {
-              this.image = this.source.canvas;
+              this.image = source.canvas;
             }
           }
           if (!game.config.antialias) {
@@ -27282,11 +27111,14 @@ var Phaser = (function() {
           return this;
         },
         update: function() {
-          var gl = this.renderer.gl;
+          var renderer = this.renderer;
+          var image = this.image;
+          var flipY = this.flipY;
+          var gl = renderer.gl;
           if (gl && this.isCanvas) {
-            this.glTexture = this.renderer.updateCanvasTexture(this.image, this.glTexture, this.flipY);
+            this.glTexture = renderer.updateCanvasTexture(image, this.glTexture, flipY);
           } else if (gl && this.isVideo) {
-            this.glTexture = this.renderer.updateVideoTexture(this.image, this.glTexture, this.flipY);
+            this.glTexture = renderer.updateVideoTexture(image, this.glTexture, flipY);
           }
         },
         destroy: function() {
@@ -27310,7 +27142,6 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/textures/Texture.js
   var require_Texture2 = __commonJS({
     "../../node_modules/phaser/src/textures/Texture.js": function(exports, module) {
-      var CONST = require_const();
       var Class = require_Class();
       var Frame = require_Frame();
       var TextureSource = require_TextureSource();
@@ -27354,7 +27185,7 @@ var Phaser = (function() {
           return false;
         },
         has: function(name) {
-          return this.frames[name];
+          return this.frames.hasOwnProperty(name);
         },
         get: function(name) {
           if (!name) {
@@ -27450,24 +27281,28 @@ var Phaser = (function() {
         },
         destroy: function() {
           var i;
-          for (i = 0; i < this.source.length; i++) {
-            this.source[i].destroy();
+          var source = this.source;
+          var dataSource = this.dataSource;
+          for (i = 0; i < source.length; i++) {
+            if (source[i]) {
+              source[i].destroy();
+            }
           }
-          for (i = 0; i < this.dataSource.length; i++) {
-            this.dataSource[i].destroy();
+          for (i = 0; i < dataSource.length; i++) {
+            if (dataSource[i]) {
+              dataSource[i].destroy();
+            }
           }
           for (var frameName in this.frames) {
             var frame = this.frames[frameName];
-            frame.destroy();
+            if (frame) {
+              frame.destroy();
+            }
           }
           this.source = [];
           this.dataSource = [];
           this.frames = {};
           this.manager.removeKey(this.key);
-          var renderer = this.manager.game.renderer;
-          if (renderer && renderer.type === CONST.WEBGL) {
-            renderer.resetTextures(true);
-          }
           this.manager = null;
         }
       });
@@ -27491,7 +27326,7 @@ var Phaser = (function() {
           this.add("__BASE", 0, 0, 0, width, height);
           this._source = this.frames["__BASE"].source;
           this.canvas = this._source.image;
-          this.context = this.canvas.getContext("2d");
+          this.context = this.canvas.getContext("2d", { willReadFrequently: true });
           this.width = width;
           this.height = height;
           this.imageData = this.context.getImageData(0, 0, width, height);
@@ -27530,16 +27365,25 @@ var Phaser = (function() {
           }
           return this;
         },
-        draw: function(x, y, source) {
+        draw: function(x, y, source, update) {
+          if (update === void 0) {
+            update = true;
+          }
           this.context.drawImage(source, x, y);
-          return this.update();
+          if (update) {
+            this.update();
+          }
+          return this;
         },
-        drawFrame: function(key, frame, x, y) {
+        drawFrame: function(key, frame, x, y, update) {
           if (x === void 0) {
             x = 0;
           }
           if (y === void 0) {
             y = 0;
+          }
+          if (update === void 0) {
+            update = true;
           }
           var textureFrame = this.manager.getFrame(key, frame);
           if (textureFrame) {
@@ -27548,10 +27392,11 @@ var Phaser = (function() {
             var height = textureFrame.cutHeight;
             var res = textureFrame.source.resolution;
             this.context.drawImage(textureFrame.source.image, cd.x, cd.y, width, height, x, y, width / res, height / res);
-            return this.update();
-          } else {
-            return this;
+            if (update) {
+              this.update();
+            }
           }
+          return this;
         },
         setPixel: function(x, y, red, green, blue, alpha) {
           if (alpha === void 0) {
@@ -27659,7 +27504,7 @@ var Phaser = (function() {
         getContext: function() {
           return this.context;
         },
-        clear: function(x, y, width, height) {
+        clear: function(x, y, width, height, update) {
           if (x === void 0) {
             x = 0;
           }
@@ -27672,8 +27517,14 @@ var Phaser = (function() {
           if (height === void 0) {
             height = this.height;
           }
+          if (update === void 0) {
+            update = true;
+          }
           this.context.clearRect(x, y, width, height);
-          return this.update();
+          if (update) {
+            this.update();
+          }
+          return this;
         },
         setSize: function(width, height) {
           if (height === void 0) {
@@ -27704,6 +27555,528 @@ var Phaser = (function() {
         }
       });
       module.exports = CanvasTexture;
+    }
+  });
+
+  // ../../node_modules/phaser/src/textures/DynamicTexture.js
+  var require_DynamicTexture = __commonJS({
+    "../../node_modules/phaser/src/textures/DynamicTexture.js": function(exports, module) {
+      var BlendModes = require_BlendModes();
+      var Camera = require_BaseCamera();
+      var CanvasPool = require_CanvasPool();
+      var Class = require_Class();
+      var CONST = require_const();
+      var Frame = require_Frame();
+      var GetFastValue = require_GetFastValue();
+      var PIPELINES = require_const6();
+      var RenderTarget = require_RenderTarget();
+      var Texture = require_Texture2();
+      var Utils = require_Utils();
+      var DynamicTexture = new Class({
+        Extends: Texture,
+        initialize: function DynamicTexture2(manager, key, width, height) {
+          if (width === void 0) {
+            width = 256;
+          }
+          if (height === void 0) {
+            height = 256;
+          }
+          this.type = "DynamicTexture";
+          var renderer = manager.game.renderer;
+          var isCanvas = renderer && renderer.type === CONST.CANVAS;
+          var source = isCanvas ? CanvasPool.create2D(this, width, height) : [this];
+          Texture.call(this, manager, key, source, width, height);
+          this.add("__BASE", 0, 0, 0, width, height);
+          this.renderer = renderer;
+          this.isDrawing = false;
+          this.canvas = isCanvas ? source : null;
+          this.context = isCanvas ? source.getContext("2d") : null;
+          this.dirty = false;
+          this.isSpriteTexture = true;
+          this._eraseMode = false;
+          this.camera = new Camera(0, 0, width, height).setScene(manager.game.scene.systemScene, false);
+          this.renderTarget = !isCanvas ? new RenderTarget(renderer, width, height, 1, 0, false) : null;
+          this.pipeline = !isCanvas ? renderer.pipelines.get(PIPELINES.SINGLE_PIPELINE) : null;
+          this.setSize(width, height);
+        },
+        setSize: function(width, height) {
+          if (height === void 0) {
+            height = width;
+          }
+          var frame = this.get();
+          var source = frame.source;
+          if (width !== this.width || height !== this.height) {
+            if (this.canvas) {
+              this.canvas.width = width;
+              this.canvas.height = height;
+            }
+            var renderTarget = this.renderTarget;
+            if (renderTarget) {
+              renderTarget.resize(width, height);
+              frame.glTexture = renderTarget.texture;
+              source.isRenderTexture = true;
+              source.isGLTexture = true;
+              source.glTexture = renderTarget.texture;
+              source.glTexture.flipY = true;
+            }
+            this.camera.setSize(width, height);
+            source.width = width;
+            source.height = height;
+            frame.setSize(width, height);
+            this.width = width;
+            this.height = height;
+          } else {
+            var baseFrame = this.getSourceImage();
+            if (frame.cutX + width > baseFrame.width) {
+              width = baseFrame.width - frame.cutX;
+            }
+            if (frame.cutY + height > baseFrame.height) {
+              height = baseFrame.height - frame.cutY;
+            }
+            frame.setSize(width, height, frame.cutX, frame.cutY);
+          }
+          return this;
+        },
+        setIsSpriteTexture: function(value) {
+          this.isSpriteTexture = value;
+          return this;
+        },
+        fill: function(rgb, alpha, x, y, width, height) {
+          var camera = this.camera;
+          var renderer = this.renderer;
+          if (alpha === void 0) {
+            alpha = 1;
+          }
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          if (width === void 0) {
+            width = this.width;
+          }
+          if (height === void 0) {
+            height = this.height;
+          }
+          var r = rgb >> 16 & 255;
+          var g = rgb >> 8 & 255;
+          var b = rgb & 255;
+          var renderTarget = this.renderTarget;
+          camera.preRender();
+          if (renderTarget) {
+            renderTarget.bind(true);
+            var pipeline = this.pipeline.manager.set(this.pipeline);
+            var sx = renderer.width / renderTarget.width;
+            var sy = renderer.height / renderTarget.height;
+            pipeline.drawFillRect(x * sx, y * sy, width * sx, height * sy, Utils.getTintFromFloats(b / 255, g / 255, r / 255, 1), alpha);
+            renderTarget.unbind(true);
+          } else {
+            var ctx = this.context;
+            renderer.setContext(ctx);
+            ctx.globalCompositeOperation = "source-over";
+            ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+            ctx.fillRect(x, y, width, height);
+            renderer.setContext();
+          }
+          this.dirty = true;
+          return this;
+        },
+        clear: function() {
+          if (this.dirty) {
+            var ctx = this.context;
+            var renderTarget = this.renderTarget;
+            if (renderTarget) {
+              renderTarget.clear();
+            } else if (ctx) {
+              ctx.save();
+              ctx.setTransform(1, 0, 0, 1, 0, 0);
+              ctx.clearRect(0, 0, this.width, this.height);
+              ctx.restore();
+            }
+            this.dirty = false;
+          }
+          return this;
+        },
+        stamp: function(key, frame, x, y, config) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          var alpha = GetFastValue(config, "alpha", 1);
+          var tint = GetFastValue(config, "tint", 16777215);
+          var angle = GetFastValue(config, "angle", 0);
+          var rotation = GetFastValue(config, "rotation", 0);
+          var scale = GetFastValue(config, "scale", 1);
+          var scaleX = GetFastValue(config, "scaleX", scale);
+          var scaleY = GetFastValue(config, "scaleY", scale);
+          var originX = GetFastValue(config, "originX", 0.5);
+          var originY = GetFastValue(config, "originY", 0.5);
+          var blendMode = GetFastValue(config, "blendMode", 0);
+          var erase = GetFastValue(config, "erase", false);
+          var stamp = this.manager.resetStamp(alpha, tint);
+          stamp.setAngle(0);
+          if (angle !== 0) {
+            stamp.setAngle(angle);
+          } else if (rotation !== 0) {
+            stamp.setRotation(rotation);
+          }
+          stamp.setScale(scaleX, scaleY);
+          stamp.setTexture(key, frame);
+          stamp.setOrigin(originX, originY);
+          stamp.setBlendMode(blendMode);
+          if (erase) {
+            this._eraseMode = true;
+          }
+          this.draw(stamp, x, y);
+          if (erase) {
+            this._eraseMode = false;
+          }
+          return this;
+        },
+        erase: function(entries, x, y) {
+          this._eraseMode = true;
+          this.draw(entries, x, y);
+          this._eraseMode = false;
+          return this;
+        },
+        draw: function(entries, x, y, alpha, tint) {
+          this.beginDraw();
+          this.batchDraw(entries, x, y, alpha, tint);
+          this.endDraw();
+          return this;
+        },
+        drawFrame: function(key, frame, x, y, alpha, tint) {
+          this.beginDraw();
+          this.batchDrawFrame(key, frame, x, y, alpha, tint);
+          this.endDraw();
+          return this;
+        },
+        repeat: function(key, frame, x, y, width, height, alpha, tint, skipBatch) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          if (width === void 0) {
+            width = this.width;
+          }
+          if (height === void 0) {
+            height = this.height;
+          }
+          if (alpha === void 0) {
+            alpha = 1;
+          }
+          if (tint === void 0) {
+            tint = 16777215;
+          }
+          if (skipBatch === void 0) {
+            skipBatch = false;
+          }
+          if (key instanceof Frame) {
+            frame = key;
+          } else {
+            frame = this.manager.getFrame(key, frame);
+          }
+          if (!frame) {
+            return this;
+          }
+          var stamp = this.manager.resetStamp(alpha, tint);
+          stamp.setFrame(frame);
+          stamp.setOrigin(0);
+          var frameWidth = frame.width;
+          var frameHeight = frame.height;
+          width = Math.floor(width);
+          height = Math.floor(height);
+          var hmax = Math.ceil(width / frameWidth);
+          var vmax = Math.ceil(height / frameHeight);
+          var hdiff = hmax * frameWidth - width;
+          var vdiff = vmax * frameHeight - height;
+          if (hdiff > 0) {
+            hdiff = frameWidth - hdiff;
+          }
+          if (vdiff > 0) {
+            vdiff = frameHeight - vdiff;
+          }
+          if (x < 0) {
+            hmax += Math.ceil(Math.abs(x) / frameWidth);
+          }
+          if (y < 0) {
+            vmax += Math.ceil(Math.abs(y) / frameHeight);
+          }
+          var dx = x;
+          var dy = y;
+          var useCrop = false;
+          var cropRect = this.manager.stampCrop.setTo(0, 0, frameWidth, frameHeight);
+          if (!skipBatch) {
+            this.beginDraw();
+          }
+          for (var ty = 0; ty < vmax; ty++) {
+            if (dy + frameHeight < 0) {
+              dy += frameHeight;
+              continue;
+            }
+            for (var tx = 0; tx < hmax; tx++) {
+              useCrop = false;
+              if (dx + frameWidth < 0) {
+                dx += frameWidth;
+                continue;
+              } else if (dx < 0) {
+                useCrop = true;
+                cropRect.width = frameWidth + dx;
+                cropRect.x = frameWidth - cropRect.width;
+              }
+              if (dy < 0) {
+                useCrop = true;
+                cropRect.height = frameHeight + dy;
+                cropRect.y = frameHeight - cropRect.height;
+              }
+              if (hdiff > 0 && tx === hmax - 1) {
+                useCrop = true;
+                cropRect.width = hdiff;
+              }
+              if (vdiff > 0 && ty === vmax - 1) {
+                useCrop = true;
+                cropRect.height = vdiff;
+              }
+              if (useCrop) {
+                stamp.setCrop(cropRect);
+              }
+              this.batchGameObject(stamp, dx, dy);
+              stamp.isCropped = false;
+              cropRect.setTo(0, 0, frameWidth, frameHeight);
+              dx += frameWidth;
+            }
+            dx = x;
+            dy += frameHeight;
+          }
+          if (!skipBatch) {
+            this.endDraw();
+          }
+          return this;
+        },
+        beginDraw: function() {
+          if (!this.isDrawing) {
+            var camera = this.camera;
+            var renderer = this.renderer;
+            var renderTarget = this.renderTarget;
+            camera.preRender();
+            if (renderTarget) {
+              renderer.beginCapture(renderTarget.width, renderTarget.height);
+            } else {
+              renderer.setContext(this.context);
+            }
+            this.isDrawing = true;
+          }
+          return this;
+        },
+        batchDraw: function(entries, x, y, alpha, tint) {
+          if (!Array.isArray(entries)) {
+            entries = [entries];
+          }
+          this.batchList(entries, x, y, alpha, tint);
+          return this;
+        },
+        batchDrawFrame: function(key, frame, x, y, alpha, tint) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          if (alpha === void 0) {
+            alpha = 1;
+          }
+          if (tint === void 0) {
+            tint = 16777215;
+          }
+          var textureFrame = this.manager.getFrame(key, frame);
+          if (textureFrame) {
+            if (this.renderTarget) {
+              this.pipeline.batchTextureFrame(textureFrame, x, y, tint, alpha, this.camera.matrix, null);
+            } else {
+              this.batchTextureFrame(textureFrame, x, y, alpha, tint);
+            }
+          }
+          return this;
+        },
+        endDraw: function(erase) {
+          if (erase === void 0) {
+            erase = this._eraseMode;
+          }
+          if (this.isDrawing) {
+            var renderer = this.renderer;
+            var renderTarget = this.renderTarget;
+            if (renderTarget) {
+              var canvasTarget = renderer.endCapture();
+              var util = renderer.pipelines.setUtility();
+              util.blitFrame(canvasTarget, renderTarget, 1, false, false, erase, this.isSpriteTexture);
+              renderer.resetScissor();
+              renderer.resetViewport();
+            } else {
+              renderer.setContext();
+            }
+            this.dirty = true;
+            this.isDrawing = false;
+          }
+          return this;
+        },
+        batchList: function(children, x, y, alpha, tint) {
+          var len = children.length;
+          if (len === 0) {
+            return;
+          }
+          for (var i = 0; i < len; i++) {
+            var entry = children[i];
+            if (!entry || entry === this) {
+              continue;
+            }
+            if (entry.renderWebGL || entry.renderCanvas) {
+              this.batchGameObject(entry, x, y);
+            } else if (entry.isParent || entry.list) {
+              this.batchGroup(entry.getChildren(), x, y);
+            } else if (typeof entry === "string") {
+              this.batchTextureFrameKey(entry, null, x, y, alpha, tint);
+            } else if (entry instanceof Frame) {
+              this.batchTextureFrame(entry, x, y, alpha, tint);
+            } else if (Array.isArray(entry)) {
+              this.batchList(entry, x, y, alpha, tint);
+            }
+          }
+        },
+        batchGroup: function(children, x, y) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          for (var i = 0; i < children.length; i++) {
+            var entry = children[i];
+            if (entry.willRender(this.camera)) {
+              this.batchGameObject(entry, entry.x + x, entry.y + y);
+            }
+          }
+        },
+        batchGameObject: function(gameObject, x, y) {
+          if (x === void 0) {
+            x = gameObject.x;
+          }
+          if (y === void 0) {
+            y = gameObject.y;
+          }
+          var prevX = gameObject.x;
+          var prevY = gameObject.y;
+          var camera = this.camera;
+          var renderer = this.renderer;
+          var eraseMode = this._eraseMode;
+          var mask = gameObject.mask;
+          gameObject.setPosition(x, y);
+          if (this.canvas) {
+            if (eraseMode) {
+              var blendMode = gameObject.blendMode;
+              gameObject.blendMode = BlendModes.ERASE;
+            }
+            if (mask) {
+              mask.preRenderCanvas(renderer, gameObject, camera);
+            }
+            gameObject.renderCanvas(renderer, gameObject, camera, null);
+            if (mask) {
+              mask.postRenderCanvas(renderer, gameObject, camera);
+            }
+            if (eraseMode) {
+              gameObject.blendMode = blendMode;
+            }
+          } else if (renderer) {
+            if (mask) {
+              mask.preRenderWebGL(renderer, gameObject, camera);
+            }
+            if (!eraseMode) {
+              renderer.setBlendMode(gameObject.blendMode);
+            }
+            gameObject.renderWebGL(renderer, gameObject, camera);
+            if (mask) {
+              mask.postRenderWebGL(renderer, camera, this.renderTarget);
+            }
+          }
+          gameObject.setPosition(prevX, prevY);
+        },
+        batchTextureFrameKey: function(key, frame, x, y, alpha, tint) {
+          var textureFrame = this.manager.getFrame(key, frame);
+          if (textureFrame) {
+            this.batchTextureFrame(textureFrame, x, y, alpha, tint);
+          }
+        },
+        batchTextureFrame: function(textureFrame, x, y, alpha, tint) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          if (alpha === void 0) {
+            alpha = 1;
+          }
+          if (tint === void 0) {
+            tint = 16777215;
+          }
+          var matrix = this.camera.matrix;
+          var renderTarget = this.renderTarget;
+          if (renderTarget) {
+            this.pipeline.batchTextureFrame(textureFrame, x, y, tint, alpha, matrix, null);
+          } else {
+            var ctx = this.context;
+            var cd = textureFrame.canvasData;
+            var source = textureFrame.source.image;
+            ctx.save();
+            ctx.globalCompositeOperation = this._eraseMode ? "destination-out" : "source-over";
+            ctx.globalAlpha = alpha;
+            matrix.setToContext(ctx);
+            if (cd.width > 0 && cd.height > 0) {
+              ctx.drawImage(source, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
+            }
+            ctx.restore();
+          }
+        },
+        snapshotArea: function(x, y, width, height, callback, type, encoderOptions) {
+          if (this.renderTarget) {
+            this.renderer.snapshotFramebuffer(this.renderTarget.framebuffer, this.width, this.height, callback, false, x, y, width, height, type, encoderOptions);
+          } else {
+            this.renderer.snapshotCanvas(this.canvas, callback, false, x, y, width, height, type, encoderOptions);
+          }
+          return this;
+        },
+        snapshot: function(callback, type, encoderOptions) {
+          return this.snapshotArea(0, 0, this.width, this.height, callback, type, encoderOptions);
+        },
+        snapshotPixel: function(x, y, callback) {
+          return this.snapshotArea(x, y, 1, 1, callback, "pixel");
+        },
+        renderWebGL: function(renderer, src, camera, parentMatrix) {
+          var stamp = this.manager.resetStamp();
+          stamp.setTexture(this);
+          stamp.setOrigin(0);
+          stamp.renderWebGL(renderer, stamp, camera, parentMatrix);
+        },
+        renderCanvas: function() {
+        },
+        preDestroy: function() {
+          CanvasPool.remove(this.canvas);
+          if (this.renderTarget) {
+            this.renderTarget.destroy();
+          }
+          this.camera.destroy();
+          this.stamp.destroy();
+          this.canvas = null;
+          this.context = null;
+          this.renderer = null;
+          this.scene = null;
+        }
+      });
+      module.exports = DynamicTexture;
     }
   });
 
@@ -27784,6 +28157,90 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js
+  var require_ImageWebGLRenderer = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js": function(exports, module) {
+      var ImageWebGLRenderer = function(renderer, src, camera, parentMatrix) {
+        camera.addToRenderList(src);
+        this.pipeline.batchSprite(src, camera, parentMatrix);
+      };
+      module.exports = ImageWebGLRenderer;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js
+  var require_ImageCanvasRenderer = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js": function(exports, module) {
+      var ImageCanvasRenderer = function(renderer, src, camera, parentMatrix) {
+        camera.addToRenderList(src);
+        renderer.batchSprite(src, src.frame, camera, parentMatrix);
+      };
+      module.exports = ImageCanvasRenderer;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/image/ImageRender.js
+  var require_ImageRender = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/image/ImageRender.js": function(exports, module) {
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
+      if (true) {
+        renderWebGL = require_ImageWebGLRenderer();
+      }
+      if (true) {
+        renderCanvas = require_ImageCanvasRenderer();
+      }
+      module.exports = {
+        renderWebGL: renderWebGL,
+        renderCanvas: renderCanvas
+      };
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/image/Image.js
+  var require_Image = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/image/Image.js": function(exports, module) {
+      var Class = require_Class();
+      var Components = require_components();
+      var GameObject = require_GameObject();
+      var ImageRender = require_ImageRender();
+      var Image2 = new Class({
+        Extends: GameObject,
+        Mixins: [
+          Components.Alpha,
+          Components.BlendMode,
+          Components.Depth,
+          Components.Flip,
+          Components.FX,
+          Components.GetBounds,
+          Components.Mask,
+          Components.Origin,
+          Components.Pipeline,
+          Components.PostPipeline,
+          Components.ScrollFactor,
+          Components.Size,
+          Components.TextureCrop,
+          Components.Tint,
+          Components.Transform,
+          Components.Visible,
+          ImageRender
+        ],
+        initialize: function Image3(scene, x, y, texture, frame) {
+          GameObject.call(this, scene, "Image");
+          this._crop = this.resetCropObject();
+          this.setTexture(texture, frame);
+          this.setPosition(x, y);
+          this.setSizeToFrame();
+          this.setOriginFromFrame();
+          this.initPipeline();
+          this.initPostPipeline();
+        }
+      });
+      module.exports = Image2;
+    }
+  });
+
   // ../../node_modules/phaser/src/textures/parsers/AtlasXML.js
   var require_AtlasXML = __commonJS({
     "../../node_modules/phaser/src/textures/parsers/AtlasXML.js": function(exports, module) {
@@ -27831,7 +28288,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/textures/parsers/Image.js
-  var require_Image = __commonJS({
+  var require_Image2 = __commonJS({
     "../../node_modules/phaser/src/textures/parsers/Image.js": function(exports, module) {
       var Image2 = function(texture, sourceIndex) {
         var source = texture.source[sourceIndex];
@@ -28162,13 +28619,14 @@ var Phaser = (function() {
         if (startFrame < 0) {
           startFrame = total + startFrame;
         }
-        if (endFrame !== -1) {
-          total = startFrame + (endFrame + 1);
+        if (endFrame === -1 || endFrame > total || endFrame < startFrame) {
+          endFrame = total;
         }
         var fx = margin;
         var fy = margin;
         var ax = 0;
         var ay = 0;
+        var c = 0;
         for (var i = 0; i < total; i++) {
           ax = 0;
           ay = 0;
@@ -28180,7 +28638,10 @@ var Phaser = (function() {
           if (h > height) {
             ay = h - height;
           }
-          texture.add(i, sourceIndex, x + fx, y + fy, frameWidth - ax, frameHeight - ay);
+          if (i >= startFrame && i <= endFrame) {
+            texture.add(c, sourceIndex, x + fx, y + fy, frameWidth - ax, frameHeight - ay);
+            c++;
+          }
           fx += frameWidth + spacing;
           if (fx + frameWidth > width) {
             fx = margin;
@@ -28237,7 +28698,7 @@ var Phaser = (function() {
         var frameX = margin;
         var frameY = margin;
         var frameIndex = 0;
-        var sourceIndex = frame.sourceIndex;
+        var sourceIndex = 0;
         for (var sheetY = 0; sheetY < column; sheetY++) {
           var topRow = sheetY === 0;
           var bottomRow = sheetY === column - 1;
@@ -28354,7 +28815,7 @@ var Phaser = (function() {
       module.exports = {
         AtlasXML: require_AtlasXML(),
         Canvas: require_Canvas(),
-        Image: require_Image(),
+        Image: require_Image2(),
         JSONArray: require_JSONArray(),
         JSONHash: require_JSONHash(),
         KTXParser: require_KTXParser(),
@@ -28374,12 +28835,17 @@ var Phaser = (function() {
       var Class = require_Class();
       var Color = require_Color();
       var CONST = require_const();
+      var DynamicTexture = require_DynamicTexture();
       var EventEmitter = require_eventemitter3();
       var Events = require_events9();
-      var GameEvents = require_events();
+      var Frame = require_Frame();
+      var GameEvents = require_events5();
       var GenerateTexture = require_GenerateTexture();
       var GetValue = require_GetValue();
+      var ImageGameObject = require_Image();
+      var IsPlainObject = require_IsPlainObject();
       var Parser = require_parsers();
+      var Rectangle = require_Rectangle();
       var Texture = require_Texture2();
       var TextureManager = new Class({
         Extends: EventEmitter,
@@ -28388,9 +28854,12 @@ var Phaser = (function() {
           this.game = game;
           this.name = "TextureManager";
           this.list = {};
-          this._tempCanvas = CanvasPool.create2D(this, 1, 1);
-          this._tempContext = this._tempCanvas.getContext("2d");
+          this._tempCanvas = CanvasPool.create2D(this);
+          this._tempContext = this._tempCanvas.getContext("2d", { willReadFrequently: true });
           this._pending = 0;
+          this.stamp;
+          this.stampCrop = new Rectangle();
+          this.silentWarnings = false;
           game.events.once(GameEvents.BOOT, this.boot, this);
         },
         boot: function() {
@@ -28409,11 +28878,14 @@ var Phaser = (function() {
             this.off(Events.LOAD);
             this.off(Events.ERROR);
             this.emit(Events.READY);
+            this.stamp = new ImageGameObject(this.game.scene.systemScene).setOrigin(0);
           }
         },
         checkKey: function(key) {
           if (this.exists(key)) {
-            console.error("Texture key already in use: " + key);
+            if (!this.silentWarnings) {
+              console.error("Texture key already in use: " + key);
+            }
             return false;
           }
           return true;
@@ -28423,13 +28895,16 @@ var Phaser = (function() {
             if (this.exists(key)) {
               key = this.get(key);
             } else {
-              console.warn("No texture found matching key: " + key);
+              if (!this.silentWarnings) {
+                console.warn("No texture found matching key: " + key);
+              }
               return this;
             }
           }
           if (this.list.hasOwnProperty(key.key)) {
             key.destroy();
             this.emit(Events.REMOVE, key.key);
+            this.emit(Events.REMOVE_KEY + key.key);
           }
           return this;
         },
@@ -28450,6 +28925,7 @@ var Phaser = (function() {
               var texture = _this.create(key, image);
               Parser.Image(texture, 0);
               _this.emit(Events.ADD, key, texture);
+              _this.emit(Events.ADD_KEY + key, texture);
               _this.emit(Events.LOAD, key, texture);
             };
             image.src = data;
@@ -28466,7 +28942,9 @@ var Phaser = (function() {
           var data = "";
           var textureFrame = this.getFrame(key, frame);
           if (textureFrame && (textureFrame.source.isRenderTexture || textureFrame.source.isGLTexture)) {
-            console.warn("Cannot getBase64 from WebGL Texture");
+            if (!this.silentWarnings) {
+              console.warn("Cannot getBase64 from WebGL Texture");
+            }
           } else if (textureFrame) {
             var cd = textureFrame.canvasData;
             var canvas = CanvasPool.create2D(this, cd.width, cd.height);
@@ -28488,6 +28966,7 @@ var Phaser = (function() {
               texture.setDataSource(dataSource);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
@@ -28503,6 +28982,7 @@ var Phaser = (function() {
             texture = this.create(key, glTexture, width, height);
             texture.add("__BASE", 0, 0, 0, width, height);
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
@@ -28521,6 +29001,7 @@ var Phaser = (function() {
               }
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
@@ -28530,6 +29011,7 @@ var Phaser = (function() {
             texture = this.create(key, renderTexture);
             texture.add("__BASE", 0, 0, 0, renderTexture.width, renderTexture.height);
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
@@ -28567,6 +29049,24 @@ var Phaser = (function() {
             texture = new CanvasTexture(this, key, source, source.width, source.height);
             this.list[key] = texture;
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
+          }
+          return texture;
+        },
+        addDynamicTexture: function(key, width, height) {
+          var texture = null;
+          if (typeof key === "string" && !this.exists(key)) {
+            texture = new DynamicTexture(this, key, width, height);
+          } else {
+            texture = key;
+            key = texture.key;
+          }
+          if (this.checkKey(key)) {
+            this.list[key] = texture;
+            this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
+          } else {
+            texture = null;
           }
           return texture;
         },
@@ -28579,8 +29079,13 @@ var Phaser = (function() {
         },
         addAtlasJSONArray: function(key, source, data, dataSource) {
           var texture = null;
-          if (this.checkKey(key)) {
+          if (source instanceof Texture) {
+            key = texture.key;
+            texture = source;
+          } else if (this.checkKey(key)) {
             texture = this.create(key, source);
+          }
+          if (texture) {
             if (Array.isArray(data)) {
               var singleAtlasFile = data.length === 1;
               for (var i = 0; i < texture.source.length; i++) {
@@ -28594,13 +29099,19 @@ var Phaser = (function() {
               texture.setDataSource(dataSource);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
         addAtlasJSONHash: function(key, source, data, dataSource) {
           var texture = null;
-          if (this.checkKey(key)) {
+          if (source instanceof Texture) {
+            key = texture.key;
+            texture = source;
+          } else if (this.checkKey(key)) {
             texture = this.create(key, source);
+          }
+          if (texture) {
             if (Array.isArray(data)) {
               for (var i = 0; i < data.length; i++) {
                 Parser.JSONHash(texture, i, data[i]);
@@ -28612,41 +29123,60 @@ var Phaser = (function() {
               texture.setDataSource(dataSource);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
         addAtlasXML: function(key, source, data, dataSource) {
           var texture = null;
-          if (this.checkKey(key)) {
+          if (source instanceof Texture) {
+            key = texture.key;
+            texture = source;
+          } else if (this.checkKey(key)) {
             texture = this.create(key, source);
+          }
+          if (texture) {
             Parser.AtlasXML(texture, 0, data);
             if (dataSource) {
               texture.setDataSource(dataSource);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
         addUnityAtlas: function(key, source, data, dataSource) {
           var texture = null;
-          if (this.checkKey(key)) {
+          if (source instanceof Texture) {
+            key = texture.key;
+            texture = source;
+          } else if (this.checkKey(key)) {
             texture = this.create(key, source);
+          }
+          if (texture) {
             Parser.UnityYAML(texture, 0, data);
             if (dataSource) {
               texture.setDataSource(dataSource);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
         addSpriteSheet: function(key, source, config) {
           var texture = null;
-          if (this.checkKey(key)) {
+          if (source instanceof Texture) {
+            key = texture.key;
+            texture = source;
+          } else if (this.checkKey(key)) {
             texture = this.create(key, source);
+          }
+          if (texture) {
             var width = texture.source[0].width;
             var height = texture.source[0].height;
             Parser.SpriteSheet(texture, 0, 0, 0, width, height, config);
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
           }
           return texture;
         },
@@ -28669,6 +29199,7 @@ var Phaser = (function() {
               Parser.SpriteSheet(texture, 0, sheet.cutX, sheet.cutY, sheet.cutWidth, sheet.cutHeight, config);
             }
             this.emit(Events.ADD, key, texture);
+            this.emit(Events.ADD_KEY + key, texture);
             return texture;
           }
         },
@@ -28691,6 +29222,8 @@ var Phaser = (function() {
             return this.list[key];
           } else if (key instanceof Texture) {
             return key;
+          } else if (key instanceof Frame) {
+            return key.texture;
           } else {
             return this.list["__MISSING"];
           }
@@ -28705,10 +29238,25 @@ var Phaser = (function() {
             return this.list[key].get(frame);
           }
         },
+        parseFrame: function(key) {
+          if (!key) {
+            return void 0;
+          } else if (typeof key === "string") {
+            return this.getFrame(key);
+          } else if (Array.isArray(key) && key.length === 2) {
+            return this.getFrame(key[0], key[1]);
+          } else if (IsPlainObject(key)) {
+            return this.getFrame(key.key, key.frame);
+          } else if (key instanceof Texture) {
+            return key.get();
+          } else if (key instanceof Frame) {
+            return key;
+          }
+        },
         getTextureKeys: function() {
           var output = [];
           for (var key in this.list) {
-            if (key !== "__DEFAULT" && key !== "__MISSING") {
+            if (key !== "__DEFAULT" && key !== "__MISSING" && key !== "__WHITE") {
               output.push(key);
             }
           }
@@ -28777,12 +29325,30 @@ var Phaser = (function() {
             callback.apply(scope, args);
           }
         },
+        resetStamp: function(alpha, tint) {
+          if (alpha === void 0) {
+            alpha = 1;
+          }
+          if (tint === void 0) {
+            tint = 16777215;
+          }
+          var stamp = this.stamp;
+          stamp.setCrop();
+          stamp.setPosition(0);
+          stamp.setAngle(0);
+          stamp.setScale(1);
+          stamp.setAlpha(alpha);
+          stamp.setTint(tint);
+          return stamp;
+        },
         destroy: function() {
           for (var texture in this.list) {
             this.list[texture].destroy();
           }
           this.list = {};
+          this.stamp.destroy();
           this.game = null;
+          this.stamp = null;
           CanvasPool.remove(this._tempCanvas);
         }
       });
@@ -29066,10 +29632,11 @@ var Phaser = (function() {
       var Clone = require_Clone();
       var EventEmitter = require_eventemitter3();
       var Events = require_events15();
-      var GameEvents = require_events();
-      var NOOP = require_NOOP();
+      var GameEvents = require_events5();
       var GetAll = require_GetAll();
       var GetFirst = require_GetFirst();
+      var NOOP = require_NOOP();
+      var Vector2 = require_Vector2();
       var BaseSoundManager = new Class({
         Extends: EventEmitter,
         initialize: function BaseSoundManager2(game) {
@@ -29084,6 +29651,7 @@ var Phaser = (function() {
           this._detune = 0;
           this.locked = this.locked || false;
           this.unlocked = false;
+          this.listenerPosition = new Vector2();
           game.events.on(GameEvents.BLUR, this.onGameBlur, this);
           game.events.on(GameEvents.FOCUS, this.onGameFocus, this);
           game.events.on(GameEvents.PRE_STEP, this.update, this);
@@ -29116,7 +29684,14 @@ var Phaser = (function() {
           return GetFirst(this.sounds, "key", key);
         },
         getAll: function(key) {
-          return GetAll(this.sounds, "key", key);
+          if (key) {
+            return GetAll(this.sounds, "key", key);
+          } else {
+            return GetAll(this.sounds);
+          }
+        },
+        getAllPlaying: function() {
+          return GetAll(this.sounds, "isPlaying", true);
         },
         play: function(key, extra) {
           var sound = this.add(key);
@@ -29176,6 +29751,7 @@ var Phaser = (function() {
           });
           this.emit(Events.RESUME_ALL, this);
         },
+        setListenerPosition: NOOP,
         stopAll: function() {
           this.forEachActiveSound(function(sound) {
             sound.stop();
@@ -29227,6 +29803,7 @@ var Phaser = (function() {
           this.removeAll();
           this.sounds.length = 0;
           this.sounds = null;
+          this.listenerPosition = null;
           this.game = null;
         },
         forEachActiveSound: function(callback, scope) {
@@ -29433,12 +30010,9 @@ var Phaser = (function() {
             return;
           }
           this.emit(Events.DESTROY, this);
+          this.removeAllListeners();
           this.pendingRemove = true;
           this.manager = null;
-          this.key = "";
-          this.removeAllListeners();
-          this.isPlaying = false;
-          this.isPaused = false;
           this.config = null;
           this.currentConfig = null;
           this.markers = null;
@@ -29464,7 +30038,7 @@ var Phaser = (function() {
           }
           this.tags = manager.game.cache.audio.get(key);
           if (!this.tags) {
-            throw new Error('There is no audio asset with key "' + key + '" in the audio cache');
+            throw new Error('No cached audio asset with key "' + key);
           }
           this.audio = null;
           this.startTime = 0;
@@ -29987,6 +30561,7 @@ var Phaser = (function() {
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
       var Extend = require_Extend();
+      var NOOP = require_NOOP();
       var returnFalse = function() {
         return false;
       };
@@ -30039,16 +30614,20 @@ var Phaser = (function() {
         pause: returnFalse,
         resume: returnFalse,
         stop: returnFalse,
-        destroy: function() {
-          BaseSound.prototype.destroy.call(this);
-        },
         setMute: returnThis,
         setVolume: returnThis,
         setRate: returnThis,
         setDetune: returnThis,
         setSeek: returnThis,
         setLoop: returnThis,
-        setPan: returnThis
+        setPan: returnThis,
+        applyConfig: returnNull,
+        resetConfig: returnNull,
+        update: NOOP,
+        calculateRate: returnNull,
+        destroy: function() {
+          BaseSound.prototype.destroy.call(this);
+        }
       });
       module.exports = NoAudioSound;
     }
@@ -30085,6 +30664,12 @@ var Phaser = (function() {
           sound.spritemap = {};
           return sound;
         },
+        get: function(key) {
+          return BaseSoundManager.prototype.get.call(this, key);
+        },
+        getAll: function(key) {
+          return BaseSoundManager.prototype.getAll.call(this, key);
+        },
         play: function(key, extra) {
           return false;
         },
@@ -30094,9 +30679,19 @@ var Phaser = (function() {
         remove: function(sound) {
           return BaseSoundManager.prototype.remove.call(this, sound);
         },
+        removeAll: function() {
+          return BaseSoundManager.prototype.removeAll.call(this);
+        },
         removeByKey: function(key) {
           return BaseSoundManager.prototype.removeByKey.call(this, key);
         },
+        stopByKey: function(key) {
+          return BaseSoundManager.prototype.stopByKey.call(this, key);
+        },
+        onBlur: NOOP,
+        onFocus: NOOP,
+        onGameBlur: NOOP,
+        onGameFocus: NOOP,
         pauseAll: NOOP,
         resumeAll: NOOP,
         stopAll: NOOP,
@@ -30105,6 +30700,7 @@ var Phaser = (function() {
         setDetune: NOOP,
         setMute: NOOP,
         setVolume: NOOP,
+        unlock: NOOP,
         forEachActiveSound: function(callbackfn, scope) {
           BaseSoundManager.prototype.forEachActiveSound.call(this, callbackfn, scope);
         },
@@ -30163,6 +30759,7 @@ var Phaser = (function() {
       var BaseSound = require_BaseSound();
       var Class = require_Class();
       var Events = require_events15();
+      var GetFastValue = require_GetFastValue();
       var WebAudioSound = new Class({
         Extends: BaseSound,
         initialize: function WebAudioSound2(manager, key, config) {
@@ -30178,6 +30775,8 @@ var Phaser = (function() {
           this.muteNode = manager.context.createGain();
           this.volumeNode = manager.context.createGain();
           this.pannerNode = null;
+          this.spatialNode = null;
+          this.spatialSource = null;
           this.playTime = 0;
           this.startTime = 0;
           this.loopTime = 0;
@@ -30185,10 +30784,20 @@ var Phaser = (function() {
           this.hasEnded = false;
           this.hasLooped = false;
           this.muteNode.connect(this.volumeNode);
+          if (manager.context.createPanner) {
+            this.spatialNode = manager.context.createPanner();
+            this.volumeNode.connect(this.spatialNode);
+          }
           if (manager.context.createStereoPanner) {
             this.pannerNode = manager.context.createStereoPanner();
-            this.volumeNode.connect(this.pannerNode);
+            if (manager.context.createPanner) {
+              this.spatialNode.connect(this.pannerNode);
+            } else {
+              this.volumeNode.connect(this.pannerNode);
+            }
             this.pannerNode.connect(manager.destination);
+          } else if (manager.context.createPanner) {
+            this.spatialNode.connect(manager.destination);
           } else {
             this.volumeNode.connect(manager.destination);
           }
@@ -30298,9 +30907,60 @@ var Phaser = (function() {
             time: 0,
             rate: 1
           });
+          var source = this.currentConfig.source;
+          if (source && this.manager.context.createPanner) {
+            var node = this.spatialNode;
+            node.panningModel = GetFastValue(source, "panningModel", "equalpower");
+            node.distanceModel = GetFastValue(source, "distanceModel", "inverse");
+            node.positionX.value = GetFastValue(source, "x", 0);
+            node.positionY.value = GetFastValue(source, "y", 0);
+            node.positionZ.value = GetFastValue(source, "z", 0);
+            node.orientationX.value = GetFastValue(source, "orientationX", 0);
+            node.orientationY.value = GetFastValue(source, "orientationY", 0);
+            node.orientationZ.value = GetFastValue(source, "orientationZ", -1);
+            node.refDistance = GetFastValue(source, "refDistance", 1);
+            node.maxDistance = GetFastValue(source, "maxDistance", 1e4);
+            node.rolloffFactor = GetFastValue(source, "rolloffFactor", 1);
+            node.coneInnerAngle = GetFastValue(source, "coneInnerAngle", 360);
+            node.coneOuterAngle = GetFastValue(source, "coneOuterAngle", 0);
+            node.coneOuterGain = GetFastValue(source, "coneOuterGain", 0);
+            this.spatialSource = GetFastValue(source, "follow", null);
+          }
           BaseSound.prototype.applyConfig.call(this);
         },
+        x: {
+          get: function() {
+            if (this.spatialNode) {
+              return this.spatialNode.positionX;
+            } else {
+              return 0;
+            }
+          },
+          set: function(value) {
+            if (this.spatialNode) {
+              this.spatialNode.positionX.value = value;
+            }
+          }
+        },
+        y: {
+          get: function() {
+            if (this.spatialNode) {
+              return this.spatialNode.positionY;
+            } else {
+              return 0;
+            }
+          },
+          set: function(value) {
+            if (this.spatialNode) {
+              this.spatialNode.positionY.value = value;
+            }
+          }
+        },
         update: function() {
+          if (this.isPlaying && this.spatialSource) {
+            this.x = this.spatialSource.x;
+            this.y = this.spatialSource.y;
+          }
           if (this.hasEnded) {
             this.hasEnded = false;
             BaseSound.prototype.stop.call(this);
@@ -30321,6 +30981,9 @@ var Phaser = (function() {
           }
         },
         destroy: function() {
+          if (this.pendingRemove) {
+            return;
+          }
           BaseSound.prototype.destroy.call(this);
           this.audioBuffer = null;
           this.stopAndRemoveBufferSource();
@@ -30331,6 +30994,11 @@ var Phaser = (function() {
           if (this.pannerNode) {
             this.pannerNode.disconnect();
             this.pannerNode = null;
+          }
+          if (this.spatialNode) {
+            this.spatialNode.disconnect();
+            this.spatialNode = null;
+            this.spatialSource = null;
           }
           this.rateUpdates.length = 0;
           this.rateUpdates = null;
@@ -30512,7 +31180,7 @@ var Phaser = (function() {
       var BaseSoundManager = require_BaseSoundManager();
       var Class = require_Class();
       var Events = require_events15();
-      var GameEvents = require_events();
+      var GameEvents = require_events5();
       var WebAudioSound = require_WebAudioSound();
       var WebAudioSoundManager = new Class({
         Extends: BaseSoundManager,
@@ -30600,6 +31268,16 @@ var Phaser = (function() {
             this.context.decodeAudioData(data, success, failure);
           }
         },
+        setListenerPosition: function(x, y) {
+          if (x === void 0) {
+            x = this.game.scale.width / 2;
+          }
+          if (y === void 0) {
+            y = this.game.scale.height / 2;
+          }
+          this.listenerPosition.set(x, y);
+          return this;
+        },
         unlock: function() {
           var _this = this;
           var body = document.body;
@@ -30634,16 +31312,18 @@ var Phaser = (function() {
         },
         onFocus: function() {
           var context = this.context;
-          if ((context.state === "suspended" || context.state === "interrupted") && !this.locked) {
+          if (context && !this.locked && (context.state === "suspended" || context.state === "interrupted")) {
             context.resume();
           }
         },
         update: function(time, delta) {
-          BaseSoundManager.prototype.update.call(this, time, delta);
-          var context = this.context;
-          if (context && context.state === "interrupted") {
-            context.resume();
+          var listener = this.context.listener;
+          if (this.listenerPosition && listener) {
+            listener.positionX.value = this.listenerPosition.x;
+            listener.positionY.value = this.listenerPosition.y;
           }
+          BaseSoundManager.prototype.update.call(this, time, delta);
+          this.onFocus();
         },
         destroy: function() {
           this.destination = null;
@@ -31640,7 +32320,7 @@ var Phaser = (function() {
       var Device = require_device();
       var DOMContentLoaded = require_DOMContentLoaded();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events();
+      var Events = require_events5();
       var InputManager = require_InputManager();
       var PluginCache = require_PluginCache();
       var PluginManager = require_PluginManager();
@@ -31671,7 +32351,7 @@ var Phaser = (function() {
           this.anims = new AnimationManager(this);
           this.textures = new TextureManager(this);
           this.cache = new CacheManager(this);
-          this.registry = new DataManager(this);
+          this.registry = new DataManager(this, new EventEmitter());
           this.input = new InputManager(this, this.config);
           this.scene = new SceneManager(this, this.config.sceneConfig);
           this.device = Device;
@@ -31689,6 +32369,7 @@ var Phaser = (function() {
           this.removeCanvas = false;
           this.noReturn = false;
           this.hasFocus = false;
+          this.isPaused = false;
           DOMContentLoaded(this.boot.bind(this));
         },
         boot: function() {
@@ -31705,6 +32386,9 @@ var Phaser = (function() {
           AddToDOM(this.canvas, this.config.parent);
           this.textures.once(TextureEvents.READY, this.texturesReady, this);
           this.events.emit(Events.BOOT);
+          if (false && window) {
+            window.PHASER_GAME = this;
+          }
         },
         texturesReady: function() {
           this.events.emit(Events.READY);
@@ -31729,6 +32413,9 @@ var Phaser = (function() {
           if (this.pendingDestroy) {
             return this.runDestroy();
           }
+          if (this.isPaused) {
+            return;
+          }
           var eventEmitter = this.events;
           eventEmitter.emit(Events.PRE_STEP, time, delta);
           eventEmitter.emit(Events.STEP, time, delta);
@@ -31745,21 +32432,39 @@ var Phaser = (function() {
           if (this.pendingDestroy) {
             return this.runDestroy();
           }
+          if (this.isPaused) {
+            return;
+          }
           var eventEmitter = this.events;
           eventEmitter.emit(Events.PRE_STEP, time, delta);
           eventEmitter.emit(Events.STEP, time, delta);
           this.scene.update(time, delta);
           eventEmitter.emit(Events.POST_STEP, time, delta);
-          eventEmitter.emit(Events.PRE_RENDER);
-          eventEmitter.emit(Events.POST_RENDER);
+          this.scene.isProcessing = false;
+          eventEmitter.emit(Events.PRE_RENDER, null, time, delta);
+          eventEmitter.emit(Events.POST_RENDER, null, time, delta);
         },
         onHidden: function() {
           this.loop.pause();
           this.events.emit(Events.PAUSE);
         },
+        pause: function() {
+          var wasPaused = this.isPaused;
+          this.isPaused = true;
+          if (!wasPaused) {
+            this.events.emit(Events.PAUSE);
+          }
+        },
         onVisible: function() {
           this.loop.resume();
           this.events.emit(Events.RESUME);
+        },
+        resume: function() {
+          var wasPaused = this.isPaused;
+          this.isPaused = false;
+          if (wasPaused) {
+            this.events.emit(Events.RESUME);
+          }
         },
         onBlur: function() {
           this.hasFocus = false;
@@ -31807,108 +32512,15 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureWebGLRenderer.js
-  var require_RenderTextureWebGLRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureWebGLRenderer.js": function(exports, module) {
-      var Utils = require_Utils();
-      var RenderTextureWebGLRenderer = function(renderer, src, camera, parentMatrix) {
-        camera.addToRenderList(src);
-        var cameraAlpha = camera.alpha;
-        var renderTarget = src.renderTarget;
-        var width = renderTarget.width;
-        var height = renderTarget.height;
-        var getTint = Utils.getTintAppendFloatAlpha;
-        var pipeline = renderer.pipelines.set(src.pipeline);
-        var textureUnit = pipeline.setTexture2D(renderTarget.texture);
-        pipeline.batchTexture(src, renderTarget.texture, width, height, src.x, src.y, width, height, src.scaleX, src.scaleY, src.rotation, src.flipX, !src.flipY, src.scrollFactorX, src.scrollFactorY, src.displayOriginX, src.displayOriginY, 0, 0, width, height, getTint(src.tintTopLeft, cameraAlpha * src._alphaTL), getTint(src.tintTopRight, cameraAlpha * src._alphaTR), getTint(src.tintBottomLeft, cameraAlpha * src._alphaBL), getTint(src.tintBottomRight, cameraAlpha * src._alphaBR), src.tintFill, 0, 0, camera, parentMatrix, true, textureUnit);
-        renderer.resetTextures();
-      };
-      module.exports = RenderTextureWebGLRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureCanvasRenderer.js
-  var require_RenderTextureCanvasRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureCanvasRenderer.js": function(exports, module) {
-      var RenderTextureCanvasRenderer = function(renderer, src, camera, parentMatrix) {
-        camera.addToRenderList(src);
-        renderer.batchSprite(src, src.frame, camera, parentMatrix);
-      };
-      module.exports = RenderTextureCanvasRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureRender.js
-  var require_RenderTextureRender = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureRender.js": function(exports, module) {
-      var NOOP = require_NOOP();
-      var renderWebGL = NOOP;
-      var renderCanvas = NOOP;
-      if (true) {
-        renderWebGL = require_RenderTextureWebGLRenderer();
-      }
-      if (true) {
-        renderCanvas = require_RenderTextureCanvasRenderer();
-      }
-      module.exports = {
-        renderWebGL: renderWebGL,
-        renderCanvas: renderCanvas
-      };
-    }
-  });
-
-  // ../../node_modules/phaser/src/utils/string/UUID.js
-  var require_UUID = __commonJS({
-    "../../node_modules/phaser/src/utils/string/UUID.js": function(exports, module) {
-      var UUID = function() {
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-          var r = Math.random() * 16 | 0;
-          var v = c === "x" ? r : r & 3 | 8;
-          return v.toString(16);
-        });
-      };
-      module.exports = UUID;
-    }
-  });
-
   // ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTexture.js
   var require_RenderTexture = __commonJS({
     "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTexture.js": function(exports, module) {
-      var BlendModes = require_BlendModes();
-      var Camera = require_BaseCamera();
-      var CanvasPool = require_CanvasPool();
       var Class = require_Class();
-      var Components = require_components();
-      var CONST = require_const();
-      var Frame = require_Frame();
-      var GameObject = require_GameObject();
-      var NOOP = require_NOOP();
-      var PIPELINE_CONST = require_const6();
-      var Render = require_RenderTextureRender();
-      var RenderTarget = require_RenderTarget();
-      var Utils = require_Utils();
-      var UUID = require_UUID();
+      var DynamicTexture = require_DynamicTexture();
+      var Image2 = require_Image();
       var RenderTexture = new Class({
-        Extends: GameObject,
-        Mixins: [
-          Components.Alpha,
-          Components.BlendMode,
-          Components.ComputedSize,
-          Components.Crop,
-          Components.Depth,
-          Components.Flip,
-          Components.FX,
-          Components.GetBounds,
-          Components.Mask,
-          Components.Origin,
-          Components.Pipeline,
-          Components.ScrollFactor,
-          Components.Tint,
-          Components.Transform,
-          Components.Visible,
-          Render
-        ],
-        initialize: function RenderTexture2(scene, x, y, width, height, key, frame) {
+        Extends: Image2,
+        initialize: function RenderTexture2(scene, x, y, width, height) {
           if (x === void 0) {
             x = 0;
           }
@@ -31921,98 +32533,16 @@ var Phaser = (function() {
           if (height === void 0) {
             height = 32;
           }
-          GameObject.call(this, scene, "RenderTexture");
-          this.renderer = scene.sys.renderer;
-          this.textureManager = scene.sys.textures;
-          this.globalTint = 16777215;
-          this.globalAlpha = 1;
-          this.canvas = null;
-          this.dirty = false;
-          this._crop = this.resetCropObject();
-          this.texture = null;
-          this.frame = null;
+          var dynamicTexture = new DynamicTexture(scene.sys.textures, "", width, height);
+          Image2.call(this, scene, x, y, dynamicTexture);
+          this.type = "RenderTexture";
+          this.camera = this.texture.camera;
           this._saved = false;
-          this.isSpriteTexture = false;
-          if (key === void 0) {
-            this.canvas = CanvasPool.create2D(this, width, height);
-            this.texture = scene.sys.textures.addCanvas(UUID(), this.canvas);
-            this.frame = this.texture.get();
-          } else {
-            this.texture = scene.sys.textures.get(key);
-            this.frame = this.texture.get(frame);
-            this.canvas = this.frame.source.image;
-            this._saved = true;
-            this.dirty = true;
-            this.width = this.frame.cutWidth;
-            this.height = this.frame.cutHeight;
-          }
-          this.context = this.canvas.getContext("2d");
-          this._eraseMode = false;
-          this.camera = new Camera(0, 0, width, height);
-          this.renderTarget = null;
-          var renderer = this.renderer;
-          if (!renderer) {
-            this.drawGameObject = NOOP;
-          } else if (renderer.type === CONST.WEBGL) {
-            this.drawGameObject = this.batchGameObjectWebGL;
-            this.renderTarget = new RenderTarget(renderer, width, height, 1, 0, false);
-            this.setFlipY(this.isSpriteTexture);
-          } else if (renderer.type === CONST.CANVAS) {
-            this.drawGameObject = this.batchGameObjectCanvas;
-          }
-          this.camera.setScene(scene);
-          this.setPosition(x, y);
-          if (key === void 0) {
-            this.setSize(width, height);
-          }
-          this.setOrigin(0, 0);
-          this.initPipeline(PIPELINE_CONST.SINGLE_PIPELINE);
         },
         setSize: function(width, height) {
-          return this.resize(width, height);
-        },
-        setIsSpriteTexture: function(value) {
-          this.isSpriteTexture = value;
-          this.setFlipY(value);
-          return this;
-        },
-        resize: function(width, height) {
-          if (height === void 0) {
-            height = width;
-          }
-          var frame = this.frame;
-          if (width !== this.width || height !== this.height) {
-            if (frame.name === "__BASE") {
-              this.canvas.width = width;
-              this.canvas.height = height;
-              this.texture.width = width;
-              this.texture.height = height;
-              var renderTarget = this.renderTarget;
-              if (renderTarget) {
-                renderTarget.resize(width, height);
-                frame.glTexture = renderTarget.texture;
-                frame.source.isRenderTexture = true;
-                frame.source.isGLTexture = true;
-                frame.source.glTexture = renderTarget.texture;
-                frame.source.glTexture.flipY = true;
-              }
-              this.camera.setSize(width, height);
-              frame.source.width = width;
-              frame.source.height = height;
-              frame.setSize(width, height);
-              this.width = width;
-              this.height = height;
-            }
-          } else {
-            var baseFrame = this.texture.getSourceImage();
-            if (frame.cutX + width > baseFrame.width) {
-              width = baseFrame.width - frame.cutX;
-            }
-            if (frame.cutY + height > baseFrame.height) {
-              height = baseFrame.height - frame.cutY;
-            }
-            frame.setSize(width, height, frame.cutX, frame.cutY);
-          }
+          this.width = width;
+          this.height = height;
+          this.texture.setSize(width, height);
           this.updateDisplayOrigin();
           var input = this.input;
           if (input && !input.customHitArea) {
@@ -32021,314 +32551,75 @@ var Phaser = (function() {
           }
           return this;
         },
-        setGlobalTint: function(tint) {
-          this.globalTint = tint;
-          return this;
-        },
-        setGlobalAlpha: function(alpha) {
-          this.globalAlpha = alpha;
+        resize: function(width, height) {
+          this.setSize(width, height);
           return this;
         },
         saveTexture: function(key) {
-          this.textureManager.renameTexture(this.texture.key, key);
-          this._saved = true;
-          return this.texture;
+          var texture = this.texture;
+          texture.key = key;
+          if (texture.manager.addDynamicTexture(texture)) {
+            this._saved = true;
+          }
+          return texture;
         },
         fill: function(rgb, alpha, x, y, width, height) {
-          var frame = this.frame;
-          var camera = this.camera;
-          var renderer = this.renderer;
-          if (alpha === void 0) {
-            alpha = 1;
-          }
-          if (x === void 0) {
-            x = 0;
-          }
-          if (y === void 0) {
-            y = 0;
-          }
-          if (width === void 0) {
-            width = frame.cutWidth;
-          }
-          if (height === void 0) {
-            height = frame.cutHeight;
-          }
-          var r = rgb >> 16 & 255;
-          var g = rgb >> 8 & 255;
-          var b = rgb & 255;
-          var renderTarget = this.renderTarget;
-          camera.preRender();
-          if (renderTarget) {
-            renderTarget.bind(true);
-            var pipeline = this.pipeline;
-            pipeline.manager.set(pipeline);
-            var tw = renderTarget.width;
-            var th = renderTarget.height;
-            var rw = renderer.width;
-            var rh = renderer.height;
-            var sx = rw / tw;
-            var sy = rh / th;
-            pipeline.drawFillRect(x * sx, y * sy, width * sx, height * sy, Utils.getTintFromFloats(b / 255, g / 255, r / 255, 1), alpha);
-            renderTarget.unbind(true);
-          } else {
-            var ctx = this.context;
-            renderer.setContext(ctx);
-            ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
-            ctx.fillRect(x + frame.cutX, y + frame.cutY, width, height);
-            renderer.setContext();
-          }
-          this.dirty = true;
+          this.texture.fill(rgb, alpha, x, y, width, height);
           return this;
         },
         clear: function() {
-          if (this.dirty) {
-            var renderTarget = this.renderTarget;
-            if (renderTarget) {
-              renderTarget.clear();
-            } else {
-              var ctx = this.context;
-              ctx.save();
-              ctx.setTransform(1, 0, 0, 1, 0, 0);
-              ctx.clearRect(this.frame.cutX, this.frame.cutY, this.frame.cutWidth, this.frame.cutHeight);
-              ctx.restore();
-            }
-            this.dirty = false;
-          }
+          this.texture.clear();
+          return this;
+        },
+        stamp: function(key, frame, x, y, config) {
+          this.texture.stamp(key, frame, x, y, config);
           return this;
         },
         erase: function(entries, x, y) {
-          this._eraseMode = true;
-          this.draw(entries, x, y, 1, 16777215);
-          this._eraseMode = false;
+          this.texture.erase(entries, x, y);
           return this;
         },
         draw: function(entries, x, y, alpha, tint) {
-          this.beginDraw();
-          this.batchDraw(entries, x, y, alpha, tint);
-          this.endDraw();
+          this.texture.draw(entries, x, y, alpha, tint);
           return this;
         },
         drawFrame: function(key, frame, x, y, alpha, tint) {
-          this.beginDraw();
-          this.batchDrawFrame(key, frame, x, y, alpha, tint);
-          this.endDraw();
+          this.texture.drawFrame(key, frame, x, y, alpha, tint);
+          return this;
+        },
+        repeat: function(key, frame, x, y, width, height, alpha, tint, skipBatch) {
+          this.texture.repeat(key, frame, x, y, width, height, alpha, tint, skipBatch);
           return this;
         },
         beginDraw: function() {
-          var camera = this.camera;
-          var renderer = this.renderer;
-          var renderTarget = this.renderTarget;
-          camera.preRender();
-          if (renderTarget) {
-            renderer.beginCapture(renderTarget.width, renderTarget.height);
-          } else {
-            renderer.setContext(this.context);
-          }
+          this.texture.beginDraw();
           return this;
         },
         batchDraw: function(entries, x, y, alpha, tint) {
-          if (alpha === void 0) {
-            alpha = this.globalAlpha;
-          }
-          if (tint === void 0) {
-            tint = (this.globalTint >> 16) + (this.globalTint & 65280) + ((this.globalTint & 255) << 16);
-          } else {
-            tint = (tint >> 16) + (tint & 65280) + ((tint & 255) << 16);
-          }
-          if (!Array.isArray(entries)) {
-            entries = [entries];
-          }
-          this.batchList(entries, x, y, alpha, tint);
+          this.texture.batchDraw(entries, x, y, alpha, tint);
           return this;
         },
         batchDrawFrame: function(key, frame, x, y, alpha, tint) {
-          if (x === void 0) {
-            x = 0;
-          }
-          if (y === void 0) {
-            y = 0;
-          }
-          if (alpha === void 0) {
-            alpha = this.globalAlpha;
-          }
-          if (tint === void 0) {
-            tint = (this.globalTint >> 16) + (this.globalTint & 65280) + ((this.globalTint & 255) << 16);
-          } else {
-            tint = (tint >> 16) + (tint & 65280) + ((tint & 255) << 16);
-          }
-          var textureFrame = this.textureManager.getFrame(key, frame);
-          if (textureFrame) {
-            if (this.renderTarget) {
-              this.pipeline.batchTextureFrame(textureFrame, x, y, tint, alpha, this.camera.matrix, null);
-            } else {
-              this.batchTextureFrame(textureFrame, x + this.frame.cutX, y + this.frame.cutY, alpha, tint);
-            }
-          }
+          this.texture.batchDrawFrame(key, frame, x, y, alpha, tint);
           return this;
         },
         endDraw: function(erase) {
-          if (erase === void 0) {
-            erase = this._eraseMode;
-          }
-          var renderer = this.renderer;
-          var renderTarget = this.renderTarget;
-          if (renderTarget) {
-            var canvasTarget = renderer.endCapture();
-            var util = renderer.pipelines.setUtility();
-            util.blitFrame(canvasTarget, renderTarget, 1, false, false, erase, this.isSpriteTexture);
-            renderer.resetScissor();
-            renderer.resetViewport();
-          } else {
-            renderer.setContext();
-          }
-          this.dirty = true;
+          this.texture.endDraw(erase);
           return this;
         },
-        batchList: function(children, x, y, alpha, tint) {
-          for (var i = 0; i < children.length; i++) {
-            var entry = children[i];
-            if (!entry || entry === this) {
-              continue;
-            }
-            if (entry.renderWebGL || entry.renderCanvas) {
-              this.drawGameObject(entry, x, y);
-            } else if (entry.isParent || entry.list) {
-              this.batchGroup(entry.getChildren(), x, y);
-            } else if (typeof entry === "string") {
-              this.batchTextureFrameKey(entry, null, x, y, alpha, tint);
-            } else if (entry instanceof Frame) {
-              this.batchTextureFrame(entry, x, y, alpha, tint);
-            } else if (Array.isArray(entry)) {
-              this.batchList(entry, x, y, alpha, tint);
-            }
-          }
-        },
-        batchGroup: function(children, x, y) {
-          if (x === void 0) {
-            x = 0;
-          }
-          if (y === void 0) {
-            y = 0;
-          }
-          x += this.frame.cutX;
-          y += this.frame.cutY;
-          for (var i = 0; i < children.length; i++) {
-            var entry = children[i];
-            if (entry.willRender(this.camera)) {
-              var tx = entry.x + x;
-              var ty = entry.y + y;
-              this.drawGameObject(entry, tx, ty);
-            }
-          }
-        },
-        batchGameObjectWebGL: function(gameObject, x, y) {
-          if (x === void 0) {
-            x = gameObject.x;
-          }
-          if (y === void 0) {
-            y = gameObject.y;
-          }
-          var prevX = gameObject.x;
-          var prevY = gameObject.y;
-          gameObject.setPosition(x + this.frame.cutX, y + this.frame.cutY);
-          if (gameObject.renderDirect) {
-            gameObject.renderDirect(this.renderer, gameObject, this.camera);
-          } else {
-            if (!this._eraseMode) {
-              this.renderer.setBlendMode(gameObject.blendMode);
-            }
-            gameObject.renderWebGL(this.renderer, gameObject, this.camera);
-          }
-          gameObject.setPosition(prevX, prevY);
-        },
-        batchGameObjectCanvas: function(gameObject, x, y) {
-          if (x === void 0) {
-            x = gameObject.x;
-          }
-          if (y === void 0) {
-            y = gameObject.y;
-          }
-          var prevX = gameObject.x;
-          var prevY = gameObject.y;
-          if (this._eraseMode) {
-            var blendMode = gameObject.blendMode;
-            gameObject.blendMode = BlendModes.ERASE;
-          }
-          gameObject.setPosition(x + this.frame.cutX, y + this.frame.cutY);
-          gameObject.renderCanvas(this.renderer, gameObject, this.camera, null);
-          gameObject.setPosition(prevX, prevY);
-          if (this._eraseMode) {
-            gameObject.blendMode = blendMode;
-          }
-        },
-        batchTextureFrameKey: function(key, frame, x, y, alpha, tint) {
-          var textureFrame = this.textureManager.getFrame(key, frame);
-          if (textureFrame) {
-            this.batchTextureFrame(textureFrame, x, y, alpha, tint);
-          }
-        },
-        batchTextureFrame: function(textureFrame, x, y, alpha, tint) {
-          if (x === void 0) {
-            x = 0;
-          }
-          if (y === void 0) {
-            y = 0;
-          }
-          x += this.frame.cutX;
-          y += this.frame.cutY;
-          var renderTarget = this.renderTarget;
-          if (renderTarget) {
-            this.pipeline.batchTextureFrame(textureFrame, x, y, tint, alpha, this.camera.matrix, null);
-          } else {
-            var ctx = this.context;
-            var cd = textureFrame.canvasData;
-            var source = textureFrame.source.image;
-            var matrix = this.camera.matrix;
-            ctx.save();
-            ctx.globalCompositeOperation = this._eraseMode ? "destination-out" : "source-over";
-            ctx.globalAlpha = alpha;
-            matrix.setToContext(ctx);
-            if (cd.width > 0 && cd.height > 0) {
-              ctx.drawImage(source, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
-            }
-            ctx.restore();
-          }
-        },
         snapshotArea: function(x, y, width, height, callback, type, encoderOptions) {
-          if (this.renderTarget) {
-            this.renderer.snapshotFramebuffer(this.renderTarget.framebuffer, this.width, this.height, callback, false, x, y, width, height, type, encoderOptions);
-          } else {
-            this.renderer.snapshotCanvas(this.canvas, callback, false, x, y, width, height, type, encoderOptions);
-          }
+          this.texture.snapshotArea(x, y, width, height, callback, type, encoderOptions);
           return this;
         },
         snapshot: function(callback, type, encoderOptions) {
-          if (this.renderTarget) {
-            this.renderer.snapshotFramebuffer(this.renderTarget.framebuffer, this.width, this.height, callback, false, 0, 0, this.width, this.height, type, encoderOptions);
-          } else {
-            this.renderer.snapshotCanvas(this.canvas, callback, false, 0, 0, this.width, this.height, type, encoderOptions);
-          }
-          return this;
+          return this.snapshotArea(0, 0, this.width, this.height, callback, type, encoderOptions);
         },
         snapshotPixel: function(x, y, callback) {
-          if (this.renderTarget) {
-            this.renderer.snapshotFramebuffer(this.renderTarget.framebuffer, this.width, this.height, callback, true, x, y);
-          } else {
-            this.renderer.snapshotCanvas(this.canvas, callback, true, x, y);
-          }
-          return this;
+          return this.snapshotArea(x, y, 1, 1, callback, "pixel");
         },
         preDestroy: function() {
           if (!this._saved) {
-            CanvasPool.remove(this.canvas);
-            if (this.renderTarget) {
-              this.renderTarget.destroy();
-            }
             this.texture.destroy();
-            this.camera.destroy();
-            this.canvas = null;
-            this.context = null;
-            this.texture = null;
           }
         }
       });
@@ -32786,6 +33077,26 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/utils/array/Flatten.js
+  var require_Flatten = __commonJS({
+    "../../node_modules/phaser/src/utils/array/Flatten.js": function(exports, module) {
+      var Flatten = function(array, output) {
+        if (output === void 0) {
+          output = [];
+        }
+        for (var i = 0; i < array.length; i++) {
+          if (Array.isArray(array[i])) {
+            Flatten(array[i], output);
+          } else {
+            output.push(array[i]);
+          }
+        }
+        return output;
+      };
+      module.exports = Flatten;
+    }
+  });
+
   // ../../node_modules/phaser/src/utils/array/GetRandom.js
   var require_GetRandom = __commonJS({
     "../../node_modules/phaser/src/utils/array/GetRandom.js": function(exports, module) {
@@ -33212,6 +33523,7 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/utils/array/StableSort.js
   var require_StableSort = __commonJS({
     "../../node_modules/phaser/src/utils/array/StableSort.js": function(exports, module) {
+      var Device = require_device();
       function Compare(a, b) {
         return String(a).localeCompare(b);
       }
@@ -33267,6 +33579,12 @@ var Phaser = (function() {
         if (compare === void 0) {
           compare = Compare;
         }
+        if (!array || array.length < 2) {
+          return array;
+        }
+        if (Device.features.stableSort) {
+          return array.sort(compare);
+        }
         var result = Process(array, compare);
         if (result !== array) {
           RunPass(result, null, array.length, array);
@@ -33309,6 +33627,7 @@ var Phaser = (function() {
         Each: require_Each(),
         EachInRange: require_EachInRange(),
         FindClosestInSorted: require_FindClosestInSorted(),
+        Flatten: require_Flatten(),
         GetAll: require_GetAll(),
         GetFirst: require_GetFirst(),
         GetRandom: require_GetRandom(),
@@ -33518,7 +33837,7 @@ var Phaser = (function() {
       var BlendModes = require_BlendModes();
       var Class = require_Class();
       var Components = require_components();
-      var Events = require_events4();
+      var Events = require_events3();
       var GameObject = require_GameObject();
       var Rectangle = require_Rectangle();
       var Render = require_ContainerRender();
@@ -33532,7 +33851,7 @@ var Phaser = (function() {
           Components.ComputedSize,
           Components.Depth,
           Components.Mask,
-          Components.Pipeline,
+          Components.PostPipeline,
           Components.Transform,
           Components.Visible,
           Render
@@ -33549,7 +33868,7 @@ var Phaser = (function() {
           this._sysEvents = scene.sys.events;
           this.scrollFactorX = 1;
           this.scrollFactorY = 1;
-          this.initPipeline();
+          this.initPostPipeline();
           this.setPosition(x, y);
           this.clearAlpha();
           this.setBlendMode(BlendModes.SKIP_CHECK);
@@ -34102,8 +34421,8 @@ var Phaser = (function() {
       var Class = require_Class();
       var List = require_List();
       var PluginCache = require_PluginCache();
-      var GameObjectEvents = require_events4();
-      var SceneEvents = require_events5();
+      var GameObjectEvents = require_events3();
+      var SceneEvents = require_events();
       var StableSort = require_StableSort();
       var DisplayList = new Class({
         Extends: List,
@@ -34229,7 +34548,7 @@ var Phaser = (function() {
           return this._destroy.indexOf(item) > -1;
         },
         add: function(item) {
-          if (this.checkQueue && (this.isActive(item) || this.isPending(item))) {
+          if (this.checkQueue && (this.isActive() && !this.isDestroying()) || this.isPending()) {
             return item;
           }
           this._pending.push(item);
@@ -34313,7 +34632,7 @@ var Phaser = (function() {
       var Class = require_Class();
       var ProcessQueue = require_ProcessQueue();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var UpdateList = new Class({
         Extends: ProcessQueue,
         initialize: function UpdateList2(scene) {
@@ -35006,7 +35325,7 @@ var Phaser = (function() {
         ctx.globalAlpha = alpha;
         ctx.save();
         calcMatrix.setToContext(ctx);
-        ctx.imageSmoothingEnabled = !(!renderer.antialias || src.frame && src.frame.source.scaleMode);
+        ctx.imageSmoothingEnabled = src.frame ? !src.frame.source.scaleMode : renderer.antialias;
         return true;
       };
       module.exports = SetTransform;
@@ -35182,14 +35501,7 @@ var Phaser = (function() {
       var BaseCamera = require_BaseCamera();
       var Class = require_Class();
       var Commands = require_Commands();
-      var ComponentsAlpha = require_AlphaSingle();
-      var ComponentsBlendMode = require_BlendMode();
-      var ComponentsDepth = require_Depth();
-      var ComponentsMask = require_Mask();
-      var ComponentsPipeline = require_Pipeline();
-      var ComponentsScrollFactor = require_ScrollFactor();
-      var ComponentsTransform = require_Transform();
-      var ComponentsVisible = require_Visible();
+      var Components = require_components();
       var Ellipse = require_Ellipse();
       var GameObject = require_GameObject();
       var GetFastValue = require_GetFastValue();
@@ -35199,14 +35511,15 @@ var Phaser = (function() {
       var Graphics = new Class({
         Extends: GameObject,
         Mixins: [
-          ComponentsAlpha,
-          ComponentsBlendMode,
-          ComponentsDepth,
-          ComponentsMask,
-          ComponentsPipeline,
-          ComponentsTransform,
-          ComponentsVisible,
-          ComponentsScrollFactor,
+          Components.Alpha,
+          Components.BlendMode,
+          Components.Depth,
+          Components.Mask,
+          Components.Pipeline,
+          Components.PostPipeline,
+          Components.Transform,
+          Components.Visible,
+          Components.ScrollFactor,
           Render
         ],
         initialize: function Graphics2(scene, options) {
@@ -35215,6 +35528,7 @@ var Phaser = (function() {
           GameObject.call(this, scene, "Graphics");
           this.setPosition(x, y);
           this.initPipeline();
+          this.initPostPipeline();
           this.displayOriginX = 0;
           this.displayOriginY = 0;
           this.commandBuffer = [];
@@ -35366,16 +35680,40 @@ var Phaser = (function() {
             bl = GetFastValue(radius, "bl", 20);
             br = GetFastValue(radius, "br", 20);
           }
+          var convexTL = tl >= 0;
+          var convexTR = tr >= 0;
+          var convexBL = bl >= 0;
+          var convexBR = br >= 0;
+          tl = Math.abs(tl);
+          tr = Math.abs(tr);
+          bl = Math.abs(bl);
+          br = Math.abs(br);
           this.beginPath();
           this.moveTo(x + tl, y);
           this.lineTo(x + width - tr, y);
-          this.arc(x + width - tr, y + tr, tr, -MATH_CONST.TAU, 0);
+          if (convexTR) {
+            this.arc(x + width - tr, y + tr, tr, -MATH_CONST.TAU, 0);
+          } else {
+            this.arc(x + width, y, tr, Math.PI, MATH_CONST.TAU, true);
+          }
           this.lineTo(x + width, y + height - br);
-          this.arc(x + width - br, y + height - br, br, 0, MATH_CONST.TAU);
+          if (convexBR) {
+            this.arc(x + width - br, y + height - br, br, 0, MATH_CONST.TAU);
+          } else {
+            this.arc(x + width, y + height, br, -MATH_CONST.TAU, Math.PI, true);
+          }
           this.lineTo(x + bl, y + height);
-          this.arc(x + bl, y + height - bl, bl, MATH_CONST.TAU, Math.PI);
+          if (convexBL) {
+            this.arc(x + bl, y + height - bl, bl, MATH_CONST.TAU, Math.PI);
+          } else {
+            this.arc(x, y + height, bl, 0, -MATH_CONST.TAU, true);
+          }
           this.lineTo(x, y + tl);
-          this.arc(x + tl, y + tl, tl, -Math.PI, -MATH_CONST.TAU);
+          if (convexTL) {
+            this.arc(x + tl, y + tl, tl, -Math.PI, -MATH_CONST.TAU);
+          } else {
+            this.arc(x, y, tl, MATH_CONST.TAU, 0, true);
+          }
           this.fillPath();
           return this;
         },
@@ -35387,26 +35725,51 @@ var Phaser = (function() {
           var tr = radius;
           var bl = radius;
           var br = radius;
+          var maxRadius = Math.min(width, height) / 2;
           if (typeof radius !== "number") {
             tl = GetFastValue(radius, "tl", 20);
             tr = GetFastValue(radius, "tr", 20);
             bl = GetFastValue(radius, "bl", 20);
             br = GetFastValue(radius, "br", 20);
           }
+          var convexTL = tl >= 0;
+          var convexTR = tr >= 0;
+          var convexBL = bl >= 0;
+          var convexBR = br >= 0;
+          tl = Math.min(Math.abs(tl), maxRadius);
+          tr = Math.min(Math.abs(tr), maxRadius);
+          bl = Math.min(Math.abs(bl), maxRadius);
+          br = Math.min(Math.abs(br), maxRadius);
           this.beginPath();
           this.moveTo(x + tl, y);
           this.lineTo(x + width - tr, y);
           this.moveTo(x + width - tr, y);
-          this.arc(x + width - tr, y + tr, tr, -MATH_CONST.TAU, 0);
+          if (convexTR) {
+            this.arc(x + width - tr, y + tr, tr, -MATH_CONST.TAU, 0);
+          } else {
+            this.arc(x + width, y, tr, Math.PI, MATH_CONST.TAU, true);
+          }
           this.lineTo(x + width, y + height - br);
           this.moveTo(x + width, y + height - br);
-          this.arc(x + width - br, y + height - br, br, 0, MATH_CONST.TAU);
+          if (convexBR) {
+            this.arc(x + width - br, y + height - br, br, 0, MATH_CONST.TAU);
+          } else {
+            this.arc(x + width, y + height, br, -MATH_CONST.TAU, Math.PI, true);
+          }
           this.lineTo(x + bl, y + height);
           this.moveTo(x + bl, y + height);
-          this.arc(x + bl, y + height - bl, bl, MATH_CONST.TAU, Math.PI);
+          if (convexBL) {
+            this.arc(x + bl, y + height - bl, bl, MATH_CONST.TAU, Math.PI);
+          } else {
+            this.arc(x, y + height, bl, 0, -MATH_CONST.TAU, true);
+          }
           this.lineTo(x, y + tl);
           this.moveTo(x, y + tl);
-          this.arc(x + tl, y + tl, tl, -Math.PI, -MATH_CONST.TAU);
+          if (convexTL) {
+            this.arc(x + tl, y + tl, tl, -Math.PI, -MATH_CONST.TAU);
+          } else {
+            this.arc(x, y, tl, MATH_CONST.TAU, 0, true);
+          }
           this.strokePath();
           return this;
         },
@@ -35632,88 +35995,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js
-  var require_ImageWebGLRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js": function(exports, module) {
-      var ImageWebGLRenderer = function(renderer, src, camera, parentMatrix) {
-        camera.addToRenderList(src);
-        this.pipeline.batchSprite(src, camera, parentMatrix);
-      };
-      module.exports = ImageWebGLRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js
-  var require_ImageCanvasRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js": function(exports, module) {
-      var ImageCanvasRenderer = function(renderer, src, camera, parentMatrix) {
-        camera.addToRenderList(src);
-        renderer.batchSprite(src, src.frame, camera, parentMatrix);
-      };
-      module.exports = ImageCanvasRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/image/ImageRender.js
-  var require_ImageRender = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/image/ImageRender.js": function(exports, module) {
-      var NOOP = require_NOOP();
-      var renderWebGL = NOOP;
-      var renderCanvas = NOOP;
-      if (true) {
-        renderWebGL = require_ImageWebGLRenderer();
-      }
-      if (true) {
-        renderCanvas = require_ImageCanvasRenderer();
-      }
-      module.exports = {
-        renderWebGL: renderWebGL,
-        renderCanvas: renderCanvas
-      };
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/image/Image.js
-  var require_Image2 = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/image/Image.js": function(exports, module) {
-      var Class = require_Class();
-      var Components = require_components();
-      var GameObject = require_GameObject();
-      var ImageRender = require_ImageRender();
-      var Image2 = new Class({
-        Extends: GameObject,
-        Mixins: [
-          Components.Alpha,
-          Components.BlendMode,
-          Components.Depth,
-          Components.Flip,
-          Components.FX,
-          Components.GetBounds,
-          Components.Mask,
-          Components.Origin,
-          Components.Pipeline,
-          Components.ScrollFactor,
-          Components.Size,
-          Components.TextureCrop,
-          Components.Tint,
-          Components.Transform,
-          Components.Visible,
-          ImageRender
-        ],
-        initialize: function Image3(scene, x, y, texture, frame) {
-          GameObject.call(this, scene, "Image");
-          this._crop = this.resetCropObject();
-          this.setTexture(texture, frame);
-          this.setPosition(x, y);
-          this.setSizeToFrame();
-          this.setOriginFromFrame();
-          this.initPipeline();
-        }
-      });
-      module.exports = Image2;
-    }
-  });
-
   // ../../node_modules/phaser/src/gameobjects/shape/Shape.js
   var require_Shape = __commonJS({
     "../../node_modules/phaser/src/gameobjects/shape/Shape.js": function(exports, module) {
@@ -35728,9 +36009,11 @@ var Phaser = (function() {
           Components.BlendMode,
           Components.Depth,
           Components.GetBounds,
+          Components.FX,
           Components.Mask,
           Components.Origin,
           Components.Pipeline,
+          Components.PostPipeline,
           Components.ScrollFactor,
           Components.Transform,
           Components.Visible
@@ -35755,6 +36038,7 @@ var Phaser = (function() {
           this.width = 0;
           this.height = 0;
           this.initPipeline();
+          this.initPostPipeline();
         },
         setFillStyle: function(color, alpha) {
           if (alpha === void 0) {
@@ -36549,9 +36833,12 @@ var Phaser = (function() {
         }
         var angle = startAngle;
         var angleStep = (endAngle - startAngle) / items.length;
+        var cx = circle.x;
+        var cy = circle.y;
+        var radius = circle.radius;
         for (var i = 0; i < items.length; i++) {
-          items[i].x = circle.x + circle.radius * Math.cos(angle);
-          items[i].y = circle.y + circle.radius * Math.sin(angle);
+          items[i].x = cx + radius * Math.cos(angle);
+          items[i].y = cy + radius * Math.sin(angle);
           angle += angleStep;
         }
         return items;
@@ -37214,46 +37501,40 @@ var Phaser = (function() {
         }
         var px;
         var py;
-        if (items.length > 1) {
-          var i;
-          var cx;
-          var cy;
-          var cur;
-          if (direction === 0) {
-            var len = items.length - 1;
-            px = items[len].x;
-            py = items[len].y;
-            for (i = len - 1; i >= 0; i--) {
-              cur = items[i];
-              cx = cur.x;
-              cy = cur.y;
-              cur.x = px;
-              cur.y = py;
-              px = cx;
-              py = cy;
-            }
-            items[len].x = x;
-            items[len].y = y;
-          } else {
-            px = items[0].x;
-            py = items[0].y;
-            for (i = 1; i < items.length; i++) {
-              cur = items[i];
-              cx = cur.x;
-              cy = cur.y;
-              cur.x = px;
-              cur.y = py;
-              px = cx;
-              py = cy;
-            }
-            items[0].x = x;
-            items[0].y = y;
-          }
-        } else {
+        var len = items.length;
+        if (len === 1) {
           px = items[0].x;
           py = items[0].y;
           items[0].x = x;
           items[0].y = y;
+        } else {
+          var i = 1;
+          var pos = 0;
+          if (direction === 0) {
+            pos = len - 1;
+            i = len - 2;
+          }
+          px = items[pos].x;
+          py = items[pos].y;
+          items[pos].x = x;
+          items[pos].y = y;
+          for (var c = 0; c < len; c++) {
+            if (i >= len || i === -1) {
+              continue;
+            }
+            var cur = items[i];
+            var cx = cur.x;
+            var cy = cur.y;
+            cur.x = px;
+            cur.y = py;
+            px = cx;
+            py = cy;
+            if (direction === 0) {
+              i--;
+            } else {
+              i++;
+            }
+          }
         }
         output.x = px;
         output.y = py;
@@ -37331,7 +37612,18 @@ var Phaser = (function() {
         if (inc === void 0) {
           inc = false;
         }
-        var step = Math.abs(max - min) / items.length;
+        if (items.length === 0) {
+          return items;
+        }
+        if (items.length === 1) {
+          if (inc) {
+            items[0][property] += (max + min) / 2;
+          } else {
+            items[0][property] = (max + min) / 2;
+          }
+          return items;
+        }
+        var step = Math.abs(max - min) / (items.length - 1);
         var i;
         if (inc) {
           for (i = 0; i < items.length; i++) {
@@ -37438,6 +37730,16 @@ var Phaser = (function() {
         ToggleVisible: require_ToggleVisible(),
         WrapInRectangle: require_WrapInRectangle()
       };
+    }
+  });
+
+  // ../../node_modules/phaser/src/utils/object/HasValue.js
+  var require_HasValue = __commonJS({
+    "../../node_modules/phaser/src/utils/object/HasValue.js": function(exports, module) {
+      var HasValue = function(source, key) {
+        return source.hasOwnProperty(key);
+      };
+      module.exports = HasValue;
     }
   });
 
@@ -37618,6 +37920,7 @@ var Phaser = (function() {
           this.repeat = 0;
           this.repeatDelay = 0;
           this.yoyo = false;
+          this.showBeforeDelay = false;
           this.showOnStart = false;
           this.hideOnComplete = false;
           this.forward = true;
@@ -37644,7 +37947,7 @@ var Phaser = (function() {
           }
           for (var i = 0; i < key.length; i++) {
             var anim = key[i];
-            if (this.nextAnim === null) {
+            if (!this.nextAnim) {
               this.nextAnim = anim;
             } else {
               this.nextAnimsQueue.push(anim);
@@ -37677,6 +37980,7 @@ var Phaser = (function() {
             this.repeat = GetFastValue(key, "repeat", anim.repeat);
             this.repeatDelay = GetFastValue(key, "repeatDelay", anim.repeatDelay);
             this.yoyo = GetFastValue(key, "yoyo", anim.yoyo);
+            this.showBeforeDelay = GetFastValue(key, "showBeforeDelay", anim.showBeforeDelay);
             this.showOnStart = GetFastValue(key, "showOnStart", anim.showOnStart);
             this.hideOnComplete = GetFastValue(key, "hideOnComplete", anim.hideOnComplete);
             this.skipMissedFrames = GetFastValue(key, "skipMissedFrames", anim.skipMissedFrames);
@@ -37805,6 +38109,8 @@ var Phaser = (function() {
           this.delayCounter += this.delay;
           if (this.delayCounter === 0) {
             this.handleStart();
+          } else if (this.showBeforeDelay) {
+            this.setCurrentFrame(this.currentFrame);
           }
           return gameObject;
         },
@@ -37835,12 +38141,14 @@ var Phaser = (function() {
         },
         emitEvents: function(event, keyEvent) {
           var anim = this.currentAnim;
-          var frame = this.currentFrame;
-          var gameObject = this.parent;
-          var frameKey = frame.textureFrame;
-          gameObject.emit(event, anim, frame, gameObject, frameKey);
-          if (keyEvent) {
-            gameObject.emit(keyEvent + anim.key, anim, frame, gameObject, frameKey);
+          if (anim) {
+            var frame = this.currentFrame;
+            var gameObject = this.parent;
+            var frameKey = frame.textureFrame;
+            gameObject.emit(event, anim, frame, gameObject, frameKey);
+            if (keyEvent) {
+              gameObject.emit(keyEvent + anim.key, anim, frame, gameObject, frameKey);
+            }
           }
         },
         reverse: function() {
@@ -37923,6 +38231,7 @@ var Phaser = (function() {
         stop: function() {
           this._pendingStop = 0;
           this.isPlaying = false;
+          this.delayCounter = 0;
           if (this.currentAnim) {
             this.handleStop();
           }
@@ -38155,6 +38464,7 @@ var Phaser = (function() {
           Components.Mask,
           Components.Origin,
           Components.Pipeline,
+          Components.PostPipeline,
           Components.ScrollFactor,
           Components.Size,
           Components.TextureCrop,
@@ -38172,6 +38482,7 @@ var Phaser = (function() {
           this.setSizeToFrame();
           this.setOriginFromFrame();
           this.initPipeline();
+          this.initPostPipeline();
         },
         addedToScene: function() {
           this.scene.sys.updateList.add(this);
@@ -38226,11 +38537,12 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/group/Group.js": function(exports, module) {
       var Actions = require_actions();
       var Class = require_Class();
-      var Events = require_events4();
+      var Events = require_events3();
       var EventEmitter = require_eventemitter3();
       var GetAll = require_GetAll();
       var GetFastValue = require_GetFastValue();
       var GetValue = require_GetValue();
+      var HasValue = require_HasValue();
       var IsPlainObject = require_IsPlainObject();
       var Range = require_Range();
       var Set = require_Set();
@@ -38377,35 +38689,49 @@ var Phaser = (function() {
             }
             entries.push(created);
           }
-          var x = GetValue(options, "setXY.x", 0);
-          var y = GetValue(options, "setXY.y", 0);
-          var stepX = GetValue(options, "setXY.stepX", 0);
-          var stepY = GetValue(options, "setXY.stepY", 0);
-          Actions.SetXY(entries, x, y, stepX, stepY);
-          var rotation = GetValue(options, "setRotation.value", 0);
-          var stepRotation = GetValue(options, "setRotation.step", 0);
-          Actions.SetRotation(entries, rotation, stepRotation);
-          var scaleX = GetValue(options, "setScale.x", 1);
-          var scaleY = GetValue(options, "setScale.y", scaleX);
-          var stepScaleX = GetValue(options, "setScale.stepX", 0);
-          var stepScaleY = GetValue(options, "setScale.stepY", 0);
-          Actions.SetScale(entries, scaleX, scaleY, stepScaleX, stepScaleY);
-          var originX = GetValue(options, "setOrigin.x", 0.5);
-          var originY = GetValue(options, "setOrigin.y", originX);
-          var stepOriginX = GetValue(options, "setOrigin.stepX", 0);
-          var stepOriginY = GetValue(options, "setOrigin.stepY", 0);
-          Actions.SetOrigin(entries, originX, originY, stepOriginX, stepOriginY);
-          var alpha = GetValue(options, "setAlpha.value", 1);
-          var stepAlpha = GetValue(options, "setAlpha.step", 0);
-          Actions.SetAlpha(entries, alpha, stepAlpha);
-          var depth = GetValue(options, "setDepth.value", 0);
-          var stepDepth = GetValue(options, "setDepth.step", 0);
-          Actions.SetDepth(entries, depth, stepDepth);
-          var scrollFactorX = GetValue(options, "setScrollFactor.x", 1);
-          var scrollFactorY = GetValue(options, "setScrollFactor.y", scrollFactorX);
-          var stepScrollFactorX = GetValue(options, "setScrollFactor.stepX", 0);
-          var stepScrollFactorY = GetValue(options, "setScrollFactor.stepY", 0);
-          Actions.SetScrollFactor(entries, scrollFactorX, scrollFactorY, stepScrollFactorX, stepScrollFactorY);
+          if (HasValue(options, "setXY")) {
+            var x = GetValue(options, "setXY.x", 0);
+            var y = GetValue(options, "setXY.y", 0);
+            var stepX = GetValue(options, "setXY.stepX", 0);
+            var stepY = GetValue(options, "setXY.stepY", 0);
+            Actions.SetXY(entries, x, y, stepX, stepY);
+          }
+          if (HasValue(options, "setRotation")) {
+            var rotation = GetValue(options, "setRotation.value", 0);
+            var stepRotation = GetValue(options, "setRotation.step", 0);
+            Actions.SetRotation(entries, rotation, stepRotation);
+          }
+          if (HasValue(options, "setScale")) {
+            var scaleX = GetValue(options, "setScale.x", 1);
+            var scaleY = GetValue(options, "setScale.y", scaleX);
+            var stepScaleX = GetValue(options, "setScale.stepX", 0);
+            var stepScaleY = GetValue(options, "setScale.stepY", 0);
+            Actions.SetScale(entries, scaleX, scaleY, stepScaleX, stepScaleY);
+          }
+          if (HasValue(options, "setOrigin")) {
+            var originX = GetValue(options, "setOrigin.x", 0.5);
+            var originY = GetValue(options, "setOrigin.y", originX);
+            var stepOriginX = GetValue(options, "setOrigin.stepX", 0);
+            var stepOriginY = GetValue(options, "setOrigin.stepY", 0);
+            Actions.SetOrigin(entries, originX, originY, stepOriginX, stepOriginY);
+          }
+          if (HasValue(options, "setAlpha")) {
+            var alpha = GetValue(options, "setAlpha.value", 1);
+            var stepAlpha = GetValue(options, "setAlpha.step", 0);
+            Actions.SetAlpha(entries, alpha, stepAlpha);
+          }
+          if (HasValue(options, "setDepth")) {
+            var depth = GetValue(options, "setDepth.value", 0);
+            var stepDepth = GetValue(options, "setDepth.step", 0);
+            Actions.SetDepth(entries, depth, stepDepth);
+          }
+          if (HasValue(options, "setScrollFactor")) {
+            var scrollFactorX = GetValue(options, "setScrollFactor.x", 1);
+            var scrollFactorY = GetValue(options, "setScrollFactor.y", scrollFactorX);
+            var stepScrollFactorX = GetValue(options, "setScrollFactor.stepX", 0);
+            var stepScrollFactorY = GetValue(options, "setScrollFactor.stepY", 0);
+            Actions.SetScrollFactor(entries, scrollFactorX, scrollFactorY, stepScrollFactorX, stepScrollFactorY);
+          }
           var hitArea = GetFastValue(options, "hitArea", null);
           var hitAreaCallback = GetFastValue(options, "hitAreaCallback", null);
           if (hitArea) {
@@ -38881,7 +39207,7 @@ var Phaser = (function() {
       var CanvasPool = require_CanvasPool();
       var MeasureText = function(textStyle) {
         var canvas = CanvasPool.create(this);
-        var context = canvas.getContext("2d");
+        var context = canvas.getContext("2d", { willReadFrequently: true });
         textStyle.syncFont(canvas, context);
         var metrics = context.measureText(textStyle.testString);
         if ("actualBoundingBoxAscent" in metrics) {
@@ -39323,7 +39649,6 @@ var Phaser = (function() {
       var CanvasPool = require_CanvasPool();
       var Class = require_Class();
       var Components = require_components();
-      var GameEvents = require_events();
       var GameObject = require_GameObject();
       var GetTextSize = require_GetTextSize();
       var GetValue = require_GetValue();
@@ -39344,6 +39669,7 @@ var Phaser = (function() {
           Components.Mask,
           Components.Origin,
           Components.Pipeline,
+          Components.PostPipeline,
           Components.ScrollFactor,
           Components.Tint,
           Components.Transform,
@@ -39362,6 +39688,7 @@ var Phaser = (function() {
           this.setPosition(x, y);
           this.setOrigin(0, 0);
           this.initPipeline();
+          this.initPostPipeline();
           this.canvas = CanvasPool.create(this);
           this.context = this.canvas.getContext("2d");
           this.style = new TextStyle(this, style);
@@ -39392,7 +39719,6 @@ var Phaser = (function() {
           if (style && style.lineSpacing) {
             this.setLineSpacing(style.lineSpacing);
           }
-          scene.sys.game.events.on(GameEvents.CONTEXT_RESTORED, this.onContextRestored, this);
         },
         initRTL: function() {
           if (!this.style.rtl) {
@@ -39452,7 +39778,7 @@ var Phaser = (function() {
                     }
                   }
                   if (!newWord.length) {
-                    throw new Error("This text's wordWrapWidth setting is less than a single character!");
+                    throw new Error("wordWrapWidth < a single character");
                   }
                   var secondPart = word.substr(newWord.length);
                   words[j] = secondPart;
@@ -39460,7 +39786,7 @@ var Phaser = (function() {
                 }
                 var offset = words[j].length ? j : j + 1;
                 var remainder = words.slice(offset).join(" ").replace(/[ \n]*$/gi, "");
-                lines[i + 1] = remainder + " " + (lines[i + 1] || "");
+                lines.splice(i + 1, 0, remainder);
                 linesCount = lines.length;
                 break;
               } else {
@@ -39526,6 +39852,24 @@ var Phaser = (function() {
           }
           if (value !== this._text) {
             this._text = value.toString();
+            this.updateText();
+          }
+          return this;
+        },
+        appendText: function(value, addCR) {
+          if (addCR === void 0) {
+            addCR = true;
+          }
+          if (!value && value !== 0) {
+            value = "";
+          }
+          if (Array.isArray(value)) {
+            value = value.join("\n");
+          }
+          value = value.toString();
+          var newText = this._text.concat(addCR ? "\n" + value : value);
+          if (newText !== this._text) {
+            this._text = newText;
             this.updateText();
           }
           return this;
@@ -39678,6 +40022,9 @@ var Phaser = (function() {
             canvas.height = h;
             this.frame.setSize(w, h);
             style.syncFont(canvas, context);
+            if (style.rtl) {
+              context.direction = "rtl";
+            }
           } else {
             context.clearRect(0, 0, w, h);
           }
@@ -39688,7 +40035,6 @@ var Phaser = (function() {
             context.fillRect(0, 0, w, h);
           }
           style.syncStyle(canvas, context);
-          context.textBaseline = "alphabetic";
           context.translate(padding.left, padding.top);
           var linePositionX;
           var linePositionY;
@@ -39727,11 +40073,11 @@ var Phaser = (function() {
               linePositionY = Math.round(linePositionY);
             }
             if (style.strokeThickness) {
-              this.style.syncShadow(context, style.shadowStroke);
+              style.syncShadow(context, style.shadowStroke);
               context.strokeText(lines[i], linePositionX, linePositionY);
             }
             if (style.color) {
-              this.style.syncShadow(context, style.shadowFill);
+              style.syncShadow(context, style.shadowFill);
               context.fillText(lines[i], linePositionX, linePositionY);
             }
           }
@@ -39739,6 +40085,9 @@ var Phaser = (function() {
           if (this.renderer && this.renderer.gl) {
             this.frame.source.glTexture = this.renderer.canvasToTexture(canvas, this.frame.source.glTexture, true);
             this.frame.glTexture = this.frame.source.glTexture;
+            if (false) {
+              this.frame.glTexture.__SPECTOR_Metadata = { textureKey: "Text Game Object" };
+            }
           }
           this.dirty = true;
           var input = this.input;
@@ -39775,16 +40124,12 @@ var Phaser = (function() {
           out.data = data;
           return out;
         },
-        onContextRestored: function() {
-          this.dirty = true;
-        },
         preDestroy: function() {
           if (this.style.rtl) {
             RemoveFromDOM(this.canvas);
           }
           CanvasPool.remove(this.canvas);
           this.texture.destroy();
-          this.scene.sys.game.events.off(GameEvents.CONTEXT_RESTORED, this.onContextRestored, this);
         }
       });
       module.exports = Text;
@@ -39837,6 +40182,7 @@ var Phaser = (function() {
         var chars = src.fontData.chars;
         var lineHeight = src.fontData.lineHeight;
         var letterSpacing = src.letterSpacing;
+        var lineSpacing = src.lineSpacing;
         var xAdvance = 0;
         var yAdvance = 0;
         var charCode = 0;
@@ -39875,7 +40221,7 @@ var Phaser = (function() {
                 current = null;
               }
               xAdvance = 0;
-              yAdvance += lineHeight;
+              yAdvance += lineHeight + lineSpacing;
               lastGlyph = null;
               continue;
             }
@@ -39981,7 +40327,7 @@ var Phaser = (function() {
               current = null;
             }
             xAdvance = 0;
-            yAdvance += lineHeight;
+            yAdvance += lineHeight + lineSpacing;
             lastGlyph = null;
             lineWidths[currentLine] = currentLineWidth;
             if (currentLineWidth > longestLine) {
@@ -40040,6 +40386,7 @@ var Phaser = (function() {
           }
           characters.push({
             i: charIndex,
+            idx: i,
             char: text[i],
             code: charCode,
             x: (glyph.xOffset + x) * scale,
@@ -40363,6 +40710,7 @@ var Phaser = (function() {
         var chars = src.fontData.chars;
         var lineHeight = src.fontData.lineHeight;
         var letterSpacing = src._letterSpacing;
+        var lineSpacing = src._lineSpacing;
         var xAdvance = 0;
         var yAdvance = 0;
         var charCode = 0;
@@ -40405,7 +40753,7 @@ var Phaser = (function() {
               lineOffsetX = lineData.longest - lineData.lengths[currentLine];
             }
             xAdvance = 0;
-            yAdvance += lineHeight;
+            yAdvance += lineHeight + lineSpacing;
             lastGlyph = null;
             continue;
           }
@@ -40485,9 +40833,11 @@ var Phaser = (function() {
           Components.Alpha,
           Components.BlendMode,
           Components.Depth,
+          Components.GetBounds,
           Components.Mask,
           Components.Origin,
           Components.Pipeline,
+          Components.PostPipeline,
           Components.ScrollFactor,
           Components.Texture,
           Components.Tint,
@@ -40512,6 +40862,7 @@ var Phaser = (function() {
           this._text = "";
           this._fontSize = size || this.fontData.size;
           this._letterSpacing = 0;
+          this._lineSpacing = 0;
           this._align = align;
           this._bounds = GetBitmapTextSize();
           this._dirty = true;
@@ -40527,6 +40878,7 @@ var Phaser = (function() {
           this.setPosition(x, y);
           this.setOrigin(0, 0);
           this.initPipeline();
+          this.initPostPipeline();
           this.setText(text);
         },
         setLeftAlign: function() {
@@ -40555,6 +40907,13 @@ var Phaser = (function() {
           }
           this._letterSpacing = spacing;
           this._dirty = true;
+          return this;
+        },
+        setLineSpacing: function(spacing) {
+          if (spacing === void 0) {
+            spacing = 0;
+          }
+          this.lineSpacing = spacing;
           return this;
         },
         setText: function(value) {
@@ -40754,6 +41113,15 @@ var Phaser = (function() {
             return this._letterSpacing;
           }
         },
+        lineSpacing: {
+          set: function(value) {
+            this._lineSpacing = value;
+            this._dirty = true;
+          },
+          get: function() {
+            return this._lineSpacing;
+          }
+        },
         maxWidth: {
           set: function(value) {
             this._maxWidth = value;
@@ -40775,6 +41143,16 @@ var Phaser = (function() {
             return this._bounds.global.height;
           }
         },
+        displayWidth: {
+          get: function() {
+            return this.width;
+          }
+        },
+        displayHeight: {
+          get: function() {
+            return this.height;
+          }
+        },
         toJSON: function() {
           var out = Components.ToJSON(this);
           var data = {
@@ -40782,6 +41160,7 @@ var Phaser = (function() {
             text: this.text,
             fontSize: this.fontSize,
             letterSpacing: this.letterSpacing,
+            lineSpacing: this.lineSpacing,
             align: this.align
           };
           out.data = data;
@@ -40815,23 +41194,23 @@ var Phaser = (function() {
           } else {
             var direction = "";
             if (ease.indexOf(".")) {
-              direction = ease.substr(ease.indexOf(".") + 1);
-              if (direction.toLowerCase() === "in") {
+              direction = ease.substring(ease.indexOf(".") + 1);
+              var directionLower = direction.toLowerCase();
+              if (directionLower === "in") {
                 direction = "easeIn";
-              } else if (direction.toLowerCase() === "out") {
+              } else if (directionLower === "out") {
                 direction = "easeOut";
-              } else if (direction.toLowerCase() === "inout") {
+              } else if (directionLower === "inout") {
                 direction = "easeInOut";
               }
             }
-            ease = UppercaseFirst(ease.substr(0, ease.indexOf(".") + 1) + direction);
+            ease = UppercaseFirst(ease.substring(0, ease.indexOf(".") + 1) + direction);
             if (EaseMap.hasOwnProperty(ease)) {
               easeFunction = EaseMap[ease];
             }
           }
         } else if (typeof ease === "function") {
           easeFunction = ease;
-        } else if (Array.isArray(ease) && ease.length === 4) {
         }
         if (!easeParams) {
           return easeFunction;
@@ -40847,16 +41226,50 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/tweens/builders/GetInterpolationFunction.js
+  var require_GetInterpolationFunction = __commonJS({
+    "../../node_modules/phaser/src/tweens/builders/GetInterpolationFunction.js": function(exports, module) {
+      var Bezier = require_BezierInterpolation();
+      var CatmullRom = require_CatmullRomInterpolation();
+      var Linear = require_LinearInterpolation();
+      var FuncMap = {
+        bezier: Bezier,
+        catmull: CatmullRom,
+        catmullrom: CatmullRom,
+        linear: Linear
+      };
+      var GetInterpolationFunction = function(interpolation) {
+        if (interpolation === null) {
+          return null;
+        }
+        var interpolationFunction = FuncMap.linear;
+        if (typeof interpolation === "string") {
+          if (FuncMap.hasOwnProperty(interpolation)) {
+            interpolationFunction = FuncMap[interpolation];
+          }
+        } else if (typeof interpolation === "function") {
+          interpolationFunction = interpolation;
+        }
+        return interpolationFunction;
+      };
+      module.exports = GetInterpolationFunction;
+    }
+  });
+
   // ../../node_modules/phaser/src/gameobjects/particles/EmitterOp.js
   var require_EmitterOp = __commonJS({
     "../../node_modules/phaser/src/gameobjects/particles/EmitterOp.js": function(exports, module) {
+      var Between = require_Between2();
+      var Clamp = require_Clamp();
       var Class = require_Class();
       var FloatBetween = require_FloatBetween();
       var GetEaseFunction = require_GetEaseFunction();
       var GetFastValue = require_GetFastValue();
+      var GetInterpolationFunction = require_GetInterpolationFunction();
+      var SnapTo = require_SnapTo();
       var Wrap = require_Wrap();
       var EmitterOp = new Class({
-        initialize: function EmitterOp2(config, key, defaultValue, emitOnly) {
+        initialize: function EmitterOp2(key, defaultValue, emitOnly) {
           if (emitOnly === void 0) {
             emitOnly = false;
           }
@@ -40865,13 +41278,20 @@ var Phaser = (function() {
           this.defaultValue = defaultValue;
           this.steps = 0;
           this.counter = 0;
+          this.yoyo = false;
+          this.direction = 0;
           this.start = 0;
+          this.current = 0;
           this.end = 0;
-          this.ease;
+          this.ease = null;
+          this.interpolation = null;
           this.emitOnly = emitOnly;
           this.onEmit = this.defaultEmit;
           this.onUpdate = this.defaultUpdate;
-          this.loadConfig(config);
+          this.active = true;
+          this.method = 0;
+          this._onEmit;
+          this._onUpdate;
         },
         loadConfig: function(config, newKey) {
           if (config === void 0) {
@@ -40881,75 +41301,146 @@ var Phaser = (function() {
             this.propertyKey = newKey;
           }
           this.propertyValue = GetFastValue(config, this.propertyKey, this.defaultValue);
+          this.method = this.getMethod();
           this.setMethods();
           if (this.emitOnly) {
             this.onUpdate = this.defaultUpdate;
           }
         },
         toJSON: function() {
-          return this.propertyValue;
+          return JSON.stringify(this.propertyValue);
         },
         onChange: function(value) {
-          this.propertyValue = value;
-          return this.setMethods();
+          var current;
+          switch (this.method) {
+            case 1:
+            case 3:
+            case 8:
+              current = value;
+              break;
+            case 2:
+              if (this.propertyValue.indexOf(value) >= 0) {
+                current = value;
+              }
+              break;
+            case 4:
+              var step = (this.end - this.start) / this.steps;
+              current = SnapTo(value, step);
+              this.counter = current;
+              break;
+            case 5:
+            case 6:
+            case 7:
+              current = Clamp(value, this.start, this.end);
+              break;
+            case 9:
+              current = this.start[0];
+              break;
+          }
+          this.current = current;
+          return this;
+        },
+        getMethod: function() {
+          var value = this.propertyValue;
+          if (value === null) {
+            return 0;
+          }
+          var t = typeof value;
+          if (t === "number") {
+            return 1;
+          } else if (Array.isArray(value)) {
+            return 2;
+          } else if (t === "function") {
+            return 3;
+          } else if (t === "object") {
+            if (this.hasBoth(value, "start", "end")) {
+              if (this.has(value, "steps")) {
+                return 4;
+              } else {
+                return 5;
+              }
+            } else if (this.hasBoth(value, "min", "max")) {
+              return 6;
+            } else if (this.has(value, "random")) {
+              return 7;
+            } else if (this.hasEither(value, "onEmit", "onUpdate")) {
+              return 8;
+            } else if (this.has(value, "interpolation")) {
+              return 9;
+            }
+          }
+          return 0;
         },
         setMethods: function() {
           var value = this.propertyValue;
-          var t = typeof value;
-          this.onEmit = this.defaultEmit;
-          this.onUpdate = this.defaultUpdate;
-          if (value === null) {
-            return;
-          }
-          if (t === "number") {
-            this.onEmit = this.staticValueEmit;
-            this.onUpdate = this.staticValueUpdate;
-          } else if (Array.isArray(value)) {
-            this.onEmit = this.randomStaticValueEmit;
-          } else if (t === "function") {
-            if (this.emitOnly) {
-              this.onEmit = value;
-            } else {
-              this.onUpdate = value;
-            }
-          } else if (t === "object" && this.hasBoth(value, "start", "end")) {
-            this.start = value.start;
-            this.end = value.end;
-            var isRandom = this.has(value, "random");
-            if (isRandom) {
-              this.onEmit = this.randomRangedValueEmit;
-            }
-            if (this.has(value, "steps")) {
+          var current = value;
+          var onEmit = this.defaultEmit;
+          var onUpdate = this.defaultUpdate;
+          switch (this.method) {
+            case 1:
+              onEmit = this.staticValueEmit;
+              break;
+            case 2:
+              onEmit = this.randomStaticValueEmit;
+              current = value[0];
+              break;
+            case 3:
+              this._onEmit = value;
+              onEmit = this.proxyEmit;
+              break;
+            case 4:
+              this.start = value.start;
+              this.end = value.end;
               this.steps = value.steps;
               this.counter = this.start;
-              this.onEmit = this.steppedEmit;
-            } else {
+              this.yoyo = this.has(value, "yoyo") ? value.yoyo : false;
+              this.direction = 0;
+              onEmit = this.steppedEmit;
+              current = this.start;
+              break;
+            case 5:
+              this.start = value.start;
+              this.end = value.end;
               var easeType = this.has(value, "ease") ? value.ease : "Linear";
               this.ease = GetEaseFunction(easeType, value.easeParams);
-              if (!isRandom) {
-                this.onEmit = this.easedValueEmit;
+              onEmit = this.has(value, "random") && value.random ? this.randomRangedValueEmit : this.easedValueEmit;
+              onUpdate = this.easeValueUpdate;
+              current = this.start;
+              break;
+            case 6:
+              this.start = value.min;
+              this.end = value.max;
+              onEmit = this.has(value, "int") && value.int ? this.randomRangedIntEmit : this.randomRangedValueEmit;
+              current = this.start;
+              break;
+            case 7:
+              var rnd = value.random;
+              if (Array.isArray(rnd)) {
+                this.start = rnd[0];
+                this.end = rnd[1];
               }
-              this.onUpdate = this.easeValueUpdate;
-            }
-          } else if (t === "object" && this.hasBoth(value, "min", "max")) {
-            this.start = value.min;
-            this.end = value.max;
-            this.onEmit = this.randomRangedValueEmit;
-          } else if (t === "object" && this.has(value, "random")) {
-            var rnd = value.random;
-            if (Array.isArray(rnd)) {
-              this.start = rnd[0];
-              this.end = rnd[1];
-            }
-            this.onEmit = this.randomRangedValueEmit;
-          } else if (t === "object" && this.hasEither(value, "onEmit", "onUpdate")) {
-            if (this.has(value, "onEmit")) {
-              this.onEmit = value.onEmit;
-            }
-            if (this.has(value, "onUpdate")) {
-              this.onUpdate = value.onUpdate;
-            }
+              onEmit = this.randomRangedIntEmit;
+              current = this.start;
+              break;
+            case 8:
+              this._onEmit = this.has(value, "onEmit") ? value.onEmit : this.defaultEmit;
+              this._onUpdate = this.has(value, "onUpdate") ? value.onUpdate : this.defaultUpdate;
+              onEmit = this.proxyEmit;
+              onUpdate = this.proxyUpdate;
+              break;
+            case 9:
+              this.start = value.values;
+              var easeTypeI = this.has(value, "ease") ? value.ease : "Linear";
+              this.ease = GetEaseFunction(easeTypeI, value.easeParams);
+              this.interpolation = GetInterpolationFunction(value.interpolation);
+              onEmit = this.easedValueEmit;
+              onUpdate = this.easeValueUpdate;
+              current = this.start[0];
+              break;
           }
+          this.onEmit = onEmit;
+          this.onUpdate = onUpdate;
+          this.current = current;
           return this;
         },
         has: function(object, key) {
@@ -40967,27 +41458,71 @@ var Phaser = (function() {
         defaultUpdate: function(particle, key, t, value) {
           return value;
         },
+        proxyEmit: function(particle, key, value) {
+          var result = this._onEmit(particle, key, value);
+          this.current = result;
+          return result;
+        },
+        proxyUpdate: function(particle, key, t, value) {
+          var result = this._onUpdate(particle, key, t, value);
+          this.current = result;
+          return result;
+        },
         staticValueEmit: function() {
-          return this.propertyValue;
+          return this.current;
         },
         staticValueUpdate: function() {
-          return this.propertyValue;
+          return this.current;
         },
         randomStaticValueEmit: function() {
           var randomIndex = Math.floor(Math.random() * this.propertyValue.length);
-          return this.propertyValue[randomIndex];
+          this.current = this.propertyValue[randomIndex];
+          return this.current;
         },
         randomRangedValueEmit: function(particle, key) {
           var value = FloatBetween(this.start, this.end);
           if (particle && particle.data[key]) {
             particle.data[key].min = value;
+            particle.data[key].max = this.end;
           }
+          this.current = value;
+          return value;
+        },
+        randomRangedIntEmit: function(particle, key) {
+          var value = Between(this.start, this.end);
+          if (particle && particle.data[key]) {
+            particle.data[key].min = value;
+            particle.data[key].max = this.end;
+          }
+          this.current = value;
           return value;
         },
         steppedEmit: function() {
           var current = this.counter;
-          var next = this.counter + (this.end - this.start) / this.steps;
-          this.counter = Wrap(next, this.start, this.end);
+          var next = current;
+          var step = (this.end - this.start) / this.steps;
+          if (this.yoyo) {
+            var over;
+            if (this.direction === 0) {
+              next += step;
+              if (next >= this.end) {
+                over = next - this.end;
+                next = this.end - over;
+                this.direction = 1;
+              }
+            } else {
+              next -= step;
+              if (next <= this.start) {
+                over = this.start - next;
+                next = this.start + over;
+                this.direction = 0;
+              }
+            }
+            this.counter = next;
+          } else {
+            this.counter = Wrap(next + step, this.start, this.end);
+          }
+          this.current = current;
           return current;
         },
         easedValueEmit: function(particle, key) {
@@ -40996,14 +41531,178 @@ var Phaser = (function() {
             data.min = this.start;
             data.max = this.end;
           }
+          this.current = this.start;
           return this.start;
         },
         easeValueUpdate: function(particle, key, t) {
           var data = particle.data[key];
-          return (data.max - data.min) * this.ease(t) + data.min;
+          var current;
+          var v = this.ease(t);
+          if (this.interpolation) {
+            current = this.interpolation(this.start, v);
+          } else {
+            current = (data.max - data.min) * v + data.min;
+          }
+          this.current = current;
+          return current;
+        },
+        destroy: function() {
+          this.propertyValue = null;
+          this.defaultValue = null;
+          this.ease = null;
+          this.interpolation = null;
+          this._onEmit = null;
+          this._onUpdate = null;
         }
       });
       module.exports = EmitterOp;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/EmitterColorOp.js
+  var require_EmitterColorOp = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/EmitterColorOp.js": function(exports, module) {
+      var Class = require_Class();
+      var EmitterOp = require_EmitterOp();
+      var GetColor = require_GetColor();
+      var GetEaseFunction = require_GetEaseFunction();
+      var GetInterpolationFunction = require_GetInterpolationFunction();
+      var IntegerToRGB = require_IntegerToRGB();
+      var EmitterColorOp = new Class({
+        Extends: EmitterOp,
+        initialize: function EmitterColorOp2(key) {
+          EmitterOp.call(this, key, null, false);
+          this.active = false;
+          this.easeName = "Linear";
+          this.r = [];
+          this.g = [];
+          this.b = [];
+        },
+        getMethod: function() {
+          return this.propertyValue === null ? 0 : 9;
+        },
+        setMethods: function() {
+          var value = this.propertyValue;
+          var current = value;
+          var onEmit = this.defaultEmit;
+          var onUpdate = this.defaultUpdate;
+          if (this.method === 9) {
+            this.start = value[0];
+            this.ease = GetEaseFunction("Linear");
+            this.interpolation = GetInterpolationFunction("linear");
+            onEmit = this.easedValueEmit;
+            onUpdate = this.easeValueUpdate;
+            current = value[0];
+            this.active = true;
+            for (var i = 0; i < value.length; i++) {
+              var color = IntegerToRGB(value[i]);
+              this.r.push(color.r);
+              this.g.push(color.g);
+              this.b.push(color.b);
+            }
+          }
+          this.onEmit = onEmit;
+          this.onUpdate = onUpdate;
+          this.current = current;
+          return this;
+        },
+        setEase: function(value) {
+          this.easeName = value;
+          this.ease = GetEaseFunction(value);
+        },
+        easedValueEmit: function() {
+          this.current = this.start;
+          return this.start;
+        },
+        easeValueUpdate: function(particle, key, t) {
+          var v = this.ease(t);
+          var r = this.interpolation(this.r, v);
+          var g = this.interpolation(this.g, v);
+          var b = this.interpolation(this.b, v);
+          var current = GetColor(r, g, b);
+          this.current = current;
+          return current;
+        }
+      });
+      module.exports = EmitterColorOp;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/COMPLETE_EVENT.js
+  var require_COMPLETE_EVENT3 = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/COMPLETE_EVENT.js": function(exports, module) {
+      module.exports = "complete";
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/DEATH_ZONE_EVENT.js
+  var require_DEATH_ZONE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/DEATH_ZONE_EVENT.js": function(exports, module) {
+      module.exports = "deathzone";
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/EXPLODE_EVENT.js
+  var require_EXPLODE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/EXPLODE_EVENT.js": function(exports, module) {
+      module.exports = "explode";
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/START_EVENT.js
+  var require_START_EVENT4 = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/START_EVENT.js": function(exports, module) {
+      module.exports = "start";
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/STOP_EVENT.js
+  var require_STOP_EVENT2 = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/STOP_EVENT.js": function(exports, module) {
+      module.exports = "stop";
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/events/index.js
+  var require_events17 = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/events/index.js": function(exports, module) {
+      module.exports = {
+        COMPLETE: require_COMPLETE_EVENT3(),
+        DEATH_ZONE: require_DEATH_ZONE_EVENT(),
+        EXPLODE: require_EXPLODE_EVENT(),
+        START: require_START_EVENT4(),
+        STOP: require_STOP_EVENT2()
+      };
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleProcessor.js
+  var require_ParticleProcessor = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleProcessor.js": function(exports, module) {
+      var Class = require_Class();
+      var ParticleProcessor = new Class({
+        initialize: function ParticleProcessor2(x, y, active) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          if (active === void 0) {
+            active = true;
+          }
+          this.emitter;
+          this.x = x;
+          this.y = y;
+          this.active = active;
+        },
+        update: function() {
+        },
+        destroy: function() {
+          this.emitter = null;
+        }
+      });
+      module.exports = ParticleProcessor;
     }
   });
 
@@ -41012,7 +41711,9 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/particles/GravityWell.js": function(exports, module) {
       var Class = require_Class();
       var GetFastValue = require_GetFastValue();
+      var ParticleProcessor = require_ParticleProcessor();
       var GravityWell = new Class({
+        Extends: ParticleProcessor,
         initialize: function GravityWell2(x, y, power, epsilon, gravity) {
           if (typeof x === "object") {
             var config = x;
@@ -41038,14 +41739,10 @@ var Phaser = (function() {
               gravity = 50;
             }
           }
-          this.x = x;
-          this.y = y;
-          this.active = true;
+          ParticleProcessor.call(this, x, y, true);
           this._gravity = gravity;
-          this._power = 0;
-          this._epsilon = 0;
-          this.power = power;
-          this.epsilon = epsilon;
+          this._power = power * gravity;
+          this._epsilon = epsilon * epsilon;
         },
         update: function(particle, delta) {
           var x = this.x - particle.x;
@@ -41096,14 +41793,21 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/particles/Particle.js
   var require_Particle = __commonJS({
     "../../node_modules/phaser/src/gameobjects/particles/Particle.js": function(exports, module) {
+      var AnimationState = require_AnimationState();
+      var Clamp = require_Clamp();
       var Class = require_Class();
       var DegToRad = require_DegToRad();
+      var Rectangle = require_Rectangle();
+      var RotateAround = require_RotateAround();
+      var Vector2 = require_Vector2();
       var Particle = new Class({
         initialize: function Particle2(emitter) {
           this.emitter = emitter;
+          this.texture = null;
           this.frame = null;
           this.x = 0;
           this.y = 0;
+          this.worldPosition = new Vector2();
           this.velocityX = 0;
           this.velocityY = 0;
           this.accelerationX = 0;
@@ -41120,53 +41824,99 @@ var Phaser = (function() {
           this.life = 1e3;
           this.lifeCurrent = 1e3;
           this.delayCurrent = 0;
+          this.holdCurrent = 0;
           this.lifeT = 0;
           this.data = {
-            tint: { min: 16777215, max: 16777215, current: 16777215 },
+            tint: { min: 16777215, max: 16777215 },
             alpha: { min: 1, max: 1 },
             rotate: { min: 0, max: 0 },
             scaleX: { min: 1, max: 1 },
-            scaleY: { min: 1, max: 1 }
+            scaleY: { min: 1, max: 1 },
+            x: { min: 0, max: 0 },
+            y: { min: 0, max: 0 },
+            accelerationX: { min: 0, max: 0 },
+            accelerationY: { min: 0, max: 0 },
+            maxVelocityX: { min: 0, max: 0 },
+            maxVelocityY: { min: 0, max: 0 },
+            moveToX: { min: 0, max: 0 },
+            moveToY: { min: 0, max: 0 },
+            bounce: { min: 0, max: 0 }
           };
+          this.isCropped = false;
+          this.scene = emitter.scene;
+          this.anims = new AnimationState(this);
+          this.bounds = new Rectangle();
+        },
+        emit: function(event, a1, a2, a3, a4, a5) {
+          return this.emitter.emit(event, a1, a2, a3, a4, a5);
         },
         isAlive: function() {
           return this.lifeCurrent > 0;
         },
-        resetPosition: function() {
-          this.x = 0;
-          this.y = 0;
+        kill: function() {
+          this.lifeCurrent = 0;
+        },
+        setPosition: function(x, y) {
+          if (x === void 0) {
+            x = 0;
+          }
+          if (y === void 0) {
+            y = 0;
+          }
+          this.x = x;
+          this.y = y;
         },
         fire: function(x, y) {
           var emitter = this.emitter;
-          this.frame = emitter.getFrame();
+          var ops = emitter.ops;
+          var anim = emitter.getAnim();
+          if (anim) {
+            this.anims.play(anim);
+          } else {
+            this.frame = emitter.getFrame();
+            this.texture = this.frame.texture;
+          }
           if (!this.frame) {
             throw new Error("Particle has no texture frame");
           }
-          if (emitter.emitZone) {
-            emitter.emitZone.getPoint(this);
-          }
+          emitter.getEmitZone(this);
           if (x === void 0) {
-            this.x += emitter.x.onEmit(this, "x");
+            this.x += ops.x.onEmit(this, "x");
+          } else if (ops.x.steps > 0) {
+            this.x += x + ops.x.onEmit(this, "x");
           } else {
             this.x += x;
           }
           if (y === void 0) {
-            this.y += emitter.y.onEmit(this, "y");
+            this.y += ops.y.onEmit(this, "y");
+          } else if (ops.y.steps > 0) {
+            this.y += y + ops.y.onEmit(this, "y");
           } else {
             this.y += y;
           }
-          this.life = emitter.lifespan.onEmit(this, "lifespan");
+          this.life = ops.lifespan.onEmit(this, "lifespan");
           this.lifeCurrent = this.life;
           this.lifeT = 0;
-          var sx = emitter.speedX.onEmit(this, "speedX");
-          var sy = emitter.speedY ? emitter.speedY.onEmit(this, "speedY") : sx;
+          this.delayCurrent = ops.delay.onEmit(this, "delay");
+          this.holdCurrent = ops.hold.onEmit(this, "hold");
+          this.scaleX = ops.scaleX.onEmit(this, "scaleX");
+          this.scaleY = ops.scaleY.active ? ops.scaleY.onEmit(this, "scaleY") : this.scaleX;
+          this.angle = ops.rotate.onEmit(this, "rotate");
+          this.rotation = DegToRad(this.angle);
+          emitter.worldMatrix.transformPoint(this.x, this.y, this.worldPosition);
+          if (this.delayCurrent === 0 && emitter.getDeathZone(this)) {
+            this.lifeCurrent = 0;
+            return false;
+          }
+          var sx = ops.speedX.onEmit(this, "speedX");
+          var sy = ops.speedY.active ? ops.speedY.onEmit(this, "speedY") : sx;
           if (emitter.radial) {
-            var rad = DegToRad(emitter.angle.onEmit(this, "angle"));
+            var rad = DegToRad(ops.angle.onEmit(this, "angle"));
             this.velocityX = Math.cos(rad) * Math.abs(sx);
             this.velocityY = Math.sin(rad) * Math.abs(sy);
           } else if (emitter.moveTo) {
-            var mx = emitter.moveToX.onEmit(this, "moveToX");
-            var my = emitter.moveToY ? emitter.moveToY.onEmit(this, "moveToY") : mx;
+            var mx = ops.moveToX.onEmit(this, "moveToX");
+            var my = ops.moveToY.onEmit(this, "moveToY");
             var lifeS = this.life / 1e3;
             this.velocityX = (mx - this.x) / lifeS;
             this.velocityY = (my - this.y) / lifeS;
@@ -41175,98 +41925,199 @@ var Phaser = (function() {
             this.velocityY = sy;
           }
           if (emitter.acceleration) {
-            this.accelerationX = emitter.accelerationX.onEmit(this, "accelerationX");
-            this.accelerationY = emitter.accelerationY.onEmit(this, "accelerationY");
+            this.accelerationX = ops.accelerationX.onEmit(this, "accelerationX");
+            this.accelerationY = ops.accelerationY.onEmit(this, "accelerationY");
           }
-          this.maxVelocityX = emitter.maxVelocityX.onEmit(this, "maxVelocityX");
-          this.maxVelocityY = emitter.maxVelocityY.onEmit(this, "maxVelocityY");
-          this.delayCurrent = emitter.delay.onEmit(this, "delay");
-          this.scaleX = emitter.scaleX.onEmit(this, "scaleX");
-          this.scaleY = emitter.scaleY.onEmit(this, "scaleY");
-          this.angle = emitter.rotate.onEmit(this, "rotate");
-          this.rotation = DegToRad(this.angle);
-          this.bounce = emitter.bounce.onEmit(this, "bounce");
-          this.alpha = emitter.alpha.onEmit(this, "alpha");
-          this.tint = emitter.tint.onEmit(this, "tint");
-        },
-        computeVelocity: function(emitter, delta, step, processors) {
-          var vx = this.velocityX;
-          var vy = this.velocityY;
-          var ax = this.accelerationX;
-          var ay = this.accelerationY;
-          var mx = this.maxVelocityX;
-          var my = this.maxVelocityY;
-          vx += emitter.gravityX * step;
-          vy += emitter.gravityY * step;
-          if (ax) {
-            vx += ax * step;
+          this.maxVelocityX = ops.maxVelocityX.onEmit(this, "maxVelocityX");
+          this.maxVelocityY = ops.maxVelocityY.onEmit(this, "maxVelocityY");
+          this.bounce = ops.bounce.onEmit(this, "bounce");
+          this.alpha = ops.alpha.onEmit(this, "alpha");
+          if (ops.color.active) {
+            this.tint = ops.color.onEmit(this, "tint");
+          } else {
+            this.tint = ops.tint.onEmit(this, "tint");
           }
-          if (ay) {
-            vy += ay * step;
-          }
-          if (vx > mx) {
-            vx = mx;
-          } else if (vx < -mx) {
-            vx = -mx;
-          }
-          if (vy > my) {
-            vy = my;
-          } else if (vy < -my) {
-            vy = -my;
-          }
-          this.velocityX = vx;
-          this.velocityY = vy;
-          for (var i = 0; i < processors.length; i++) {
-            processors[i].update(this, delta, step);
-          }
-        },
-        checkBounds: function(emitter) {
-          var bounds = emitter.bounds;
-          var bounce = -this.bounce;
-          if (this.x < bounds.x && emitter.collideLeft) {
-            this.x = bounds.x;
-            this.velocityX *= bounce;
-          } else if (this.x > bounds.right && emitter.collideRight) {
-            this.x = bounds.right;
-            this.velocityX *= bounce;
-          }
-          if (this.y < bounds.y && emitter.collideTop) {
-            this.y = bounds.y;
-            this.velocityY *= bounce;
-          } else if (this.y > bounds.bottom && emitter.collideBottom) {
-            this.y = bounds.bottom;
-            this.velocityY *= bounce;
-          }
+          return true;
         },
         update: function(delta, step, processors) {
+          if (this.lifeCurrent <= 0) {
+            if (this.holdCurrent > 0) {
+              this.holdCurrent -= delta;
+              return this.holdCurrent <= 0;
+            } else {
+              return true;
+            }
+          }
           if (this.delayCurrent > 0) {
             this.delayCurrent -= delta;
             return false;
           }
+          this.anims.update(0, delta);
           var emitter = this.emitter;
+          var ops = emitter.ops;
           var t = 1 - this.lifeCurrent / this.life;
           this.lifeT = t;
-          this.computeVelocity(emitter, delta, step, processors);
-          this.x += this.velocityX * step;
-          this.y += this.velocityY * step;
-          if (emitter.bounds) {
-            this.checkBounds(emitter);
+          this.x = ops.x.onUpdate(this, "x", t, this.x);
+          this.y = ops.y.onUpdate(this, "y", t, this.y);
+          if (emitter.moveTo) {
+            var mx = ops.moveToX.onUpdate(this, "moveToX", t, emitter.moveToX);
+            var my = ops.moveToY.onUpdate(this, "moveToY", t, emitter.moveToY);
+            var lifeS = this.lifeCurrent / 1e3;
+            this.velocityX = (mx - this.x) / lifeS;
+            this.velocityY = (my - this.y) / lifeS;
           }
-          if (emitter.deathZone && emitter.deathZone.willKill(this)) {
+          this.computeVelocity(emitter, delta, step, processors, t);
+          this.scaleX = ops.scaleX.onUpdate(this, "scaleX", t, this.scaleX);
+          this.scaleY = this.scaleX;
+          if (ops.scaleY.active) {
+            this.scaleY = ops.scaleY.onUpdate(this, "scaleY", t, this.scaleY);
+          }
+          this.angle = ops.rotate.onUpdate(this, "rotate", t, this.angle);
+          this.rotation = DegToRad(this.angle);
+          if (emitter.getDeathZone(this)) {
             this.lifeCurrent = 0;
             return true;
           }
-          this.scaleX = emitter.scaleX.onUpdate(this, "scaleX", t, this.scaleX);
-          this.scaleY = emitter.scaleY.onUpdate(this, "scaleY", t, this.scaleY);
-          this.angle = emitter.rotate.onUpdate(this, "rotate", t, this.angle);
-          this.rotation = DegToRad(this.angle);
-          this.alpha = emitter.alpha.onUpdate(this, "alpha", t, this.alpha);
-          this.tint = emitter.tint.onUpdate(this, "tint", t, this.tint);
+          this.alpha = ops.alpha.onUpdate(this, "alpha", t, this.alpha);
+          if (ops.color.active) {
+            this.tint = ops.color.onUpdate(this, "color", t, this.tint);
+          } else {
+            this.tint = ops.tint.onUpdate(this, "tint", t, this.tint);
+          }
           this.lifeCurrent -= delta;
-          return this.lifeCurrent <= 0;
+          return this.lifeCurrent <= 0 && this.holdCurrent <= 0;
+        },
+        computeVelocity: function(emitter, delta, step, processors, t) {
+          var ops = emitter.ops;
+          var vx = this.velocityX;
+          var vy = this.velocityY;
+          var ax = ops.accelerationX.onUpdate(this, "accelerationX", t, this.accelerationX);
+          var ay = ops.accelerationY.onUpdate(this, "accelerationY", t, this.accelerationY);
+          var mx = ops.maxVelocityX.onUpdate(this, "maxVelocityX", t, this.maxVelocityX);
+          var my = ops.maxVelocityY.onUpdate(this, "maxVelocityY", t, this.maxVelocityY);
+          this.bounce = ops.bounce.onUpdate(this, "bounce", t, this.bounce);
+          vx += emitter.gravityX * step + ax * step;
+          vy += emitter.gravityY * step + ay * step;
+          vx = Clamp(vx, -mx, mx);
+          vy = Clamp(vy, -my, my);
+          this.velocityX = vx;
+          this.velocityY = vy;
+          this.x += vx * step;
+          this.y += vy * step;
+          emitter.worldMatrix.transformPoint(this.x, this.y, this.worldPosition);
+          for (var i = 0; i < processors.length; i++) {
+            var processor = processors[i];
+            if (processor.active) {
+              processor.update(this, delta, step, t);
+            }
+          }
+        },
+        setSizeToFrame: function() {
+        },
+        getBounds: function(matrix) {
+          if (matrix === void 0) {
+            matrix = this.emitter.getWorldTransformMatrix();
+          }
+          var sx = Math.abs(matrix.scaleX) * this.scaleX;
+          var sy = Math.abs(matrix.scaleY) * this.scaleY;
+          var x = this.x;
+          var y = this.y;
+          var rotation = this.rotation;
+          var width = this.frame.width * sx / 2;
+          var height = this.frame.height * sy / 2;
+          var bounds = this.bounds;
+          var topLeft = new Vector2(x - width, y - height);
+          var topRight = new Vector2(x + width, y - height);
+          var bottomLeft = new Vector2(x - width, y + height);
+          var bottomRight = new Vector2(x + width, y + height);
+          if (rotation !== 0) {
+            RotateAround(topLeft, x, y, rotation);
+            RotateAround(topRight, x, y, rotation);
+            RotateAround(bottomLeft, x, y, rotation);
+            RotateAround(bottomRight, x, y, rotation);
+          }
+          matrix.transformPoint(topLeft.x, topLeft.y, topLeft);
+          matrix.transformPoint(topRight.x, topRight.y, topRight);
+          matrix.transformPoint(bottomLeft.x, bottomLeft.y, bottomLeft);
+          matrix.transformPoint(bottomRight.x, bottomRight.y, bottomRight);
+          bounds.x = Math.min(topLeft.x, topRight.x, bottomLeft.x, bottomRight.x);
+          bounds.y = Math.min(topLeft.y, topRight.y, bottomLeft.y, bottomRight.y);
+          bounds.width = Math.max(topLeft.x, topRight.x, bottomLeft.x, bottomRight.x) - bounds.x;
+          bounds.height = Math.max(topLeft.y, topRight.y, bottomLeft.y, bottomRight.y) - bounds.y;
+          return bounds;
+        },
+        destroy: function() {
+          this.anims.destroy();
+          this.anims = null;
+          this.emitter = null;
+          this.texture = null;
+          this.frame = null;
+          this.scene = null;
         }
       });
       module.exports = Particle;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleBounds.js
+  var require_ParticleBounds = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleBounds.js": function(exports, module) {
+      var Class = require_Class();
+      var ParticleProcessor = require_ParticleProcessor();
+      var Rectangle = require_Rectangle();
+      var ParticleBounds = new Class({
+        Extends: ParticleProcessor,
+        initialize: function ParticleBounds2(x, y, width, height, collideLeft, collideRight, collideTop, collideBottom) {
+          if (collideLeft === void 0) {
+            collideLeft = true;
+          }
+          if (collideRight === void 0) {
+            collideRight = true;
+          }
+          if (collideTop === void 0) {
+            collideTop = true;
+          }
+          if (collideBottom === void 0) {
+            collideBottom = true;
+          }
+          ParticleProcessor.call(this, x, y, true);
+          this.bounds = new Rectangle(x, y, width, height);
+          this.collideLeft = collideLeft;
+          this.collideRight = collideRight;
+          this.collideTop = collideTop;
+          this.collideBottom = collideBottom;
+        },
+        update: function(particle) {
+          var bounds = this.bounds;
+          var bounce = -particle.bounce;
+          var pos = particle.worldPosition;
+          if (pos.x < bounds.x && this.collideLeft) {
+            particle.x += bounds.x - pos.x;
+            particle.velocityX *= bounce;
+          } else if (pos.x > bounds.right && this.collideRight) {
+            particle.x -= pos.x - bounds.right;
+            particle.velocityX *= bounce;
+          }
+          if (pos.y < bounds.y && this.collideTop) {
+            particle.y += bounds.y - pos.y;
+            particle.velocityY *= bounce;
+          } else if (pos.y > bounds.bottom && this.collideBottom) {
+            particle.y -= pos.y - bounds.bottom;
+            particle.velocityY *= bounce;
+          }
+        }
+      });
+      module.exports = ParticleBounds;
+    }
+  });
+
+  // ../../node_modules/phaser/src/geom/rectangle/CopyFrom.js
+  var require_CopyFrom = __commonJS({
+    "../../node_modules/phaser/src/geom/rectangle/CopyFrom.js": function(exports, module) {
+      var CopyFrom = function(source, dest) {
+        return dest.setTo(source.x, source.y, source.width, source.height);
+      };
+      module.exports = CopyFrom;
     }
   });
 
@@ -41280,7 +42131,8 @@ var Phaser = (function() {
           this.killOnEnter = killOnEnter;
         },
         willKill: function(particle) {
-          var withinZone = this.source.contains(particle.x, particle.y);
+          var pos = particle.worldPosition;
+          var withinZone = this.source.contains(pos.x, pos.y);
           return withinZone && this.killOnEnter || !withinZone && !this.killOnEnter;
         }
       });
@@ -41293,12 +42145,15 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/particles/zones/EdgeZone.js": function(exports, module) {
       var Class = require_Class();
       var EdgeZone = new Class({
-        initialize: function EdgeZone2(source, quantity, stepRate, yoyo, seamless) {
+        initialize: function EdgeZone2(source, quantity, stepRate, yoyo, seamless, total) {
           if (yoyo === void 0) {
             yoyo = false;
           }
           if (seamless === void 0) {
             seamless = true;
+          }
+          if (total === void 0) {
+            total = -1;
           }
           this.source = source;
           this.points = [];
@@ -41309,6 +42164,7 @@ var Phaser = (function() {
           this.seamless = seamless;
           this._length = 0;
           this._direction = 0;
+          this.total = total;
           this.updateSource();
         },
         updateSource: function() {
@@ -41379,13 +42235,35 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/utils/object/HasValue.js
-  var require_HasValue = __commonJS({
-    "../../node_modules/phaser/src/utils/object/HasValue.js": function(exports, module) {
-      var HasValue = function(source, key) {
-        return source.hasOwnProperty(key);
+  // ../../node_modules/phaser/src/geom/rectangle/Inflate.js
+  var require_Inflate = __commonJS({
+    "../../node_modules/phaser/src/geom/rectangle/Inflate.js": function(exports, module) {
+      var CenterOn = require_CenterOn2();
+      var Inflate = function(rect, x, y) {
+        var cx = rect.centerX;
+        var cy = rect.centerY;
+        rect.setSize(rect.width + x * 2, rect.height + y * 2);
+        return CenterOn(rect, cx, cy);
       };
-      module.exports = HasValue;
+      module.exports = Inflate;
+    }
+  });
+
+  // ../../node_modules/phaser/src/geom/rectangle/MergeRect.js
+  var require_MergeRect = __commonJS({
+    "../../node_modules/phaser/src/geom/rectangle/MergeRect.js": function(exports, module) {
+      var MergeRect = function(target, source) {
+        var minX = Math.min(target.x, source.x);
+        var maxX = Math.max(target.right, source.right);
+        target.x = minX;
+        target.width = maxX - minX;
+        var minY = Math.min(target.y, source.y);
+        var maxY = Math.max(target.bottom, source.bottom);
+        target.y = minY;
+        target.height = maxY - minY;
+        return target;
+      };
+      module.exports = MergeRect;
     }
   });
 
@@ -41398,6 +42276,7 @@ var Phaser = (function() {
         initialize: function RandomZone2(source) {
           this.source = source;
           this._tempVec = new Vector2();
+          this.total = -1;
         },
         getPoint: function(particle) {
           var vec = this._tempVec;
@@ -41410,174 +42289,404 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js
+  var require_RectangleToRectangle = __commonJS({
+    "../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js": function(exports, module) {
+      var RectangleToRectangle = function(rectA, rectB) {
+        if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0) {
+          return false;
+        }
+        return !(rectA.right < rectB.x || rectA.bottom < rectB.y || rectA.x > rectB.right || rectA.y > rectB.bottom);
+      };
+      module.exports = RectangleToRectangle;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterWebGLRenderer.js
+  var require_ParticleEmitterWebGLRenderer = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterWebGLRenderer.js": function(exports, module) {
+      var RectangleToRectangle = require_RectangleToRectangle();
+      var TransformMatrix = require_TransformMatrix();
+      var Utils = require_Utils();
+      var tempMatrix1 = new TransformMatrix();
+      var tempMatrix2 = new TransformMatrix();
+      var tempMatrix3 = new TransformMatrix();
+      var tempMatrix4 = new TransformMatrix();
+      var ParticleEmitterWebGLRenderer = function(renderer, emitter, camera, parentMatrix) {
+        var pipeline = renderer.pipelines.set(emitter.pipeline);
+        var camMatrix = tempMatrix1;
+        var calcMatrix = tempMatrix2;
+        var particleMatrix = tempMatrix3;
+        var managerMatrix = tempMatrix4;
+        if (parentMatrix) {
+          managerMatrix.loadIdentity();
+          managerMatrix.multiply(parentMatrix);
+          managerMatrix.translate(emitter.x, emitter.y);
+          managerMatrix.rotate(emitter.rotation);
+          managerMatrix.scale(emitter.scaleX, emitter.scaleY);
+        } else {
+          managerMatrix.applyITRS(emitter.x, emitter.y, emitter.rotation, emitter.scaleX, emitter.scaleY);
+        }
+        var roundPixels = camera.roundPixels;
+        var getTint = Utils.getTintAppendFloatAlpha;
+        var camerAlpha = camera.alpha;
+        var emitterAlpha = emitter.alpha;
+        var texture = emitter.texture.glTexture;
+        renderer.pipelines.preBatch(emitter);
+        var particles = emitter.alive;
+        var particleCount = particles.length;
+        var viewBounds = emitter.viewBounds;
+        if (!emitter.visible || particleCount === 0 || viewBounds && !RectangleToRectangle(viewBounds, camera.worldView)) {
+          return;
+        }
+        if (emitter.sortCallback) {
+          emitter.depthSort();
+        }
+        var textureUnit = pipeline.setGameObject(emitter, emitter.frame);
+        camera.addToRenderList(emitter);
+        camMatrix.copyFrom(camera.matrix);
+        camMatrix.multiplyWithOffset(managerMatrix, -camera.scrollX * emitter.scrollFactorX, -camera.scrollY * emitter.scrollFactorY);
+        renderer.setBlendMode(emitter.blendMode);
+        if (emitter.mask) {
+          emitter.mask.preRenderWebGL(renderer, emitter, camera);
+          renderer.pipelines.set(emitter.pipeline);
+        }
+        var tintEffect = emitter.tintFill;
+        for (var i = 0; i < particleCount; i++) {
+          var particle = particles[i];
+          var alpha = particle.alpha * emitterAlpha * camerAlpha;
+          if (alpha <= 0 || particle.scaleX === 0 || particle.scaleY === 0) {
+            continue;
+          }
+          particleMatrix.applyITRS(particle.x, particle.y, particle.rotation, particle.scaleX, particle.scaleY);
+          particleMatrix.e = particle.x;
+          particleMatrix.f = particle.y;
+          camMatrix.multiply(particleMatrix, calcMatrix);
+          var frame = particle.frame;
+          var x = -frame.halfWidth;
+          var y = -frame.halfHeight;
+          var quad = calcMatrix.setQuad(x, y, x + frame.width, y + frame.height, roundPixels);
+          var tint = getTint(particle.tint, alpha);
+          pipeline.batchQuad(emitter, quad[0], quad[1], quad[2], quad[3], quad[4], quad[5], quad[6], quad[7], frame.u0, frame.v0, frame.u1, frame.v1, tint, tint, tint, tint, tintEffect, texture, textureUnit);
+        }
+        if (emitter.mask) {
+          emitter.mask.postRenderWebGL(renderer, camera);
+        }
+        renderer.pipelines.postBatch(emitter);
+      };
+      module.exports = ParticleEmitterWebGLRenderer;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterCanvasRenderer.js
+  var require_ParticleEmitterCanvasRenderer = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterCanvasRenderer.js": function(exports, module) {
+      var RectangleToRectangle = require_RectangleToRectangle();
+      var TransformMatrix = require_TransformMatrix();
+      var tempMatrix1 = new TransformMatrix();
+      var tempMatrix2 = new TransformMatrix();
+      var tempMatrix3 = new TransformMatrix();
+      var tempMatrix4 = new TransformMatrix();
+      var ParticleEmitterCanvasRenderer = function(renderer, emitter, camera, parentMatrix) {
+        var camMatrix = tempMatrix1;
+        var calcMatrix = tempMatrix2;
+        var particleMatrix = tempMatrix3;
+        var managerMatrix = tempMatrix4;
+        if (parentMatrix) {
+          managerMatrix.loadIdentity();
+          managerMatrix.multiply(parentMatrix);
+          managerMatrix.translate(emitter.x, emitter.y);
+          managerMatrix.rotate(emitter.rotation);
+          managerMatrix.scale(emitter.scaleX, emitter.scaleY);
+        } else {
+          managerMatrix.applyITRS(emitter.x, emitter.y, emitter.rotation, emitter.scaleX, emitter.scaleY);
+        }
+        var ctx = renderer.currentContext;
+        var roundPixels = camera.roundPixels;
+        var camerAlpha = camera.alpha;
+        var emitterAlpha = emitter.alpha;
+        var particles = emitter.alive;
+        var particleCount = particles.length;
+        var viewBounds = emitter.viewBounds;
+        if (!emitter.visible || particleCount === 0 || viewBounds && !RectangleToRectangle(viewBounds, camera.worldView)) {
+          return;
+        }
+        if (emitter.sortCallback) {
+          emitter.depthSort();
+        }
+        camera.addToRenderList(emitter);
+        var scrollFactorX = emitter.scrollFactorX;
+        var scrollFactorY = emitter.scrollFactorY;
+        ctx.save();
+        ctx.globalCompositeOperation = renderer.blendModes[emitter.blendMode];
+        for (var i = 0; i < particleCount; i++) {
+          var particle = particles[i];
+          var alpha = particle.alpha * emitterAlpha * camerAlpha;
+          if (alpha <= 0 || particle.scaleX === 0 || particle.scaleY === 0) {
+            continue;
+          }
+          particleMatrix.applyITRS(particle.x, particle.y, particle.rotation, particle.scaleX, particle.scaleY);
+          camMatrix.copyFrom(camera.matrix);
+          camMatrix.multiplyWithOffset(managerMatrix, -camera.scrollX * scrollFactorX, -camera.scrollY * scrollFactorY);
+          particleMatrix.e = particle.x;
+          particleMatrix.f = particle.y;
+          camMatrix.multiply(particleMatrix, calcMatrix);
+          var frame = particle.frame;
+          var cd = frame.canvasData;
+          if (cd.width > 0 && cd.height > 0) {
+            var x = -frame.halfWidth;
+            var y = -frame.halfHeight;
+            ctx.globalAlpha = alpha;
+            ctx.save();
+            calcMatrix.setToContext(ctx);
+            if (roundPixels) {
+              x = Math.round(x);
+              y = Math.round(y);
+            }
+            ctx.imageSmoothingEnabled = !frame.source.scaleMode;
+            ctx.drawImage(frame.source.image, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
+            ctx.restore();
+          }
+        }
+        ctx.restore();
+      };
+      module.exports = ParticleEmitterCanvasRenderer;
+    }
+  });
+
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterRender.js
+  var require_ParticleEmitterRender = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterRender.js": function(exports, module) {
+      var NOOP = require_NOOP();
+      var renderWebGL = NOOP;
+      var renderCanvas = NOOP;
+      if (true) {
+        renderWebGL = require_ParticleEmitterWebGLRenderer();
+      }
+      if (true) {
+        renderCanvas = require_ParticleEmitterCanvasRenderer();
+      }
+      module.exports = {
+        renderWebGL: renderWebGL,
+        renderCanvas: renderCanvas
+      };
+    }
+  });
+
   // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitter.js
   var require_ParticleEmitter = __commonJS({
     "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitter.js": function(exports, module) {
-      var BlendModes = require_BlendModes();
+      var Add = require_Add();
       var Class = require_Class();
       var Components = require_components();
+      var ComponentsToJSON = require_ToJSON();
+      var CopyFrom = require_CopyFrom();
       var DeathZone = require_DeathZone();
       var EdgeZone = require_EdgeZone();
+      var EmitterColorOp = require_EmitterColorOp();
       var EmitterOp = require_EmitterOp();
+      var Events = require_events17();
+      var GameObject = require_GameObject();
       var GetFastValue = require_GetFastValue();
       var GetRandom = require_GetRandom();
+      var GravityWell = require_GravityWell();
       var HasAny = require_HasAny();
       var HasValue = require_HasValue();
+      var Inflate = require_Inflate();
+      var List = require_List();
+      var MergeRect = require_MergeRect();
       var Particle = require_Particle();
       var RandomZone = require_RandomZone();
       var Rectangle = require_Rectangle();
+      var RectangleToRectangle = require_RectangleToRectangle();
+      var Remove = require_Remove();
+      var Render = require_ParticleEmitterRender();
       var StableSort = require_StableSort();
+      var TransformMatrix = require_TransformMatrix();
       var Vector2 = require_Vector2();
       var Wrap = require_Wrap();
+      var ParticleBounds = require_ParticleBounds();
+      var configFastMap = [
+        "active",
+        "advance",
+        "blendMode",
+        "colorEase",
+        "deathCallback",
+        "deathCallbackScope",
+        "duration",
+        "emitCallback",
+        "emitCallbackScope",
+        "follow",
+        "frequency",
+        "gravityX",
+        "gravityY",
+        "maxAliveParticles",
+        "maxParticles",
+        "name",
+        "emitting",
+        "particleBringToTop",
+        "particleClass",
+        "radial",
+        "sortCallback",
+        "sortOrderAsc",
+        "sortProperty",
+        "stopAfter",
+        "tintFill",
+        "timeScale",
+        "trackVisible",
+        "visible"
+      ];
+      var configOpMap = [
+        "accelerationX",
+        "accelerationY",
+        "alpha",
+        "angle",
+        "bounce",
+        "color",
+        "delay",
+        "hold",
+        "lifespan",
+        "maxVelocityX",
+        "maxVelocityY",
+        "moveToX",
+        "moveToY",
+        "quantity",
+        "rotate",
+        "scaleX",
+        "scaleY",
+        "speedX",
+        "speedY",
+        "tint",
+        "x",
+        "y"
+      ];
       var ParticleEmitter = new Class({
+        Extends: GameObject,
         Mixins: [
+          Components.AlphaSingle,
           Components.BlendMode,
+          Components.Depth,
+          Components.FX,
           Components.Mask,
+          Components.Pipeline,
+          Components.PostPipeline,
           Components.ScrollFactor,
-          Components.Visible
+          Components.Texture,
+          Components.Transform,
+          Components.Visible,
+          Render
         ],
-        initialize: function ParticleEmitter2(manager, config) {
-          this.manager = manager;
-          this.texture = manager.texture;
-          this.frames = [manager.defaultFrame];
-          this.defaultFrame = manager.defaultFrame;
-          this.configFastMap = [
-            "active",
-            "blendMode",
-            "collideBottom",
-            "collideLeft",
-            "collideRight",
-            "collideTop",
-            "deathCallback",
-            "deathCallbackScope",
-            "emitCallback",
-            "emitCallbackScope",
-            "follow",
-            "frequency",
-            "gravityX",
-            "gravityY",
-            "maxParticles",
-            "name",
-            "on",
-            "particleBringToTop",
-            "particleClass",
-            "radial",
-            "timeScale",
-            "trackVisible",
-            "visible"
-          ];
-          this.configOpMap = [
-            "accelerationX",
-            "accelerationY",
-            "angle",
-            "alpha",
-            "bounce",
-            "delay",
-            "lifespan",
-            "maxVelocityX",
-            "maxVelocityY",
-            "moveToX",
-            "moveToY",
-            "quantity",
-            "rotate",
-            "scaleX",
-            "scaleY",
-            "speedX",
-            "speedY",
-            "tint",
-            "x",
-            "y"
-          ];
-          this.name = "";
+        initialize: function ParticleEmitter2(scene, x, y, texture, config) {
+          GameObject.call(this, scene, "ParticleEmitter");
           this.particleClass = Particle;
-          this.x = new EmitterOp(config, "x", 0, true);
-          this.y = new EmitterOp(config, "y", 0, true);
+          this.ops = {
+            accelerationX: new EmitterOp("accelerationX", 0),
+            accelerationY: new EmitterOp("accelerationY", 0),
+            alpha: new EmitterOp("alpha", 1),
+            angle: new EmitterOp("angle", { min: 0, max: 360 }, true),
+            bounce: new EmitterOp("bounce", 0),
+            color: new EmitterColorOp("color"),
+            delay: new EmitterOp("delay", 0, true),
+            hold: new EmitterOp("hold", 0, true),
+            lifespan: new EmitterOp("lifespan", 1e3, true),
+            maxVelocityX: new EmitterOp("maxVelocityX", 1e4),
+            maxVelocityY: new EmitterOp("maxVelocityY", 1e4),
+            moveToX: new EmitterOp("moveToX", 0),
+            moveToY: new EmitterOp("moveToY", 0),
+            quantity: new EmitterOp("quantity", 1, true),
+            rotate: new EmitterOp("rotate", 0),
+            scaleX: new EmitterOp("scaleX", 1),
+            scaleY: new EmitterOp("scaleY", 1),
+            speedX: new EmitterOp("speedX", 0, true),
+            speedY: new EmitterOp("speedY", 0, true),
+            tint: new EmitterOp("tint", 16777215),
+            x: new EmitterOp("x", 0),
+            y: new EmitterOp("y", 0)
+          };
           this.radial = true;
           this.gravityX = 0;
           this.gravityY = 0;
           this.acceleration = false;
-          this.accelerationX = new EmitterOp(config, "accelerationX", 0, true);
-          this.accelerationY = new EmitterOp(config, "accelerationY", 0, true);
-          this.maxVelocityX = new EmitterOp(config, "maxVelocityX", 1e4, true);
-          this.maxVelocityY = new EmitterOp(config, "maxVelocityY", 1e4, true);
-          this.speedX = new EmitterOp(config, "speedX", 0, true);
-          this.speedY = new EmitterOp(config, "speedY", 0, true);
           this.moveTo = false;
-          this.moveToX = new EmitterOp(config, "moveToX", null, true);
-          this.moveToY = new EmitterOp(config, "moveToY", null, true);
-          this.bounce = new EmitterOp(config, "bounce", 0, true);
-          this.scaleX = new EmitterOp(config, "scaleX", 1);
-          this.scaleY = new EmitterOp(config, "scaleY", 1);
-          this.tint = new EmitterOp(config, "tint", 16777215);
-          this.alpha = new EmitterOp(config, "alpha", 1);
-          this.lifespan = new EmitterOp(config, "lifespan", 1e3, true);
-          this.angle = new EmitterOp(config, "angle", { min: 0, max: 360 }, true);
-          this.rotate = new EmitterOp(config, "rotate", 0);
           this.emitCallback = null;
           this.emitCallbackScope = null;
           this.deathCallback = null;
           this.deathCallbackScope = null;
           this.maxParticles = 0;
-          this.quantity = new EmitterOp(config, "quantity", 1, true);
-          this.delay = new EmitterOp(config, "delay", 0, true);
+          this.maxAliveParticles = 0;
+          this.stopAfter = 0;
+          this.duration = 0;
           this.frequency = 0;
-          this.on = true;
+          this.emitting = true;
           this.particleBringToTop = true;
           this.timeScale = 1;
-          this.emitZone = null;
-          this.deathZone = null;
-          this.bounds = null;
-          this.collideLeft = true;
-          this.collideRight = true;
-          this.collideTop = true;
-          this.collideBottom = true;
-          this.active = true;
-          this.visible = true;
-          this.blendMode = BlendModes.NORMAL;
+          this.emitZones = [];
+          this.deathZones = [];
+          this.viewBounds = null;
           this.follow = null;
           this.followOffset = new Vector2();
           this.trackVisible = false;
-          this.currentFrame = 0;
+          this.frames = [];
           this.randomFrame = true;
           this.frameQuantity = 1;
+          this.anims = [];
+          this.randomAnim = true;
+          this.animQuantity = 1;
           this.dead = [];
           this.alive = [];
-          this._counter = 0;
-          this._frameCounter = 0;
+          this.counters = new Float32Array(10);
+          this._frameLength = 0;
+          this._animLength = 0;
+          this.skipping = false;
+          this.worldMatrix = new TransformMatrix();
+          this.sortProperty = "";
+          this.sortOrderAsc = true;
+          this.sortCallback = this.depthSortCallback;
+          this.processors = new List(this);
+          this.tintFill = false;
+          this.initPipeline();
+          this.initPostPipeline();
+          this.setPosition(x, y);
+          this.setTexture(texture);
           if (config) {
-            this.fromJSON(config);
+            this.setConfig(config);
           }
         },
-        fromJSON: function(config) {
+        addedToScene: function() {
+          this.scene.sys.updateList.add(this);
+        },
+        removedFromScene: function() {
+          this.scene.sys.updateList.remove(this);
+        },
+        setConfig: function(config) {
           if (!config) {
             return this;
           }
           var i = 0;
           var key = "";
-          for (i = 0; i < this.configFastMap.length; i++) {
-            key = this.configFastMap[i];
+          var ops = this.ops;
+          for (i = 0; i < configOpMap.length; i++) {
+            key = configOpMap[i];
+            ops[key].loadConfig(config);
+          }
+          for (i = 0; i < configFastMap.length; i++) {
+            key = configFastMap[i];
             if (HasValue(config, key)) {
               this[key] = GetFastValue(config, key);
             }
           }
-          for (i = 0; i < this.configOpMap.length; i++) {
-            key = this.configOpMap[i];
-            if (HasValue(config, key)) {
-              this[key].loadConfig(config);
-            }
-          }
-          this.acceleration = this.accelerationX.propertyValue !== 0 || this.accelerationY.propertyValue !== 0;
-          this.moveTo = this.moveToX.propertyValue !== null && this.moveToY.propertyValue !== null;
+          this.acceleration = this.accelerationX !== 0 || this.accelerationY !== 0;
+          this.moveTo = this.moveToX !== 0 && this.moveToY !== 0;
           if (HasValue(config, "speed")) {
-            this.speedX.loadConfig(config, "speed");
-            this.speedY = null;
+            ops.speedX.loadConfig(config, "speed");
+            ops.speedY.active = false;
           }
           if (HasAny(config, ["speedX", "speedY"]) || this.moveTo) {
             this.radial = false;
           }
           if (HasValue(config, "scale")) {
-            this.scaleX.loadConfig(config, "scale");
-            this.scaleY.loadConfig(config, "scale");
+            ops.scaleX.loadConfig(config, "scale");
+            ops.scaleY.active = false;
           }
           if (HasValue(config, "callbackScope")) {
             var callbackScope = GetFastValue(config, "callbackScope", null);
@@ -41585,51 +42694,74 @@ var Phaser = (function() {
             this.deathCallbackScope = callbackScope;
           }
           if (HasValue(config, "emitZone")) {
-            this.setEmitZone(config.emitZone);
+            this.addEmitZone(config.emitZone);
           }
           if (HasValue(config, "deathZone")) {
-            this.setDeathZone(config.deathZone);
+            this.addDeathZone(config.deathZone);
           }
           if (HasValue(config, "bounds")) {
-            this.setBounds(config.bounds);
+            var bounds = this.addParticleBounds(config.bounds);
+            bounds.collideLeft = GetFastValue(config, "collideLeft", true);
+            bounds.collideRight = GetFastValue(config, "collideRight", true);
+            bounds.collideTop = GetFastValue(config, "collideTop", true);
+            bounds.collideBottom = GetFastValue(config, "collideBottom", true);
           }
           if (HasValue(config, "followOffset")) {
             this.followOffset.setFromObject(GetFastValue(config, "followOffset", 0));
           }
+          if (HasValue(config, "texture")) {
+            this.setTexture(config.texture);
+          }
           if (HasValue(config, "frame")) {
-            this.setFrame(config.frame);
+            this.setEmitterFrame(config.frame);
+          } else if (HasValue(config, "anim")) {
+            this.setAnim(config.anim);
           }
           if (HasValue(config, "reserve")) {
             this.reserve(config.reserve);
           }
+          if (HasValue(config, "advance")) {
+            this.fastForward(config.advance);
+          }
+          this.resetCounters(this.frequency, this.emitting);
+          if (this.emitting) {
+            this.emit(Events.START, this);
+          }
           return this;
         },
-        toJSON: function(output) {
-          if (output === void 0) {
-            output = {};
-          }
+        toJSON: function() {
+          var output = ComponentsToJSON(this);
           var i = 0;
           var key = "";
-          for (i = 0; i < this.configFastMap.length; i++) {
-            key = this.configFastMap[i];
+          for (i = 0; i < configFastMap.length; i++) {
+            key = configFastMap[i];
             output[key] = this[key];
           }
-          for (i = 0; i < this.configOpMap.length; i++) {
-            key = this.configOpMap[i];
-            if (this[key]) {
-              output[key] = this[key].toJSON();
+          var ops = this.ops;
+          for (i = 0; i < configOpMap.length; i++) {
+            key = configOpMap[i];
+            if (ops[key]) {
+              output[key] = ops[key].toJSON();
             }
           }
-          if (!this.speedY) {
+          if (!ops.speedY.active) {
             delete output.speedX;
-            output.speed = this.speedX.toJSON();
+            output.speed = ops.speedX.toJSON();
           }
           if (this.scaleX === this.scaleY) {
             delete output.scaleX;
             delete output.scaleY;
-            output.scale = this.scaleX.toJSON();
+            output.scale = ops.scaleX.toJSON();
           }
           return output;
+        },
+        resetCounters: function(frequency, on) {
+          var counters = this.counters;
+          counters.fill(0);
+          counters[0] = frequency;
+          if (on) {
+            counters[5] = 1;
+          }
         },
         startFollow: function(target, offsetX, offsetY, trackVisible) {
           if (offsetX === void 0) {
@@ -41653,21 +42785,23 @@ var Phaser = (function() {
           return this;
         },
         getFrame: function() {
-          if (this.frames.length === 1) {
-            return this.defaultFrame;
+          var frames = this.frames;
+          var current;
+          if (frames.length === 1) {
+            current = frames[0];
           } else if (this.randomFrame) {
-            return GetRandom(this.frames);
+            current = GetRandom(frames);
           } else {
-            var frame = this.frames[this.currentFrame];
-            this._frameCounter++;
-            if (this._frameCounter === this.frameQuantity) {
-              this._frameCounter = 0;
+            current = frames[this.currentFrame];
+            this.frameCounter++;
+            if (this.frameCounter >= this.frameQuantity) {
+              this.frameCounter = 0;
               this.currentFrame = Wrap(this.currentFrame + 1, 0, this._frameLength);
             }
-            return frame;
           }
+          return this.texture.get(current);
         },
-        setFrame: function(frames, pickRandom, quantity) {
+        setEmitterFrame: function(frames, pickRandom, quantity) {
           if (pickRandom === void 0) {
             pickRandom = true;
           }
@@ -41677,15 +42811,17 @@ var Phaser = (function() {
           this.randomFrame = pickRandom;
           this.frameQuantity = quantity;
           this.currentFrame = 0;
-          this._frameCounter = 0;
           var t = typeof frames;
-          if (Array.isArray(frames) || t === "string" || t === "number") {
-            this.manager.setEmitterFrames(frames, this);
+          this.frames.length = 0;
+          if (Array.isArray(frames)) {
+            this.frames = this.frames.concat(frames);
+          } else if (t === "string" || t === "number") {
+            this.frames.push(frames);
           } else if (t === "object") {
             var frameConfig = frames;
             frames = GetFastValue(frameConfig, "frames", null);
             if (frames) {
-              this.manager.setEmitterFrames(frames, this);
+              this.frames = this.frames.concat(frames);
             }
             var isCycle = GetFastValue(frameConfig, "cycle", false);
             this.randomFrame = isCycle ? false : true;
@@ -41698,6 +42834,57 @@ var Phaser = (function() {
           }
           return this;
         },
+        getAnim: function() {
+          var anims = this.anims;
+          if (anims.length === 0) {
+            return null;
+          } else if (anims.length === 1) {
+            return anims[0];
+          } else if (this.randomAnim) {
+            return GetRandom(anims);
+          } else {
+            var anim = anims[this.currentAnim];
+            this.animCounter++;
+            if (this.animCounter >= this.animQuantity) {
+              this.animCounter = 0;
+              this.currentAnim = Wrap(this.currentAnim + 1, 0, this._animLength);
+            }
+            return anim;
+          }
+        },
+        setAnim: function(anims, pickRandom, quantity) {
+          if (pickRandom === void 0) {
+            pickRandom = true;
+          }
+          if (quantity === void 0) {
+            quantity = 1;
+          }
+          this.randomAnim = pickRandom;
+          this.animQuantity = quantity;
+          this.currentAnim = 0;
+          var t = typeof anims;
+          this.anims.length = 0;
+          if (Array.isArray(anims)) {
+            this.anims = this.anims.concat(anims);
+          } else if (t === "string") {
+            this.anims.push(anims);
+          } else if (t === "object") {
+            var animConfig = anims;
+            anims = GetFastValue(animConfig, "anims", null);
+            if (anims) {
+              this.anims = this.anims.concat(anims);
+            }
+            var isCycle = GetFastValue(animConfig, "cycle", false);
+            this.randomAnim = isCycle ? false : true;
+            this.animQuantity = GetFastValue(animConfig, "quantity", quantity);
+          }
+          this._animLength = this.anims.length;
+          if (this._animLength === 1) {
+            this.animQuantity = 1;
+            this.randomAnim = false;
+          }
+          return this;
+        },
         setRadial: function(value) {
           if (value === void 0) {
             value = true;
@@ -41705,12 +42892,7 @@ var Phaser = (function() {
           this.radial = value;
           return this;
         },
-        setPosition: function(x, y) {
-          this.x.onChange(x);
-          this.y.onChange(y);
-          return this;
-        },
-        setBounds: function(x, y, width, height) {
+        addParticleBounds: function(x, y, width, height, collideLeft, collideRight, collideTop, collideBottom) {
           if (typeof x === "object") {
             var obj = x;
             x = obj.x;
@@ -41718,126 +42900,199 @@ var Phaser = (function() {
             width = HasValue(obj, "w") ? obj.w : obj.width;
             height = HasValue(obj, "h") ? obj.h : obj.height;
           }
-          if (this.bounds) {
-            this.bounds.setTo(x, y, width, height);
+          return this.addParticleProcessor(new ParticleBounds(x, y, width, height, collideLeft, collideRight, collideTop, collideBottom));
+        },
+        setParticleSpeed: function(x, y) {
+          if (y === void 0) {
+            y = x;
+          }
+          this.ops.speedX.onChange(x);
+          if (x === y) {
+            this.ops.speedY.active = false;
           } else {
-            this.bounds = new Rectangle(x, y, width, height);
+            this.ops.speedY.onChange(y);
           }
-          return this;
-        },
-        setSpeedX: function(value) {
-          this.speedX.onChange(value);
-          this.radial = false;
-          return this;
-        },
-        setSpeedY: function(value) {
-          if (this.speedY) {
-            this.speedY.onChange(value);
-            this.radial = false;
-          }
-          return this;
-        },
-        setSpeed: function(value) {
-          this.speedX.onChange(value);
-          this.speedY = null;
           this.radial = true;
           return this;
         },
-        setScaleX: function(value) {
-          this.scaleX.onChange(value);
+        setParticleScale: function(x, y) {
+          if (x === void 0) {
+            x = 1;
+          }
+          if (y === void 0) {
+            y = x;
+          }
+          this.ops.scaleX.onChange(x);
+          this.ops.scaleY.onChange(y);
           return this;
         },
-        setScaleY: function(value) {
-          this.scaleY.onChange(value);
-          return this;
-        },
-        setScale: function(value) {
-          this.scaleX.onChange(value);
-          this.scaleY.onChange(value);
-          return this;
-        },
-        setGravityX: function(value) {
-          this.gravityX = value;
-          return this;
-        },
-        setGravityY: function(value) {
-          this.gravityY = value;
-          return this;
-        },
-        setGravity: function(x, y) {
+        setParticleGravity: function(x, y) {
           this.gravityX = x;
           this.gravityY = y;
           return this;
         },
-        setAlpha: function(value) {
-          this.alpha.onChange(value);
+        setParticleAlpha: function(value) {
+          this.ops.alpha.onChange(value);
           return this;
         },
-        setTint: function(value) {
-          this.tint.onChange(value);
+        setParticleTint: function(value) {
+          this.ops.tint.onChange(value);
           return this;
         },
         setEmitterAngle: function(value) {
-          this.angle.onChange(value);
+          this.ops.angle.onChange(value);
           return this;
         },
-        setAngle: function(value) {
-          this.angle.onChange(value);
-          return this;
-        },
-        setLifespan: function(value) {
+        setParticleLifespan: function(value) {
           this.lifespan.onChange(value);
           return this;
         },
         setQuantity: function(quantity) {
-          this.quantity.onChange(quantity);
+          this.quantity = quantity;
           return this;
         },
         setFrequency: function(frequency, quantity) {
           this.frequency = frequency;
-          this._counter = 0;
+          this.flowCounter = frequency > 0 ? frequency : 0;
           if (quantity) {
-            this.quantity.onChange(quantity);
+            this.quantity = quantity;
           }
           return this;
         },
-        setEmitZone: function(zoneConfig) {
-          if (zoneConfig === void 0) {
-            this.emitZone = null;
-          } else {
-            var type = GetFastValue(zoneConfig, "type", "random");
-            var source = GetFastValue(zoneConfig, "source", null);
-            switch (type) {
-              case "random":
-                this.emitZone = new RandomZone(source);
-                break;
-              case "edge":
-                var quantity = GetFastValue(zoneConfig, "quantity", 1);
-                var stepRate = GetFastValue(zoneConfig, "stepRate", 0);
-                var yoyo = GetFastValue(zoneConfig, "yoyo", false);
-                var seamless = GetFastValue(zoneConfig, "seamless", true);
-                this.emitZone = new EdgeZone(source, quantity, stepRate, yoyo, seamless);
-                break;
+        addDeathZone: function(config) {
+          if (!Array.isArray(config)) {
+            config = [config];
+          }
+          var zone;
+          for (var i = 0; i < config.length; i++) {
+            zone = config[i];
+            if (zone instanceof DeathZone) {
+              Add(this.deathZones, zone);
+            } else if (typeof zone.contains === "function") {
+              zone = new DeathZone(zone, true);
+              Add(this.deathZones, zone);
+            } else {
+              var type = GetFastValue(zone, "type", "onEnter");
+              var source = GetFastValue(zone, "source", null);
+              if (source && typeof source.contains === "function") {
+                var killOnEnter = type === "onEnter" ? true : false;
+                zone = new DeathZone(source, killOnEnter);
+                Add(this.deathZones, zone);
+              }
             }
           }
+          return zone;
+        },
+        removeDeathZone: function(zone) {
+          Remove(this.deathZones, zone);
           return this;
         },
-        setDeathZone: function(zoneConfig) {
-          if (zoneConfig === void 0) {
-            this.deathZone = null;
-          } else {
-            var type = GetFastValue(zoneConfig, "type", "onEnter");
-            var source = GetFastValue(zoneConfig, "source", null);
-            if (source && typeof source.contains === "function") {
-              var killOnEnter = type === "onEnter" ? true : false;
-              this.deathZone = new DeathZone(source, killOnEnter);
+        addEmitZone: function(config) {
+          if (!Array.isArray(config)) {
+            config = [config];
+          }
+          var zone;
+          for (var i = 0; i < config.length; i++) {
+            zone = config[i];
+            if (zone instanceof RandomZone || zone instanceof EdgeZone) {
+              Add(this.emitZones, zone);
+            } else {
+              var type = GetFastValue(zone, "type", "random");
+              var source = GetFastValue(zone, "source", null);
+              if (type === "random") {
+                zone = new RandomZone(source);
+              } else if (type === "edge") {
+                var quantity = GetFastValue(zone, "quantity", 1);
+                var stepRate = GetFastValue(zone, "stepRate", 0);
+                var yoyo = GetFastValue(zone, "yoyo", false);
+                var seamless = GetFastValue(zone, "seamless", true);
+                var total = GetFastValue(zone, "total", -1);
+                zone = new EdgeZone(source, quantity, stepRate, yoyo, seamless, total);
+              }
+              if (zone) {
+                Add(this.emitZones, zone);
+              }
             }
+          }
+          return zone;
+        },
+        removeEmitZone: function(zone) {
+          Remove(this.emitZones, zone);
+          this.zoneIndex = 0;
+          return this;
+        },
+        getEmitZone: function(particle) {
+          var zones = this.emitZones;
+          var len = zones.length;
+          if (len === 0) {
+            return;
+          } else {
+            var zone = zones[this.zoneIndex];
+            zone.getPoint(particle);
+            if (zone.total > -1) {
+              this.zoneTotal++;
+              if (this.zoneTotal >= zone.total) {
+                this.zoneTotal = 0;
+                this.zoneIndex = Wrap(this.zoneIndex + 1, 0, len);
+              }
+            }
+          }
+        },
+        getDeathZone: function(particle) {
+          var zones = this.deathZones;
+          for (var i = 0; i < zones.length; i++) {
+            var zone = zones[i];
+            if (zone.willKill(particle)) {
+              this.emit(Events.DEATH_ZONE, this, particle, zone);
+              return true;
+            }
+          }
+          return false;
+        },
+        setEmitZone: function(zone) {
+          var index;
+          if (isFinite(zone)) {
+            index = zone;
+          } else {
+            index = this.emitZones.indexOf(zone);
+          }
+          if (index >= 0) {
+            this.zoneIndex = index;
           }
           return this;
         },
-        reserve: function(particleCount) {
+        addParticleProcessor: function(processor) {
+          if (!this.processors.exists(processor)) {
+            if (processor.emitter) {
+              processor.emitter.removeParticleProcessor(processor);
+            }
+            this.processors.add(processor);
+            processor.emitter = this;
+          }
+          return processor;
+        },
+        removeParticleProcessor: function(processor) {
+          if (this.processors.exists(processor)) {
+            this.processors.remove(processor, true);
+            processor.emitter = null;
+          }
+          return processor;
+        },
+        getProcessors: function() {
+          return this.processors.getAll("active", true);
+        },
+        createGravityWell: function(config) {
+          return this.addParticleProcessor(new GravityWell(config));
+        },
+        reserve: function(count) {
           var dead = this.dead;
-          for (var i = 0; i < particleCount; i++) {
+          if (this.maxParticles > 0) {
+            var total = this.getParticleCount();
+            if (total + count > this.maxParticles) {
+              count = this.maxParticles - (total + count);
+            }
+          }
+          for (var i = 0; i < count; i++) {
             dead.push(new this.particleClass(this));
           }
           return this;
@@ -41852,7 +43107,10 @@ var Phaser = (function() {
           return this.getAliveParticleCount() + this.getDeadParticleCount();
         },
         atLimit: function() {
-          return this.maxParticles > 0 && this.getParticleCount() === this.maxParticles;
+          if (this.maxParticles > 0 && this.getParticleCount() >= this.maxParticles) {
+            return true;
+          }
+          return this.maxAliveParticles > 0 && this.getAliveParticleCount() >= this.maxAliveParticles;
         },
         onParticleEmit: function(callback, context) {
           if (callback === void 0) {
@@ -41889,26 +43147,47 @@ var Phaser = (function() {
         forEachAlive: function(callback, context) {
           var alive = this.alive;
           var length = alive.length;
-          for (var index = 0; index < length; ++index) {
-            callback.call(context, alive[index], this);
+          for (var i = 0; i < length; i++) {
+            callback.call(context, alive[i], this);
           }
           return this;
         },
         forEachDead: function(callback, context) {
           var dead = this.dead;
           var length = dead.length;
-          for (var index = 0; index < length; ++index) {
-            callback.call(context, dead[index], this);
+          for (var i = 0; i < length; i++) {
+            callback.call(context, dead[i], this);
           }
           return this;
         },
-        start: function() {
-          this.on = true;
-          this._counter = 0;
+        start: function(advance, duration) {
+          if (advance === void 0) {
+            advance = 0;
+          }
+          if (!this.emitting) {
+            if (advance > 0) {
+              this.fastForward(advance);
+            }
+            this.emitting = true;
+            this.resetCounters(this.frequency, true);
+            if (duration !== void 0) {
+              this.duration = Math.abs(duration);
+            }
+            this.emit(Events.START, this);
+          }
           return this;
         },
-        stop: function() {
-          this.on = false;
+        stop: function(kill) {
+          if (kill === void 0) {
+            kill = false;
+          }
+          if (this.emitting) {
+            this.emitting = false;
+            if (kill) {
+              this.killAll();
+            }
+            this.emit(Events.STOP, this);
+          }
           return this;
         },
         pause: function() {
@@ -41919,25 +43198,57 @@ var Phaser = (function() {
           this.active = true;
           return this;
         },
-        remove: function() {
-          this.manager.removeEmitter(this);
+        setSortProperty: function(property, ascending) {
+          if (property === void 0) {
+            property = "";
+          }
+          if (ascending === void 0) {
+            ascending = this.true;
+          }
+          this.sortProperty = property;
+          this.sortOrderAsc = ascending;
+          this.sortCallback = this.depthSortCallback;
+          return this;
+        },
+        setSortCallback: function(callback) {
+          if (this.sortProperty !== "") {
+            callback = this.depthSortCallback;
+          } else {
+            callback = null;
+          }
+          this.sortCallback = callback;
           return this;
         },
         depthSort: function() {
-          StableSort(this.alive, this.depthSortCallback);
+          StableSort(this.alive, this.sortCallback.bind(this));
           return this;
         },
-        flow: function(frequency, count) {
+        depthSortCallback: function(a, b) {
+          var key = this.sortProperty;
+          if (this.sortOrderAsc) {
+            return a[key] - b[key];
+          } else {
+            return b[key] - a[key];
+          }
+        },
+        flow: function(frequency, count, stopAfter) {
           if (count === void 0) {
             count = 1;
           }
+          this.emitting = false;
           this.frequency = frequency;
-          this.quantity.onChange(count);
+          this.quantity = count;
+          if (stopAfter !== void 0) {
+            this.stopAfter = stopAfter;
+          }
           return this.start();
         },
         explode: function(count, x, y) {
           this.frequency = -1;
-          return this.emitParticle(count, x, y);
+          this.resetCounters(-1, true);
+          var particle = this.emitParticle(count, x, y);
+          this.emit(Events.EXPLODE, this, particle);
+          return particle;
         },
         emitParticleAt: function(x, y, count) {
           return this.emitParticle(count, x, y);
@@ -41947,9 +43258,10 @@ var Phaser = (function() {
             return;
           }
           if (count === void 0) {
-            count = this.quantity.onEmit();
+            count = this.ops.quantity.onEmit();
           }
           var dead = this.dead;
+          var stopAfter = this.stopAfter;
           var followX = this.follow ? this.follow.x + this.followOffset.x : x;
           var followY = this.follow ? this.follow.y + this.followOffset.y : y;
           for (var i = 0; i < count; i++) {
@@ -41957,14 +43269,23 @@ var Phaser = (function() {
             if (!particle) {
               particle = new this.particleClass(this);
             }
-            particle.fire(followX, followY);
-            if (this.particleBringToTop) {
-              this.alive.push(particle);
+            if (particle.fire(followX, followY)) {
+              if (this.particleBringToTop) {
+                this.alive.push(particle);
+              } else {
+                this.alive.unshift(particle);
+              }
+              if (this.emitCallback) {
+                this.emitCallback.call(this.emitCallbackScope, particle, this);
+              }
             } else {
-              this.alive.unshift(particle);
+              this.dead.push(particle);
             }
-            if (this.emitCallback) {
-              this.emitCallback.call(this.emitCallbackScope, particle, this);
+            if (stopAfter > 0) {
+              this.stopCounter++;
+              if (this.stopCounter >= stopAfter) {
+                break;
+              }
             }
             if (this.atLimit()) {
               break;
@@ -41972,13 +43293,27 @@ var Phaser = (function() {
           }
           return particle;
         },
+        fastForward: function(time, delta) {
+          if (delta === void 0) {
+            delta = 1e3 / 60;
+          }
+          var total = 0;
+          this.skipping = true;
+          while (total < Math.abs(time)) {
+            this.preUpdate(0, delta);
+            total += delta;
+          }
+          this.skipping = false;
+          return this;
+        },
         preUpdate: function(time, delta) {
           delta *= this.timeScale;
           var step = delta / 1e3;
           if (this.trackVisible) {
             this.visible = this.follow.visible;
           }
-          var processors = this.manager.getProcessors();
+          this.getWorldTransformMatrix(this.worldMatrix);
+          var processors = this.getProcessors();
           var particles = this.alive;
           var dead = this.dead;
           var i = 0;
@@ -42001,358 +43336,410 @@ var Phaser = (function() {
               if (deathCallback) {
                 deathCallback.call(deathCallbackScope, entry.particle);
               }
-              entry.particle.resetPosition();
+              entry.particle.setPosition();
             }
           }
-          if (!this.on) {
+          if (!this.emitting && !this.skipping) {
+            if (this.completeFlag === 1 && particles.length === 0) {
+              this.completeFlag = 0;
+              this.emit(Events.COMPLETE, this);
+            }
             return;
           }
           if (this.frequency === 0) {
             this.emitParticle();
           } else if (this.frequency > 0) {
-            this._counter -= delta;
-            while (this._counter <= 0) {
+            this.flowCounter -= delta;
+            while (this.flowCounter <= 0) {
               this.emitParticle();
-              this._counter += this.frequency;
+              this.flowCounter += this.frequency;
+            }
+          }
+          if (!this.skipping) {
+            if (this.duration > 0) {
+              this.elapsed += delta;
+              if (this.elapsed >= this.duration) {
+                this.stop();
+              }
+            }
+            if (this.stopAfter > 0 && this.stopCounter >= this.stopAfter) {
+              this.stop();
             }
           }
         },
-        depthSortCallback: function(a, b) {
-          return a.y - b.y;
+        overlap: function(target) {
+          var matrix = this.getWorldTransformMatrix();
+          var alive = this.alive;
+          var length = alive.length;
+          var output = [];
+          for (var i = 0; i < length; i++) {
+            var particle = alive[i];
+            if (RectangleToRectangle(target, particle.getBounds(matrix))) {
+              output.push(particle);
+            }
+          }
+          return output;
+        },
+        getBounds: function(padding, advance, delta, output) {
+          if (padding === void 0) {
+            padding = 0;
+          }
+          if (advance === void 0) {
+            advance = 0;
+          }
+          if (delta === void 0) {
+            delta = 1e3 / 60;
+          }
+          if (output === void 0) {
+            output = new Rectangle();
+          }
+          var matrix = this.getWorldTransformMatrix();
+          var i;
+          var bounds;
+          var alive = this.alive;
+          var setFirst = false;
+          output.setTo(0, 0, 0, 0);
+          if (advance > 0) {
+            var total = 0;
+            this.skipping = true;
+            while (total < Math.abs(advance)) {
+              this.preUpdate(0, delta);
+              for (i = 0; i < alive.length; i++) {
+                bounds = alive[i].getBounds(matrix);
+                if (!setFirst) {
+                  setFirst = true;
+                  CopyFrom(bounds, output);
+                } else {
+                  MergeRect(output, bounds);
+                }
+              }
+              total += delta;
+            }
+            this.skipping = false;
+          } else {
+            for (i = 0; i < alive.length; i++) {
+              bounds = alive[i].getBounds(matrix);
+              if (!setFirst) {
+                setFirst = true;
+                CopyFrom(bounds, output);
+              } else {
+                MergeRect(output, bounds);
+              }
+            }
+          }
+          if (padding > 0) {
+            Inflate(output, padding, padding);
+          }
+          return output;
+        },
+        createEmitter: function() {
+          throw new Error("createEmitter removed. See ParticleEmitter docs for info");
+        },
+        particleX: {
+          get: function() {
+            return this.ops.x.current;
+          },
+          set: function(value) {
+            this.ops.x.onChange(value);
+          }
+        },
+        particleY: {
+          get: function() {
+            return this.ops.y.current;
+          },
+          set: function(value) {
+            this.ops.y.onChange(value);
+          }
+        },
+        accelerationX: {
+          get: function() {
+            return this.ops.accelerationX.current;
+          },
+          set: function(value) {
+            this.ops.accelerationX.onChange(value);
+          }
+        },
+        accelerationY: {
+          get: function() {
+            return this.ops.accelerationY.current;
+          },
+          set: function(value) {
+            this.ops.accelerationY.onChange(value);
+          }
+        },
+        maxVelocityX: {
+          get: function() {
+            return this.ops.maxVelocityX.current;
+          },
+          set: function(value) {
+            this.ops.maxVelocityX.onChange(value);
+          }
+        },
+        maxVelocityY: {
+          get: function() {
+            return this.ops.maxVelocityY.current;
+          },
+          set: function(value) {
+            this.ops.maxVelocityY.onChange(value);
+          }
+        },
+        speed: {
+          get: function() {
+            return this.ops.speedX.current;
+          },
+          set: function(value) {
+            this.ops.speedX.onChange(value);
+            this.ops.speedY.onChange(value);
+          }
+        },
+        speedX: {
+          get: function() {
+            return this.ops.speedX.current;
+          },
+          set: function(value) {
+            this.ops.speedX.onChange(value);
+          }
+        },
+        speedY: {
+          get: function() {
+            return this.ops.speedY.current;
+          },
+          set: function(value) {
+            this.ops.speedY.onChange(value);
+          }
+        },
+        moveToX: {
+          get: function() {
+            return this.ops.moveToX.current;
+          },
+          set: function(value) {
+            this.ops.moveToX.onChange(value);
+          }
+        },
+        moveToY: {
+          get: function() {
+            return this.ops.moveToY.current;
+          },
+          set: function(value) {
+            this.ops.moveToY.onChange(value);
+          }
+        },
+        bounce: {
+          get: function() {
+            return this.ops.bounce.current;
+          },
+          set: function(value) {
+            this.ops.bounce.onChange(value);
+          }
+        },
+        particleScaleX: {
+          get: function() {
+            return this.ops.scaleX.current;
+          },
+          set: function(value) {
+            this.ops.scaleX.onChange(value);
+          }
+        },
+        particleScaleY: {
+          get: function() {
+            return this.ops.scaleY.current;
+          },
+          set: function(value) {
+            this.ops.scaleY.onChange(value);
+          }
+        },
+        particleColor: {
+          get: function() {
+            return this.ops.color.current;
+          },
+          set: function(value) {
+            this.ops.color.onChange(value);
+          }
+        },
+        colorEase: {
+          get: function() {
+            return this.ops.color.easeName;
+          },
+          set: function(value) {
+            this.ops.color.setEase(value);
+          }
+        },
+        particleTint: {
+          get: function() {
+            return this.ops.tint.current;
+          },
+          set: function(value) {
+            this.ops.tint.onChange(value);
+          }
+        },
+        particleAlpha: {
+          get: function() {
+            return this.ops.alpha.current;
+          },
+          set: function(value) {
+            this.ops.alpha.onChange(value);
+          }
+        },
+        lifespan: {
+          get: function() {
+            return this.ops.lifespan.current;
+          },
+          set: function(value) {
+            this.ops.lifespan.onChange(value);
+          }
+        },
+        particleAngle: {
+          get: function() {
+            return this.ops.angle.current;
+          },
+          set: function(value) {
+            this.ops.angle.onChange(value);
+          }
+        },
+        particleRotate: {
+          get: function() {
+            return this.ops.rotate.current;
+          },
+          set: function(value) {
+            this.ops.rotate.onChange(value);
+          }
+        },
+        quantity: {
+          get: function() {
+            return this.ops.quantity.current;
+          },
+          set: function(value) {
+            this.ops.quantity.onChange(value);
+          }
+        },
+        delay: {
+          get: function() {
+            return this.ops.delay.current;
+          },
+          set: function(value) {
+            this.ops.delay.onChange(value);
+          }
+        },
+        hold: {
+          get: function() {
+            return this.ops.hold.current;
+          },
+          set: function(value) {
+            this.ops.hold.onChange(value);
+          }
+        },
+        flowCounter: {
+          get: function() {
+            return this.counters[0];
+          },
+          set: function(value) {
+            this.counters[0] = value;
+          }
+        },
+        frameCounter: {
+          get: function() {
+            return this.counters[1];
+          },
+          set: function(value) {
+            this.counters[1] = value;
+          }
+        },
+        animCounter: {
+          get: function() {
+            return this.counters[2];
+          },
+          set: function(value) {
+            this.counters[2] = value;
+          }
+        },
+        elapsed: {
+          get: function() {
+            return this.counters[3];
+          },
+          set: function(value) {
+            this.counters[3] = value;
+          }
+        },
+        stopCounter: {
+          get: function() {
+            return this.counters[4];
+          },
+          set: function(value) {
+            this.counters[4] = value;
+          }
+        },
+        completeFlag: {
+          get: function() {
+            return this.counters[5];
+          },
+          set: function(value) {
+            this.counters[5] = value;
+          }
+        },
+        zoneIndex: {
+          get: function() {
+            return this.counters[6];
+          },
+          set: function(value) {
+            this.counters[6] = value;
+          }
+        },
+        zoneTotal: {
+          get: function() {
+            return this.counters[7];
+          },
+          set: function(value) {
+            this.counters[7] = value;
+          }
+        },
+        currentFrame: {
+          get: function() {
+            return this.counters[8];
+          },
+          set: function(value) {
+            this.counters[8] = value;
+          }
+        },
+        currentAnim: {
+          get: function() {
+            return this.counters[9];
+          },
+          set: function(value) {
+            this.counters[9] = value;
+          }
+        },
+        preDestroy: function() {
+          this.texture = null;
+          this.frames = null;
+          this.anims = null;
+          this.emitCallback = null;
+          this.emitCallbackScope = null;
+          this.deathCallback = null;
+          this.deathCallbackScope = null;
+          this.emitZones = null;
+          this.deathZones = null;
+          this.bounds = null;
+          this.follow = null;
+          this.counters = null;
+          var i;
+          var ops = this.ops;
+          for (i = 0; i < configOpMap.length; i++) {
+            var key = configOpMap[i];
+            ops[key].destroy();
+          }
+          for (i = 0; i < this.alive.length; i++) {
+            this.alive[i].destroy();
+          }
+          for (i = 0; i < this.dead.length; i++) {
+            this.dead[i].destroy();
+          }
+          this.ops = null;
+          this.alive = [];
+          this.dead = [];
+          this.worldMatrix.destroy();
         }
       });
       module.exports = ParticleEmitter;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/particles/ParticleManagerWebGLRenderer.js
-  var require_ParticleManagerWebGLRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/particles/ParticleManagerWebGLRenderer.js": function(exports, module) {
-      var TransformMatrix = require_TransformMatrix();
-      var Utils = require_Utils();
-      var tempMatrix1 = new TransformMatrix();
-      var tempMatrix2 = new TransformMatrix();
-      var tempMatrix3 = new TransformMatrix();
-      var tempMatrix4 = new TransformMatrix();
-      var ParticleManagerWebGLRenderer = function(renderer, emitterManager, camera, parentMatrix) {
-        var emitters = emitterManager.emitters.list;
-        var emittersLength = emitters.length;
-        if (emittersLength === 0) {
-          return;
-        }
-        var pipeline = renderer.pipelines.set(emitterManager.pipeline);
-        var camMatrix = tempMatrix1;
-        var calcMatrix = tempMatrix2;
-        var particleMatrix = tempMatrix3;
-        var managerMatrix = tempMatrix4;
-        if (parentMatrix) {
-          managerMatrix.loadIdentity();
-          managerMatrix.multiply(parentMatrix);
-          managerMatrix.translate(emitterManager.x, emitterManager.y);
-          managerMatrix.rotate(emitterManager.rotation);
-          managerMatrix.scale(emitterManager.scaleX, emitterManager.scaleY);
-        } else {
-          managerMatrix.applyITRS(emitterManager.x, emitterManager.y, emitterManager.rotation, emitterManager.scaleX, emitterManager.scaleY);
-        }
-        var roundPixels = camera.roundPixels;
-        var texture = emitterManager.defaultFrame.glTexture;
-        var getTint = Utils.getTintAppendFloatAlpha;
-        var textureUnit = pipeline.setGameObject(emitterManager, emitterManager.defaultFrame);
-        renderer.pipelines.preBatch(emitterManager);
-        for (var e = 0; e < emittersLength; e++) {
-          var emitter = emitters[e];
-          var particles = emitter.alive;
-          var particleCount = particles.length;
-          if (!emitter.visible || particleCount === 0) {
-            continue;
-          }
-          camera.addToRenderList(emitter);
-          var scrollFactorX = emitter.scrollFactorX;
-          var scrollFactorY = emitter.scrollFactorY;
-          renderer.setBlendMode(emitter.blendMode);
-          if (emitter.mask) {
-            emitter.mask.preRenderWebGL(renderer, emitter, camera);
-            renderer.pipelines.set(emitterManager.pipeline);
-          }
-          var tintEffect = 0;
-          for (var i = 0; i < particleCount; i++) {
-            var particle = particles[i];
-            var alpha = particle.alpha * camera.alpha;
-            if (alpha <= 0) {
-              continue;
-            }
-            particleMatrix.applyITRS(particle.x, particle.y, particle.rotation, particle.scaleX, particle.scaleY);
-            camMatrix.copyFrom(camera.matrix);
-            camMatrix.multiplyWithOffset(managerMatrix, -camera.scrollX * scrollFactorX, -camera.scrollY * scrollFactorY);
-            particleMatrix.e = particle.x;
-            particleMatrix.f = particle.y;
-            camMatrix.multiply(particleMatrix, calcMatrix);
-            var frame = particle.frame;
-            var x = -frame.halfWidth;
-            var y = -frame.halfHeight;
-            var xw = x + frame.width;
-            var yh = y + frame.height;
-            var tx0 = calcMatrix.getXRound(x, y, roundPixels);
-            var ty0 = calcMatrix.getYRound(x, y, roundPixels);
-            var tx1 = calcMatrix.getXRound(x, yh, roundPixels);
-            var ty1 = calcMatrix.getYRound(x, yh, roundPixels);
-            var tx2 = calcMatrix.getXRound(xw, yh, roundPixels);
-            var ty2 = calcMatrix.getYRound(xw, yh, roundPixels);
-            var tx3 = calcMatrix.getXRound(xw, y, roundPixels);
-            var ty3 = calcMatrix.getYRound(xw, y, roundPixels);
-            var tint = getTint(particle.tint, alpha);
-            pipeline.batchQuad(emitter, tx0, ty0, tx1, ty1, tx2, ty2, tx3, ty3, frame.u0, frame.v0, frame.u1, frame.v1, tint, tint, tint, tint, tintEffect, texture, textureUnit);
-          }
-          if (emitter.mask) {
-            emitter.mask.postRenderWebGL(renderer, camera);
-          }
-        }
-        renderer.pipelines.postBatch(emitterManager);
-      };
-      module.exports = ParticleManagerWebGLRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/particles/ParticleManagerCanvasRenderer.js
-  var require_ParticleManagerCanvasRenderer = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/particles/ParticleManagerCanvasRenderer.js": function(exports, module) {
-      var TransformMatrix = require_TransformMatrix();
-      var tempMatrix1 = new TransformMatrix();
-      var tempMatrix2 = new TransformMatrix();
-      var tempMatrix3 = new TransformMatrix();
-      var tempMatrix4 = new TransformMatrix();
-      var ParticleManagerCanvasRenderer = function(renderer, emitterManager, camera, parentMatrix) {
-        var emitters = emitterManager.emitters.list;
-        var emittersLength = emitters.length;
-        if (emittersLength === 0) {
-          return;
-        }
-        var camMatrix = tempMatrix1.copyFrom(camera.matrix);
-        var calcMatrix = tempMatrix2;
-        var particleMatrix = tempMatrix3;
-        var managerMatrix = tempMatrix4;
-        if (parentMatrix) {
-          managerMatrix.loadIdentity();
-          managerMatrix.multiply(parentMatrix);
-          managerMatrix.translate(emitterManager.x, emitterManager.y);
-          managerMatrix.rotate(emitterManager.rotation);
-          managerMatrix.scale(emitterManager.scaleX, emitterManager.scaleY);
-        } else {
-          managerMatrix.applyITRS(emitterManager.x, emitterManager.y, emitterManager.rotation, emitterManager.scaleX, emitterManager.scaleY);
-        }
-        var ctx = renderer.currentContext;
-        var roundPixels = camera.roundPixels;
-        for (var e = 0; e < emittersLength; e++) {
-          var emitter = emitters[e];
-          var particles = emitter.alive;
-          var particleCount = particles.length;
-          if (!emitter.visible || particleCount === 0) {
-            continue;
-          }
-          camera.addToRenderList(emitter);
-          var scrollFactorX = emitter.scrollFactorX;
-          var scrollFactorY = emitter.scrollFactorY;
-          ctx.save();
-          ctx.globalCompositeOperation = renderer.blendModes[emitter.blendMode];
-          for (var i = 0; i < particleCount; i++) {
-            var particle = particles[i];
-            var alpha = particle.alpha * camera.alpha;
-            if (alpha <= 0) {
-              continue;
-            }
-            particleMatrix.applyITRS(particle.x, particle.y, particle.rotation, particle.scaleX, particle.scaleY);
-            camMatrix.copyFrom(camera.matrix);
-            camMatrix.multiplyWithOffset(managerMatrix, -camera.scrollX * scrollFactorX, -camera.scrollY * scrollFactorY);
-            particleMatrix.e = particle.x;
-            particleMatrix.f = particle.y;
-            camMatrix.multiply(particleMatrix, calcMatrix);
-            var frame = particle.frame;
-            var cd = frame.canvasData;
-            if (cd.width > 0 && cd.height > 0) {
-              var x = -frame.halfWidth;
-              var y = -frame.halfHeight;
-              ctx.globalAlpha = alpha;
-              ctx.save();
-              calcMatrix.setToContext(ctx);
-              if (roundPixels) {
-                x = Math.round(x);
-                y = Math.round(y);
-              }
-              ctx.imageSmoothingEnabled = !(!renderer.antialias || frame.source.scaleMode);
-              ctx.drawImage(frame.source.image, cd.x, cd.y, cd.width, cd.height, x, y, cd.width, cd.height);
-              ctx.restore();
-            }
-          }
-          ctx.restore();
-        }
-      };
-      module.exports = ParticleManagerCanvasRenderer;
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/particles/ParticleManagerRender.js
-  var require_ParticleManagerRender = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/particles/ParticleManagerRender.js": function(exports, module) {
-      var NOOP = require_NOOP();
-      var renderWebGL = NOOP;
-      var renderCanvas = NOOP;
-      if (true) {
-        renderWebGL = require_ParticleManagerWebGLRenderer();
-      }
-      if (true) {
-        renderCanvas = require_ParticleManagerCanvasRenderer();
-      }
-      module.exports = {
-        renderWebGL: renderWebGL,
-        renderCanvas: renderCanvas
-      };
-    }
-  });
-
-  // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterManager.js
-  var require_ParticleEmitterManager = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterManager.js": function(exports, module) {
-      var Class = require_Class();
-      var Components = require_components();
-      var GameObject = require_GameObject();
-      var GravityWell = require_GravityWell();
-      var List = require_List();
-      var ParticleEmitter = require_ParticleEmitter();
-      var Render = require_ParticleManagerRender();
-      var ParticleEmitterManager = new Class({
-        Extends: GameObject,
-        Mixins: [
-          Components.Depth,
-          Components.Mask,
-          Components.Pipeline,
-          Components.Transform,
-          Components.Visible,
-          Render
-        ],
-        initialize: function ParticleEmitterManager2(scene, texture, frame, emitters) {
-          GameObject.call(this, scene, "ParticleEmitterManager");
-          this.blendMode = -1;
-          this.timeScale = 1;
-          this.texture = null;
-          this.frame = null;
-          this.frameNames = [];
-          if (frame !== null && (typeof frame === "object" || Array.isArray(frame))) {
-            emitters = frame;
-            frame = null;
-          }
-          this.setTexture(texture, frame);
-          this.initPipeline();
-          this.emitters = new List(this);
-          this.wells = new List(this);
-          if (emitters) {
-            if (!Array.isArray(emitters)) {
-              emitters = [emitters];
-            }
-            for (var i = 0; i < emitters.length; i++) {
-              this.createEmitter(emitters[i]);
-            }
-          }
-        },
-        addedToScene: function() {
-          this.scene.sys.updateList.add(this);
-        },
-        removedFromScene: function() {
-          this.scene.sys.updateList.remove(this);
-        },
-        setTexture: function(key, frame) {
-          this.texture = this.scene.sys.textures.get(key);
-          return this.setFrame(frame);
-        },
-        setFrame: function(frame) {
-          this.frame = this.texture.get(frame);
-          var frames = this.texture.getFramesFromTextureSource(this.frame.sourceIndex);
-          var names = [];
-          frames.forEach(function(sourceFrame) {
-            names.push(sourceFrame.name);
-          });
-          this.frameNames = names;
-          this.defaultFrame = this.frame;
-          return this;
-        },
-        setEmitterFrames: function(frames, emitter) {
-          if (!Array.isArray(frames)) {
-            frames = [frames];
-          }
-          var out = emitter.frames;
-          out.length = 0;
-          for (var i = 0; i < frames.length; i++) {
-            var frame = frames[i];
-            if (this.frameNames.indexOf(frame) !== -1) {
-              out.push(this.texture.get(frame));
-            } else {
-              console.warn('Texture "%s" has no frame "%s"', this.texture.key, frame);
-            }
-          }
-          if (out.length > 0) {
-            emitter.defaultFrame = out[0];
-          } else {
-            console.warn("No texture frames were set");
-            emitter.defaultFrame = this.defaultFrame;
-          }
-          return this;
-        },
-        addEmitter: function(emitter) {
-          return this.emitters.add(emitter);
-        },
-        createEmitter: function(config) {
-          return this.addEmitter(new ParticleEmitter(this, config));
-        },
-        removeEmitter: function(emitter) {
-          return this.emitters.remove(emitter, true);
-        },
-        addGravityWell: function(well) {
-          return this.wells.add(well);
-        },
-        createGravityWell: function(config) {
-          return this.addGravityWell(new GravityWell(config));
-        },
-        emitParticle: function(count, x, y) {
-          var emitters = this.emitters.list;
-          for (var i = 0; i < emitters.length; i++) {
-            var emitter = emitters[i];
-            if (emitter.active) {
-              emitter.emitParticle(count, x, y);
-            }
-          }
-          return this;
-        },
-        emitParticleAt: function(x, y, count) {
-          return this.emitParticle(count, x, y);
-        },
-        pause: function() {
-          this.active = false;
-          return this;
-        },
-        resume: function() {
-          this.active = true;
-          return this;
-        },
-        getProcessors: function() {
-          return this.wells.getAll("active", true);
-        },
-        preUpdate: function(time, delta) {
-          delta *= this.timeScale;
-          var emitters = this.emitters.list;
-          for (var i = 0; i < emitters.length; i++) {
-            var emitter = emitters[i];
-            if (emitter.active) {
-              emitter.preUpdate(time, delta);
-            }
-          }
-        },
-        setAlpha: function() {
-        },
-        setScrollFactor: function() {
-        },
-        setBlendMode: function() {
-        }
-      });
-      module.exports = ParticleEmitterManager;
     }
   });
 
@@ -42371,11 +43758,14 @@ var Phaser = (function() {
   var require_particles = __commonJS({
     "../../node_modules/phaser/src/gameobjects/particles/index.js": function(exports, module) {
       module.exports = {
+        EmitterColorOp: require_EmitterColorOp(),
         EmitterOp: require_EmitterOp(),
+        Events: require_events17(),
         GravityWell: require_GravityWell(),
         Particle: require_Particle(),
+        ParticleBounds: require_ParticleBounds(),
         ParticleEmitter: require_ParticleEmitter(),
-        ParticleEmitterManager: require_ParticleEmitterManager(),
+        ParticleProcessor: require_ParticleProcessor(),
         Zones: require_zones()
       };
     }
@@ -42417,10 +43807,10 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/gameobjects/image/ImageFactory.js
   var require_ImageFactory = __commonJS({
     "../../node_modules/phaser/src/gameobjects/image/ImageFactory.js": function() {
-      var Image2 = require_Image2();
+      var Image2 = require_Image();
       var GameObjectFactory = require_GameObjectFactory();
-      GameObjectFactory.register("image", function(x, y, key, frame) {
-        return this.displayList.add(new Image2(this.scene, x, y, key, frame));
+      GameObjectFactory.register("image", function(x, y, texture, frame) {
+        return this.displayList.add(new Image2(this.scene, x, y, texture, frame));
       });
     }
   });
@@ -42430,10 +43820,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/sprite/SpriteFactory.js": function() {
       var GameObjectFactory = require_GameObjectFactory();
       var Sprite = require_Sprite();
-      GameObjectFactory.register("sprite", function(x, y, key, frame) {
-        var sprite = new Sprite(this.scene, x, y, key, frame);
-        this.displayList.add(sprite);
-        return sprite;
+      GameObjectFactory.register("sprite", function(x, y, texture, frame) {
+        return this.displayList.add(new Sprite(this.scene, x, y, texture, frame));
       });
     }
   });
@@ -42460,13 +43848,16 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/gameobjects/particles/ParticleManagerFactory.js
-  var require_ParticleManagerFactory = __commonJS({
-    "../../node_modules/phaser/src/gameobjects/particles/ParticleManagerFactory.js": function() {
+  // ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterFactory.js
+  var require_ParticleEmitterFactory = __commonJS({
+    "../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterFactory.js": function() {
       var GameObjectFactory = require_GameObjectFactory();
-      var ParticleEmitterManager = require_ParticleEmitterManager();
-      GameObjectFactory.register("particles", function(key, frame, emitters) {
-        return this.displayList.add(new ParticleEmitterManager(this.scene, key, frame, emitters));
+      var ParticleEmitter = require_ParticleEmitter();
+      GameObjectFactory.register("particles", function(x, y, texture, config) {
+        if (x !== void 0 && typeof x === "string") {
+          console.warn("ParticleEmitterManager was removed in Phaser 3.60. See documentation for details");
+        }
+        return this.displayList.add(new ParticleEmitter(this.scene, x, y, texture, config));
       });
     }
   });
@@ -42476,8 +43867,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureFactory.js": function() {
       var GameObjectFactory = require_GameObjectFactory();
       var RenderTexture = require_RenderTexture();
-      GameObjectFactory.register("renderTexture", function(x, y, width, height, key, frame) {
-        return this.displayList.add(new RenderTexture(this.scene, x, y, width, height, key, frame));
+      GameObjectFactory.register("renderTexture", function(x, y, width, height) {
+        return this.displayList.add(new RenderTexture(this.scene, x, y, width, height));
       });
     }
   });
@@ -42542,7 +43933,7 @@ var Phaser = (function() {
       var BuildGameObject = require_BuildGameObject();
       var GameObjectCreator = require_GameObjectCreator();
       var GetAdvancedValue = require_GetAdvancedValue();
-      var Image2 = require_Image2();
+      var Image2 = require_Image();
       GameObjectCreator.register("image", function(config, addToScene) {
         if (config === void 0) {
           config = {};
@@ -42629,9 +44020,7 @@ var Phaser = (function() {
         var y = GetAdvancedValue(config, "y", 0);
         var width = GetAdvancedValue(config, "width", 32);
         var height = GetAdvancedValue(config, "height", 32);
-        var key = GetAdvancedValue(config, "key", void 0);
-        var frame = GetAdvancedValue(config, "frame", void 0);
-        var renderTexture = new RenderTexture(this.scene, x, y, width, height, key, frame);
+        var renderTexture = new RenderTexture(this.scene, x, y, width, height);
         if (addToScene !== void 0) {
           config.add = addToScene;
         }
@@ -42663,7 +44052,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/geom/point/CopyFrom.js
-  var require_CopyFrom = __commonJS({
+  var require_CopyFrom2 = __commonJS({
     "../../node_modules/phaser/src/geom/point/CopyFrom.js": function(exports, module) {
       var CopyFrom = function(source, dest) {
         return dest.setTo(source.x, source.y);
@@ -42887,7 +44276,7 @@ var Phaser = (function() {
       var Point = require_Point();
       Point.Ceil = require_Ceil2();
       Point.Clone = require_Clone2();
-      Point.CopyFrom = require_CopyFrom();
+      Point.CopyFrom = require_CopyFrom2();
       Point.Equals = require_Equals();
       Point.Floor = require_Floor2();
       Point.GetCentroid = require_GetCentroid();
@@ -42972,16 +44361,6 @@ var Phaser = (function() {
         return rectB.x > rectA.x && rectB.x < rectA.right && (rectB.right > rectA.x && rectB.right < rectA.right) && (rectB.y > rectA.y && rectB.y < rectA.bottom) && (rectB.bottom > rectA.y && rectB.bottom < rectA.bottom);
       };
       module.exports = ContainsRect;
-    }
-  });
-
-  // ../../node_modules/phaser/src/geom/rectangle/CopyFrom.js
-  var require_CopyFrom2 = __commonJS({
-    "../../node_modules/phaser/src/geom/rectangle/CopyFrom.js": function(exports, module) {
-      var CopyFrom = function(source, dest) {
-        return dest.setTo(source.x, source.y, source.width, source.height);
-      };
-      module.exports = CopyFrom;
     }
   });
 
@@ -43128,33 +44507,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/geom/rectangle/Inflate.js
-  var require_Inflate = __commonJS({
-    "../../node_modules/phaser/src/geom/rectangle/Inflate.js": function(exports, module) {
-      var CenterOn = require_CenterOn2();
-      var Inflate = function(rect, x, y) {
-        var cx = rect.centerX;
-        var cy = rect.centerY;
-        rect.setSize(rect.width + x * 2, rect.height + y * 2);
-        return CenterOn(rect, cx, cy);
-      };
-      module.exports = Inflate;
-    }
-  });
-
-  // ../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js
-  var require_RectangleToRectangle = __commonJS({
-    "../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js": function(exports, module) {
-      var RectangleToRectangle = function(rectA, rectB) {
-        if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0) {
-          return false;
-        }
-        return !(rectA.right < rectB.x || rectA.bottom < rectB.y || rectA.x > rectB.right || rectA.y > rectB.bottom);
-      };
-      module.exports = RectangleToRectangle;
-    }
-  });
-
   // ../../node_modules/phaser/src/geom/rectangle/Intersection.js
   var require_Intersection = __commonJS({
     "../../node_modules/phaser/src/geom/rectangle/Intersection.js": function(exports, module) {
@@ -43199,24 +44551,6 @@ var Phaser = (function() {
         return target;
       };
       module.exports = MergePoints;
-    }
-  });
-
-  // ../../node_modules/phaser/src/geom/rectangle/MergeRect.js
-  var require_MergeRect = __commonJS({
-    "../../node_modules/phaser/src/geom/rectangle/MergeRect.js": function(exports, module) {
-      var MergeRect = function(target, source) {
-        var minX = Math.min(target.x, source.x);
-        var maxX = Math.max(target.right, source.right);
-        target.x = minX;
-        target.width = maxX - minX;
-        var minY = Math.min(target.y, source.y);
-        var maxY = Math.max(target.bottom, source.bottom);
-        target.y = minY;
-        target.height = maxY - minY;
-        return target;
-      };
-      module.exports = MergeRect;
     }
   });
 
@@ -43372,7 +44706,7 @@ var Phaser = (function() {
       Rectangle.Contains = require_Contains2();
       Rectangle.ContainsPoint = require_ContainsPoint();
       Rectangle.ContainsRect = require_ContainsRect();
-      Rectangle.CopyFrom = require_CopyFrom2();
+      Rectangle.CopyFrom = require_CopyFrom();
       Rectangle.Decompose = require_Decompose();
       Rectangle.Equals = require_Equals2();
       Rectangle.FitInside = require_FitInside();
@@ -43554,7 +44888,6 @@ var Phaser = (function() {
         return {
           gameObject: gameObject,
           enabled: true,
-          alwaysEnabled: false,
           draggable: false,
           dropZone: false,
           cursor: false,
@@ -43649,7 +44982,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/input/gamepad/events/index.js
-  var require_events17 = __commonJS({
+  var require_events18 = __commonJS({
     "../../node_modules/phaser/src/input/gamepad/events/index.js": function(exports, module) {
       module.exports = {
         BUTTON_DOWN: require_BUTTON_DOWN_EVENT(),
@@ -43666,7 +44999,7 @@ var Phaser = (function() {
   var require_Button = __commonJS({
     "../../node_modules/phaser/src/input/gamepad/Button.js": function(exports, module) {
       var Class = require_Class();
-      var Events = require_events17();
+      var Events = require_events18();
       var Button = new Class({
         initialize: function Button2(pad, index) {
           this.pad = pad;
@@ -43923,7 +45256,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/input/gamepad/GamepadPlugin.js": function(exports, module) {
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events17();
+      var Events = require_events18();
       var Gamepad = require_Gamepad();
       var GetValue = require_GetValue();
       var InputPluginCache = require_InputPluginCache();
@@ -44210,7 +45543,7 @@ var Phaser = (function() {
       module.exports = {
         Axis: require_Axis(),
         Button: require_Button(),
-        Events: require_events17(),
+        Events: require_events18(),
         Gamepad: require_Gamepad(),
         GamepadPlugin: require_GamepadPlugin(),
         Configs: require_configs()
@@ -44529,7 +45862,7 @@ var Phaser = (function() {
       var PluginCache = require_PluginCache();
       var Rectangle = require_Rectangle();
       var RectangleContains = require_Contains2();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var Triangle = require_Triangle();
       var TriangleContains = require_Contains4();
       var InputPlugin = new Class({
@@ -44619,12 +45952,11 @@ var Phaser = (function() {
               this.clear(gameObject, true);
             }
           }
-          removeList.length = 0;
           this._pendingRemoval.length = 0;
           this._list = current.concat(insertList.splice(0));
         },
         isActive: function() {
-          return this.enabled && this.scene.sys.isActive();
+          return this.enabled && this.scene.sys.canInput();
         },
         updatePoll: function(time, delta) {
           if (!this.isActive()) {
@@ -44749,6 +46081,7 @@ var Phaser = (function() {
           this.disable(gameObject);
           var input = gameObject.input;
           if (input) {
+            this.removeDebug(gameObject);
             input.gameObject = void 0;
             input.target = void 0;
             input.hitArea = void 0;
@@ -45489,7 +46822,7 @@ var Phaser = (function() {
               }
               debug.setRotation(rotation);
               debug.setScale(scaleX, scaleY);
-              debug.setPosition(x + offsetx, y + offsety);
+              debug.setPosition(x + offsetx * scaleX, y + offsety * scaleY);
               debug.setScrollFactor(gameObject.scrollFactorX, gameObject.scrollFactorY);
               debug.setDepth(gameObject.depth);
             };
@@ -45616,6 +46949,12 @@ var Phaser = (function() {
           manager.events.off(Events.GAME_OUT, this.onGameOut, this);
           manager.events.off(Events.GAME_OVER, this.onGameOver, this);
           eventEmitter.off(SceneEvents.SHUTDOWN, this.shutdown, this);
+        },
+        resetPointers: function() {
+          var pointers = this.manager.pointers;
+          for (var i = 0; i < pointers.length; i++) {
+            pointers[i].reset();
+          }
         },
         destroy: function() {
           this.shutdown();
@@ -45759,7 +47098,7 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/input/keyboard/events/index.js
-  var require_events18 = __commonJS({
+  var require_events19 = __commonJS({
     "../../node_modules/phaser/src/input/keyboard/events/index.js": function(exports, module) {
       module.exports = {
         ANY_KEY_DOWN: require_ANY_KEY_DOWN_EVENT(),
@@ -45778,7 +47117,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/input/keyboard/keys/Key.js": function(exports, module) {
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events18();
+      var Events = require_events19();
       var Key = new Class({
         Extends: EventEmitter,
         initialize: function Key2(plugin, keyCode) {
@@ -45951,7 +47290,7 @@ var Phaser = (function() {
   var require_KeyCombo = __commonJS({
     "../../node_modules/phaser/src/input/keyboard/combo/KeyCombo.js": function(exports, module) {
       var Class = require_Class();
-      var Events = require_events18();
+      var Events = require_events19();
       var GetFastValue = require_GetFastValue();
       var ProcessKeyCombo = require_ProcessKeyCombo();
       var ResetKeyCombo = require_ResetKeyCombo();
@@ -46038,8 +47377,8 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/input/keyboard/KeyboardPlugin.js": function(exports, module) {
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events18();
-      var GameEvents = require_events();
+      var Events = require_events19();
+      var GameEvents = require_events5();
       var GetValue = require_GetValue();
       var InputEvents = require_events13();
       var InputPluginCache = require_InputPluginCache();
@@ -46047,7 +47386,7 @@ var Phaser = (function() {
       var KeyCodes = require_KeyCodes();
       var KeyCombo = require_KeyCombo();
       var KeyMap = require_KeyMap();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var SnapFloor = require_SnapFloor();
       var KeyboardPlugin = new Class({
         Extends: EventEmitter,
@@ -46084,7 +47423,7 @@ var Phaser = (function() {
           this.scene.sys.events.on(SceneEvents.SLEEP, this.resetKeys, this);
         },
         isActive: function() {
-          return this.enabled && this.scene.sys.isActive();
+          return this.enabled && this.scene.sys.canInput();
         },
         addCapture: function(keycode) {
           this.manager.addCapture(keycode);
@@ -46414,7 +47753,7 @@ var Phaser = (function() {
   var require_keyboard = __commonJS({
     "../../node_modules/phaser/src/input/keyboard/index.js": function(exports, module) {
       module.exports = {
-        Events: require_events18(),
+        Events: require_events19(),
         KeyboardManager: require_KeyboardManager(),
         KeyboardPlugin: require_KeyboardPlugin(),
         Key: require_Key(),
@@ -46878,13 +48217,15 @@ var Phaser = (function() {
         },
         addToCache: function() {
           var linkFile = this.linkFile;
-          if (linkFile && linkFile.state >= CONST.FILE_COMPLETE) {
-            if (this.type === "image") {
-              this.cache.addImage(this.key, this.data, linkFile.data);
-            } else {
-              this.cache.addImage(linkFile.key, linkFile.data, this.data);
+          if (linkFile) {
+            if (linkFile.state >= CONST.FILE_COMPLETE) {
+              if (this.type === "normalMap") {
+                this.cache.addImage(this.key, linkFile.data, this.data);
+              } else {
+                this.cache.addImage(this.key, this.data, linkFile.data);
+              }
             }
-          } else if (!linkFile) {
+          } else {
             this.cache.addImage(this.key, this.data);
           }
         }
@@ -47402,7 +48743,7 @@ var Phaser = (function() {
       var GetFastValue = require_GetFastValue();
       var GetValue = require_GetValue();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var XHRSettings = require_XHRSettings();
       var LoaderPlugin = new Class({
         Extends: EventEmitter,
@@ -47753,7 +49094,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/plugins/ScenePlugin.js": function(exports, module) {
       var BasePlugin = require_BasePlugin();
       var Class = require_Class();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var ScenePlugin = new Class({
         Extends: BasePlugin,
         initialize: function ScenePlugin2(scene, pluginManager, pluginKey) {
@@ -47965,9 +49306,7 @@ var Phaser = (function() {
           gl.bindTexture(gl.TEXTURE_2D, source.texture);
           gl.bufferData(gl.ARRAY_BUFFER, this.vertexData, gl.STATIC_DRAW);
           gl.drawArrays(gl.TRIANGLES, 0, 6);
-          if (!target) {
-            renderer.resetTextures();
-          } else {
+          if (target) {
             gl.bindTexture(gl.TEXTURE_2D, null);
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
           }
@@ -47983,6 +49322,7 @@ var Phaser = (function() {
       var BlendModes = require_BlendModes();
       var CenterOn = require_CenterOn2();
       var Class = require_Class();
+      var ColorMatrixFS = require_ColorMatrix_frag();
       var GetFastValue = require_GetFastValue();
       var MultiPipeline = require_MultiPipeline();
       var PostFXFS = require_PostFX_frag();
@@ -47990,34 +49330,10 @@ var Phaser = (function() {
       var RenderTarget = require_RenderTarget();
       var SingleQuadFS = require_Single_frag();
       var SingleQuadVS = require_Single_vert();
-      var TransformMatrix = require_TransformMatrix();
-      var WEBGL_CONST = require_const7();
       var WebGLPipeline = require_WebGLPipeline();
       var SpriteFXPipeline = new Class({
-        Extends: WebGLPipeline,
+        Extends: MultiPipeline,
         initialize: function SpriteFXPipeline2(config) {
-          config.attributes = GetFastValue(config, "attributes", [
-            {
-              name: "inPosition",
-              size: 2
-            },
-            {
-              name: "inTexCoord",
-              size: 2
-            },
-            {
-              name: "inTexId"
-            },
-            {
-              name: "inTintEffect"
-            },
-            {
-              name: "inTint",
-              size: 4,
-              type: WEBGL_CONST.UNSIGNED_BYTE,
-              normalized: true
-            }
-          ]);
           var fragShader = GetFastValue(config, "fragShader", PostFXFS);
           var vertShader = GetFastValue(config, "vertShader", SingleQuadVS);
           var drawShader = GetFastValue(config, "drawShader", PostFXFS);
@@ -48036,6 +49352,10 @@ var Phaser = (function() {
               name: "DrawGame",
               fragShader: drawShader,
               vertShader: SingleQuadVS
+            },
+            {
+              name: "ColorMatrix",
+              fragShader: ColorMatrixFS
             }
           ];
           var configShaders = GetFastValue(config, "shaders", []);
@@ -48044,14 +49364,13 @@ var Phaser = (function() {
             config.vertShader = vertShader;
           }
           config.batchSize = 1;
-          WebGLPipeline.call(this, config);
+          MultiPipeline.call(this, config);
           this.isSpriteFX = true;
-          this._tempMatrix1 = new TransformMatrix();
-          this._tempMatrix2 = new TransformMatrix();
-          this._tempMatrix3 = new TransformMatrix();
+          this.customMainSampler = null;
           this.drawSpriteShader;
           this.copyShader;
           this.gameShader;
+          this.colorMatrixShader;
           this.quadVertexData;
           this.quadVertexBuffer;
           this.quadVertexViewF32;
@@ -48071,6 +49390,7 @@ var Phaser = (function() {
           this.drawSpriteShader = shaders[0];
           this.copyShader = shaders[1];
           this.gameShader = shaders[2];
+          this.colorMatrixShader = shaders[3];
           this.fsTarget = new RenderTarget(renderer, renderer.width, renderer.height, 1, 0, true, true);
           this.renderTargets = this.manager.renderTargets.concat(this.fsTarget);
           var data = new ArrayBuffer(168);
@@ -48089,12 +49409,6 @@ var Phaser = (function() {
           vertexViewF32[35] = width;
           vertexViewF32[36] = height;
         },
-        batchSprite: function(gameObject, camera, parentTransformMatrix) {
-          MultiPipeline.prototype.batchSprite.call(this, gameObject, camera, parentTransformMatrix);
-        },
-        batchTexture: function(gameObject, texture, textureWidth, textureHeight, srcX, srcY, srcWidth, srcHeight, scaleX, scaleY, rotation, flipX, flipY, scrollFactorX, scrollFactorY, displayOriginX, displayOriginY, frameX, frameY, frameWidth, frameHeight, tintTL, tintTR, tintBL, tintBR, tintEffect, uOffset, vOffset, camera, parentTransformMatrix, skipFlip, textureUnit) {
-          MultiPipeline.prototype.batchTexture.call(this, gameObject, texture, textureWidth, textureHeight, srcX, srcY, srcWidth, srcHeight, scaleX, scaleY, rotation, flipX, flipY, scrollFactorX, scrollFactorY, displayOriginX, displayOriginY, frameX, frameY, frameWidth, frameHeight, tintTL, tintTR, tintBL, tintBR, tintEffect, uOffset, vOffset, camera, parentTransformMatrix, skipFlip, textureUnit);
-        },
         batchQuad: function(gameObject, x0, y0, x1, y1, x2, y2, x3, y3, u0, v0, u1, v1, tintTL, tintTR, tintBL, tintBR, tintEffect, texture) {
           var bx = Math.min(x0, x1, x2, x3);
           var by = Math.min(y0, y1, y2, y3);
@@ -48103,7 +49417,7 @@ var Phaser = (function() {
           var bw = br - bx;
           var bh = bb - by;
           var bounds = this.spriteBounds.setTo(bx, by, bw, bh);
-          var padding = gameObject.fxPadding;
+          var padding = gameObject ? gameObject.fxPadding : 0;
           var width = bw + padding * 2;
           var height = bh + padding * 2;
           var maxDimension = Math.abs(Math.max(width, height));
@@ -48116,15 +49430,18 @@ var Phaser = (function() {
           this.setShader(this.drawSpriteShader);
           this.set1i("uMainSampler", 0);
           this.flipProjectionMatrix(true);
-          this.onDrawSprite(gameObject, target);
-          gameObject.onFX(this);
+          if (gameObject) {
+            this.onDrawSprite(gameObject, target);
+            gameObject.onFX(this);
+          }
           var fsTarget = this.fsTarget;
-          renderer.setTextureZero(texture);
+          this.flush();
           gl.viewport(0, 0, renderer.width, renderer.height);
           gl.bindFramebuffer(gl.FRAMEBUFFER, fsTarget.framebuffer);
           gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, fsTarget.texture, 0);
           gl.clearColor(0, 0, 0, 0);
           gl.clear(gl.COLOR_BUFFER_BIT);
+          this.setTexture2D(texture);
           this.batchVert(x0, y0, u0, v0, 0, tintEffect, tintTL);
           this.batchVert(x1, y1, u0, v1, 0, tintEffect, tintBL);
           this.batchVert(x2, y2, u1, v1, 0, tintEffect, tintBR);
@@ -48133,7 +49450,6 @@ var Phaser = (function() {
           this.batchVert(x3, y3, u1, v0, 0, tintEffect, tintTR);
           this.flush();
           this.flipProjectionMatrix(false);
-          renderer.clearTextureZero();
           gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, target.texture);
           gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, targetBounds.x, targetBounds.y, targetBounds.width, targetBounds.height);
@@ -48148,7 +49464,7 @@ var Phaser = (function() {
         },
         onCopySprite: function() {
         },
-        copySprite: function(source, target, clear, clearAlpha, eraseMode, shader) {
+        copySprite: function(source, target, clear, clearAlpha, eraseMode, colorMatrix, shader) {
           if (clear === void 0) {
             clear = true;
           }
@@ -48163,12 +49479,19 @@ var Phaser = (function() {
           }
           var gl = this.gl;
           var sprite = this.tempSprite;
+          if (colorMatrix) {
+            shader = this.colorMatrixShader;
+          }
           this.currentShader = shader;
           var wasBound = this.setVertexBuffer(this.quadVertexBuffer);
           shader.bind(wasBound, false);
           this.set1i("uMainSampler", 0);
           sprite.onFXCopy(this);
           this.onCopySprite(source, target, sprite);
+          if (colorMatrix) {
+            this.set1fv("uColorMatrix", colorMatrix.getData());
+            this.set1f("uAlpha", colorMatrix.alpha);
+          }
           gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, source.texture);
           if (source.height > target.height) {
@@ -48220,8 +49543,11 @@ var Phaser = (function() {
           if (!renderer.currentFramebuffer) {
             gl.viewport(0, 0, renderer.width, renderer.height);
           }
-          gl.activeTexture(gl.TEXTURE0);
-          gl.bindTexture(gl.TEXTURE_2D, source.texture);
+          if (this.customMainSampler) {
+            this.setTexture2D(this.customMainSampler);
+          } else {
+            this.setTexture2D(source.texture);
+          }
           var matrix = this._tempMatrix1.loadIdentity();
           var x = this.targetBounds.x;
           var y = this.targetBounds.y;
@@ -48242,7 +49568,6 @@ var Phaser = (function() {
           this.batchVert(x2, y2, 1, 1, 0, 0, 16777215);
           this.batchVert(x3, y3, 1, 0, 0, 0, 16777215);
           this.flush();
-          renderer.resetTextures();
           this.tempSprite = null;
         },
         onDraw: function(target) {
@@ -48277,21 +49602,17 @@ var Phaser = (function() {
         },
         destroy: function() {
           this.gl.deleteBuffer(this.quadVertexBuffer);
-          this._tempMatrix1.destroy();
-          this._tempMatrix2.destroy();
-          this._tempMatrix3.destroy();
-          this._tempMatrix1 = null;
-          this._tempMatrix1 = null;
-          this._tempMatrix1 = null;
           this.drawSpriteShader = null;
           this.copyShader = null;
           this.gameShader = null;
+          this.colorMatrixShader = null;
           this.quadVertexData = null;
           this.quadVertexBuffer = null;
           this.quadVertexViewF32 = null;
           this.fsTarget = null;
           this.tempSprite = null;
-          WebGLPipeline.prototype.destroy.call(this);
+          MultiPipeline.prototype.destroy.call(this);
+          return this;
         }
       });
       module.exports = SpriteFXPipeline;
@@ -48306,8 +49627,8 @@ var Phaser = (function() {
       var Pipelines = {
         BitmapMaskPipeline: require_BitmapMaskPipeline(),
         Events: require_events10(),
-        GraphicsPipeline: require_GraphicsPipeline(),
         LightPipeline: require_LightPipeline(),
+        MobilePipeline: require_MobilePipeline(),
         MultiPipeline: require_MultiPipeline(),
         PointLightPipeline: require_PointLightPipeline(),
         PostFXPipeline: require_PostFXPipeline(),
@@ -48345,7 +49666,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/renderer/index.js": function(exports, module) {
       module.exports = {
         Canvas: require_canvas2(),
-        Events: require_events2(),
+        Events: require_events8(),
         Snapshot: require_snapshot(),
         WebGL: require_webgl()
       };
@@ -48359,7 +49680,7 @@ var Phaser = (function() {
       var CONST = require_const9();
       var Scale = {
         Center: require_CENTER_CONST(),
-        Events: require_events8(),
+        Events: require_events7(),
         Orientation: require_ORIENTATION_CONST(),
         ScaleManager: require_ScaleManager(),
         ScaleModes: require_SCALE_MODE_CONST(),
@@ -48378,7 +49699,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/scene/ScenePlugin.js": function(exports, module) {
       var Clamp = require_Clamp();
       var Class = require_Class();
-      var Events = require_events5();
+      var Events = require_events();
       var GetFastValue = require_GetFastValue();
       var PluginCache = require_PluginCache();
       var ScenePlugin = new Class({
@@ -48457,8 +49778,12 @@ var Phaser = (function() {
           } else {
             this.manager.start(key, GetFastValue(config, "data"));
           }
+          var onStartCallback = GetFastValue(config, "onStart", null);
+          var onStartScope = GetFastValue(config, "onStartScope", this.scene);
+          if (onStartCallback) {
+            onStartCallback.call(onStartScope, this.scene, target, duration);
+          }
           this.systems.events.emit(Events.TRANSITION_OUT, target, duration);
-          this.systems.events.on(Events.UPDATE, this.step, this);
           return true;
         },
         checkValidTransition: function(target) {
@@ -48480,7 +49805,6 @@ var Phaser = (function() {
         transitionComplete: function() {
           var targetSys = this._target.sys;
           var targetSettings = this._target.sys.settings;
-          this.systems.events.off(Events.UPDATE, this.step, this);
           targetSys.events.emit(Events.TRANSITION_COMPLETE, this.scene);
           targetSettings.isTransition = false;
           targetSettings.transitionFrom = null;
@@ -48676,7 +50000,6 @@ var Phaser = (function() {
         shutdown: function() {
           var eventEmitter = this.systems.events;
           eventEmitter.off(Events.SHUTDOWN, this.shutdown, this);
-          eventEmitter.off(Events.POST_UPDATE, this.step, this);
           eventEmitter.off(Events.TRANSITION_OUT);
         },
         destroy: function() {
@@ -48699,7 +50022,7 @@ var Phaser = (function() {
       var CONST = require_const10();
       var Extend = require_Extend();
       var Scene = {
-        Events: require_events5(),
+        Events: require_events(),
         GetPhysicsPlugins: require_GetPhysicsPlugins(),
         GetScenePlugins: require_GetScenePlugins(),
         SceneManager: require_SceneManager(),
@@ -48730,6 +50053,7 @@ var Phaser = (function() {
       var FilterMode = require_const12();
       var Textures = {
         CanvasTexture: require_CanvasTexture(),
+        DynamicTexture: require_DynamicTexture(),
         Events: require_events9(),
         FilterMode: FilterMode,
         Frame: require_Frame(),
@@ -48777,6 +50101,9 @@ var Phaser = (function() {
           this.elapsed = this.startAt;
           this.hasDispatched = false;
           this.repeatCount = this.repeat === -1 || this.loop ? 999999999999 : this.repeat;
+          if (this.delay === 0 && (this.repeat > 0 || this.loop)) {
+            throw new Error("TimerEvent infinite loop created via zero delay");
+          }
           return this;
         },
         getProgress: function() {
@@ -48835,7 +50162,7 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/time/Clock.js": function(exports, module) {
       var Class = require_Class();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var TimerEvent = require_TimerEvent();
       var Remove = require_Remove();
       var Clock = new Class({
@@ -48843,6 +50170,7 @@ var Phaser = (function() {
           this.scene = scene;
           this.systems = scene.sys;
           this.now = 0;
+          this.startTime = 0;
           this.timeScale = 1;
           this.paused = false;
           this._active = [];
@@ -48856,6 +50184,7 @@ var Phaser = (function() {
           this.systems.events.once(SceneEvents.DESTROY, this.destroy, this);
         },
         start: function() {
+          this.startTime = this.systems.game.loop.time;
           var eventEmitter = this.systems.events;
           eventEmitter.on(SceneEvents.PRE_UPDATE, this.preUpdate, this);
           eventEmitter.on(SceneEvents.UPDATE, this.update, this);
@@ -49042,39 +50371,35 @@ var Phaser = (function() {
         "flipX",
         "flipY",
         "hold",
+        "interpolation",
         "loop",
         "loopDelay",
-        "offset",
         "onActive",
         "onActiveParams",
-        "onActiveScope",
         "onComplete",
         "onCompleteParams",
-        "onCompleteScope",
         "onLoop",
         "onLoopParams",
-        "onLoopScope",
+        "onPause",
+        "onPauseParams",
         "onRepeat",
         "onRepeatParams",
-        "onRepeatScope",
+        "onResume",
+        "onResumeParams",
         "onStart",
         "onStartParams",
-        "onStartScope",
         "onStop",
         "onStopParams",
-        "onStopScope",
         "onUpdate",
         "onUpdateParams",
-        "onUpdateScope",
         "onYoyo",
         "onYoyoParams",
-        "onYoyoScope",
         "paused",
+        "persist",
         "props",
         "repeat",
         "repeatDelay",
         "targets",
-        "useFrames",
         "yoyo"
       ];
     }
@@ -49089,13 +50414,13 @@ var Phaser = (function() {
         var keys = [];
         if (config.hasOwnProperty("props")) {
           for (key in config.props) {
-            if (key.substr(0, 1) !== "_") {
+            if (key.substring(0, 1) !== "_") {
               keys.push({ key: key, value: config.props[key] });
             }
           }
         } else {
           for (key in config) {
-            if (RESERVED.indexOf(key) === -1 && key.substr(0, 1) !== "_") {
+            if (RESERVED.indexOf(key) === -1 && key.substring(0, 1) !== "_") {
               keys.push({ key: key, value: config[key] });
             }
           }
@@ -49127,29 +50452,11 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/tweens/builders/GetTweens.js
-  var require_GetTweens = __commonJS({
-    "../../node_modules/phaser/src/tweens/builders/GetTweens.js": function(exports, module) {
-      var GetValue = require_GetValue();
-      var GetTweens = function(config) {
-        var tweens = GetValue(config, "tweens", null);
-        if (tweens === null) {
-          return [];
-        } else if (typeof tweens === "function") {
-          tweens = tweens.call();
-        }
-        if (!Array.isArray(tweens)) {
-          tweens = [tweens];
-        }
-        return tweens;
-      };
-      module.exports = GetTweens;
-    }
-  });
-
   // ../../node_modules/phaser/src/tweens/builders/GetValueOp.js
   var require_GetValueOp = __commonJS({
     "../../node_modules/phaser/src/tweens/builders/GetValueOp.js": function(exports, module) {
+      var Between = require_Between2();
+      var FloatBetween = require_FloatBetween();
       function hasGetActive(def) {
         return !!def.getActive && typeof def.getActive === "function";
       }
@@ -49176,34 +50483,65 @@ var Phaser = (function() {
           getEnd = function() {
             return propertyValue;
           };
+        } else if (Array.isArray(propertyValue)) {
+          getStart = function() {
+            return propertyValue[0];
+          };
+          getEnd = function() {
+            return propertyValue[propertyValue.length - 1];
+          };
         } else if (t === "string") {
-          var op = propertyValue[0];
-          var num = parseFloat(propertyValue.substr(2));
-          switch (op) {
-            case "+":
-              getEnd = function(target, key2, value) {
-                return value + num;
-              };
-              break;
-            case "-":
-              getEnd = function(target, key2, value) {
-                return value - num;
-              };
-              break;
-            case "*":
-              getEnd = function(target, key2, value) {
-                return value * num;
-              };
-              break;
-            case "/":
-              getEnd = function(target, key2, value) {
-                return value / num;
-              };
-              break;
-            default:
-              getEnd = function() {
-                return parseFloat(propertyValue);
-              };
+          var op = propertyValue.toLowerCase();
+          var isRandom = op.substring(0, 6) === "random";
+          var isInt = op.substring(0, 3) === "int";
+          if (isRandom || isInt) {
+            var brace1 = op.indexOf("(");
+            var brace2 = op.indexOf(")");
+            var comma = op.indexOf(",");
+            if (brace1 && brace2 && comma) {
+              var value1 = parseFloat(op.substring(brace1 + 1, comma));
+              var value2 = parseFloat(op.substring(comma + 1, brace2));
+              if (isRandom) {
+                getEnd = function() {
+                  return FloatBetween(value1, value2);
+                };
+              } else {
+                getEnd = function() {
+                  return Between(value1, value2);
+                };
+              }
+            } else {
+              throw new Error("invalid random() format");
+            }
+          } else {
+            op = op[0];
+            var num = parseFloat(propertyValue.substr(2));
+            switch (op) {
+              case "+":
+                getEnd = function(target, key2, value) {
+                  return value + num;
+                };
+                break;
+              case "-":
+                getEnd = function(target, key2, value) {
+                  return value - num;
+                };
+                break;
+              case "*":
+                getEnd = function(target, key2, value) {
+                  return value * num;
+                };
+                break;
+              case "/":
+                getEnd = function(target, key2, value) {
+                  return value / num;
+                };
+                break;
+              default:
+                getEnd = function() {
+                  return parseFloat(propertyValue);
+                };
+            }
           }
         } else if (t === "function") {
           getEnd = propertyValue;
@@ -49250,68 +50588,6 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/tweens/tween/Defaults.js
-  var require_Defaults = __commonJS({
-    "../../node_modules/phaser/src/tweens/tween/Defaults.js": function(exports, module) {
-      var TWEEN_DEFAULTS = {
-        targets: null,
-        delay: 0,
-        duration: 1e3,
-        ease: "Power0",
-        easeParams: null,
-        hold: 0,
-        repeat: 0,
-        repeatDelay: 0,
-        yoyo: false,
-        flipX: false,
-        flipY: false
-      };
-      module.exports = TWEEN_DEFAULTS;
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_COMPLETE_EVENT.js
-  var require_TIMELINE_COMPLETE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_COMPLETE_EVENT.js": function(exports, module) {
-      module.exports = "complete";
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_LOOP_EVENT.js
-  var require_TIMELINE_LOOP_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_LOOP_EVENT.js": function(exports, module) {
-      module.exports = "loop";
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_PAUSE_EVENT.js
-  var require_TIMELINE_PAUSE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_PAUSE_EVENT.js": function(exports, module) {
-      module.exports = "pause";
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_RESUME_EVENT.js
-  var require_TIMELINE_RESUME_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_RESUME_EVENT.js": function(exports, module) {
-      module.exports = "resume";
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_START_EVENT.js
-  var require_TIMELINE_START_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_START_EVENT.js": function(exports, module) {
-      module.exports = "start";
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/events/TIMELINE_UPDATE_EVENT.js
-  var require_TIMELINE_UPDATE_EVENT = __commonJS({
-    "../../node_modules/phaser/src/tweens/events/TIMELINE_UPDATE_EVENT.js": function(exports, module) {
-      module.exports = "update";
-    }
-  });
-
   // ../../node_modules/phaser/src/tweens/events/TWEEN_ACTIVE_EVENT.js
   var require_TWEEN_ACTIVE_EVENT = __commonJS({
     "../../node_modules/phaser/src/tweens/events/TWEEN_ACTIVE_EVENT.js": function(exports, module) {
@@ -49330,6 +50606,20 @@ var Phaser = (function() {
   var require_TWEEN_LOOP_EVENT = __commonJS({
     "../../node_modules/phaser/src/tweens/events/TWEEN_LOOP_EVENT.js": function(exports, module) {
       module.exports = "loop";
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/events/TWEEN_PAUSE_EVENT.js
+  var require_TWEEN_PAUSE_EVENT = __commonJS({
+    "../../node_modules/phaser/src/tweens/events/TWEEN_PAUSE_EVENT.js": function(exports, module) {
+      module.exports = "pause";
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/events/TWEEN_RESUME_EVENT.js
+  var require_TWEEN_RESUME_EVENT = __commonJS({
+    "../../node_modules/phaser/src/tweens/events/TWEEN_RESUME_EVENT.js": function(exports, module) {
+      module.exports = "resume";
     }
   });
 
@@ -49369,18 +50659,14 @@ var Phaser = (function() {
   });
 
   // ../../node_modules/phaser/src/tweens/events/index.js
-  var require_events19 = __commonJS({
+  var require_events20 = __commonJS({
     "../../node_modules/phaser/src/tweens/events/index.js": function(exports, module) {
       module.exports = {
-        TIMELINE_COMPLETE: require_TIMELINE_COMPLETE_EVENT(),
-        TIMELINE_LOOP: require_TIMELINE_LOOP_EVENT(),
-        TIMELINE_PAUSE: require_TIMELINE_PAUSE_EVENT(),
-        TIMELINE_RESUME: require_TIMELINE_RESUME_EVENT(),
-        TIMELINE_START: require_TIMELINE_START_EVENT(),
-        TIMELINE_UPDATE: require_TIMELINE_UPDATE_EVENT(),
         TWEEN_ACTIVE: require_TWEEN_ACTIVE_EVENT(),
         TWEEN_COMPLETE: require_TWEEN_COMPLETE_EVENT(),
         TWEEN_LOOP: require_TWEEN_LOOP_EVENT(),
+        TWEEN_PAUSE: require_TWEEN_PAUSE_EVENT(),
+        TWEEN_RESUME: require_TWEEN_RESUME_EVENT(),
         TWEEN_REPEAT: require_TWEEN_REPEAT_EVENT(),
         TWEEN_START: require_TWEEN_START_EVENT(),
         TWEEN_STOP: require_TWEEN_STOP_EVENT(),
@@ -49390,64 +50676,44 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/tweens/tween/Tween.js
-  var require_Tween = __commonJS({
-    "../../node_modules/phaser/src/tweens/tween/Tween.js": function(exports, module) {
+  // ../../node_modules/phaser/src/tweens/tween/BaseTween.js
+  var require_BaseTween = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/BaseTween.js": function(exports, module) {
       var Class = require_Class();
       var EventEmitter = require_eventemitter3();
-      var Events = require_events19();
-      var GameObjectCreator = require_GameObjectCreator();
-      var GameObjectFactory = require_GameObjectFactory();
+      var Events = require_events20();
       var TWEEN_CONST = require_const5();
-      var MATH_CONST = require_const4();
-      var Tween = new Class({
+      var BaseTween = new Class({
         Extends: EventEmitter,
-        initialize: function Tween2(parent, data, targets) {
+        initialize: function BaseTween2(parent) {
           EventEmitter.call(this);
           this.parent = parent;
-          this.parentIsTimeline = parent.hasOwnProperty("isTimeline");
-          this.data = data;
-          this.totalData = data.length;
-          this.targets = targets;
-          this.totalTargets = targets.length;
-          this.useFrames = false;
+          this.data = [];
+          this.totalData = 0;
+          this.startDelay = 0;
+          this.hasStarted = false;
           this.timeScale = 1;
           this.loop = 0;
           this.loopDelay = 0;
           this.loopCounter = 0;
-          this.startDelay = 0;
-          this.hasStarted = false;
-          this.isSeeking = false;
           this.completeDelay = 0;
           this.countdown = 0;
-          this.offset = 0;
-          this.calculatedOffset = 0;
-          this.state = TWEEN_CONST.PENDING_ADD;
-          this._pausedState = TWEEN_CONST.PENDING_ADD;
+          this.state = TWEEN_CONST.PENDING;
           this.paused = false;
-          this.elapsed = 0;
-          this.totalElapsed = 0;
-          this.duration = 0;
-          this.progress = 0;
-          this.totalDuration = 0;
-          this.totalProgress = 0;
           this.callbacks = {
             onActive: null,
             onComplete: null,
             onLoop: null,
+            onPause: null,
             onRepeat: null,
+            onResume: null,
             onStart: null,
             onStop: null,
             onUpdate: null,
             onYoyo: null
           };
           this.callbackScope;
-        },
-        getValue: function(index) {
-          if (index === void 0) {
-            index = 0;
-          }
-          return this.data[index].current;
+          this.persist = false;
         },
         setTimeScale: function(value) {
           this.timeScale = value;
@@ -49457,282 +50723,51 @@ var Phaser = (function() {
           return this.timeScale;
         },
         isPlaying: function() {
-          return this.state === TWEEN_CONST.ACTIVE;
+          return !this.paused && this.isActive();
         },
         isPaused: function() {
-          return this.state === TWEEN_CONST.PAUSED;
+          return this.paused;
         },
-        hasTarget: function(target) {
-          return this.targets.indexOf(target) !== -1;
-        },
-        updateTo: function(key, value, startToCurrent) {
-          if (startToCurrent === void 0) {
-            startToCurrent = false;
-          }
-          for (var i = 0; i < this.totalData; i++) {
-            var tweenData = this.data[i];
-            if (tweenData.key === key) {
-              tweenData.end = value;
-              if (startToCurrent) {
-                tweenData.start = tweenData.current;
-              }
-            }
+        pause: function() {
+          if (!this.paused) {
+            this.paused = true;
+            this.dispatchEvent(Events.TWEEN_PAUSE, "onPause");
           }
           return this;
         },
-        restart: function() {
-          this.elapsed = 0;
-          this.progress = 0;
-          this.totalElapsed = 0;
-          this.totalProgress = 0;
-          if (this.state === TWEEN_CONST.ACTIVE) {
-            return this.seek(0);
-          } else if (this.state === TWEEN_CONST.REMOVED) {
-            this.seek(0);
-            this.parent.makeActive(this);
-            return this;
-          } else if (this.state === TWEEN_CONST.PENDING_ADD) {
-            return this;
-          } else if (this.state === TWEEN_CONST.PENDING_REMOVE) {
-            this.parent.reset(this);
-          } else {
-            return this.play();
+        resume: function() {
+          if (this.paused) {
+            this.paused = false;
+            this.dispatchEvent(Events.TWEEN_RESUME, "onResume");
           }
-        },
-        calcDuration: function() {
-          var maxDuration = 0;
-          var minDelay = MATH_CONST.MAX_SAFE_INTEGER;
-          var data = this.data;
-          for (var i = 0; i < this.totalData; i++) {
-            var tweenData = data[i];
-            tweenData.t1 = tweenData.duration + tweenData.hold;
-            if (tweenData.yoyo) {
-              tweenData.t1 += tweenData.duration;
-            }
-            tweenData.t2 = tweenData.t1 + tweenData.repeatDelay;
-            tweenData.totalDuration = tweenData.delay + tweenData.t1;
-            if (tweenData.repeat === -1) {
-              tweenData.totalDuration += tweenData.t2 * 999999999999;
-            } else if (tweenData.repeat > 0) {
-              tweenData.totalDuration += tweenData.t2 * tweenData.repeat;
-            }
-            if (tweenData.totalDuration > maxDuration) {
-              maxDuration = tweenData.totalDuration;
-            }
-            if (tweenData.delay < minDelay) {
-              minDelay = tweenData.delay;
-            }
-          }
-          this.duration = Math.max(maxDuration, 1e-3);
-          this.loopCounter = this.loop === -1 ? 999999999999 : this.loop;
-          if (this.loopCounter > 0) {
-            this.totalDuration = this.duration + this.completeDelay + (this.duration + this.loopDelay) * this.loopCounter;
-          } else {
-            this.totalDuration = this.duration + this.completeDelay;
-          }
-          this.startDelay = minDelay;
-        },
-        init: function() {
-          if (this.paused && !this.parentIsTimeline) {
-            this.state = TWEEN_CONST.PENDING_ADD;
-            this._pausedState = TWEEN_CONST.INIT;
-            return false;
-          }
-          var data = this.data;
-          var totalTargets = this.totalTargets;
-          for (var i = 0; i < this.totalData; i++) {
-            var tweenData = data[i];
-            var target = tweenData.target;
-            var gen = tweenData.gen;
-            var key = tweenData.key;
-            var targetIndex = tweenData.index;
-            tweenData.delay = gen.delay(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.duration = Math.max(gen.duration(target, key, 0, targetIndex, totalTargets, this), 1e-3);
-            tweenData.hold = gen.hold(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.repeat = gen.repeat(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.repeatDelay = gen.repeatDelay(target, key, 0, targetIndex, totalTargets, this);
-          }
-          this.calcDuration();
-          this.progress = 0;
-          this.totalProgress = 0;
-          this.elapsed = 0;
-          this.totalElapsed = 0;
-          this.state = TWEEN_CONST.INIT;
-          return true;
+          return this;
         },
         makeActive: function() {
           this.parent.makeActive(this);
-          this.dispatchTweenEvent(Events.TWEEN_ACTIVE, this.callbacks.onActive);
+          this.dispatchEvent(Events.TWEEN_ACTIVE, "onActive");
         },
-        nextState: function() {
-          if (this.loopCounter > 0) {
-            this.elapsed = 0;
-            this.progress = 0;
-            this.loopCounter--;
-            this.resetTweenData(true);
-            if (this.loopDelay > 0) {
-              this.countdown = this.loopDelay;
-              this.state = TWEEN_CONST.LOOP_DELAY;
-            } else {
-              this.state = TWEEN_CONST.ACTIVE;
-              this.dispatchTweenEvent(Events.TWEEN_LOOP, this.callbacks.onLoop);
-            }
-          } else if (this.completeDelay > 0) {
-            this.state = TWEEN_CONST.COMPLETE_DELAY;
-            this.countdown = this.completeDelay;
-          } else {
-            this.state = TWEEN_CONST.PENDING_REMOVE;
-            this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
-          }
-        },
-        pause: function() {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            return this;
-          }
-          this.paused = true;
-          this._pausedState = this.state;
-          this.state = TWEEN_CONST.PAUSED;
-          return this;
-        },
-        play: function(resetFromTimeline) {
-          if (resetFromTimeline === void 0) {
-            resetFromTimeline = false;
-          }
-          var state = this.state;
-          if (state === TWEEN_CONST.INIT && !this.parentIsTimeline) {
-            this.resetTweenData(false);
-            this.state = TWEEN_CONST.ACTIVE;
-            return this;
-          } else if (state === TWEEN_CONST.ACTIVE || state === TWEEN_CONST.PENDING_ADD && this._pausedState === TWEEN_CONST.PENDING_ADD) {
-            return this;
-          } else if (!this.parentIsTimeline && (state === TWEEN_CONST.PENDING_REMOVE || state === TWEEN_CONST.REMOVED)) {
-            this.seek(0);
-            this.parent.makeActive(this);
-            return this;
-          }
-          if (this.parentIsTimeline) {
-            this.resetTweenData(resetFromTimeline);
-            if (this.calculatedOffset === 0) {
-              this.state = TWEEN_CONST.ACTIVE;
-            } else {
-              this.countdown = this.calculatedOffset;
-              this.state = TWEEN_CONST.OFFSET_DELAY;
-            }
-          } else if (this.paused) {
-            this.paused = false;
-            this.makeActive();
-          } else {
-            this.resetTweenData(resetFromTimeline);
-            this.state = TWEEN_CONST.ACTIVE;
-            this.makeActive();
-          }
-          return this;
-        },
-        resetTweenData: function(resetFromLoop) {
-          var data = this.data;
-          var total = this.totalData;
-          var totalTargets = this.totalTargets;
-          for (var i = 0; i < total; i++) {
-            var tweenData = data[i];
-            var target = tweenData.target;
-            var key = tweenData.key;
-            var targetIndex = tweenData.index;
-            tweenData.progress = 0;
-            tweenData.elapsed = 0;
-            tweenData.repeatCounter = tweenData.repeat === -1 ? 999999999999 : tweenData.repeat;
-            if (resetFromLoop) {
-              tweenData.start = tweenData.getStartValue(target, key, tweenData.start, targetIndex, totalTargets, this);
-              tweenData.end = tweenData.getEndValue(target, key, tweenData.end, targetIndex, totalTargets, this);
-              tweenData.current = tweenData.start;
-              tweenData.state = TWEEN_CONST.PLAYING_FORWARD;
-            } else {
-              tweenData.state = TWEEN_CONST.PENDING_RENDER;
-            }
-            if (tweenData.delay > 0) {
-              tweenData.elapsed = tweenData.delay;
-              tweenData.state = TWEEN_CONST.DELAY;
-            }
-            if (tweenData.getActiveValue) {
-              target[key] = tweenData.getActiveValue(tweenData.target, tweenData.key, tweenData.start);
-            }
-          }
-        },
-        resume: function() {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            this.paused = false;
-            this.state = this._pausedState;
-          } else {
-            this.play();
-          }
-          return this;
-        },
-        seek: function(toPosition, delta) {
-          if (delta === void 0) {
-            delta = 16.6;
-          }
-          if (this.state === TWEEN_CONST.REMOVED) {
-            this.makeActive();
-          }
-          this.elapsed = 0;
-          this.progress = 0;
-          this.totalElapsed = 0;
-          this.totalProgress = 0;
-          var data = this.data;
-          var totalTargets = this.totalTargets;
-          for (var i = 0; i < this.totalData; i++) {
-            var tweenData = data[i];
-            var target = tweenData.target;
-            var gen = tweenData.gen;
-            var key = tweenData.key;
-            var targetIndex = tweenData.index;
-            tweenData.progress = 0;
-            tweenData.elapsed = 0;
-            tweenData.repeatCounter = tweenData.repeat === -1 ? 999999999999 : tweenData.repeat;
-            tweenData.delay = gen.delay(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.duration = Math.max(gen.duration(target, key, 0, targetIndex, totalTargets, this), 1e-3);
-            tweenData.hold = gen.hold(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.repeat = gen.repeat(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.repeatDelay = gen.repeatDelay(target, key, 0, targetIndex, totalTargets, this);
-            tweenData.current = tweenData.start;
-            tweenData.state = TWEEN_CONST.PLAYING_FORWARD;
-            this.updateTweenData(this, tweenData, 0, targetIndex, totalTargets);
-            if (tweenData.delay > 0) {
-              tweenData.elapsed = tweenData.delay;
-              tweenData.state = TWEEN_CONST.DELAY;
-            }
-          }
-          this.calcDuration();
-          var wasPaused = false;
-          if (this.state === TWEEN_CONST.PAUSED) {
-            wasPaused = true;
-            this.state = TWEEN_CONST.ACTIVE;
-          }
-          if (toPosition > 0) {
-            this.isSeeking = true;
-            do {
-              this.update(0, delta);
-            } while (this.totalProgress < toPosition);
-          }
-          this.isSeeking = false;
-          if (wasPaused) {
-            this.state = TWEEN_CONST.PAUSED;
-          }
-          return this;
-        },
-        setCallback: function(type, callback, params, scope) {
-          this.callbacks[type] = { func: callback, scope: scope, params: [this, null].concat(params) };
-          return this;
+        onCompleteHandler: function() {
+          this.setPendingRemoveState();
+          this.dispatchEvent(Events.TWEEN_COMPLETE, "onComplete");
         },
         complete: function(delay) {
           if (delay === void 0) {
             delay = 0;
           }
           if (delay) {
-            this.state = TWEEN_CONST.COMPLETE_DELAY;
+            this.setCompleteDelayState();
             this.countdown = delay;
           } else {
-            this.state = TWEEN_CONST.PENDING_REMOVE;
-            this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
+            this.onCompleteHandler();
+          }
+          return this;
+        },
+        completeAfterLoop: function(loops) {
+          if (loops === void 0) {
+            loops = 0;
+          }
+          if (this.loopCounter > loops) {
+            this.loopCounter = loops;
           }
           return this;
         },
@@ -49740,252 +50775,897 @@ var Phaser = (function() {
           this.parent.remove(this);
           return this;
         },
-        stop: function(resetTo) {
-          if (this.state === TWEEN_CONST.ACTIVE) {
-            if (resetTo !== void 0) {
-              this.seek(resetTo);
-            }
-          }
-          if (this.state !== TWEEN_CONST.REMOVED) {
-            if (this.state === TWEEN_CONST.PAUSED || this.state === TWEEN_CONST.PENDING_ADD) {
-              if (this.parentIsTimeline) {
-                this.parent.manager._destroy.push(this);
-                this.parent.manager._toProcess++;
-              } else {
-                this.parent._destroy.push(this);
-                this.parent._toProcess++;
-              }
-            }
-            this.dispatchTweenEvent(Events.TWEEN_STOP, this.callbacks.onStop);
-            this.removeAllListeners();
-            this.state = TWEEN_CONST.PENDING_REMOVE;
+        stop: function() {
+          if (!this.isRemoved() && !this.isPendingRemove() && !this.isDestroyed()) {
+            this.dispatchEvent(Events.TWEEN_STOP, "onStop");
+            this.setPendingRemoveState();
           }
           return this;
         },
-        update: function(timestamp, delta) {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            return false;
+        updateLoopCountdown: function(delta) {
+          this.countdown -= delta;
+          if (this.countdown <= 0) {
+            this.setActiveState();
+            this.dispatchEvent(Events.TWEEN_LOOP, "onLoop");
           }
-          if (this.useFrames) {
-            delta = 1 * this.parent.timeScale;
+        },
+        updateStartCountdown: function(delta) {
+          this.countdown -= delta;
+          if (this.countdown <= 0) {
+            this.hasStarted = true;
+            this.setActiveState();
+            this.dispatchEvent(Events.TWEEN_START, "onStart");
+            delta = 0;
           }
-          delta *= this.timeScale;
-          this.elapsed += delta;
-          this.progress = Math.min(this.elapsed / this.duration, 1);
-          this.totalElapsed += delta;
-          this.totalProgress = Math.min(this.totalElapsed / this.totalDuration, 1);
-          switch (this.state) {
-            case TWEEN_CONST.ACTIVE:
-              if (!this.hasStarted && !this.isSeeking) {
-                this.startDelay -= delta;
-                if (this.startDelay <= 0) {
-                  this.hasStarted = true;
-                  this.dispatchTweenEvent(Events.TWEEN_START, this.callbacks.onStart);
-                }
-              }
-              var stillRunning = false;
-              for (var i = 0; i < this.totalData; i++) {
-                var tweenData = this.data[i];
-                if (this.updateTweenData(this, tweenData, delta)) {
-                  stillRunning = true;
-                }
-              }
-              if (!stillRunning) {
-                this.nextState();
-              }
-              break;
-            case TWEEN_CONST.LOOP_DELAY:
-              this.countdown -= delta;
-              if (this.countdown <= 0) {
-                this.state = TWEEN_CONST.ACTIVE;
-                this.dispatchTweenEvent(Events.TWEEN_LOOP, this.callbacks.onLoop);
-              }
-              break;
-            case TWEEN_CONST.OFFSET_DELAY:
-              this.countdown -= delta;
-              if (this.countdown <= 0) {
-                this.state = TWEEN_CONST.ACTIVE;
-              }
-              break;
-            case TWEEN_CONST.COMPLETE_DELAY:
-              this.countdown -= delta;
-              if (this.countdown <= 0) {
-                this.state = TWEEN_CONST.PENDING_REMOVE;
-                this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
-              }
-              break;
+          return delta;
+        },
+        updateCompleteDelay: function(delta) {
+          this.countdown -= delta;
+          if (this.countdown <= 0) {
+            this.onCompleteHandler();
           }
+        },
+        setCallback: function(type, callback, params) {
+          if (params === void 0) {
+            params = [];
+          }
+          if (this.callbacks.hasOwnProperty(type)) {
+            this.callbacks[type] = { func: callback, params: params };
+          }
+          return this;
+        },
+        setPendingState: function() {
+          this.state = TWEEN_CONST.PENDING;
+        },
+        setActiveState: function() {
+          this.state = TWEEN_CONST.ACTIVE;
+        },
+        setLoopDelayState: function() {
+          this.state = TWEEN_CONST.LOOP_DELAY;
+        },
+        setCompleteDelayState: function() {
+          this.state = TWEEN_CONST.COMPLETE_DELAY;
+        },
+        setStartDelayState: function() {
+          this.state = TWEEN_CONST.START_DELAY;
+          this.countdown = this.startDelay;
+          this.hasStarted = false;
+        },
+        setPendingRemoveState: function() {
+          this.state = TWEEN_CONST.PENDING_REMOVE;
+        },
+        setRemovedState: function() {
+          this.state = TWEEN_CONST.REMOVED;
+        },
+        setFinishedState: function() {
+          this.state = TWEEN_CONST.FINISHED;
+        },
+        setDestroyedState: function() {
+          this.state = TWEEN_CONST.DESTROYED;
+        },
+        isPending: function() {
+          return this.state === TWEEN_CONST.PENDING;
+        },
+        isActive: function() {
+          return this.state === TWEEN_CONST.ACTIVE;
+        },
+        isLoopDelayed: function() {
+          return this.state === TWEEN_CONST.LOOP_DELAY;
+        },
+        isCompleteDelayed: function() {
+          return this.state === TWEEN_CONST.COMPLETE_DELAY;
+        },
+        isStartDelayed: function() {
+          return this.state === TWEEN_CONST.START_DELAY;
+        },
+        isPendingRemove: function() {
           return this.state === TWEEN_CONST.PENDING_REMOVE;
         },
-        dispatchTweenDataEvent: function(event, callback, tweenData) {
-          if (!this.isSeeking) {
-            this.emit(event, this, tweenData.key, tweenData.target, tweenData.current, tweenData.previous);
-            if (callback) {
-              callback.params[1] = tweenData.target;
-              callback.func.apply(callback.scope, callback.params);
-            }
-          }
+        isRemoved: function() {
+          return this.state === TWEEN_CONST.REMOVED;
         },
-        dispatchTweenEvent: function(event, callback) {
-          if (!this.isSeeking) {
-            this.emit(event, this, this.targets);
-            if (callback) {
-              callback.params[1] = this.targets;
-              callback.func.apply(callback.scope, callback.params);
-            }
-          }
+        isFinished: function() {
+          return this.state === TWEEN_CONST.FINISHED;
         },
-        setStateFromEnd: function(tween, tweenData, diff) {
-          if (tweenData.yoyo) {
-            tweenData.elapsed = diff;
-            tweenData.progress = diff / tweenData.duration;
-            if (tweenData.flipX) {
-              tweenData.target.toggleFlipX();
-            }
-            if (tweenData.flipY) {
-              tweenData.target.toggleFlipY();
-            }
-            this.dispatchTweenDataEvent(Events.TWEEN_YOYO, tween.callbacks.onYoyo, tweenData);
-            tweenData.start = tweenData.getStartValue(tweenData.target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
-            return TWEEN_CONST.PLAYING_BACKWARD;
-          } else if (tweenData.repeatCounter > 0) {
-            tweenData.repeatCounter--;
-            tweenData.elapsed = diff;
-            tweenData.progress = diff / tweenData.duration;
-            if (tweenData.flipX) {
-              tweenData.target.toggleFlipX();
-            }
-            if (tweenData.flipY) {
-              tweenData.target.toggleFlipY();
-            }
-            tweenData.start = tweenData.getStartValue(tweenData.target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
-            tweenData.end = tweenData.getEndValue(tweenData.target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
-            if (tweenData.repeatDelay > 0) {
-              tweenData.elapsed = tweenData.repeatDelay - diff;
-              tweenData.current = tweenData.start;
-              tweenData.target[tweenData.key] = tweenData.current;
-              return TWEEN_CONST.REPEAT_DELAY;
-            } else {
-              this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
-              return TWEEN_CONST.PLAYING_FORWARD;
-            }
-          }
-          return TWEEN_CONST.COMPLETE;
+        isDestroyed: function() {
+          return this.state === TWEEN_CONST.DESTROYED;
         },
-        setStateFromStart: function(tween, tweenData, diff) {
-          if (tweenData.repeatCounter > 0) {
-            tweenData.repeatCounter--;
-            tweenData.elapsed = diff;
-            tweenData.progress = diff / tweenData.duration;
-            if (tweenData.flipX) {
-              tweenData.target.toggleFlipX();
-            }
-            if (tweenData.flipY) {
-              tweenData.target.toggleFlipY();
-            }
-            tweenData.end = tweenData.getEndValue(tweenData.target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
-            if (tweenData.repeatDelay > 0) {
-              tweenData.elapsed = tweenData.repeatDelay - diff;
-              tweenData.current = tweenData.start;
-              tweenData.target[tweenData.key] = tweenData.current;
-              return TWEEN_CONST.REPEAT_DELAY;
-            } else {
-              this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
-              return TWEEN_CONST.PLAYING_FORWARD;
-            }
+        destroy: function() {
+          if (this.data) {
+            this.data.forEach(function(tweenData) {
+              tweenData.destroy();
+            });
           }
-          return TWEEN_CONST.COMPLETE;
-        },
-        updateTweenData: function(tween, tweenData, delta) {
-          var target = tweenData.target;
-          switch (tweenData.state) {
-            case TWEEN_CONST.PLAYING_FORWARD:
-            case TWEEN_CONST.PLAYING_BACKWARD:
-              if (!target) {
-                tweenData.state = TWEEN_CONST.COMPLETE;
-                break;
-              }
-              var elapsed = tweenData.elapsed;
-              var duration = tweenData.duration;
-              var diff = 0;
-              elapsed += delta;
-              if (elapsed > duration) {
-                diff = elapsed - duration;
-                elapsed = duration;
-              }
-              var forward = tweenData.state === TWEEN_CONST.PLAYING_FORWARD;
-              var progress = elapsed / duration;
-              tweenData.elapsed = elapsed;
-              tweenData.progress = progress;
-              tweenData.previous = tweenData.current;
-              if (progress === 1) {
-                if (forward) {
-                  tweenData.current = tweenData.end;
-                  target[tweenData.key] = tweenData.end;
-                  if (tweenData.hold > 0) {
-                    tweenData.elapsed = tweenData.hold - diff;
-                    tweenData.state = TWEEN_CONST.HOLD_DELAY;
-                  } else {
-                    tweenData.state = this.setStateFromEnd(tween, tweenData, diff);
-                  }
-                } else {
-                  tweenData.current = tweenData.start;
-                  target[tweenData.key] = tweenData.start;
-                  tweenData.state = this.setStateFromStart(tween, tweenData, diff);
-                }
-              } else {
-                var v = forward ? tweenData.ease(progress) : tweenData.ease(1 - progress);
-                tweenData.current = tweenData.start + (tweenData.end - tweenData.start) * v;
-                target[tweenData.key] = tweenData.current;
-              }
-              this.dispatchTweenDataEvent(Events.TWEEN_UPDATE, tween.callbacks.onUpdate, tweenData);
-              break;
-            case TWEEN_CONST.DELAY:
-              tweenData.elapsed -= delta;
-              if (tweenData.elapsed <= 0) {
-                tweenData.elapsed = Math.abs(tweenData.elapsed);
-                tweenData.state = TWEEN_CONST.PENDING_RENDER;
-              }
-              break;
-            case TWEEN_CONST.REPEAT_DELAY:
-              tweenData.elapsed -= delta;
-              if (tweenData.elapsed <= 0) {
-                tweenData.elapsed = Math.abs(tweenData.elapsed);
-                tweenData.state = TWEEN_CONST.PLAYING_FORWARD;
-                this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
-              }
-              break;
-            case TWEEN_CONST.HOLD_DELAY:
-              tweenData.elapsed -= delta;
-              if (tweenData.elapsed <= 0) {
-                tweenData.state = this.setStateFromEnd(tween, tweenData, Math.abs(tweenData.elapsed));
-              }
-              break;
-            case TWEEN_CONST.PENDING_RENDER:
-              if (target) {
-                tweenData.start = tweenData.getStartValue(target, tweenData.key, target[tweenData.key], tweenData.index, tween.totalTargets, tween);
-                tweenData.end = tweenData.getEndValue(target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
-                tweenData.current = tweenData.start;
-                target[tweenData.key] = tweenData.start;
-                tweenData.state = TWEEN_CONST.PLAYING_FORWARD;
-              } else {
-                tweenData.state = TWEEN_CONST.COMPLETE;
-              }
-              break;
-          }
-          return tweenData.state !== TWEEN_CONST.COMPLETE;
+          this.removeAllListeners();
+          this.callbacks = null;
+          this.data = null;
+          this.parent = null;
+          this.setDestroyedState();
         }
       });
-      Tween.TYPES = [
+      BaseTween.TYPES = [
         "onActive",
         "onComplete",
         "onLoop",
+        "onPause",
         "onRepeat",
+        "onResume",
         "onStart",
         "onStop",
         "onUpdate",
         "onYoyo"
       ];
+      module.exports = BaseTween;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/Defaults.js
+  var require_Defaults = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/Defaults.js": function(exports, module) {
+      var TWEEN_DEFAULTS = {
+        targets: null,
+        delay: 0,
+        duration: 1e3,
+        ease: "Power0",
+        easeParams: null,
+        hold: 0,
+        repeat: 0,
+        repeatDelay: 0,
+        yoyo: false,
+        flipX: false,
+        flipY: false,
+        persist: false,
+        interpolation: null
+      };
+      module.exports = TWEEN_DEFAULTS;
+    }
+  });
+
+  // ../../node_modules/phaser/src/utils/object/MergeRight.js
+  var require_MergeRight = __commonJS({
+    "../../node_modules/phaser/src/utils/object/MergeRight.js": function(exports, module) {
+      var Clone = require_Clone();
+      var MergeRight = function(obj1, obj2) {
+        var clone = Clone(obj1);
+        for (var key in obj2) {
+          if (clone.hasOwnProperty(key)) {
+            clone[key] = obj2[key];
+          }
+        }
+        return clone;
+      };
+      module.exports = MergeRight;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/BaseTweenData.js
+  var require_BaseTweenData = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/BaseTweenData.js": function(exports, module) {
+      var Class = require_Class();
+      var Events = require_events20();
+      var TWEEN_CONST = require_const5();
+      var BaseTweenData = new Class({
+        initialize: function BaseTweenData2(tween, targetIndex, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY) {
+          this.tween = tween;
+          this.targetIndex = targetIndex;
+          this.duration = duration;
+          this.totalDuration = 0;
+          this.delay = 0;
+          this.getDelay = delay;
+          this.yoyo = yoyo;
+          this.hold = hold;
+          this.repeat = repeat;
+          this.repeatDelay = repeatDelay;
+          this.repeatCounter = 0;
+          this.flipX = flipX;
+          this.flipY = flipY;
+          this.progress = 0;
+          this.elapsed = 0;
+          this.state = 0;
+          this.isCountdown = false;
+        },
+        getTarget: function() {
+          return this.tween.targets[this.targetIndex];
+        },
+        setTargetValue: function(value) {
+          if (value === void 0) {
+            value = this.current;
+          }
+          this.tween.targets[this.targetIndex][this.key] = value;
+        },
+        setCreatedState: function() {
+          this.state = TWEEN_CONST.CREATED;
+          this.isCountdown = false;
+        },
+        setDelayState: function() {
+          this.state = TWEEN_CONST.DELAY;
+          this.isCountdown = true;
+        },
+        setPendingRenderState: function() {
+          this.state = TWEEN_CONST.PENDING_RENDER;
+          this.isCountdown = false;
+        },
+        setPlayingForwardState: function() {
+          this.state = TWEEN_CONST.PLAYING_FORWARD;
+          this.isCountdown = false;
+        },
+        setPlayingBackwardState: function() {
+          this.state = TWEEN_CONST.PLAYING_BACKWARD;
+          this.isCountdown = false;
+        },
+        setHoldState: function() {
+          this.state = TWEEN_CONST.HOLD_DELAY;
+          this.isCountdown = true;
+        },
+        setRepeatState: function() {
+          this.state = TWEEN_CONST.REPEAT_DELAY;
+          this.isCountdown = true;
+        },
+        setCompleteState: function() {
+          this.state = TWEEN_CONST.COMPLETE;
+          this.isCountdown = false;
+        },
+        isCreated: function() {
+          return this.state === TWEEN_CONST.CREATED;
+        },
+        isDelayed: function() {
+          return this.state === TWEEN_CONST.DELAY;
+        },
+        isPendingRender: function() {
+          return this.state === TWEEN_CONST.PENDING_RENDER;
+        },
+        isPlayingForward: function() {
+          return this.state === TWEEN_CONST.PLAYING_FORWARD;
+        },
+        isPlayingBackward: function() {
+          return this.state === TWEEN_CONST.PLAYING_BACKWARD;
+        },
+        isHolding: function() {
+          return this.state === TWEEN_CONST.HOLD_DELAY;
+        },
+        isRepeating: function() {
+          return this.state === TWEEN_CONST.REPEAT_DELAY;
+        },
+        isComplete: function() {
+          return this.state === TWEEN_CONST.COMPLETE;
+        },
+        setStateFromEnd: function(diff) {
+          if (this.yoyo) {
+            this.onRepeat(diff, true, true);
+          } else if (this.repeatCounter > 0) {
+            this.onRepeat(diff, true, false);
+          } else {
+            this.setCompleteState();
+          }
+        },
+        setStateFromStart: function(diff) {
+          if (this.repeatCounter > 0) {
+            this.onRepeat(diff, false);
+          } else {
+            this.setCompleteState();
+          }
+        },
+        reset: function() {
+          var tween = this.tween;
+          var totalTargets = tween.totalTargets;
+          var targetIndex = this.targetIndex;
+          var target = tween.targets[targetIndex];
+          var key = this.key;
+          this.progress = 0;
+          this.elapsed = 0;
+          this.delay = this.getDelay(target, key, 0, targetIndex, totalTargets, tween);
+          this.repeatCounter = this.repeat === -1 ? TWEEN_CONST.MAX : this.repeat;
+          this.setPendingRenderState();
+          var t1 = this.duration + this.hold;
+          if (this.yoyo) {
+            t1 += this.duration;
+          }
+          var t2 = t1 + this.repeatDelay;
+          this.totalDuration = this.delay + t1;
+          if (this.repeat === -1) {
+            this.totalDuration += t2 * TWEEN_CONST.MAX;
+            tween.isInfinite = true;
+          } else if (this.repeat > 0) {
+            this.totalDuration += t2 * this.repeat;
+          }
+          if (this.totalDuration > tween.duration) {
+            tween.duration = this.totalDuration;
+          }
+          if (this.delay < tween.startDelay) {
+            tween.startDelay = this.delay;
+          }
+          if (this.delay > 0) {
+            this.elapsed = this.delay;
+            this.setDelayState();
+          }
+        },
+        onRepeat: function(diff, setStart, isYoyo) {
+          var tween = this.tween;
+          var totalTargets = tween.totalTargets;
+          var targetIndex = this.targetIndex;
+          var target = tween.targets[targetIndex];
+          var key = this.key;
+          var isTweenData = key !== "texture";
+          this.elapsed = diff;
+          this.progress = diff / this.duration;
+          if (this.flipX) {
+            target.toggleFlipX();
+          }
+          if (this.flipY) {
+            target.toggleFlipY();
+          }
+          if (isTweenData && (setStart || isYoyo)) {
+            this.start = this.getStartValue(target, key, this.start, targetIndex, totalTargets, tween);
+          }
+          if (isYoyo) {
+            this.setPlayingBackwardState();
+            this.dispatchEvent(Events.TWEEN_YOYO, "onYoyo");
+            return;
+          }
+          this.repeatCounter--;
+          if (isTweenData) {
+            this.end = this.getEndValue(target, key, this.start, targetIndex, totalTargets, tween);
+          }
+          if (this.repeatDelay > 0) {
+            this.elapsed = this.repeatDelay - diff;
+            if (isTweenData) {
+              this.current = this.start;
+              target[key] = this.current;
+            }
+            this.setRepeatState();
+          } else {
+            this.setPlayingForwardState();
+            this.dispatchEvent(Events.TWEEN_REPEAT, "onRepeat");
+          }
+        },
+        destroy: function() {
+          this.tween = null;
+          this.getDelay = null;
+          this.setCompleteState();
+        }
+      });
+      module.exports = BaseTweenData;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/TweenData.js
+  var require_TweenData = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/TweenData.js": function(exports, module) {
+      var BaseTweenData = require_BaseTweenData();
+      var Clamp = require_Clamp();
+      var Class = require_Class();
+      var Events = require_events20();
+      var TweenData = new Class({
+        Extends: BaseTweenData,
+        initialize: function TweenData2(tween, targetIndex, key, getEnd, getStart, getActive, ease, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY, interpolation, interpolationData) {
+          BaseTweenData.call(this, tween, targetIndex, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY);
+          this.key = key;
+          this.getActiveValue = getActive;
+          this.getEndValue = getEnd;
+          this.getStartValue = getStart;
+          this.ease = ease;
+          this.start = 0;
+          this.previous = 0;
+          this.current = 0;
+          this.end = 0;
+          this.interpolation = interpolation;
+          this.interpolationData = interpolationData;
+        },
+        reset: function(isSeeking) {
+          BaseTweenData.prototype.reset.call(this);
+          var target = this.tween.targets[this.targetIndex];
+          var key = this.key;
+          if (isSeeking) {
+            target[key] = this.start;
+          }
+          this.start = 0;
+          this.previous = 0;
+          this.current = 0;
+          this.end = 0;
+          if (this.getActiveValue) {
+            target[key] = this.getActiveValue(target, key, 0);
+          }
+        },
+        update: function(delta) {
+          var tween = this.tween;
+          var totalTargets = tween.totalTargets;
+          var targetIndex = this.targetIndex;
+          var target = tween.targets[targetIndex];
+          var key = this.key;
+          if (!target) {
+            this.setCompleteState();
+            return false;
+          }
+          if (this.isCountdown) {
+            this.elapsed -= delta;
+            if (this.elapsed <= 0) {
+              this.elapsed = 0;
+              delta = 0;
+              if (this.isDelayed()) {
+                this.setPendingRenderState();
+              } else if (this.isRepeating()) {
+                this.setPlayingForwardState();
+                this.dispatchEvent(Events.TWEEN_REPEAT, "onRepeat");
+              } else if (this.isHolding()) {
+                this.setStateFromEnd(0);
+              }
+            }
+          }
+          if (this.isPendingRender()) {
+            this.start = this.getStartValue(target, key, target[key], targetIndex, totalTargets, tween);
+            this.end = this.getEndValue(target, key, this.start, targetIndex, totalTargets, tween);
+            this.current = this.start;
+            target[key] = this.start;
+            this.setPlayingForwardState();
+            return true;
+          }
+          var forward = this.isPlayingForward();
+          var backward = this.isPlayingBackward();
+          if (forward || backward) {
+            var elapsed = this.elapsed;
+            var duration = this.duration;
+            var diff = 0;
+            var complete = false;
+            elapsed += delta;
+            if (elapsed >= duration) {
+              diff = elapsed - duration;
+              elapsed = duration;
+              complete = true;
+            } else if (elapsed < 0) {
+              elapsed = 0;
+            }
+            var progress = Clamp(elapsed / duration, 0, 1);
+            this.elapsed = elapsed;
+            this.progress = progress;
+            this.previous = this.current;
+            if (complete) {
+              if (forward) {
+                this.current = this.end;
+                target[key] = this.end;
+                if (this.hold > 0) {
+                  this.elapsed = this.hold;
+                  this.setHoldState();
+                } else {
+                  this.setStateFromEnd(diff);
+                }
+              } else {
+                this.current = this.start;
+                target[key] = this.start;
+                this.setStateFromStart(diff);
+              }
+            } else {
+              if (!forward) {
+                progress = 1 - progress;
+              }
+              var v = this.ease(progress);
+              if (this.interpolation) {
+                this.current = this.interpolation(this.interpolationData, v);
+              } else {
+                this.current = this.start + (this.end - this.start) * v;
+              }
+              target[key] = this.current;
+            }
+            this.dispatchEvent(Events.TWEEN_UPDATE, "onUpdate");
+          }
+          return !this.isComplete();
+        },
+        dispatchEvent: function(event, callback) {
+          var tween = this.tween;
+          if (!tween.isSeeking) {
+            var target = tween.targets[this.targetIndex];
+            var key = this.key;
+            var current = this.current;
+            var previous = this.previous;
+            tween.emit(event, tween, key, target, current, previous);
+            var handler = tween.callbacks[callback];
+            if (handler) {
+              handler.func.apply(tween.callbackScope, [tween, target, key, current, previous].concat(handler.params));
+            }
+          }
+        },
+        destroy: function() {
+          BaseTweenData.prototype.destroy.call(this);
+          this.getActiveValue = null;
+          this.getEndValue = null;
+          this.getStartValue = null;
+          this.ease = null;
+        }
+      });
+      module.exports = TweenData;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/TweenFrameData.js
+  var require_TweenFrameData = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/TweenFrameData.js": function(exports, module) {
+      var BaseTweenData = require_BaseTweenData();
+      var Clamp = require_Clamp();
+      var Class = require_Class();
+      var Events = require_events20();
+      var TweenFrameData = new Class({
+        Extends: BaseTweenData,
+        initialize: function TweenFrameData2(tween, targetIndex, texture, frame, delay, duration, hold, repeat, repeatDelay, flipX, flipY) {
+          BaseTweenData.call(this, tween, targetIndex, delay, duration, false, hold, repeat, repeatDelay, flipX, flipY);
+          this.key = "texture";
+          this.startTexture = null;
+          this.endTexture = texture;
+          this.startFrame = null;
+          this.endFrame = frame;
+          this.yoyo = repeat !== 0 ? true : false;
+        },
+        reset: function(isSeeking) {
+          BaseTweenData.prototype.reset.call(this);
+          var target = this.tween.targets[this.targetIndex];
+          if (!this.startTexture) {
+            this.startTexture = target.texture.key;
+            this.startFrame = target.frame.name;
+          }
+          if (isSeeking) {
+            target.setTexture(this.startTexture, this.startFrame);
+          }
+        },
+        update: function(delta) {
+          var tween = this.tween;
+          var targetIndex = this.targetIndex;
+          var target = tween.targets[targetIndex];
+          if (!target) {
+            this.setCompleteState();
+            return false;
+          }
+          if (this.isCountdown) {
+            this.elapsed -= delta;
+            if (this.elapsed <= 0) {
+              this.elapsed = 0;
+              delta = 0;
+              if (this.isDelayed()) {
+                this.setPendingRenderState();
+              } else if (this.isRepeating()) {
+                this.setPlayingForwardState();
+                this.dispatchEvent(Events.TWEEN_REPEAT, "onRepeat");
+              } else if (this.isHolding()) {
+                this.setStateFromEnd(0);
+              }
+            }
+          }
+          if (this.isPendingRender()) {
+            if (this.startTexture) {
+              target.setTexture(this.startTexture, this.startFrame);
+            }
+            this.setPlayingForwardState();
+            return true;
+          }
+          var forward = this.isPlayingForward();
+          var backward = this.isPlayingBackward();
+          if (forward || backward) {
+            var elapsed = this.elapsed;
+            var duration = this.duration;
+            var diff = 0;
+            var complete = false;
+            elapsed += delta;
+            if (elapsed >= duration) {
+              diff = elapsed - duration;
+              elapsed = duration;
+              complete = true;
+            } else if (elapsed < 0) {
+              elapsed = 0;
+            }
+            var progress = Clamp(elapsed / duration, 0, 1);
+            this.elapsed = elapsed;
+            this.progress = progress;
+            if (complete) {
+              if (forward) {
+                target.setTexture(this.endTexture, this.endFrame);
+                if (this.hold > 0) {
+                  this.elapsed = this.hold;
+                  this.setHoldState();
+                } else {
+                  this.setStateFromEnd(diff);
+                }
+              } else {
+                target.setTexture(this.startTexture, this.startFrame);
+                this.setStateFromStart(diff);
+              }
+            }
+            this.dispatchEvent(Events.TWEEN_UPDATE, "onUpdate");
+          }
+          return !this.isComplete();
+        },
+        dispatchEvent: function(event, callback) {
+          var tween = this.tween;
+          if (!tween.isSeeking) {
+            var target = tween.targets[this.targetIndex];
+            var key = this.key;
+            tween.emit(event, tween, key, target);
+            var handler = tween.callbacks[callback];
+            if (handler) {
+              handler.func.apply(tween.callbackScope, [tween, target, key].concat(handler.params));
+            }
+          }
+        },
+        destroy: function() {
+          BaseTweenData.prototype.destroy.call(this);
+          this.startTexture = null;
+          this.endTexture = null;
+          this.startFrame = null;
+          this.endFrame = null;
+        }
+      });
+      module.exports = TweenFrameData;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/Tween.js
+  var require_Tween = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/Tween.js": function(exports, module) {
+      var BaseTween = require_BaseTween();
+      var Class = require_Class();
+      var Events = require_events20();
+      var GameObjectCreator = require_GameObjectCreator();
+      var GameObjectFactory = require_GameObjectFactory();
+      var MATH_CONST = require_const4();
+      var TWEEN_CONST = require_const5();
+      var TweenData = require_TweenData();
+      var TweenFrameData = require_TweenFrameData();
+      var Tween = new Class({
+        Extends: BaseTween,
+        initialize: function Tween2(parent, targets) {
+          BaseTween.call(this, parent);
+          this.targets = targets;
+          this.totalTargets = targets.length;
+          this.isSeeking = false;
+          this.isInfinite = false;
+          this.elapsed = 0;
+          this.totalElapsed = 0;
+          this.duration = 0;
+          this.progress = 0;
+          this.totalDuration = 0;
+          this.totalProgress = 0;
+        },
+        add: function(targetIndex, key, getEnd, getStart, getActive, ease, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY, interpolation, interpolationData) {
+          var tweenData = new TweenData(this, targetIndex, key, getEnd, getStart, getActive, ease, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY, interpolation, interpolationData);
+          this.totalData = this.data.push(tweenData);
+          return tweenData;
+        },
+        addFrame: function(targetIndex, texture, frame, delay, duration, hold, repeat, repeatDelay, flipX, flipY) {
+          var tweenData = new TweenFrameData(this, targetIndex, texture, frame, delay, duration, hold, repeat, repeatDelay, flipX, flipY);
+          this.totalData = this.data.push(tweenData);
+          return tweenData;
+        },
+        getValue: function(index) {
+          if (index === void 0) {
+            index = 0;
+          }
+          var value = null;
+          if (this.data) {
+            value = this.data[index].current;
+          }
+          return value;
+        },
+        hasTarget: function(target) {
+          return this.targets && this.targets.indexOf(target) !== -1;
+        },
+        updateTo: function(key, value, startToCurrent) {
+          if (startToCurrent === void 0) {
+            startToCurrent = false;
+          }
+          if (key !== "texture") {
+            for (var i = 0; i < this.totalData; i++) {
+              var tweenData = this.data[i];
+              if (tweenData.key === key && (tweenData.isPlayingForward() || tweenData.isPlayingBackward())) {
+                tweenData.end = value;
+                if (startToCurrent) {
+                  tweenData.start = tweenData.current;
+                }
+              }
+            }
+          }
+          return this;
+        },
+        restart: function() {
+          switch (this.state) {
+            case TWEEN_CONST.REMOVED:
+            case TWEEN_CONST.FINISHED:
+              this.seek();
+              this.parent.makeActive(this);
+              break;
+            case TWEEN_CONST.PENDING:
+            case TWEEN_CONST.PENDING_REMOVE:
+              this.parent.reset(this);
+              break;
+            case TWEEN_CONST.DESTROYED:
+              console.warn("Cannot restart destroyed Tween", this);
+              break;
+            default:
+              this.seek();
+              break;
+          }
+          this.paused = false;
+          this.hasStarted = false;
+          return this;
+        },
+        nextState: function() {
+          if (this.loopCounter > 0) {
+            this.elapsed = 0;
+            this.progress = 0;
+            this.loopCounter--;
+            this.initTweenData(true);
+            if (this.loopDelay > 0) {
+              this.countdown = this.loopDelay;
+              this.setLoopDelayState();
+            } else {
+              this.setActiveState();
+              this.dispatchEvent(Events.TWEEN_LOOP, "onLoop");
+            }
+          } else if (this.completeDelay > 0) {
+            this.countdown = this.completeDelay;
+            this.setCompleteDelayState();
+          } else {
+            this.onCompleteHandler();
+            return true;
+          }
+          return false;
+        },
+        onCompleteHandler: function() {
+          this.progress = 1;
+          this.totalProgress = 1;
+          BaseTween.prototype.onCompleteHandler.call(this);
+        },
+        play: function() {
+          if (this.isDestroyed()) {
+            console.warn("Cannot play destroyed Tween", this);
+            return this;
+          }
+          if (this.isPendingRemove() || this.isFinished()) {
+            this.seek();
+          }
+          this.paused = false;
+          this.setActiveState();
+          return this;
+        },
+        seek: function(amount, delta, emit) {
+          if (amount === void 0) {
+            amount = 0;
+          }
+          if (delta === void 0) {
+            delta = 16.6;
+          }
+          if (emit === void 0) {
+            emit = false;
+          }
+          if (this.isDestroyed()) {
+            console.warn("Cannot seek destroyed Tween", this);
+            return this;
+          }
+          if (!emit) {
+            this.isSeeking = true;
+          }
+          this.reset(true);
+          this.initTweenData(true);
+          this.setActiveState();
+          this.dispatchEvent(Events.TWEEN_ACTIVE, "onActive");
+          var isPaused = this.paused;
+          this.paused = false;
+          if (amount > 0) {
+            var iterations = Math.floor(amount / delta);
+            var remainder = amount - iterations * delta;
+            for (var i = 0; i < iterations; i++) {
+              this.update(delta);
+            }
+            if (remainder > 0) {
+              this.update(remainder);
+            }
+          }
+          this.paused = isPaused;
+          this.isSeeking = false;
+          return this;
+        },
+        initTweenData: function(isSeeking) {
+          if (isSeeking === void 0) {
+            isSeeking = false;
+          }
+          this.duration = 0;
+          this.startDelay = MATH_CONST.MAX_SAFE_INTEGER;
+          var data = this.data;
+          for (var i = 0; i < this.totalData; i++) {
+            data[i].reset(isSeeking);
+          }
+          this.duration = Math.max(this.duration, 0.01);
+          var duration = this.duration;
+          var completeDelay = this.completeDelay;
+          var loopCounter = this.loopCounter;
+          var loopDelay = this.loopDelay;
+          if (loopCounter > 0) {
+            this.totalDuration = duration + completeDelay + (duration + loopDelay) * loopCounter;
+          } else {
+            this.totalDuration = duration + completeDelay;
+          }
+        },
+        reset: function(skipInit) {
+          if (skipInit === void 0) {
+            skipInit = false;
+          }
+          this.elapsed = 0;
+          this.totalElapsed = 0;
+          this.progress = 0;
+          this.totalProgress = 0;
+          this.loopCounter = this.loop;
+          if (this.loop === -1) {
+            this.isInfinite = true;
+            this.loopCounter = TWEEN_CONST.MAX;
+          }
+          if (!skipInit) {
+            this.initTweenData();
+            this.setActiveState();
+            this.dispatchEvent(Events.TWEEN_ACTIVE, "onActive");
+          }
+          return this;
+        },
+        update: function(delta) {
+          if (this.isPendingRemove() || this.isDestroyed()) {
+            return true;
+          } else if (this.paused || this.isFinished()) {
+            return false;
+          }
+          delta *= this.timeScale * this.parent.timeScale;
+          if (this.isLoopDelayed()) {
+            this.updateLoopCountdown(delta);
+            return false;
+          } else if (this.isCompleteDelayed()) {
+            this.updateCompleteDelay(delta);
+            return false;
+          } else if (!this.hasStarted) {
+            this.startDelay -= delta;
+            if (this.startDelay <= 0) {
+              this.hasStarted = true;
+              this.dispatchEvent(Events.TWEEN_START, "onStart");
+              delta = 0;
+            }
+          }
+          var stillRunning = false;
+          if (this.isActive()) {
+            var data = this.data;
+            for (var i = 0; i < this.totalData; i++) {
+              if (data[i].update(delta)) {
+                stillRunning = true;
+              }
+            }
+          }
+          this.elapsed += delta;
+          this.progress = Math.min(this.elapsed / this.duration, 1);
+          this.totalElapsed += delta;
+          this.totalProgress = Math.min(this.totalElapsed / this.totalDuration, 1);
+          if (!stillRunning) {
+            this.nextState();
+          }
+          var remove = this.isPendingRemove();
+          if (remove && this.persist) {
+            this.setFinishedState();
+            remove = false;
+          }
+          return remove;
+        },
+        forward: function(ms) {
+          this.update(ms);
+          return this;
+        },
+        rewind: function(ms) {
+          this.update(-ms);
+          return this;
+        },
+        dispatchEvent: function(event, callback) {
+          if (!this.isSeeking) {
+            this.emit(event, this, this.targets);
+            var handler = this.callbacks[callback];
+            if (handler) {
+              handler.func.apply(this.callbackScope, [this, this.targets].concat(handler.params));
+            }
+          }
+        },
+        destroy: function() {
+          BaseTween.prototype.destroy.call(this);
+          this.targets = null;
+        }
+      });
       GameObjectFactory.register("tween", function(config) {
         return this.scene.sys.tweens.add(config);
       });
@@ -49996,53 +51676,10 @@ var Phaser = (function() {
     }
   });
 
-  // ../../node_modules/phaser/src/tweens/tween/TweenData.js
-  var require_TweenData = __commonJS({
-    "../../node_modules/phaser/src/tweens/tween/TweenData.js": function(exports, module) {
-      var TweenData = function(target, index, key, getEnd, getStart, getActive, ease, delay, duration, yoyo, hold, repeat, repeatDelay, flipX, flipY) {
-        return {
-          target: target,
-          index: index,
-          key: key,
-          getActiveValue: getActive,
-          getEndValue: getEnd,
-          getStartValue: getStart,
-          ease: ease,
-          duration: 0,
-          totalDuration: 0,
-          delay: 0,
-          yoyo: yoyo,
-          hold: 0,
-          repeat: 0,
-          repeatDelay: 0,
-          flipX: flipX,
-          flipY: flipY,
-          progress: 0,
-          elapsed: 0,
-          repeatCounter: 0,
-          start: 0,
-          previous: 0,
-          current: 0,
-          end: 0,
-          t1: 0,
-          t2: 0,
-          gen: {
-            delay: delay,
-            duration: duration,
-            hold: hold,
-            repeat: repeat,
-            repeatDelay: repeatDelay
-          },
-          state: 0
-        };
-      };
-      module.exports = TweenData;
-    }
-  });
-
   // ../../node_modules/phaser/src/tweens/builders/NumberTweenBuilder.js
   var require_NumberTweenBuilder = __commonJS({
     "../../node_modules/phaser/src/tweens/builders/NumberTweenBuilder.js": function(exports, module) {
+      var BaseTween = require_BaseTween();
       var Defaults = require_Defaults();
       var GetAdvancedValue = require_GetAdvancedValue();
       var GetBoolean = require_GetBoolean();
@@ -50050,46 +51687,42 @@ var Phaser = (function() {
       var GetNewValue = require_GetNewValue();
       var GetValue = require_GetValue();
       var GetValueOp = require_GetValueOp();
+      var MergeRight = require_MergeRight();
       var Tween = require_Tween();
-      var TweenData = require_TweenData();
       var NumberTweenBuilder = function(parent, config, defaults) {
+        if (config instanceof Tween) {
+          config.parent = parent;
+          return config;
+        }
         if (defaults === void 0) {
           defaults = Defaults;
+        } else {
+          defaults = MergeRight(Defaults, defaults);
         }
         var from = GetValue(config, "from", 0);
         var to = GetValue(config, "to", 1);
         var targets = [{ value: from }];
-        var delay = GetNewValue(config, "delay", defaults.delay);
-        var duration = GetNewValue(config, "duration", defaults.duration);
+        var delay = GetValue(config, "delay", defaults.delay);
         var easeParams = GetValue(config, "easeParams", defaults.easeParams);
-        var ease = GetEaseFunction(GetValue(config, "ease", defaults.ease), easeParams);
-        var hold = GetNewValue(config, "hold", defaults.hold);
-        var repeat = GetNewValue(config, "repeat", defaults.repeat);
-        var repeatDelay = GetNewValue(config, "repeatDelay", defaults.repeatDelay);
-        var yoyo = GetBoolean(config, "yoyo", defaults.yoyo);
-        var data = [];
+        var ease = GetValue(config, "ease", defaults.ease);
         var ops = GetValueOp("value", to);
-        var tweenData = TweenData(targets[0], 0, "value", ops.getEnd, ops.getStart, ops.getActive, ease, delay, duration, yoyo, hold, repeat, repeatDelay, false, false);
+        var tween = new Tween(parent, targets);
+        var tweenData = tween.add(0, "value", ops.getEnd, ops.getStart, ops.getActive, GetEaseFunction(GetValue(config, "ease", ease), GetValue(config, "easeParams", easeParams)), GetNewValue(config, "delay", delay), GetValue(config, "duration", defaults.duration), GetBoolean(config, "yoyo", defaults.yoyo), GetValue(config, "hold", defaults.hold), GetValue(config, "repeat", defaults.repeat), GetValue(config, "repeatDelay", defaults.repeatDelay), false, false);
         tweenData.start = from;
         tweenData.current = from;
-        tweenData.to = to;
-        data.push(tweenData);
-        var tween = new Tween(parent, data, targets);
-        tween.offset = GetAdvancedValue(config, "offset", null);
         tween.completeDelay = GetAdvancedValue(config, "completeDelay", 0);
         tween.loop = Math.round(GetAdvancedValue(config, "loop", 0));
         tween.loopDelay = Math.round(GetAdvancedValue(config, "loopDelay", 0));
         tween.paused = GetBoolean(config, "paused", false);
-        tween.useFrames = GetBoolean(config, "useFrames", false);
-        var scope = GetValue(config, "callbackScope", tween);
-        var callbacks = Tween.TYPES;
+        tween.persist = GetBoolean(config, "persist", false);
+        tween.callbackScope = GetValue(config, "callbackScope", tween);
+        var callbacks = BaseTween.TYPES;
         for (var i = 0; i < callbacks.length; i++) {
           var type = callbacks[i];
           var callback = GetValue(config, type, false);
           if (callback) {
-            var callbackScope = GetValue(config, type + "Scope", scope);
             var callbackParams = GetValue(config, type + "Params", []);
-            tween.setCallback(type, callback, callbackParams, callbackScope);
+            tween.setCallback(type, callback, callbackParams);
           }
         }
         return tween;
@@ -50223,421 +51856,101 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/tweens/builders/TweenBuilder.js
   var require_TweenBuilder = __commonJS({
     "../../node_modules/phaser/src/tweens/builders/TweenBuilder.js": function(exports, module) {
+      var BaseTween = require_BaseTween();
       var Defaults = require_Defaults();
       var GetAdvancedValue = require_GetAdvancedValue();
       var GetBoolean = require_GetBoolean();
       var GetEaseFunction = require_GetEaseFunction();
+      var GetInterpolationFunction = require_GetInterpolationFunction();
       var GetNewValue = require_GetNewValue();
       var GetProps = require_GetProps();
       var GetTargets = require_GetTargets();
       var GetValue = require_GetValue();
       var GetValueOp = require_GetValueOp();
+      var MergeRight = require_MergeRight();
       var Tween = require_Tween();
-      var TweenData = require_TweenData();
       var TweenBuilder = function(parent, config, defaults) {
+        if (config instanceof Tween) {
+          config.parent = parent;
+          return config;
+        }
         if (defaults === void 0) {
           defaults = Defaults;
+        } else {
+          defaults = MergeRight(Defaults, defaults);
         }
-        var targets = defaults.targets ? defaults.targets : GetTargets(config);
+        var targets = GetTargets(config);
+        if (!targets && defaults.targets) {
+          targets = defaults.targets;
+        }
         var props = GetProps(config);
-        var delay = GetNewValue(config, "delay", defaults.delay);
-        var duration = GetNewValue(config, "duration", defaults.duration);
+        var delay = GetValue(config, "delay", defaults.delay);
+        var duration = GetValue(config, "duration", defaults.duration);
         var easeParams = GetValue(config, "easeParams", defaults.easeParams);
-        var ease = GetEaseFunction(GetValue(config, "ease", defaults.ease), easeParams);
-        var hold = GetNewValue(config, "hold", defaults.hold);
-        var repeat = GetNewValue(config, "repeat", defaults.repeat);
-        var repeatDelay = GetNewValue(config, "repeatDelay", defaults.repeatDelay);
+        var ease = GetValue(config, "ease", defaults.ease);
+        var hold = GetValue(config, "hold", defaults.hold);
+        var repeat = GetValue(config, "repeat", defaults.repeat);
+        var repeatDelay = GetValue(config, "repeatDelay", defaults.repeatDelay);
         var yoyo = GetBoolean(config, "yoyo", defaults.yoyo);
         var flipX = GetBoolean(config, "flipX", defaults.flipX);
         var flipY = GetBoolean(config, "flipY", defaults.flipY);
-        var data = [];
+        var interpolation = GetValue(config, "interpolation", defaults.interpolation);
+        var addTarget = function(tween2, targetIndex2, key2, value2) {
+          if (key2 === "texture") {
+            var texture = value2;
+            var frame = void 0;
+            if (Array.isArray(value2)) {
+              texture = value2[0];
+              frame = value2[1];
+            } else if (value2.hasOwnProperty("value")) {
+              texture = value2.value;
+              if (Array.isArray(value2.value)) {
+                texture = value2.value[0];
+                frame = value2.value[1];
+              } else if (typeof value2.value === "string") {
+                texture = value2.value;
+              }
+            } else if (typeof value2 === "string") {
+              texture = value2;
+            }
+            tween2.addFrame(targetIndex2, texture, frame, GetNewValue(value2, "delay", delay), GetValue(value2, "duration", duration), GetValue(value2, "hold", hold), GetValue(value2, "repeat", repeat), GetValue(value2, "repeatDelay", repeatDelay), GetBoolean(value2, "flipX", flipX), GetBoolean(value2, "flipY", flipY));
+          } else {
+            var ops = GetValueOp(key2, value2);
+            var interpolationFunc = GetInterpolationFunction(GetValue(value2, "interpolation", interpolation));
+            tween2.add(targetIndex2, key2, ops.getEnd, ops.getStart, ops.getActive, GetEaseFunction(GetValue(value2, "ease", ease), GetValue(value2, "easeParams", easeParams)), GetNewValue(value2, "delay", delay), GetValue(value2, "duration", duration), GetBoolean(value2, "yoyo", yoyo), GetValue(value2, "hold", hold), GetValue(value2, "repeat", repeat), GetValue(value2, "repeatDelay", repeatDelay), GetBoolean(value2, "flipX", flipX), GetBoolean(value2, "flipY", flipY), interpolationFunc, interpolationFunc ? value2 : null);
+          }
+        };
+        var tween = new Tween(parent, targets);
         for (var p = 0; p < props.length; p++) {
           var key = props[p].key;
           var value = props[p].value;
-          for (var t = 0; t < targets.length; t++) {
-            var ops = GetValueOp(key, value);
-            var tweenData = TweenData(targets[t], t, key, ops.getEnd, ops.getStart, ops.getActive, GetEaseFunction(GetValue(value, "ease", ease), GetValue(value, "easeParams", easeParams)), GetNewValue(value, "delay", delay), GetNewValue(value, "duration", duration), GetBoolean(value, "yoyo", yoyo), GetNewValue(value, "hold", hold), GetNewValue(value, "repeat", repeat), GetNewValue(value, "repeatDelay", repeatDelay), GetBoolean(value, "flipX", flipX), GetBoolean(value, "flipY", flipY));
-            data.push(tweenData);
+          for (var targetIndex = 0; targetIndex < targets.length; targetIndex++) {
+            if (key === "scale" && !targets[targetIndex].hasOwnProperty("scale")) {
+              addTarget(tween, targetIndex, "scaleX", value);
+              addTarget(tween, targetIndex, "scaleY", value);
+            } else {
+              addTarget(tween, targetIndex, key, value);
+            }
           }
         }
-        var tween = new Tween(parent, data, targets);
-        tween.offset = GetAdvancedValue(config, "offset", null);
         tween.completeDelay = GetAdvancedValue(config, "completeDelay", 0);
         tween.loop = Math.round(GetAdvancedValue(config, "loop", 0));
         tween.loopDelay = Math.round(GetAdvancedValue(config, "loopDelay", 0));
         tween.paused = GetBoolean(config, "paused", false);
-        tween.useFrames = GetBoolean(config, "useFrames", false);
-        var scope = GetValue(config, "callbackScope", tween);
-        var callbacks = Tween.TYPES;
+        tween.persist = GetBoolean(config, "persist", false);
+        tween.callbackScope = GetValue(config, "callbackScope", tween);
+        var callbacks = BaseTween.TYPES;
         for (var i = 0; i < callbacks.length; i++) {
           var type = callbacks[i];
           var callback = GetValue(config, type, false);
           if (callback) {
-            var callbackScope = GetValue(config, type + "Scope", scope);
             var callbackParams = GetValue(config, type + "Params", []);
-            tween.setCallback(type, callback, callbackParams, callbackScope);
+            tween.setCallback(type, callback, callbackParams);
           }
         }
         return tween;
       };
       module.exports = TweenBuilder;
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/Timeline.js
-  var require_Timeline = __commonJS({
-    "../../node_modules/phaser/src/tweens/Timeline.js": function(exports, module) {
-      var Class = require_Class();
-      var EventEmitter = require_eventemitter3();
-      var Events = require_events19();
-      var TweenBuilder = require_TweenBuilder();
-      var TWEEN_CONST = require_const5();
-      var Timeline = new Class({
-        Extends: EventEmitter,
-        initialize: function Timeline2(manager) {
-          EventEmitter.call(this);
-          this.manager = manager;
-          this.isTimeline = true;
-          this.data = [];
-          this.totalData = 0;
-          this.useFrames = false;
-          this.timeScale = 1;
-          this.loop = 0;
-          this.loopDelay = 0;
-          this.loopCounter = 0;
-          this.completeDelay = 0;
-          this.countdown = 0;
-          this.state = TWEEN_CONST.PENDING_ADD;
-          this._pausedState = TWEEN_CONST.PENDING_ADD;
-          this.paused = false;
-          this.elapsed = 0;
-          this.totalElapsed = 0;
-          this.duration = 0;
-          this.progress = 0;
-          this.totalDuration = 0;
-          this.totalProgress = 0;
-          this.callbacks = {
-            onComplete: null,
-            onLoop: null,
-            onStart: null,
-            onUpdate: null,
-            onYoyo: null
-          };
-          this.callbackScope;
-        },
-        dispatchTimelineEvent: function(event, callback) {
-          this.emit(event, this);
-          if (callback) {
-            callback.func.apply(callback.scope, callback.params);
-          }
-        },
-        setTimeScale: function(value) {
-          this.timeScale = value;
-          return this;
-        },
-        getTimeScale: function() {
-          return this.timeScale;
-        },
-        isPlaying: function() {
-          return this.state === TWEEN_CONST.ACTIVE;
-        },
-        add: function(config) {
-          return this.queue(TweenBuilder(this, config));
-        },
-        queue: function(tween) {
-          if (!this.isPlaying()) {
-            tween.parent = this;
-            tween.parentIsTimeline = true;
-            this.data.push(tween);
-            this.totalData = this.data.length;
-          }
-          return this;
-        },
-        hasOffset: function(tween) {
-          return tween.offset !== null;
-        },
-        isOffsetAbsolute: function(value) {
-          return typeof value === "number";
-        },
-        isOffsetRelative: function(value) {
-          var t = typeof value;
-          if (t === "string") {
-            var op = value[0];
-            if (op === "-" || op === "+") {
-              return true;
-            }
-          }
-          return false;
-        },
-        getRelativeOffset: function(value, base) {
-          var op = value[0];
-          var num = parseFloat(value.substr(2));
-          var result = base;
-          switch (op) {
-            case "+":
-              result += num;
-              break;
-            case "-":
-              result -= num;
-              break;
-          }
-          return Math.max(0, result);
-        },
-        calcDuration: function() {
-          var prevEnd = 0;
-          var totalDuration = 0;
-          var offsetDuration = 0;
-          for (var i = 0; i < this.totalData; i++) {
-            var tween = this.data[i];
-            tween.init();
-            if (this.hasOffset(tween)) {
-              if (this.isOffsetAbsolute(tween.offset)) {
-                tween.calculatedOffset = tween.offset;
-                if (tween.offset === 0) {
-                  offsetDuration = 0;
-                }
-              } else if (this.isOffsetRelative(tween.offset)) {
-                tween.calculatedOffset = this.getRelativeOffset(tween.offset, prevEnd);
-              }
-            } else {
-              tween.calculatedOffset = offsetDuration;
-            }
-            prevEnd = tween.totalDuration + tween.calculatedOffset;
-            totalDuration += tween.totalDuration;
-            offsetDuration += tween.totalDuration;
-          }
-          this.duration = totalDuration;
-          this.loopCounter = this.loop === -1 ? 999999999999 : this.loop;
-          if (this.loopCounter > 0) {
-            this.totalDuration = this.duration + this.completeDelay + (this.duration + this.loopDelay) * this.loopCounter;
-          } else {
-            this.totalDuration = this.duration + this.completeDelay;
-          }
-        },
-        init: function() {
-          this.calcDuration();
-          this.progress = 0;
-          this.totalProgress = 0;
-          if (this.paused) {
-            this.state = TWEEN_CONST.PAUSED;
-            return false;
-          } else {
-            return true;
-          }
-        },
-        resetTweens: function(resetFromLoop) {
-          for (var i = 0; i < this.totalData; i++) {
-            var tween = this.data[i];
-            tween.play(resetFromLoop);
-          }
-        },
-        setCallback: function(type, callback, params, scope) {
-          if (Timeline.TYPES.indexOf(type) !== -1) {
-            this.callbacks[type] = { func: callback, scope: scope, params: [this].concat(params) };
-          }
-          return this;
-        },
-        makeActive: function(tween) {
-          return this.manager.makeActive(tween);
-        },
-        play: function() {
-          if (this.state === TWEEN_CONST.ACTIVE) {
-            return;
-          }
-          if (this.paused) {
-            this.paused = false;
-            this.manager.makeActive(this);
-            return;
-          } else {
-            this.resetTweens(false);
-            this.state = TWEEN_CONST.ACTIVE;
-          }
-          this.dispatchTimelineEvent(Events.TIMELINE_START, this.callbacks.onStart);
-        },
-        nextState: function() {
-          if (this.loopCounter > 0) {
-            this.elapsed = 0;
-            this.progress = 0;
-            this.loopCounter--;
-            this.resetTweens(true);
-            if (this.loopDelay > 0) {
-              this.countdown = this.loopDelay;
-              this.state = TWEEN_CONST.LOOP_DELAY;
-            } else {
-              this.state = TWEEN_CONST.ACTIVE;
-              this.dispatchTimelineEvent(Events.TIMELINE_LOOP, this.callbacks.onLoop);
-            }
-          } else if (this.completeDelay > 0) {
-            this.state = TWEEN_CONST.COMPLETE_DELAY;
-            this.countdown = this.completeDelay;
-          } else {
-            this.state = TWEEN_CONST.PENDING_REMOVE;
-            this.dispatchTimelineEvent(Events.TIMELINE_COMPLETE, this.callbacks.onComplete);
-          }
-        },
-        update: function(timestamp, delta) {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            return;
-          }
-          if (this.useFrames) {
-            delta = 1 * this.manager.timeScale;
-          }
-          delta *= this.timeScale;
-          this.elapsed += delta;
-          this.progress = Math.min(this.elapsed / this.duration, 1);
-          this.totalElapsed += delta;
-          this.totalProgress = Math.min(this.totalElapsed / this.totalDuration, 1);
-          switch (this.state) {
-            case TWEEN_CONST.ACTIVE:
-              var stillRunning = this.totalData;
-              for (var i = 0; i < this.totalData; i++) {
-                var tween = this.data[i];
-                if (tween.update(timestamp, delta)) {
-                  stillRunning--;
-                }
-              }
-              this.dispatchTimelineEvent(Events.TIMELINE_UPDATE, this.callbacks.onUpdate);
-              if (stillRunning === 0) {
-                this.nextState();
-              }
-              break;
-            case TWEEN_CONST.LOOP_DELAY:
-              this.countdown -= delta;
-              if (this.countdown <= 0) {
-                this.state = TWEEN_CONST.ACTIVE;
-                this.dispatchTimelineEvent(Events.TIMELINE_LOOP, this.callbacks.onLoop);
-              }
-              break;
-            case TWEEN_CONST.COMPLETE_DELAY:
-              this.countdown -= delta;
-              if (this.countdown <= 0) {
-                this.state = TWEEN_CONST.PENDING_REMOVE;
-                this.dispatchTimelineEvent(Events.TIMELINE_COMPLETE, this.callbacks.onComplete);
-              }
-              break;
-          }
-          return this.state === TWEEN_CONST.PENDING_REMOVE;
-        },
-        stop: function() {
-          this.state = TWEEN_CONST.PENDING_REMOVE;
-        },
-        pause: function() {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            return;
-          }
-          this.paused = true;
-          this._pausedState = this.state;
-          this.state = TWEEN_CONST.PAUSED;
-          this.emit(Events.TIMELINE_PAUSE, this);
-          return this;
-        },
-        resume: function() {
-          if (this.state === TWEEN_CONST.PAUSED) {
-            this.paused = false;
-            this.state = this._pausedState;
-            this.emit(Events.TIMELINE_RESUME, this);
-          }
-          return this;
-        },
-        hasTarget: function(target) {
-          for (var i = 0; i < this.data.length; i++) {
-            if (this.data[i].hasTarget(target)) {
-              return true;
-            }
-          }
-          return false;
-        },
-        destroy: function() {
-          for (var i = 0; i < this.data.length; i++) {
-            this.data[i].stop();
-          }
-        }
-      });
-      Timeline.TYPES = ["onStart", "onUpdate", "onLoop", "onComplete", "onYoyo"];
-      module.exports = Timeline;
-    }
-  });
-
-  // ../../node_modules/phaser/src/tweens/builders/TimelineBuilder.js
-  var require_TimelineBuilder = __commonJS({
-    "../../node_modules/phaser/src/tweens/builders/TimelineBuilder.js": function(exports, module) {
-      var Clone = require_Clone();
-      var Defaults = require_Defaults();
-      var GetAdvancedValue = require_GetAdvancedValue();
-      var GetBoolean = require_GetBoolean();
-      var GetEaseFunction = require_GetEaseFunction();
-      var GetNewValue = require_GetNewValue();
-      var GetTargets = require_GetTargets();
-      var GetTweens = require_GetTweens();
-      var GetValue = require_GetValue();
-      var Timeline = require_Timeline();
-      var TweenBuilder = require_TweenBuilder();
-      var TimelineBuilder = function(manager, config) {
-        var timeline = new Timeline(manager);
-        timeline.completeDelay = GetAdvancedValue(config, "completeDelay", 0);
-        timeline.loop = Math.round(GetAdvancedValue(config, "loop", 0));
-        timeline.loopDelay = Math.round(GetAdvancedValue(config, "loopDelay", 0));
-        timeline.paused = GetBoolean(config, "paused", false);
-        timeline.useFrames = GetBoolean(config, "useFrames", false);
-        var scope = GetValue(config, "callbackScope", timeline);
-        var onStart = GetValue(config, "onStart", false);
-        if (onStart) {
-          var onStartScope = GetValue(config, "onStartScope", scope);
-          var onStartParams = GetValue(config, "onStartParams", []);
-          timeline.setCallback("onStart", onStart, onStartParams, onStartScope);
-        }
-        var onUpdate = GetValue(config, "onUpdate", false);
-        if (onUpdate) {
-          var onUpdateScope = GetValue(config, "onUpdateScope", scope);
-          var onUpdateParams = GetValue(config, "onUpdateParams", []);
-          timeline.setCallback("onUpdate", onUpdate, onUpdateParams, onUpdateScope);
-        }
-        var onLoop = GetValue(config, "onLoop", false);
-        if (onLoop) {
-          var onLoopScope = GetValue(config, "onLoopScope", scope);
-          var onLoopParams = GetValue(config, "onLoopParams", []);
-          timeline.setCallback("onLoop", onLoop, onLoopParams, onLoopScope);
-        }
-        var onYoyo = GetValue(config, "onYoyo", false);
-        if (onYoyo) {
-          var onYoyoScope = GetValue(config, "onYoyoScope", scope);
-          var onYoyoParams = GetValue(config, "onYoyoParams", []);
-          timeline.setCallback("onYoyo", onYoyo, onYoyoParams, onYoyoScope);
-        }
-        var onComplete = GetValue(config, "onComplete", false);
-        if (onComplete) {
-          var onCompleteScope = GetValue(config, "onCompleteScope", scope);
-          var onCompleteParams = GetValue(config, "onCompleteParams", []);
-          timeline.setCallback("onComplete", onComplete, onCompleteParams, onCompleteScope);
-        }
-        var tweens = GetTweens(config);
-        if (tweens.length === 0) {
-          timeline.paused = true;
-          return timeline;
-        }
-        var defaults = Clone(Defaults);
-        defaults.targets = GetTargets(config);
-        var totalDuration = GetAdvancedValue(config, "totalDuration", 0);
-        if (totalDuration > 0) {
-          defaults.duration = Math.floor(totalDuration / tweens.length);
-        } else {
-          defaults.duration = GetNewValue(config, "duration", defaults.duration);
-        }
-        defaults.delay = GetNewValue(config, "delay", defaults.delay);
-        defaults.easeParams = GetValue(config, "easeParams", defaults.easeParams);
-        defaults.ease = GetEaseFunction(GetValue(config, "ease", defaults.ease), defaults.easeParams);
-        defaults.hold = GetNewValue(config, "hold", defaults.hold);
-        defaults.repeat = GetNewValue(config, "repeat", defaults.repeat);
-        defaults.repeatDelay = GetNewValue(config, "repeatDelay", defaults.repeatDelay);
-        defaults.yoyo = GetBoolean(config, "yoyo", defaults.yoyo);
-        defaults.flipX = GetBoolean(config, "flipX", defaults.flipX);
-        defaults.flipY = GetBoolean(config, "flipY", defaults.flipY);
-        for (var i = 0; i < tweens.length; i++) {
-          timeline.queue(TweenBuilder(timeline, tweens[i], defaults));
-        }
-        return timeline;
-      };
-      module.exports = TimelineBuilder;
     }
   });
 
@@ -50647,16 +51960,260 @@ var Phaser = (function() {
       module.exports = {
         GetBoolean: require_GetBoolean(),
         GetEaseFunction: require_GetEaseFunction(),
+        GetInterpolationFunction: require_GetInterpolationFunction(),
         GetNewValue: require_GetNewValue(),
         GetProps: require_GetProps(),
         GetTargets: require_GetTargets(),
-        GetTweens: require_GetTweens(),
         GetValueOp: require_GetValueOp(),
         NumberTweenBuilder: require_NumberTweenBuilder(),
         StaggerBuilder: require_StaggerBuilder(),
-        TimelineBuilder: require_TimelineBuilder(),
         TweenBuilder: require_TweenBuilder()
       };
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/tween/TweenChain.js
+  var require_TweenChain = __commonJS({
+    "../../node_modules/phaser/src/tweens/tween/TweenChain.js": function(exports, module) {
+      var ArrayRemove = require_Remove();
+      var BaseTween = require_BaseTween();
+      var Class = require_Class();
+      var Events = require_events20();
+      var GameObjectCreator = require_GameObjectCreator();
+      var GameObjectFactory = require_GameObjectFactory();
+      var TWEEN_CONST = require_const5();
+      var TweenChain = new Class({
+        Extends: BaseTween,
+        initialize: function TweenChain2(parent) {
+          BaseTween.call(this, parent);
+          this.currentTween = null;
+          this.currentIndex = 0;
+        },
+        init: function() {
+          this.loopCounter = this.loop === -1 ? TWEEN_CONST.MAX : this.loop;
+          this.setCurrentTween(0);
+          if (this.startDelay > 0 && !this.isStartDelayed()) {
+            this.setStartDelayState();
+          } else {
+            this.setActiveState();
+          }
+          this.dispatchEvent(Events.TWEEN_ACTIVE, "onActive");
+          return this;
+        },
+        add: function(tweens) {
+          var newTweens = this.parent.create(tweens);
+          if (!Array.isArray(newTweens)) {
+            newTweens = [newTweens];
+          }
+          var data = this.data;
+          for (var i = 0; i < newTweens.length; i++) {
+            var tween = newTweens[i];
+            tween.parent = this;
+            data.push(tween.reset());
+          }
+          this.totalData = data.length;
+          return this;
+        },
+        remove: function(tween) {
+          ArrayRemove(this.data, tween);
+          tween.setRemovedState();
+          if (tween === this.currentTween) {
+            this.nextTween();
+          }
+          this.totalData = this.data.length;
+          return this;
+        },
+        hasTarget: function(target) {
+          var data = this.data;
+          for (var i = 0; i < this.totalData; i++) {
+            if (data[i].hasTarget(target)) {
+              return true;
+            }
+          }
+          return false;
+        },
+        restart: function() {
+          if (this.isDestroyed()) {
+            console.warn("Cannot restart destroyed TweenChain", this);
+            return this;
+          }
+          if (this.isRemoved()) {
+            this.parent.makeActive(this);
+          }
+          this.resetTweens();
+          this.paused = false;
+          return this.init();
+        },
+        reset: function(tween) {
+          tween.seek();
+          tween.setActiveState();
+          return this;
+        },
+        makeActive: function(tween) {
+          tween.reset();
+          tween.setActiveState();
+          return this;
+        },
+        nextState: function() {
+          if (this.loopCounter > 0) {
+            this.loopCounter--;
+            this.resetTweens();
+            if (this.loopDelay > 0) {
+              this.countdown = this.loopDelay;
+              this.setLoopDelayState();
+            } else {
+              this.setActiveState();
+              this.dispatchEvent(Events.TWEEN_LOOP, "onLoop");
+            }
+          } else if (this.completeDelay > 0) {
+            this.countdown = this.completeDelay;
+            this.setCompleteDelayState();
+          } else {
+            this.onCompleteHandler();
+            return true;
+          }
+          return false;
+        },
+        play: function() {
+          if (this.isDestroyed()) {
+            console.warn("Cannot play destroyed TweenChain", this);
+            return this;
+          }
+          if (this.isPendingRemove() || this.isPending()) {
+            this.resetTweens();
+          }
+          this.paused = false;
+          if (this.startDelay > 0 && !this.isStartDelayed()) {
+            this.setStartDelayState();
+          } else {
+            this.setActiveState();
+          }
+          return this;
+        },
+        resetTweens: function() {
+          var data = this.data;
+          var total = this.totalData;
+          for (var i = 0; i < total; i++) {
+            data[i].reset(false);
+          }
+          this.currentIndex = 0;
+          this.currentTween = data[0];
+        },
+        update: function(delta) {
+          if (this.isPendingRemove() || this.isDestroyed()) {
+            return true;
+          } else if (this.isFinished() || this.paused) {
+            return false;
+          }
+          delta *= this.parent.timeScale;
+          if (this.isLoopDelayed()) {
+            this.updateLoopCountdown(delta);
+          } else if (this.isCompleteDelayed()) {
+            this.updateCompleteDelay(delta);
+          } else if (this.isStartDelayed()) {
+            delta = this.updateStartCountdown(delta);
+          }
+          var remove = false;
+          if (this.isActive() && this.currentTween) {
+            if (this.currentTween.update(delta)) {
+              if (this.nextTween()) {
+                this.nextState();
+              }
+            }
+            remove = this.isPendingRemove();
+            if (remove && this.persist) {
+              this.setFinishedState();
+              remove = false;
+            }
+          }
+          return remove;
+        },
+        nextTween: function() {
+          this.currentIndex++;
+          if (this.currentIndex === this.totalData) {
+            return true;
+          } else {
+            this.setCurrentTween(this.currentIndex);
+          }
+          return false;
+        },
+        setCurrentTween: function(index) {
+          this.currentIndex = index;
+          this.currentTween = this.data[index];
+          this.currentTween.setActiveState();
+          this.currentTween.dispatchEvent(Events.TWEEN_ACTIVE, "onActive");
+        },
+        dispatchEvent: function(event, callback) {
+          this.emit(event, this);
+          var handler = this.callbacks[callback];
+          if (handler) {
+            handler.func.apply(this.callbackScope, [this].concat(handler.params));
+          }
+        },
+        destroy: function() {
+          BaseTween.prototype.destroy.call(this);
+          this.currentTween = null;
+        }
+      });
+      GameObjectFactory.register("tweenchain", function(config) {
+        return this.scene.sys.tweens.chain(config);
+      });
+      GameObjectCreator.register("tweenchain", function(config) {
+        return this.scene.sys.tweens.create(config);
+      });
+      module.exports = TweenChain;
+    }
+  });
+
+  // ../../node_modules/phaser/src/tweens/builders/TweenChainBuilder.js
+  var require_TweenChainBuilder = __commonJS({
+    "../../node_modules/phaser/src/tweens/builders/TweenChainBuilder.js": function(exports, module) {
+      var BaseTween = require_BaseTween();
+      var GetAdvancedValue = require_GetAdvancedValue();
+      var GetBoolean = require_GetBoolean();
+      var GetTargets = require_GetTargets();
+      var GetValue = require_GetValue();
+      var TweenBuilder = require_TweenBuilder();
+      var TweenChain = require_TweenChain();
+      var TweenChainBuilder = function(parent, config) {
+        if (config instanceof TweenChain) {
+          config.parent = parent;
+          return config;
+        }
+        var chain = new TweenChain(parent);
+        chain.startDelay = GetValue(config, "delay", 0);
+        chain.completeDelay = GetAdvancedValue(config, "completeDelay", 0);
+        chain.loop = Math.round(GetAdvancedValue(config, "loop", GetValue(config, "repeat", 0)));
+        chain.loopDelay = Math.round(GetAdvancedValue(config, "loopDelay", GetValue(config, "repeatDelay", 0)));
+        chain.paused = GetBoolean(config, "paused", false);
+        chain.persist = GetBoolean(config, "persist", true);
+        chain.callbackScope = GetValue(config, "callbackScope", chain);
+        var i;
+        var callbacks = BaseTween.TYPES;
+        for (i = 0; i < callbacks.length; i++) {
+          var type = callbacks[i];
+          var callback = GetValue(config, type, false);
+          if (callback) {
+            var callbackParams = GetValue(config, type + "Params", []);
+            chain.setCallback(type, callback, callbackParams);
+          }
+        }
+        var tweens = GetValue(config, "tweens", null);
+        if (Array.isArray(tweens)) {
+          var chainedTweens = [];
+          var targets = GetTargets(config);
+          var defaults = void 0;
+          if (targets) {
+            defaults = { targets: targets };
+          }
+          for (i = 0; i < tweens.length; i++) {
+            chainedTweens.push(TweenBuilder(chain, tweens[i], defaults));
+          }
+          chain.add(chainedTweens);
+        }
+        return chain;
+      };
+      module.exports = TweenChainBuilder;
     }
   });
 
@@ -50665,263 +52222,309 @@ var Phaser = (function() {
     "../../node_modules/phaser/src/tweens/TweenManager.js": function(exports, module) {
       var ArrayRemove = require_Remove();
       var Class = require_Class();
+      var Flatten = require_Flatten();
       var NumberTweenBuilder = require_NumberTweenBuilder();
       var PluginCache = require_PluginCache();
-      var SceneEvents = require_events5();
+      var SceneEvents = require_events();
       var StaggerBuilder = require_StaggerBuilder();
-      var TimelineBuilder = require_TimelineBuilder();
-      var TWEEN_CONST = require_const5();
+      var Tween = require_Tween();
       var TweenBuilder = require_TweenBuilder();
+      var TweenChain = require_TweenChain();
+      var TweenChainBuilder = require_TweenChainBuilder();
       var TweenManager = new Class({
         initialize: function TweenManager2(scene) {
           this.scene = scene;
-          this.systems = scene.sys;
+          this.events = scene.sys.events;
           this.timeScale = 1;
-          this._add = [];
-          this._pending = [];
-          this._active = [];
-          this._destroy = [];
-          this._toProcess = 0;
-          scene.sys.events.once(SceneEvents.BOOT, this.boot, this);
-          scene.sys.events.on(SceneEvents.START, this.start, this);
+          this.paused = false;
+          this.processing = false;
+          this.tweens = [];
+          this.time = 0;
+          this.startTime = 0;
+          this.nextTime = 0;
+          this.prevTime = 0;
+          this.maxLag = 500;
+          this.lagSkip = 33;
+          this.gap = 1e3 / 240;
+          this.events.once(SceneEvents.BOOT, this.boot, this);
+          this.events.on(SceneEvents.START, this.start, this);
         },
         boot: function() {
-          this.systems.events.once(SceneEvents.DESTROY, this.destroy, this);
+          this.events.once(SceneEvents.DESTROY, this.destroy, this);
         },
         start: function() {
-          var eventEmitter = this.systems.events;
-          eventEmitter.on(SceneEvents.PRE_UPDATE, this.preUpdate, this);
-          eventEmitter.on(SceneEvents.UPDATE, this.update, this);
-          eventEmitter.once(SceneEvents.SHUTDOWN, this.shutdown, this);
           this.timeScale = 1;
-        },
-        createTimeline: function(config) {
-          return TimelineBuilder(this, config);
-        },
-        timeline: function(config) {
-          var timeline = TimelineBuilder(this, config);
-          if (!timeline.paused) {
-            this._add.push(timeline);
-            this._toProcess++;
-          }
-          return timeline;
+          this.paused = false;
+          this.startTime = Date.now();
+          this.prevTime = this.startTime;
+          this.nextTime = this.gap;
+          this.events.on(SceneEvents.UPDATE, this.update, this);
+          this.events.once(SceneEvents.SHUTDOWN, this.shutdown, this);
         },
         create: function(config) {
-          return TweenBuilder(this, config);
+          if (!Array.isArray(config)) {
+            config = [config];
+          }
+          var result = [];
+          for (var i = 0; i < config.length; i++) {
+            var tween = config[i];
+            if (tween instanceof Tween || tween instanceof TweenChain) {
+              result.push(tween);
+            } else if (Array.isArray(tween.tweens)) {
+              result.push(TweenChainBuilder(this, tween));
+            } else {
+              result.push(TweenBuilder(this, tween));
+            }
+          }
+          return result.length === 1 ? result[0] : result;
         },
         add: function(config) {
-          var tween = TweenBuilder(this, config);
-          this._add.push(tween);
-          this._toProcess++;
+          var tween = config;
+          var tweens = this.tweens;
+          if (tween instanceof Tween || tween instanceof TweenChain) {
+            tweens.push(tween.reset());
+          } else {
+            if (Array.isArray(tween.tweens)) {
+              tween = TweenChainBuilder(this, tween);
+            } else {
+              tween = TweenBuilder(this, tween);
+            }
+            tweens.push(tween.reset());
+          }
           return tween;
         },
+        addMultiple: function(configs) {
+          var tween;
+          var result = [];
+          var tweens = this.tweens;
+          for (var i = 0; i < configs.length; i++) {
+            tween = configs[i];
+            if (tween instanceof Tween || tween instanceof TweenChain) {
+              tweens.push(tween.reset());
+            } else {
+              if (Array.isArray(tween.tweens)) {
+                tween = TweenChainBuilder(this, tween);
+              } else {
+                tween = TweenBuilder(this, tween);
+              }
+              tweens.push(tween.reset());
+            }
+            result.push(tween);
+          }
+          return result;
+        },
+        chain: function(config) {
+          var chain = TweenChainBuilder(this, config);
+          this.tweens.push(chain.init());
+          return chain;
+        },
+        getChainedTweens: function(tween) {
+          return tween.getChainedTweens();
+        },
+        has: function(tween) {
+          return this.tweens.indexOf(tween) > -1;
+        },
         existing: function(tween) {
-          this._add.push(tween);
-          this._toProcess++;
+          if (!this.has(tween)) {
+            this.tweens.push(tween.reset());
+          }
           return this;
         },
         addCounter: function(config) {
           var tween = NumberTweenBuilder(this, config);
-          this._add.push(tween);
-          this._toProcess++;
+          this.tweens.push(tween.reset());
           return tween;
         },
         stagger: function(value, options) {
           return StaggerBuilder(value, options);
         },
-        preUpdate: function() {
-          if (this._toProcess === 0) {
+        setLagSmooth: function(limit, skip) {
+          if (limit === void 0) {
+            limit = 1 / 1e-8;
+          }
+          if (skip === void 0) {
+            skip = 0;
+          }
+          this.maxLag = limit;
+          this.lagSkip = Math.min(skip, this.maxLag);
+          return this;
+        },
+        setFps: function(fps) {
+          if (fps === void 0) {
+            fps = 240;
+          }
+          this.gap = 1e3 / fps;
+          this.nextTime = this.time * 1e3 + this.gap;
+          return this;
+        },
+        getDelta: function(tick) {
+          var elapsed = Date.now() - this.prevTime;
+          if (elapsed > this.maxLag) {
+            this.startTime += elapsed - this.lagSkip;
+          }
+          this.prevTime += elapsed;
+          var time = this.prevTime - this.startTime;
+          var overlap = time - this.nextTime;
+          var delta = time - this.time * 1e3;
+          if (overlap > 0 || tick) {
+            time /= 1e3;
+            this.time = time;
+            this.nextTime += overlap + (overlap >= this.gap ? 4 : this.gap - overlap);
+          } else {
+            delta = 0;
+          }
+          return delta;
+        },
+        tick: function() {
+          this.step(true);
+          return this;
+        },
+        update: function() {
+          if (!this.paused) {
+            this.step(false);
+          }
+        },
+        step: function(tick) {
+          if (tick === void 0) {
+            tick = false;
+          }
+          var delta = this.getDelta(tick);
+          if (delta <= 0) {
             return;
           }
-          var list = this._destroy;
-          var active = this._active;
-          var pending = this._pending;
+          this.processing = true;
           var i;
           var tween;
+          var toDestroy = [];
+          var list = this.tweens;
           for (i = 0; i < list.length; i++) {
             tween = list[i];
-            var idx = active.indexOf(tween);
-            if (idx === -1) {
-              idx = pending.indexOf(tween);
-              if (idx > -1) {
-                tween.state = TWEEN_CONST.REMOVED;
-                pending.splice(idx, 1);
-              }
-            } else {
-              tween.state = TWEEN_CONST.REMOVED;
-              active.splice(idx, 1);
+            if (tween.update(delta)) {
+              toDestroy.push(tween);
             }
           }
-          list.length = 0;
-          list = this._add;
-          for (i = 0; i < list.length; i++) {
-            tween = list[i];
-            if (tween.state === TWEEN_CONST.PENDING_ADD) {
-              if (tween.init()) {
-                tween.play();
-                this._active.push(tween);
-              } else {
-                this._pending.push(tween);
+          var count = toDestroy.length;
+          if (count && list.length > 0) {
+            for (i = 0; i < count; i++) {
+              tween = toDestroy[i];
+              var idx = list.indexOf(tween);
+              if (idx > -1 && (tween.isPendingRemove() || tween.isDestroyed())) {
+                list.splice(idx, 1);
+                tween.destroy();
               }
             }
+            toDestroy.length = 0;
           }
-          list.length = 0;
-          this._toProcess = 0;
-        },
-        update: function(timestamp, delta) {
-          var list = this._active;
-          var tween;
-          delta *= this.timeScale;
-          for (var i = 0; i < list.length; i++) {
-            tween = list[i];
-            if (tween.update(timestamp, delta)) {
-              this._destroy.push(tween);
-              this._toProcess++;
-            }
-          }
+          this.processing = false;
         },
         remove: function(tween) {
-          ArrayRemove(this._add, tween);
-          ArrayRemove(this._pending, tween);
-          ArrayRemove(this._active, tween);
-          ArrayRemove(this._destroy, tween);
-          tween.state = TWEEN_CONST.REMOVED;
+          if (this.processing) {
+            tween.setPendingRemoveState();
+          } else {
+            ArrayRemove(this.tweens, tween);
+            tween.setRemovedState();
+          }
           return this;
         },
         reset: function(tween) {
-          this.remove(tween);
-          this._active.push(tween);
-          tween.seek(0);
-          tween.state = TWEEN_CONST.ACTIVE;
+          this.existing(tween);
+          tween.seek();
+          tween.setActiveState();
           return this;
         },
         makeActive: function(tween) {
-          if (this._add.indexOf(tween) !== -1 || this._active.indexOf(tween) !== -1) {
-            return this;
-          }
-          var idx = this._pending.indexOf(tween);
-          if (idx !== -1) {
-            this._pending.splice(idx, 1);
-          }
-          this._add.push(tween);
-          tween.state = TWEEN_CONST.PENDING_ADD;
-          this._toProcess++;
+          this.existing(tween);
+          tween.setActiveState();
           return this;
         },
         each: function(callback, scope) {
+          var i;
           var args = [null];
-          for (var i = 1; i < arguments.length; i++) {
+          for (i = 1; i < arguments.length; i++) {
             args.push(arguments[i]);
           }
-          for (var texture in this.list) {
-            args[0] = this.list[texture];
+          this.tweens.forEach(function(tween) {
+            args[0] = tween;
             callback.apply(scope, args);
-          }
+          });
+          return this;
         },
-        getAllTweens: function() {
-          var list = this._active;
+        getTweens: function() {
+          return this.tweens.slice();
+        },
+        getTweensOf: function(target) {
           var output = [];
+          var list = this.tweens;
+          if (!Array.isArray(target)) {
+            target = [target];
+          } else {
+            target = Flatten(target);
+          }
+          var targetLen = target.length;
           for (var i = 0; i < list.length; i++) {
-            output.push(list[i]);
+            var tween = list[i];
+            for (var t = 0; t < targetLen; t++) {
+              if (!tween.isDestroyed() && tween.hasTarget(target[t])) {
+                output.push(tween);
+              }
+            }
           }
           return output;
         },
         getGlobalTimeScale: function() {
           return this.timeScale;
         },
-        getTweensOf: function(target, includePending) {
-          if (includePending === void 0) {
-            includePending = false;
-          }
-          var list = this._active;
-          var tween;
-          var output = [];
-          var i;
-          var t;
-          if (!Array.isArray(target)) {
-            target = [target];
-          }
-          for (i = 0; i < list.length; i++) {
-            tween = list[i];
-            for (t = 0; t < target.length; t++) {
-              if (tween.hasTarget(target[t])) {
-                output.push(tween);
-              }
-            }
-          }
-          if (includePending) {
-            list = this._pending;
-            for (i = 0; i < list.length; i++) {
-              tween = list[i];
-              for (t = 0; t < target.length; t++) {
-                if (tween.hasTarget(target[t])) {
-                  output.push(tween);
-                }
-              }
-            }
-          }
-          return output;
+        setGlobalTimeScale: function(value) {
+          this.timeScale = value;
+          return this;
         },
         isTweening: function(target) {
-          var list = this._active;
+          var list = this.tweens;
           var tween;
           for (var i = 0; i < list.length; i++) {
             tween = list[i];
-            if (tween.hasTarget(target) && tween.isPlaying()) {
+            if (tween.isPlaying() && tween.hasTarget(target)) {
               return true;
             }
           }
           return false;
         },
         killAll: function() {
-          var tweens = this.getAllTweens();
+          var tweens = this.processing ? this.getTweens() : this.tweens;
           for (var i = 0; i < tweens.length; i++) {
-            tweens[i].stop();
+            tweens[i].destroy();
+          }
+          if (!this.processing) {
+            tweens.length = 0;
           }
           return this;
         },
         killTweensOf: function(target) {
           var tweens = this.getTweensOf(target);
           for (var i = 0; i < tweens.length; i++) {
-            tweens[i].stop();
+            tweens[i].destroy();
           }
           return this;
         },
         pauseAll: function() {
-          var list = this._active;
-          for (var i = 0; i < list.length; i++) {
-            list[i].pause();
-          }
+          this.paused = true;
           return this;
         },
         resumeAll: function() {
-          var list = this._active;
-          for (var i = 0; i < list.length; i++) {
-            list[i].resume();
-          }
-          return this;
-        },
-        setGlobalTimeScale: function(value) {
-          this.timeScale = value;
+          this.paused = false;
           return this;
         },
         shutdown: function() {
           this.killAll();
-          this._add = [];
-          this._pending = [];
-          this._active = [];
-          this._destroy = [];
-          this._toProcess = 0;
-          var eventEmitter = this.systems.events;
-          eventEmitter.off(SceneEvents.PRE_UPDATE, this.preUpdate, this);
-          eventEmitter.off(SceneEvents.UPDATE, this.update, this);
-          eventEmitter.off(SceneEvents.SHUTDOWN, this.shutdown, this);
+          this.tweens = [];
+          this.events.off(SceneEvents.UPDATE, this.update, this);
+          this.events.off(SceneEvents.SHUTDOWN, this.shutdown, this);
         },
         destroy: function() {
           this.shutdown();
-          this.scene.sys.events.off(SceneEvents.START, this.start, this);
+          this.events.off(SceneEvents.START, this.start, this);
           this.scene = null;
-          this.systems = null;
+          this.events = null;
         }
       });
       PluginCache.register("TweenManager", TweenManager, "tweens");
@@ -50932,17 +52535,17 @@ var Phaser = (function() {
   // ../../node_modules/phaser/src/tweens/index.js
   var require_tweens = __commonJS({
     "../../node_modules/phaser/src/tweens/index.js": function(exports, module) {
-      var CONST = require_const5();
-      var Extend = require_Extend();
       var Tweens = {
+        States: require_const5(),
         Builders: require_builders(),
-        Events: require_events19(),
+        Events: require_events20(),
         TweenManager: require_TweenManager(),
         Tween: require_Tween(),
         TweenData: require_TweenData(),
-        Timeline: require_Timeline()
+        TweenFrameData: require_TweenFrameData(),
+        BaseTween: require_BaseTween(),
+        TweenChain: require_TweenChain()
       };
-      Tweens = Extend(false, Tweens, CONST);
       module.exports = Tweens;
     }
   });
@@ -50975,23 +52578,6 @@ var Phaser = (function() {
         return true;
       };
       module.exports = HasAll;
-    }
-  });
-
-  // ../../node_modules/phaser/src/utils/object/MergeRight.js
-  var require_MergeRight = __commonJS({
-    "../../node_modules/phaser/src/utils/object/MergeRight.js": function(exports, module) {
-      var Clone = require_Clone();
-      var MergeRight = function(obj1, obj2) {
-        var clone = Clone(obj1);
-        for (var key in obj2) {
-          if (clone.hasOwnProperty(key)) {
-            clone[key] = obj2[key];
-          }
-        }
-        return clone;
-      };
-      module.exports = MergeRight;
     }
   });
 
@@ -51066,13 +52652,27 @@ var Phaser = (function() {
     }
   });
 
+  // ../../node_modules/phaser/src/utils/string/UUID.js
+  var require_UUID = __commonJS({
+    "../../node_modules/phaser/src/utils/string/UUID.js": function(exports, module) {
+      var UUID = function() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0;
+          var v = c === "x" ? r : r & 3 | 8;
+          return v.toString(16);
+        });
+      };
+      module.exports = UUID;
+    }
+  });
+
   // phaser.custom.config.js
   var require_phaser_custom_config = __commonJS({
     "phaser.custom.config.js": function(exports, module) {
       require_polyfills();
       var CONST = require_const();
       var Extend = require_Extend();
-      var Phaser2 = {
+      var Phaser = {
         Actions: {
           GridAlign: require_GridAlign()
         },
@@ -51094,7 +52694,7 @@ var Phaser = (function() {
         Events: require_events11(),
         Game: require_Game(),
         GameObjects: {
-          Events: require_events4(),
+          Events: require_events3(),
           RenderTexture: require_RenderTexture(),
           Container: require_Container(),
           DisplayList: require_DisplayList(),
@@ -51106,7 +52706,7 @@ var Phaser = (function() {
           BuildGameObjectAnimation: require_BuildGameObjectAnimation(),
           GameObject: require_GameObject(),
           Graphics: require_Graphics(),
-          Image: require_Image2(),
+          Image: require_Image(),
           Shape: require_Shape(),
           Ellipse: require_Ellipse2(),
           Line: require_Line2(),
@@ -51124,7 +52724,7 @@ var Phaser = (function() {
             Sprite: require_SpriteFactory(),
             Text: require_TextFactory(),
             BitmapText: require_BitmapTextFactory(),
-            Particles: require_ParticleManagerFactory(),
+            Particles: require_ParticleEmitterFactory(),
             RenderTexture: require_RenderTextureFactory(),
             Line: require_LineFactory(),
             Rectangle: require_RectangleFactory(),
@@ -51191,8 +52791,8 @@ var Phaser = (function() {
           }
         }
       };
-      Phaser2 = Extend(false, Phaser2, CONST);
-      module.exports = Phaser2;
+      Phaser = Extend(false, Phaser, CONST);
+      module.exports = Phaser;
     }
   });
   return require_phaser_custom_config();

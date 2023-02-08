@@ -23,6 +23,7 @@ function createBuild() {
 		write: false,
 		target: target,
 		legalComments: "none",
+		external: ['phaser3spectorjs'],
 	})
 }
 
@@ -30,6 +31,7 @@ function removeUnusedFeatures(content) {
 	let map = {
 		"typeof CANVAS_RENDERER": true,
 		"typeof WEBGL_RENDERER": true,
+		"typeof WEBGL_DEBUG": false,
 		"typeof EXPERIMENTAL": false,
 		"typeof PLUGIN_3D": false,
 		"typeof PLUGIN_CAMERA3D": false,
