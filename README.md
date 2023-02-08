@@ -20,12 +20,12 @@ For a long time I have been using **Littera** as a tool to create bitmap fonts. 
 
 ## How to use
 To start the editor run the following commands:
-- `npm run ts-complile`
+- `npm run ts-compile`
 - `npm run serve-dev`
 
 ## Development
 To start developing run the following commands:
-- `npm run ts-complile`
+- `npm run ts-compile`
 - `npm run ts-typecheck`
 - `npm run serve-dev`
 
@@ -45,7 +45,7 @@ Application entry point is at **src/startup/Startup.ts**
 
 
 ## NPM scripts
-- **ts-complile**  
+- **ts-compile**  
   `cd scripts/build/ && node dev.js`  
   Compliles TS to JS using extremely fast bundler - [esbuild](https://esbuild.github.io/)
 
