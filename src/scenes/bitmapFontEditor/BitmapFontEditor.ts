@@ -533,7 +533,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private doGlyphsFitIntoCanvas(): boolean {
-		let { width, height } = this.getTextureSize(0)
+		let { width, height } = this.getContentSize()
 		let { width: canvasWidth, height: canvasHeight } = this.game.canvas
 		
 		return width <= canvasWidth && height <= canvasHeight
@@ -972,34 +972,36 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	private async createTexture(): Promise<BitmapFontTexture> {
 		let addTextureBorder = !!this.config.export.texturePacker
-		let padding = addTextureBorder ? 2 : 0
-		let { width, height } = this.getTextureSize(padding)
+		let padding = addTextureBorder ? 1 : 0
+		let { width, height } = this.getContentSize()
 		let blob = await this.makeSnapshot(0, 0, width, height, padding)
 		
-		return { blob, width, height, padding }
+		return { blob, width, height, padding: padding + 1 }
 	}
 	
-	private getTextureSize(padding: number): { width: number; height: number } {
+	private getContentSize(): { width: number; height: number } {
 		let width = Math.max(...this.glyphs.map(glyph => glyph.x + glyph.displayWidth))
 		let height = Math.max(...this.glyphs.map(glyph => glyph.y + glyph.displayHeight))
 		
 		return {
-			width: Math.ceil(width + padding * 2),
-			height: Math.ceil(height + padding * 2),
+			width: Math.ceil(width),
+			height: Math.ceil(height),
 		}
 	}
 	
-	private makeSnapshot(x: number, y: number, width: number, height: number, padding = 0): Promise<Blob> {
+	private makeSnapshot(x: number, y: number, contentWidth: number, contentHeight: number, padding = 0): Promise<Blob> {
 		return new Promise((resolve, reject) => {
-			this.beforeSnapshot(width, height, padding)
+			this.beforeSnapshot(contentWidth, contentHeight, padding)
 			
 			this.renderer.once(Phaser.Renderer.Events.POST_RENDER, () => {
+				let w = contentWidth + padding * 2 + 4
+				let h = contentHeight + padding * 2 + 4
 				let canvas = document.createElement("canvas")
-				canvas.width = width
-				canvas.height = height
+				canvas.width = w
+				canvas.height = h
 				
 				let context = canvas.getContext("2d")
-				context.drawImage(this.game.canvas, x, y, width, height, x, y, width, height)
+				context.drawImage(this.game.canvas, x, y, w, h, x, y, w, h)
 				
 				this.afterSnapshot()
 				
@@ -1008,33 +1010,45 @@ export class BitmapFontEditor extends BaseScene {
 		})
 	}
 	
-	private beforeSnapshot(width: number, height: number, padding = 0): void {
+	private beforeSnapshot(contentWidth: number, contentHeight: number, padding = 0): void {
 		this.background.kill()
 		this.previewBack.kill()
 		this.preview?.kill()
 		this.previewDebug.kill()
 		
 		if (padding > 0) {
-			this.addGlyphsBorder(width, height, padding)
+			this.addGlyphsBorder(contentWidth, contentHeight, padding)
 		}
 		
-		this.glyphsContainer.x = padding
-		this.glyphsContainer.y = padding
+		this.glyphsContainer.x = padding + 2
+		this.glyphsContainer.y = padding + 2
 	}
 	
 	private addGlyphsBorder(width: number, height: number, thickness: number) {
 		if (this.glyphsBorder) {
 			this.removeGlyphsBorder()
 		}
-		
+
 		this.glyphsBorder = this.add.graphics({
-			lineStyle: {
-				width: thickness,
+			fillStyle: {
 				color: 0xff0000,
 			}
 		})
 		
-		this.glyphsBorder.strokeRect(0, 0, width, height)
+		let fullWidth = thickness * 2 + width + 4
+		let fullHeight = thickness * 2 + height + 4
+		
+		// left
+		this.glyphsBorder.fillRect(0, 0, thickness, fullHeight)
+		
+		// top
+		this.glyphsBorder.fillRect(0, 0, fullWidth, thickness)
+		
+		// right
+		this.glyphsBorder.fillRect(thickness + width + 4, 0, thickness, fullHeight)
+		
+		// bottom
+		this.glyphsBorder.fillRect(0, height + thickness + 4, fullWidth, thickness)
 	}
 	
 	private afterSnapshot(): void {
