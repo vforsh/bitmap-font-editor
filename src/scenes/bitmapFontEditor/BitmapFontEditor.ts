@@ -32,6 +32,7 @@ import WebGLRenderer = Phaser.Renderer.WebGL.WebGLRenderer
 import { copyToClipboard } from "../../robowhale/utils/copy-to-clipboard"
 import { IStartProjectConfig } from "../../IStartProjectConfig"
 import { getBmfontProjectName } from "../../utils/get-bmfont-project-name"
+import RoundTo = Phaser.Math.RoundTo
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -449,7 +450,7 @@ export class BitmapFontEditor extends BaseScene {
 	private rgbaToString(rgba: RGBA): string {
 		let { r, g, b, a } = rgba
 		
-		return `rgba(${r},${g},${b},${a})`
+		return `rgba(${r},${g},${b},${RoundTo(a, -2)})`
 	}
 	
 	private rgbaToNumber(rgb: RGBA | RGB): number {
