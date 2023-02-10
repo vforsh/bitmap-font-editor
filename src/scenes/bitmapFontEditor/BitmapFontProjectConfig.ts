@@ -80,7 +80,7 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		weight: 400,
 		size: 40,
 		lineHeight: 1,
-		resolution: 2,
+		resolution: 1.5,
 		color: { r: 255, g: 255, b: 255, a: 1 },
 		padding: { x: 0, y: 0 },
 		spacing: { x: 0, y: 0 },

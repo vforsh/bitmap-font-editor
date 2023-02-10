@@ -48,11 +48,11 @@ export class FontPanel extends EditorPanel {
 			max: 900,
 		}).on("change", () => this.emit("change", this.config))
 		
-		/*this.panel.addInput(this.config, "resolution", {
+		this.panel.addInput(this.config, "resolution", {
 			step: 0.5,
 			min: 1,
 			max: 3,
-		}).on("change", () => this.emit("change", this.config))*/
+		}).on("change", () => this.emit("change", this.config))
 		
 		this.panel.addInput(this.config, "color", {
 			input: "color.rgb",
