@@ -29,7 +29,7 @@
 		"prepare": "husky install"
 	},
 	"engines": {
-		"node": "~16.16"
+		"node": "~18.12"
 	},
 	"config": {
 		"texts": {
