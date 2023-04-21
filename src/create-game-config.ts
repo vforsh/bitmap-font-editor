@@ -26,6 +26,8 @@ export function createGameConfig(): Phaser.Types.Core.GameConfig {
 			transparent: true,
 			failIfMajorPerformanceCaveat: true,
 			maxTextures: getMaxTexturesNum(),
+			roundPixels: true,
+			mipmapFilter: 'LINEAR_MIPMAP_LINEAR',
 		},
 		banner: {
 			background: ["rgba(0,0,255,0.4)"],
@@ -68,7 +70,7 @@ function getScaleConfig(): Phaser.Types.Core.ScaleConfig {
 		height: Config.SOURCE_GAME_HEIGHT,
 		mode: Phaser.Scale.NONE,
 		autoRound: true,
-	} as Phaser.Types.Core.ScaleConfig
+	}
 }
 
 function getRenderType(): number {
@@ -85,4 +87,3 @@ function preBootCallback(game: Main): void {
 
 function postBootCallback(game: Main): void {
 }
-
