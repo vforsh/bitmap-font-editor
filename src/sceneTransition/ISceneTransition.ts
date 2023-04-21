@@ -1,9 +1,9 @@
-import { SceneKey } from "../scenes/SceneKey"
+import { SceneKey } from '../scenes/SceneKey'
 import GameObject = Phaser.GameObjects.GameObject
 
 export enum SceneTransitionEvent {
-	START = "start",
-	COMPLETE = "complete",
+	START = 'start',
+	COMPLETE = 'complete',
 }
 
 export interface ISceneTransition extends GameObject {

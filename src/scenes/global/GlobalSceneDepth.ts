@@ -4,4 +4,3 @@ export enum GlobalSceneDepth {
 	AD_OVERLAY,
 	PURCHASE_OVERLAY,
 }
-

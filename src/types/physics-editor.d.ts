@@ -5,7 +5,7 @@ declare namespace PhysicsEditor {
 	}
 
 	export interface Item {
-		type: "fromPhysicsEditor"
+		type: 'fromPhysicsEditor'
 		label: string
 		isStatic: boolean
 		density: number

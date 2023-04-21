@@ -1,4 +1,4 @@
 export enum ButtonEvent {
-	PRESS = "button_press",
-	RELEASE = "button_release",
+	PRESS = 'button_press',
+	RELEASE = 'button_release',
 }

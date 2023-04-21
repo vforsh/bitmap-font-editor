@@ -1,4 +1,4 @@
 export enum GameEnvironment {
-	DEVELOP = "develop",
-	PRODUCTION = "production",
+	DEVELOP = 'develop',
+	PRODUCTION = 'production',
 }

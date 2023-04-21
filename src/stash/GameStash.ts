@@ -1,5 +1,5 @@
-import type { Font } from "opentype.js"
-import { IStartProjectConfig } from "../IStartProjectConfig"
+import type { Font } from 'opentype.js'
+import { IStartProjectConfig } from '../IStartProjectConfig'
 
 const GAME_STASH = {
 	webp: false,
@@ -27,37 +27,35 @@ export type GameStashNumberKey = Values<{
 }>
 
 export class GameStash {
-	
 	private readonly stash: GameStashType
-	
+
 	constructor() {
 		this.stash = GAME_STASH
 	}
-	
+
 	public get<K extends GameStashKey>(key: K): GameStashValue<K> | undefined {
 		return this.stash[key]
 	}
-	
+
 	public set<K extends GameStashKey>(key: K, value: GameStashValue<K>): void {
 		this.stash[key] = value
 	}
-	
+
 	public toggle<K extends GameStashBooleanKey>(key: K): boolean {
 		let currentValue = Boolean(this.stash[key])
 		let newValue = !currentValue
-		
+
 		this.stash[key] = newValue
-		
+
 		return newValue
 	}
-	
+
 	public changeNum<K extends GameStashNumberKey>(key: K, delta: number, min = -Number.MAX_VALUE, max = Number.MAX_VALUE): number {
 		let currentValue = this.stash[key] ?? 0
 		let newValue = Phaser.Math.Clamp(currentValue + delta, min, max)
-		
+
 		this.stash[key] = newValue
-		
+
 		return newValue
 	}
-	
 }

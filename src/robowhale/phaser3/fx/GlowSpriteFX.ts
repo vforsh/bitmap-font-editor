@@ -74,12 +74,11 @@ void main ()
 `
 
 export class GlowSpriteFX extends Phaser.Renderer.WebGL.Pipelines.SpriteFXPipeline {
-	
 	public outerStrength: number
 	public innerStrength: number
 	public knockout: boolean
 	public glowColor: number[]
-	
+
 	constructor(game, quality = 0.1, distance = 10) {
 		let fragShader = glowFragShader
 		fragShader = fragShader.replace(/__SIZE__/gi, `${(1 / quality / distance).toFixed(7)}`)
@@ -110,28 +109,28 @@ export class GlowSpriteFX extends Phaser.Renderer.WebGL.Pipelines.SpriteFXPipeli
 
 		this.glowColor = [1, 1, 1, 1]
 	}
-	
+
 	reset(quality = 0.1, distance = 10) {
 		const shader = this.shaders[0]
-		
+
 		let frag = glowFragShader.replace(/__SIZE__/gi, `${(1 / quality / distance).toFixed(7)}`)
-		
+
 		frag = frag.replace(/__DIST__/gi, `${distance.toFixed(0)}.0`)
-		
+
 		// @ts-ignore
 		shader.createProgram(undefined, frag)
 	}
 
 	onPreRender() {
-		this.set1f("outerStrength", this.outerStrength)
-		this.set1f("innerStrength", this.innerStrength)
-		this.set4fv("glowColor", this.glowColor)
+		this.set1f('outerStrength', this.outerStrength)
+		this.set1f('innerStrength', this.innerStrength)
+		this.set4fv('glowColor', this.glowColor)
 		// @ts-ignore
-		this.setBoolean("knockout", this.knockout)
+		this.setBoolean('knockout', this.knockout)
 	}
 
 	onDraw(target1) {
-		this.set2f("resolution", target1.width, target1.height)
+		this.set2f('resolution', target1.width, target1.height)
 
 		this.drawToGame(target1)
 	}
@@ -139,14 +138,14 @@ export class GlowSpriteFX extends Phaser.Renderer.WebGL.Pipelines.SpriteFXPipeli
 	get color(): number {
 		const color = this.glowColor
 
-		return (((color[0] * 255) << 16) + ((color[1] * 255) << 8) + (color[2] * 255 | 0))
+		return ((color[0] * 255) << 16) + ((color[1] * 255) << 8) + ((color[2] * 255) | 0)
 	}
 
 	set color(value: number) {
 		const color = this.glowColor
 
-		color[0] = ((value >> 16) & 0xFF) / 255
-		color[1] = ((value >> 8) & 0xFF) / 255
-		color[2] = (value & 0xFF) / 255
+		color[0] = ((value >> 16) & 0xff) / 255
+		color[1] = ((value >> 8) & 0xff) / 255
+		color[2] = (value & 0xff) / 255
 	}
 }

@@ -3,14 +3,14 @@
 // random - pick item from box then put it back.
 
 declare interface RexGashaponConfig {
-	mode: "shuffle" | "random"
+	mode: 'shuffle' | 'random'
 	items?: Record<string, number>
 	reload?: boolean
 	rnd?: Phaser.Math.RandomDataGenerator
 }
 
 declare interface RexGashapon {
-	new(status?: any)
+	new (status?: any)
 	next(itemType?: string): any
 	eachItem(callback: (name, count) => void)
 	toJSON(): any

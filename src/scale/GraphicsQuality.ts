@@ -1,20 +1,20 @@
 export enum GraphicsQuality {
-	LOW = "low",
-	MEDIUM = "medium",
-	HIGH = "high",
+	LOW = 'low',
+	MEDIUM = 'medium',
+	HIGH = 'high',
 }
 
 export function getGraphicsQualityAsNumber(quality: GraphicsQuality): number {
 	switch (quality) {
 		case GraphicsQuality.LOW:
 			return 0.5
-		
+
 		case GraphicsQuality.MEDIUM:
 			return 0.75
-		
+
 		case GraphicsQuality.HIGH:
 			return 1
-		
+
 		default:
 			return 1
 	}

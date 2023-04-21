@@ -1,5 +1,5 @@
-import { PackingMethod } from "./panels/LayoutPanel"
-import { BitmapTextAlign } from "./panels/PreviewPanel"
+import { PackingMethod } from './panels/LayoutPanel'
+import { BitmapTextAlign } from './panels/PreviewPanel'
 import Vector2Like = Phaser.Types.Math.Vector2Like
 
 export type RGB = {
@@ -14,7 +14,7 @@ export type RGBA = RGB & {
 export interface BitmapFontProjectConfig {
 	content: {
 		content: string
-	},
+	}
 	font: {
 		family: string
 		weight: number
@@ -24,12 +24,12 @@ export interface BitmapFontProjectConfig {
 		color: RGBA
 		padding: Vector2Like
 		spacing: Vector2Like
-	},
-	paddings: { [char: string]: { top: number, right: number, bottom: number, left: number } }
+	}
+	paddings: { [char: string]: { top: number; right: number; bottom: number; left: number } }
 	stroke: {
 		color: RGBA
 		thickness: number
-	},
+	}
 	shadow: {
 		x: number
 		y: number
@@ -37,7 +37,7 @@ export interface BitmapFontProjectConfig {
 		blur: number
 		shadowStroke: boolean
 		shadowFill: boolean
-	},
+	}
 	glow: {
 		enabled: boolean
 		quality: number
@@ -45,22 +45,22 @@ export interface BitmapFontProjectConfig {
 		innerStrength: number
 		outerStrength: number
 		color: RGB
-	},
+	}
 	layout: {
 		bgColor: RGB
 		method: PackingMethod
-	},
+	}
 	import: {
 		project: string
 		custom: string
-	},
+	}
 	export: {
 		name: string
-		type: "json" | "xml"
+		type: 'json' | 'xml'
 		config: string
 		texture: string
 		texturePacker: string
-	},
+	}
 	preview: {
 		align: BitmapTextAlign
 		maxWidth: number
@@ -69,15 +69,15 @@ export interface BitmapFontProjectConfig {
 		content: string
 		debug: boolean
 		debugColor: RGBA
-	},
+	}
 }
 
 export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 	content: {
-		content: "",
+		content: '',
 	},
 	font: {
-		family: "Arial",
+		family: 'Arial',
 		weight: 400,
 		size: 40,
 		lineHeight: 1,
@@ -112,15 +112,15 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		method: PackingMethod.ROW,
 	},
 	import: {
-		project: "",
-		custom: "",
+		project: '',
+		custom: '',
 	},
 	export: {
-		name: "",
-		type: "json",
-		config: "",
-		texture: "",
-		texturePacker: "",
+		name: '',
+		type: 'json',
+		config: '',
+		texture: '',
+		texturePacker: '',
 	},
 	preview: {
 		debug: true,
@@ -129,6 +129,6 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		maxWidth: 0,
 		letterSpacing: 0,
 		fontSize: 30,
-		content: "",
+		content: '',
 	},
 } as const)

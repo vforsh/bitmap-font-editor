@@ -1,4 +1,4 @@
-type Format = "image/png" | "image/jpeg" | string
+type Format = 'image/png' | 'image/jpeg' | string
 
 export function canvasToImg(canvas: HTMLCanvasElement, type?: Format, quality?: number): Promise<HTMLImageElement> {
 	return new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ export function canvasToImg(canvas: HTMLCanvasElement, type?: Format, quality?: 
 		img.onload = () => {
 			resolve(img)
 		}
-		
+
 		img.src = canvas.toDataURL(type, quality)
 	})
 }

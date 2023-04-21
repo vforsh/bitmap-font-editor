@@ -1,9 +1,9 @@
-import { GraphicsQuality } from "../scale/GraphicsQuality"
-import { getObjectKeys } from "../robowhale/utils/collection/get-object-keys"
-import { RecentProjectsConfig } from "../scenes/bitmapFontEditor/modals/OpenGamePanel"
+import { getObjectKeys } from '../robowhale/utils/collection/get-object-keys'
+import { GraphicsQuality } from '../scale/GraphicsQuality'
+import { RecentProjectsConfig } from '../scenes/bitmapFontEditor/modals/OpenGamePanel'
 
 export const GAME_STORE = {
-	language: "",
+	language: '',
 	graphics_quality: GraphicsQuality.HIGH,
 	graphics_quality_manually: false,
 	sound_muted: false,
@@ -12,7 +12,7 @@ export const GAME_STORE = {
 	recent_projects: {} as RecentProjectsConfig,
 	build: window.game.config.build_version,
 	login_num: 0,
-	texture_packer_exe: "",
+	texture_packer_exe: '',
 }
 
 export type GameStoreKey = keyof typeof GAME_STORE
@@ -21,7 +21,7 @@ export type GameStoreNumberKey = Values<{
 	[K in GameStoreKey]: GameStoreValue<K> extends number ? K : never
 }>
 
-export type GameStoreValue<K extends GameStoreKey> = typeof GAME_STORE[K]
+export type GameStoreValue<K extends GameStoreKey> = (typeof GAME_STORE)[K]
 
 export type SaveKey = GameStoreKey | string
 

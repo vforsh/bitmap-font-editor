@@ -1,16 +1,16 @@
 export interface TimeComponents {
-	days: number;
-	hours: number;
-	minutes: number;
-	seconds: number;
-	milliseconds: number;
-	microseconds: number;
-	nanoseconds: number;
+	days: number
+	hours: number
+	minutes: number
+	seconds: number
+	milliseconds: number
+	microseconds: number
+	nanoseconds: number
 }
 
 export function parseMilliseconds(milliseconds: number): TimeComponents {
 	const roundTowardsZero = milliseconds > 0 ? Math.floor : Math.ceil
-	
+
 	return {
 		days: roundTowardsZero(milliseconds / 86400000),
 		hours: roundTowardsZero(milliseconds / 3600000) % 24,

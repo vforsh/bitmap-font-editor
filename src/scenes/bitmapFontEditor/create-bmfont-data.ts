@@ -1,7 +1,7 @@
-import { Font } from "opentype.js"
-import { without } from "lodash-es"
-import { BitmapFontTexture } from "./BitmapFontEditor"
-import { BitmapFontProjectConfig } from "./BitmapFontProjectConfig"
+import { without } from 'lodash-es'
+import { Font } from 'opentype.js'
+import { BitmapFontTexture } from './BitmapFontEditor'
+import { BitmapFontProjectConfig } from './BitmapFontProjectConfig'
 
 export type BmFontInfo = {
 	face: string
@@ -33,7 +33,7 @@ export interface BmFontPage extends Record<string, unknown> {
 }
 
 export type BmFontChars = {
-	count: number,
+	count: number
 	list: BmFontChar[]
 }
 
@@ -53,7 +53,7 @@ export interface BmFontChar extends Record<string, unknown> {
 }
 
 export type BmFontKernings = {
-	count: number,
+	count: number
 	list: BmFontKerning[]
 }
 
@@ -80,22 +80,22 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 	if (glyphs.length === 0) {
 		return null
 	}
-	
+
 	let fontSize = config.font.size
 	let padding = config.font.padding
 	let spacing = config.font.spacing
 	let baselines = getFontBaselines(font, fontSize)
-	
-	let lineHeight = Math.max(...glyphs.map(g => g.displayHeight))
+
+	let lineHeight = Math.max(...glyphs.map((g) => g.displayHeight))
 	let fullLineHeight = Math.ceil(lineHeight * config.font.lineHeight)
 	let yOffset = Math.round((fullLineHeight - lineHeight) / 2)
-	
+
 	// http://www.angelcode.com/products/bmfont/doc/file_format.html
 	return {
 		info: {
 			aa: 0,
 			bold: 0,
-			charset: "",
+			charset: '',
 			face: config.font.family,
 			italic: 0,
 			outline: config.stroke.thickness,
@@ -103,7 +103,7 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			spacing: [spacing.x, spacing.y],
 			size: fontSize,
 			smooth: 1,
-			unicode: "",
+			unicode: '',
 			stretchH: 100,
 		},
 		common: {
@@ -114,10 +114,12 @@ export function createBmfontData(config: BitmapFontProjectConfig, glyphs: Phaser
 			scaleW: Math.ceil(texture.width),
 			scaleH: Math.ceil(texture.height),
 		},
-		pages: [{
-			id: 0,
-			file: config.export.texture.split("/").pop(), // e.g. top_labels.png
-		}],
+		pages: [
+			{
+				id: 0,
+				file: config.export.texture.split('/').pop(), // e.g. top_labels.png
+			},
+		],
 		chars: createChars(glyphs, fullLineHeight, texture.padding, 0, yOffset),
 		kernings: createKernings(glyphs, font, fontSize),
 	}
@@ -128,7 +130,7 @@ function getFontBaselines(font: Font, fontSize: number) {
 	const height = font.ascender - font.descender
 	const fontHeight = height * scale
 	const alphabetic = font.ascender * scale
-	
+
 	return {
 		middle: 0,
 		hanging: 0,
@@ -156,29 +158,29 @@ function createChars(glyphs: Phaser.GameObjects.Text[], height: number, textureP
 			yoffset: yOffset, // TODO how to calcualte yoffset ???
 		}
 	})
-	
+
 	return { count: list.length, list }
 }
 
 // https://github.com/SilenceLeo/snowb-bmf/blob/1b784da754b10ca18bcb7cfd498a6394b58de3f1/src/file/export/toBmfInfo.ts#L94
 function createKernings(glyphs: Phaser.GameObjects.Text[], font: Font, fontSize: number): BmFontKernings {
 	let glyphIndexToCharMap: Map<number, string> = new Map<number, string>()
-	let glyphIndices = glyphs.map(glyph => {
+	let glyphIndices = glyphs.map((glyph) => {
 		let char = glyph.text
 		let glyphIndex = font.charToGlyphIndex(char)
-		
+
 		glyphIndexToCharMap.set(glyphIndex, char)
-		
+
 		return glyphIndex
 	})
-	
-	let pairs = glyphIndices.flatMap(glyphIndex => {
+
+	let pairs = glyphIndices.flatMap((glyphIndex) => {
 		let otherGlyphs = without(glyphIndices, glyphIndex)
-		return otherGlyphs.map(otherGlyph => [glyphIndex, otherGlyph])
+		return otherGlyphs.map((otherGlyph) => [glyphIndex, otherGlyph])
 	})
-	
+
 	let fontScale = (1 / font.unitsPerEm) * fontSize
-	
+
 	let list: BmFontKerning[] = pairs
 		.map(([left, right]) => {
 			let kerning = font.getKerningValue(left, right)
@@ -192,6 +194,6 @@ function createKernings(glyphs: Phaser.GameObjects.Text[], font: Font, fontSize:
 			}
 		})
 		.filter(Boolean)
-	
+
 	return { count: list.length, list }
 }

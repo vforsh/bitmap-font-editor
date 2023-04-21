@@ -4,9 +4,8 @@
  */
 export function getDeviceMemory(): number | undefined {
 	try {
-		if (typeof navigator["deviceMemory"] === "number") {
-			return navigator["deviceMemory"] * 1024
+		if (typeof navigator['deviceMemory'] === 'number') {
+			return navigator['deviceMemory'] * 1024
 		}
-	} catch (error) {
-	}
+	} catch (error) {}
 }

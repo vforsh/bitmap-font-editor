@@ -1,4 +1,4 @@
-type ReloadIntervalType = "fixed" | "expo"
+type ReloadIntervalType = 'fixed' | 'expo'
 
 declare namespace Phaser {
 	namespace Loader {
@@ -9,7 +9,7 @@ declare namespace Phaser {
 				scheduled: boolean
 				attempt: number
 				config: Partial<{
-					intervalType: ReloadIntervalType,
+					intervalType: ReloadIntervalType
 					intervalMs: number
 					attemps: number
 					ignoreKeys: string[]

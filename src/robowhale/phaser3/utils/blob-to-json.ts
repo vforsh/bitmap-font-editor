@@ -26,23 +26,23 @@ export function blobToImage(blob: Blob): Promise<HTMLImageElement> {
 	return new Promise((resolve, reject) => {
 		let url = URL.createObjectURL(blob)
 		let image = new Image()
-		
+
 		image.onload = () => {
 			URL.revokeObjectURL(url)
 			resolve(image)
 		}
-		
+
 		image.onerror = () => {
 			URL.revokeObjectURL(url)
 			reject()
 		}
-		
+
 		image.src = url
-		
+
 		if (image.complete && image.width && image.height) {
 			image.onload = null
 			image.onerror = null
-			
+
 			resolve(image)
 		}
 	})
