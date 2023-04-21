@@ -12,6 +12,8 @@ import { GamePanel, GamePanelConfig } from "./GamePanel"
 import { BrowserSyncService } from "../../../BrowserSyncService"
 import path from "path-browserify"
 import { EditorPanelEvent } from "./EditorPanel"
+import { PaddingsPanel } from './PaddingsPanel'
+import { cloneDeep } from 'lodash-es'
 
 export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	
@@ -21,6 +23,7 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 	
 	public contentPanel: ContentPanel
 	public fontPanel: FontPanel
+	public paddingsPanel: PaddingsPanel
 	public strokePanel: StrokePanel
 	public shadowPanel: ShadowPanel
 	public glowPanel: GlowPanel
@@ -43,6 +46,7 @@ export class BitmapFontEditorPanelsManager extends Phaser.Events.EventEmitter {
 		// left panel
 		this.contentPanel = new ContentPanel(this.scene, this.leftPanels, config.content)
 		this.fontPanel = new FontPanel(this.scene, this.leftPanels, config.font)
+		this.paddingsPanel = new PaddingsPanel(this.scene, this.leftPanels, config.paddings)
 		this.strokePanel = new StrokePanel(this.scene, this.leftPanels, config.stroke)
 		this.shadowPanel = new ShadowPanel(this.scene, this.leftPanels, config.shadow)
 		this.glowPanel = new GlowPanel(this.scene, this.leftPanels, config.glow)

@@ -25,6 +25,7 @@ export interface BitmapFontProjectConfig {
 		padding: Vector2Like
 		spacing: Vector2Like
 	},
+	paddings: { [char: string]: { top: number, right: number, bottom: number, left: number } }
 	stroke: {
 		color: RGBA
 		thickness: number
@@ -85,6 +86,7 @@ export const DEFAULT_CONFIG: BitmapFontProjectConfig = Object.freeze({
 		padding: { x: 0, y: 0 },
 		spacing: { x: 0, y: 0 },
 	},
+	paddings: {},
 	stroke: {
 		color: { r: 0, g: 0, b: 0, a: 1 },
 		thickness: 0,

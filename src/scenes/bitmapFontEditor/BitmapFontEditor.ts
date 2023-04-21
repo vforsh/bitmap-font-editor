@@ -35,6 +35,7 @@ import { getBmfontProjectName } from "../../utils/get-bmfont-project-name"
 import RoundTo = Phaser.Math.RoundTo
 import { UrlParams } from '../../UrlParams'
 import { assertNever } from '../../robowhale/utils/assert-never'
+import { PaddingsConfig } from './panels/PaddingsPanel'
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -301,6 +302,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.fontPanel.reloadButton.on("click", this.onReloadFontsButtonClick.bind(this))
 		this.panels.fontPanel.copyTextStyleButton.on("click", this.onCopyTextStyleButtonClick.bind(this))
 		this.panels.fontPanel.on("change", this.onFontChange, this)
+		this.panels.paddingsPanel.on("change", this.onPaddingsChange, this)
 		this.panels.strokePanel.on("change", this.onStrokeChange, this)
 		this.panels.shadowPanel.on("change", this.onShadowChange, this)
 		this.panels.glowPanel.on("change", this.onGlowChange, this)
@@ -433,11 +435,35 @@ export class BitmapFontEditor extends BaseScene {
 			glyph.setFontStyle(config.weight.toString())
 			glyph.setFontSize(config.size)
 			glyph.setColor(this.rgbaToString(config.color))
-			glyph.setPadding({ x: config.padding.x, y: config.padding.y })
+			glyph.setPadding(this.getGlyphPadding(glyph.text))
 			glyph.setResolution(config.resolution)
 		})
 		
 		this.updatePacking()
+	}
+	
+	private onPaddingsChange(char: string, config: PaddingsConfig): void {
+		let glyph = this.glyphs.find(item => item.text === char)
+		if (glyph) {
+			glyph.setPadding(this.getGlyphPadding(glyph.text))
+			this.updatePacking();
+		}
+	}
+	
+	private getGlyphPadding(char: string): Phaser.Types.GameObjects.Text.TextPadding {
+		let commonPadding = this.config.font.padding
+		
+		let charPadding = this.config.paddings[char]
+		if (!charPadding) {
+			return commonPadding
+		}
+		
+		return {
+			top: commonPadding.y + charPadding.top,
+			bottom: commonPadding.y + charPadding.bottom,
+			right: commonPadding.x + charPadding.right,
+			left: commonPadding.x + charPadding.left,
+		}
 	}
 	
 	private onStrokeChange(config: { color: RGBA, thickness: number }): void {
@@ -546,8 +572,6 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private packGlyphsInRows() {
-		let x = 0
-		let y = 0
 		for (let i = 1; i < this.glyphs.length; i++) {
 			let prev = this.glyphs[i - 1]
 			let current = this.glyphs[i]
@@ -770,7 +794,7 @@ export class BitmapFontEditor extends BaseScene {
 		glyph.setFontSize(font.size)
 		glyph.setResolution(font.resolution)
 		glyph.setColor(this.rgbaToString(font.color))
-		glyph.setPadding({ x: font.padding.x, y: font.padding.y })
+		glyph.setPadding(this.getGlyphPadding(content))
 		glyph.setStroke(this.rgbaToString(stroke.color), stroke.thickness)
 		glyph.setShadow(shadow.x, shadow.y, this.rgbaToString(shadow.color), shadow.blur, shadow.shadowStroke, shadow.shadowFill)
 		glyph.setInteractive()
@@ -1360,6 +1384,7 @@ export class BitmapFontEditor extends BaseScene {
 		
 		this.panels.contentPanel.refresh()
 		this.panels.fontPanel.refresh()
+		this.panels.paddingsPanel.refresh()
 		this.panels.strokePanel.refresh()
 		this.panels.shadowPanel.refresh()
 		this.panels.glowPanel.refresh()
