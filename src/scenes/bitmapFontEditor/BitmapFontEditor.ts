@@ -33,6 +33,7 @@ import { copyToClipboard } from "../../robowhale/utils/copy-to-clipboard"
 import { IStartProjectConfig } from "../../IStartProjectConfig"
 import { getBmfontProjectName } from "../../utils/get-bmfont-project-name"
 import RoundTo = Phaser.Math.RoundTo
+import { UrlParams } from '../../UrlParams'
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -109,7 +110,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
-		let gameDir = this.game.stash.get('startProject').game || await this.showOpenGameWindow()
+		let gameDir = this.game.stash.get('startProject').game || this.getStartProjectFromUrl() || await this.showOpenGameWindow()
 		if (gameDir) {
 			gameDir = slash(gameDir)
 		}
@@ -133,6 +134,17 @@ export class BitmapFontEditor extends BaseScene {
 		}
 		
 		this.doCreate()
+	}
+	
+	private getStartProjectFromUrl(): string | null {
+		let recentProjects = this.game.store.getValue("recent_projects")
+		
+		let game = UrlParams.get('game')
+		if (game && game in recentProjects) {
+			return Object.values(recentProjects).find(item => item.name === game)?.path ?? null;
+		}
+		
+		return UrlParams.get('gamePath')
 	}
 	
 	private async showOpenGameWindow(): Promise<string> {
