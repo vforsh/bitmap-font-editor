@@ -4,7 +4,7 @@ import { BitmapFontEditorPanelsManager } from "./panels/BitmapFontEditorPanelsMa
 import { ContentPanelEvent } from "./panels/ContentPanel"
 import { LayoutPanelConfig, PackingMethod } from "./panels/LayoutPanel"
 import { TextFontConfig } from "./panels/FontPanel"
-import { Font, parse } from "opentype.js"
+import { BoundingBox, Font, parse } from 'opentype.js'
 import { createBmfontData } from "./create-bmfont-data"
 import { BrowserSyncService } from "../../BrowserSyncService"
 import { Config } from "../../Config"
@@ -79,6 +79,7 @@ export class BitmapFontEditor extends BaseScene {
 	private glyphsBorder: Phaser.GameObjects.Graphics
 	private glyphsContainer: Phaser.GameObjects.Container
 	private glyphDebug: Phaser.GameObjects.Image
+	private glyphsCache: Map<string, readonly [advanceWidth: number, boundingBox: BoundingBox]>
 	private glyphs: Phaser.GameObjects.Text[]
 	private glyphsInfo: Phaser.GameObjects.Text
 	private previewBack: Phaser.GameObjects.Image & { lastClickTs?: number }
@@ -96,6 +97,7 @@ export class BitmapFontEditor extends BaseScene {
 		this.fontsList = null
 		this.projectsList = null
 		this.atlasesList = null
+		this.glyphsCache = new Map()
 		this.glyphs = []
 		this.isReady = false
 		this.config = cloneDeep(DEFAULT_CONFIG)
@@ -429,7 +431,9 @@ export class BitmapFontEditor extends BaseScene {
 			.catch(() => this.game.notifications.notyf.error(`Can't copy text style to the clipboard!`))
 	}
 	
-	private onFontChange(config: TextFontConfig) {
+	private async onFontChange(config: TextFontConfig) {
+		await this.loadFont(config.family)
+		
 		this.glyphs.forEach(glyph => {
 			glyph.setFontFamily(config.family)
 			glyph.setFontStyle(config.weight.toString())
@@ -453,17 +457,48 @@ export class BitmapFontEditor extends BaseScene {
 	private getGlyphPadding(char: string): Phaser.Types.GameObjects.Text.TextPadding {
 		let commonPadding = this.config.font.padding
 		
-		let charPadding = this.config.paddings[char]
-		if (!charPadding) {
-			return commonPadding
+		let customPadding: PaddingsConfig = this.config.paddings[char] ?? {
+			top: 0,
+			bottom: 0,
+			right: 0,
+			left: 0,
+		}
+		
+		let { family, size } = this.config.font
+		let [aw, bb] = this.getGlyphsData(family, char, size)
+		let glyphPadding: PaddingsConfig = {
+			top: 0,
+			bottom: Math.ceil(bb.y2),
+			right: bb.x2 - aw > 0 ? Math.ceil(bb.x2 - aw) : 0,
+			left: Math.ceil(Math.abs(bb.x1)),
 		}
 		
 		return {
-			top: commonPadding.y + charPadding.top,
-			bottom: commonPadding.y + charPadding.bottom,
-			right: commonPadding.x + charPadding.right,
-			left: commonPadding.x + charPadding.left,
+			top: commonPadding.y + customPadding.top + glyphPadding.top,
+			bottom: commonPadding.y + customPadding.bottom + glyphPadding.bottom,
+			right: commonPadding.x + customPadding.right + glyphPadding.right,
+			left: commonPadding.x + customPadding.left + glyphPadding.left,
 		}
+	}
+	
+	private getGlyphsData(fontFamily: string, char: string, fontSize: number): readonly [number, BoundingBox] | undefined {
+		let font = this.game.stash.get('fonts').get(fontFamily)
+		if (!font) {
+			return
+		}
+		
+		let cacheKey = fontFamily + '_' + char + '_' + fontSize
+		if (this.glyphsCache.has(cacheKey)) {
+			return this.glyphsCache.get(cacheKey)
+		}
+		
+		let advanceWidth = font.getAdvanceWidth(char, fontSize)
+		let boundingBox = font.getPath(char, 0, 0, fontSize).getBoundingBox()
+		let result = [advanceWidth, boundingBox] as const
+		
+		this.glyphsCache.set(cacheKey, result)
+		
+		return result
 	}
 	
 	private onStrokeChange(config: { color: RGBA, thickness: number }): void {
@@ -1361,12 +1396,14 @@ export class BitmapFontEditor extends BaseScene {
 		
 		return BrowserSyncService.readFile(projectFilepath)
 			.then(response => response.json())
-			.then((result: BitmapFontProjectConfig) => {
+			.then(async (result: BitmapFontProjectConfig) => {
 				result.import.project = slash(projectFilepath)
 				
 				if (result.export.texturePacker) {
 					result.export.texturePacker = slash(path.join(this.gameDir, result.export.texturePacker))
 				}
+				
+				await this.loadFont(result.font.family)
 				
 				this.applyProjectConfig(result)
 			})
@@ -1495,6 +1532,8 @@ export class BitmapFontEditor extends BaseScene {
 	
 	public onShutdown() {
 		super.onShutdown()
+		
+		this.glyphsCache.clear()
 		
 		this.panels.destroy()
 		this.panels = null
