@@ -110,7 +110,7 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	public async create() {
-		let gameDir = this.game.stash.get('startProject').game || this.getStartProjectFromUrl() || await this.showOpenGameWindow()
+		let gameDir = this.game.stash.get('startProject').game || this.getStartGameDirFromUrl() || await this.showOpenGameWindow()
 		if (gameDir) {
 			gameDir = slash(gameDir)
 		}
@@ -136,12 +136,12 @@ export class BitmapFontEditor extends BaseScene {
 		this.doCreate()
 	}
 	
-	private getStartProjectFromUrl(): string | null {
-		let recentProjects = this.game.store.getValue("recent_projects")
+	private getStartGameDirFromUrl(): string | null {
+		let recentProjects = this.game.store.getValue('recent_projects')
 		
 		let game = UrlParams.get('game')
 		if (game && game in recentProjects) {
-			return Object.values(recentProjects).find(item => item.name === game)?.path ?? null;
+			return Object.values(recentProjects).find(item => item.name === game)?.path ?? null
 		}
 		
 		return UrlParams.get('gamePath')
@@ -265,13 +265,33 @@ export class BitmapFontEditor extends BaseScene {
 		this.isReady = true
 		this.resize()
 		
-		let projectPath = this.game.stash.get('startProject').project
+		let projectPath = this.game.stash.get('startProject').project || this.getStartProjectPathFromUrl()
 		let projectPathExists = projectPath && await this.doestProjectExist(projectPath)
 		if (projectPathExists) {
 			await this.loadProject(projectPath)
 		}
 		
 		this.game.loadingScreen.fadeOut()
+	}
+	
+	private getStartProjectPathFromUrl(): string | null {
+		let projectNamesMap = this.projectsList.reduce((acc, path) => (acc[getBmfontProjectName(path)] = path, acc), {})
+		
+		let project = UrlParams.get('project')
+		if (project) {
+			if (!(project in projectNamesMap)) {
+				this.game.notifications.warn({
+					message: `'${project}' project doesn't exist!`,
+					duration: 0,
+				})
+				
+				return null
+			}
+			
+			return projectNamesMap[project]
+		}
+		
+		return UrlParams.get('projectPath')
 	}
 	
 	private addPanels() {

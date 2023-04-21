@@ -17,8 +17,10 @@ export type UrlParam =
 	| "storage"
 	| "quality"
 	| "throttle"
-	| "game" // project name to start with
-	| "gamePath" // project filepath to start with
+	| "game" // game name to start with
+	| "gamePath" // game filepath to start with
+	| "project" // font project filepath to start with
+	| "projectPath" // font project filepath to start with
 
 export type UrlParamType = UrlParam /*| string*/
 
