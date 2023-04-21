@@ -31,9 +31,10 @@ export class ImportPanel extends EditorPanel {
 	}
 	
 	private createProjectInput(projects: string[]): InputBindingApi<unknown, string> {
+		let options = this.createProjectsListOptions(projects)
 		let input = this.panel.addInput(this.config, "project", {
 			index: 0,
-			options: this.createProjectsListOptions(projects),
+			options: options,
 		})
 		
 		input.on("change", (e) => this.emit("project-change", this.config, e))

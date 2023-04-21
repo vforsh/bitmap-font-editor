@@ -1004,7 +1004,7 @@ export class BitmapFontEditor extends BaseScene {
 			let filename = /<filename>(.*?)<\/filename>/.exec(dataFile)[1]
 			let dirname = path.dirname(pathToTpConfig)
 			
-			return path.join(dirname, filename)
+			return path.resolve(dirname, '..', filename)
 		} catch (e) {
 			return
 		}
@@ -1167,7 +1167,7 @@ export class BitmapFontEditor extends BaseScene {
 		
 		if (!this.config.import.project) {
 			await this.reloadProjectsList()
-			this.config.import.project = project.slice('file:///'.length)
+			this.config.import.project = project.slice('file://'.length)
 			this.panels.importPanel.refresh()
 		}
 		

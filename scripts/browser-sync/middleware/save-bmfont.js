@@ -1,4 +1,4 @@
-const fs = require("fs/promises")
+const fse = require('fs-extra')
 const path = require("path")
 const { pathToFileURL } = require("url")
 const formidable = require("formidable")
@@ -17,10 +17,12 @@ module.exports = function(req, res, next) {
 		let project = fields.project
 		let projectPath = configPath.replace(".json", ".project.json")
 
+		fse.mkdirpSync(path.dirname(texturePath))
+
 		Promise.all([
-			fs.writeFile(path.normalize(projectPath), project),
-			fs.writeFile(path.normalize(configPath), config),
-			fs.rename(texture.filepath, path.normalize(texturePath)),
+			fse.outputFile(path.normalize(projectPath), project),
+			fse.outputFile(path.normalize(configPath), config),
+			fse.rename(texture.filepath, path.normalize(texturePath)),
 		])
 			.then(() => {
 				let payload = {
