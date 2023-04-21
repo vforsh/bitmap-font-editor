@@ -850,19 +850,25 @@ export class BitmapFontEditor extends BaseScene {
 		this.panels.exportPanel.refresh()
 		
 		if (this.glyphs.length === 0) {
-			console.warn("Nothing to export!")
+			this.game.notifications.warn(`Please set glyphs to export!`)
+			return
+		}
+		
+		let projectName = this.config.export.name
+		if (!projectName) {
+			this.game.notifications.warn(`Please set export name!`)
 			return
 		}
 		
 		let configPath = this.config.export.config
 		if (!configPath) {
-			console.warn("Please set export path for the font's config!")
+			this.game.notifications.warn(`Please set export path for the font's config!`)
 			return
 		}
 		
 		let texturePath = this.config.export.texture
 		if (!texturePath) {
-			console.warn("Please set export path for the font's texture!")
+			this.game.notifications.warn(`Please set export path for the font's texture!`)
 			return
 		}
 		

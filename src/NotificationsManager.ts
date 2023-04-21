@@ -31,6 +31,7 @@ export class NotificationsManager extends Phaser.Events.EventEmitter {
 					type: "warning",
 					background: "orange",
 					className: "notif",
+					duration: 3000,
 					// TODO add material-icons css
 					/*icon: {
 						color: "white",
