@@ -9,7 +9,7 @@ import { createBmfontData } from "./create-bmfont-data"
 import { BrowserSyncService } from "../../BrowserSyncService"
 import { Config } from "../../Config"
 import { ShadowPanelConfig } from "./panels/ShadowPanel"
-import { cloneDeep, get, merge, set } from "lodash-es"
+import { cloneDeep, get, maxBy, merge, set } from 'lodash-es'
 import { GlowPanelConfig } from "./panels/GlowPanel"
 import { GlowPostFX } from "../../robowhale/phaser3/fx/GlowPostFX"
 import { PreviewPanelConfig } from "./panels/PreviewPanel"
@@ -34,6 +34,7 @@ import { IStartProjectConfig } from "../../IStartProjectConfig"
 import { getBmfontProjectName } from "../../utils/get-bmfont-project-name"
 import RoundTo = Phaser.Math.RoundTo
 import { UrlParams } from '../../UrlParams'
+import { assertNever } from '../../robowhale/utils/assert-never'
 
 export type BitmapFontTexture = {
 	blob: Blob,
@@ -504,9 +505,15 @@ export class BitmapFontEditor extends BaseScene {
 	}
 	
 	private updatePacking(method?: PackingMethod): void {
-		switch (method ?? this.panels.layoutPanel.getPackingMethod()) {
+		method ??= this.panels.layoutPanel.getPackingMethod()
+		
+		switch (method) {
 			case PackingMethod.ROW:
 				this.packGlyphsInRow()
+				break
+			
+			case PackingMethod.ROWS:
+				this.packGlyphsInRows()
 				break
 			
 			case PackingMethod.COLUMN:
@@ -518,7 +525,7 @@ export class BitmapFontEditor extends BaseScene {
 				break
 			
 			default:
-				break
+				assertNever(method, 'Unknown packing method!')
 		}
 		
 		if (!this.doGlyphsFitIntoCanvas()) {
@@ -535,6 +542,25 @@ export class BitmapFontEditor extends BaseScene {
 			let current = this.glyphs[i]
 			current.x = Math.ceil(prev.x + prev.displayWidth)
 			current.y = 0
+		}
+	}
+	
+	private packGlyphsInRows() {
+		let x = 0
+		let y = 0
+		for (let i = 1; i < this.glyphs.length; i++) {
+			let prev = this.glyphs[i - 1]
+			let current = this.glyphs[i]
+			
+			let testX = Math.ceil(prev.x + prev.displayWidth)
+			if (testX > Config.GAME_WIDTH - Math.ceil(current.displayWidth)) {
+				let bottommostGlyph = maxBy(this.glyphs.slice(0, i), (glyph) => glyph.y + glyph.displayHeight)
+				current.x = 0
+				current.y = Math.ceil(bottommostGlyph.y + bottommostGlyph.displayHeight)
+			} else {
+				current.x = testX
+				current.y = prev.y
+			}
 		}
 	}
 	

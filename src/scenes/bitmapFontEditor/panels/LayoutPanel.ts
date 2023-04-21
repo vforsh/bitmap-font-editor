@@ -5,6 +5,7 @@ import { BitmapFontProjectConfig } from "../BitmapFontProjectConfig"
 
 export enum PackingMethod {
 	ROW = "row",
+	ROWS = "rows",
 	COLUMN = "column",
 	SQUARE = "square",
 }
