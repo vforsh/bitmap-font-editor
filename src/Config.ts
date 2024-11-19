@@ -1,6 +1,6 @@
 ﻿export class Config {
-	public static SOURCE_GAME_WIDTH: number = 750
-	public static SOURCE_GAME_HEIGHT: number = 800
+	public static SOURCE_GAME_WIDTH: number = 750 * 2
+	public static SOURCE_GAME_HEIGHT: number = 800 * 2
 	public static IS_LANDSCAPE: boolean = Config.SOURCE_GAME_WIDTH > Config.SOURCE_GAME_HEIGHT
 	public static IS_PORTRAIT: boolean = Config.SOURCE_GAME_HEIGHT >= Config.SOURCE_GAME_WIDTH
 	public static GAME_WIDTH: number = Config.SOURCE_GAME_WIDTH

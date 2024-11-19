@@ -73,13 +73,13 @@ void main ()
 }
 `
 
-export class GlowSpriteFX extends Phaser.Renderer.WebGL.Pipelines.SpriteFXPipeline {
+export class GlowSpriteFX extends Phaser.Renderer.WebGL.Pipelines.PreFXPipeline {
 	public outerStrength: number
 	public innerStrength: number
 	public knockout: boolean
 	public glowColor: number[]
 
-	constructor(game, quality = 0.1, distance = 10) {
+	constructor(game: Phaser.Game, quality = 0.1, distance = 10) {
 		let fragShader = glowFragShader
 		fragShader = fragShader.replace(/__SIZE__/gi, `${(1 / quality / distance).toFixed(7)}`)
 		fragShader = fragShader.replace(/__DIST__/gi, `${distance.toFixed(0)}.0`)

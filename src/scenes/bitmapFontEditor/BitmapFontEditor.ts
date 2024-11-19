@@ -464,6 +464,7 @@ export class BitmapFontEditor extends BaseScene {
 		}
 
 		let { family, size } = this.config.font
+		// TODO handle undefined here
 		let [aw, bb] = this.getGlyphsData(family, char, size)
 		let glyphPadding: PaddingsConfig = {
 			top: 0,

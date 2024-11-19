@@ -1,0 +1,29 @@
+diff --git a/node_modules/phaser/src/polyfills/requestVideoFrame.js b/node_modules/phaser/src/polyfills/requestVideoFrame.js
+index 877afad..791d1aa 100644
+--- a/node_modules/phaser/src/polyfills/requestVideoFrame.js
++++ b/node_modules/phaser/src/polyfills/requestVideoFrame.js
+@@ -4,16 +4,16 @@ if (typeof HTMLVideoElement !== 'undefined' && !('requestVideoFrameCallback' in
+ {
+     HTMLVideoElement.prototype._rvfcpolyfillmap = {}
+     HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
+-      const handle = performance.now()
+-      const quality = this.getVideoPlaybackQuality()
+-      const baseline = this.mozPresentedFrames || this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
++      var handle = performance.now()
++      var quality = this.getVideoPlaybackQuality()
++      var baseline = this.mozPresentedFrames || this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
+ 
+-      const check = (old, now) => {
+-        const newquality = this.getVideoPlaybackQuality()
+-        const presentedFrames = this.mozPresentedFrames || this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
++      var check = (old, now) => {
++        var newquality = this.getVideoPlaybackQuality()
++        var presentedFrames = this.mozPresentedFrames || this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
+         if (presentedFrames > baseline) {
+-          const processingDuration = this.mozFrameDelay || (newquality.totalFrameDelay - quality.totalFrameDelay) || 0
+-          const timediff = now - old // HighRes diff
++          var processingDuration = this.mozFrameDelay || (newquality.totalFrameDelay - quality.totalFrameDelay) || 0
++          var timediff = now - old // HighRes diff
+           callback(now, {
+             presentationTime: now + processingDuration * 1000,
+             expectedDisplayTime: now + timediff,

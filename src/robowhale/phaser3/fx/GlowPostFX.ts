@@ -79,7 +79,7 @@ export class GlowPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
 	public knockout: boolean
 	public glowColor: number[]
 
-	constructor(game, quality = 0.1, distance = 10) {
+	constructor(game: Phaser.Game, quality = 0.1, distance = 10) {
 		let frag = fragShader.replace(/__SIZE__/gi, `${(1 / quality / distance).toFixed(7)}`)
 
 		frag = frag.replace(/__DIST__/gi, `${distance.toFixed(0)}.0`)
