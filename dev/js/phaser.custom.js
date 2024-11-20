@@ -1,28 +1,24 @@
-var Phaser = (function () {
+var Phaser = (() => {
 	var __getOwnPropNames = Object.getOwnPropertyNames
-	var __require = /* @__PURE__ */ (function (x) {
-		return typeof require !== 'undefined'
+	var __require = /* @__PURE__ */ ((x) =>
+		typeof require !== 'undefined'
 			? require
 			: typeof Proxy !== 'undefined'
 			? new Proxy(x, {
-					get: function (a, b) {
-						return (typeof require !== 'undefined' ? require : a)[b]
-					},
+					get: (a, b) => (typeof require !== 'undefined' ? require : a)[b],
 			  })
-			: x
-	})(function (x) {
+			: x)(function (x) {
 		if (typeof require !== 'undefined') return require.apply(this, arguments)
 		throw new Error('Dynamic require of "' + x + '" is not supported')
 	})
-	var __commonJS = function (cb, mod) {
-		return function __require2() {
+	var __commonJS = (cb, mod) =>
+		function __require2() {
 			return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports
 		}
-	}
 
 	// ../../node_modules/phaser/src/polyfills/Array.forEach.js
 	var require_Array_forEach = __commonJS({
-		'../../node_modules/phaser/src/polyfills/Array.forEach.js': function () {
+		'../../node_modules/phaser/src/polyfills/Array.forEach.js'() {
 			if (!Array.prototype.forEach) {
 				Array.prototype.forEach = function (fun) {
 					'use strict'
@@ -47,7 +43,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/Array.isArray.js
 	var require_Array_isArray = __commonJS({
-		'../../node_modules/phaser/src/polyfills/Array.isArray.js': function () {
+		'../../node_modules/phaser/src/polyfills/Array.isArray.js'() {
 			if (!Array.isArray) {
 				Array.isArray = function (arg) {
 					return Object.prototype.toString.call(arg) === '[object Array]'
@@ -58,7 +54,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/AudioContextMonkeyPatch.js
 	var require_AudioContextMonkeyPatch = __commonJS({
-		'../../node_modules/phaser/src/polyfills/AudioContextMonkeyPatch.js': function () {
+		'../../node_modules/phaser/src/polyfills/AudioContextMonkeyPatch.js'() {
 			;(function () {
 				function fixSetTarget(param) {
 					if (!param) return
@@ -170,7 +166,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/console.js
 	var require_console = __commonJS({
-		'../../node_modules/phaser/src/polyfills/console.js': function () {
+		'../../node_modules/phaser/src/polyfills/console.js'() {
 			if (!window.console) {
 				window.console = {}
 				window.console.log = window.console.assert = function () {}
@@ -181,7 +177,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/Math.trunc.js
 	var require_Math_trunc = __commonJS({
-		'../../node_modules/phaser/src/polyfills/Math.trunc.js': function () {
+		'../../node_modules/phaser/src/polyfills/Math.trunc.js'() {
 			if (!Math.trunc) {
 				Math.trunc = function trunc(x) {
 					return x < 0 ? Math.ceil(x) : Math.floor(x)
@@ -192,7 +188,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/performance.now.js
 	var require_performance_now = __commonJS({
-		'../../node_modules/phaser/src/polyfills/performance.now.js': function () {
+		'../../node_modules/phaser/src/polyfills/performance.now.js'() {
 			;(function () {
 				if ('performance' in window === false) {
 					window.performance = {}
@@ -217,7 +213,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/requestAnimationFrame.js
 	var require_requestAnimationFrame = __commonJS({
-		'../../node_modules/phaser/src/polyfills/requestAnimationFrame.js': function () {
+		'../../node_modules/phaser/src/polyfills/requestAnimationFrame.js'() {
 			var lastTime = Date.now()
 			var vendors = ['ms', 'moz', 'webkit', 'o']
 			for (x = 0; x < vendors.length && !window.requestAnimationFrame; x++) {
@@ -252,39 +248,34 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/requestVideoFrame.js
 	var require_requestVideoFrame = __commonJS({
-		'../../node_modules/phaser/src/polyfills/requestVideoFrame.js': function () {
+		'../../node_modules/phaser/src/polyfills/requestVideoFrame.js'() {
 			if (typeof HTMLVideoElement !== 'undefined' && !('requestVideoFrameCallback' in HTMLVideoElement.prototype) && 'getVideoPlaybackQuality' in HTMLVideoElement.prototype) {
 				HTMLVideoElement.prototype._rvfcpolyfillmap = {}
 				HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
-					var _this = this
 					var handle = performance.now()
 					var quality = this.getVideoPlaybackQuality()
 					var baseline = this.mozPresentedFrames || this.mozPaintedFrames || quality.totalVideoFrames - quality.droppedVideoFrames
-					var check = function (old, now) {
-						var newquality = _this.getVideoPlaybackQuality()
-						var presentedFrames = _this.mozPresentedFrames || _this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
+					var check = (old, now) => {
+						var newquality = this.getVideoPlaybackQuality()
+						var presentedFrames = this.mozPresentedFrames || this.mozPaintedFrames || newquality.totalVideoFrames - newquality.droppedVideoFrames
 						if (presentedFrames > baseline) {
-							var processingDuration = _this.mozFrameDelay || newquality.totalFrameDelay - quality.totalFrameDelay || 0
+							var processingDuration = this.mozFrameDelay || newquality.totalFrameDelay - quality.totalFrameDelay || 0
 							var timediff = now - old
 							callback(now, {
 								presentationTime: now + processingDuration * 1e3,
 								expectedDisplayTime: now + timediff,
-								width: _this.videoWidth,
-								height: _this.videoHeight,
-								mediaTime: Math.max(0, _this.currentTime || 0) + timediff / 1e3,
-								presentedFrames: presentedFrames,
-								processingDuration: processingDuration,
+								width: this.videoWidth,
+								height: this.videoHeight,
+								mediaTime: Math.max(0, this.currentTime || 0) + timediff / 1e3,
+								presentedFrames,
+								processingDuration,
 							})
-							delete _this._rvfcpolyfillmap[handle]
+							delete this._rvfcpolyfillmap[handle]
 						} else {
-							_this._rvfcpolyfillmap[handle] = requestAnimationFrame(function (newer) {
-								return check(now, newer)
-							})
+							this._rvfcpolyfillmap[handle] = requestAnimationFrame((newer) => check(now, newer))
 						}
 					}
-					this._rvfcpolyfillmap[handle] = requestAnimationFrame(function (newer) {
-						return check(handle, newer)
-					})
+					this._rvfcpolyfillmap[handle] = requestAnimationFrame((newer) => check(handle, newer))
 					return handle
 				}
 				HTMLVideoElement.prototype.cancelVideoFrameCallback = function (handle) {
@@ -297,7 +288,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/Uint32Array.js
 	var require_Uint32Array = __commonJS({
-		'../../node_modules/phaser/src/polyfills/Uint32Array.js': function () {
+		'../../node_modules/phaser/src/polyfills/Uint32Array.js'() {
 			if (typeof window.Uint32Array !== 'function' && typeof window.Uint32Array !== 'object') {
 				CheapArray = function (fakeType) {
 					var proto = new Array()
@@ -333,7 +324,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/polyfills/index.js
 	var require_polyfills = __commonJS({
-		'../../node_modules/phaser/src/polyfills/index.js': function () {
+		'../../node_modules/phaser/src/polyfills/index.js'() {
 			require_Array_forEach()
 			require_Array_isArray()
 			require_AudioContextMonkeyPatch()
@@ -348,7 +339,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/BlendModes.js
 	var require_BlendModes = __commonJS({
-		'../../node_modules/phaser/src/renderer/BlendModes.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/BlendModes.js'(exports, module) {
 			module.exports = {
 				SKIP_CHECK: -1,
 				NORMAL: 0,
@@ -385,7 +376,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/ScaleModes.js
 	var require_ScaleModes = __commonJS({
-		'../../node_modules/phaser/src/renderer/ScaleModes.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/ScaleModes.js'(exports, module) {
 			var ScaleModes = {
 				DEFAULT: 0,
 				LINEAR: 0,
@@ -397,7 +388,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/const.js
 	var require_const = __commonJS({
-		'../../node_modules/phaser/src/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/const.js'(exports, module) {
 			var CONST = {
 				VERSION: '3.87',
 				LOG_VERSION: 'v387',
@@ -420,7 +411,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/IsPlainObject.js
 	var require_IsPlainObject = __commonJS({
-		'../../node_modules/phaser/src/utils/object/IsPlainObject.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/IsPlainObject.js'(exports, module) {
 			var IsPlainObject = function (obj) {
 				if (!obj || typeof obj !== 'object' || obj.nodeType || obj === obj.window) {
 					return false
@@ -440,7 +431,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/Extend.js
 	var require_Extend = __commonJS({
-		'../../node_modules/phaser/src/utils/object/Extend.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/Extend.js'(exports, module) {
 			var IsPlainObject = require_IsPlainObject()
 			var Extend = function () {
 				var options,
@@ -492,7 +483,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/const.js
 	var require_const2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/const.js'(exports, module) {
 			var ALIGN_CONST = {
 				TOP_LEFT: 0,
 				TOP_CENTER: 1,
@@ -514,7 +505,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetBottom.js
 	var require_GetBottom = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetBottom.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetBottom.js'(exports, module) {
 			var GetBottom = function (gameObject) {
 				return gameObject.y + gameObject.height - gameObject.height * gameObject.originY
 			}
@@ -524,7 +515,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetCenterX.js
 	var require_GetCenterX = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetCenterX.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetCenterX.js'(exports, module) {
 			var GetCenterX = function (gameObject) {
 				return gameObject.x - gameObject.width * gameObject.originX + gameObject.width * 0.5
 			}
@@ -534,7 +525,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetBottom.js
 	var require_SetBottom = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetBottom.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetBottom.js'(exports, module) {
 			var SetBottom = function (gameObject, value) {
 				gameObject.y = value - gameObject.height + gameObject.height * gameObject.originY
 				return gameObject
@@ -545,7 +536,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetCenterX.js
 	var require_SetCenterX = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetCenterX.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetCenterX.js'(exports, module) {
 			var SetCenterX = function (gameObject, x) {
 				var offsetX = gameObject.width * gameObject.originX
 				gameObject.x = x + offsetX - gameObject.width * 0.5
@@ -557,7 +548,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/BottomCenter.js
 	var require_BottomCenter = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/BottomCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/BottomCenter.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetCenterX = require_GetCenterX()
 			var SetBottom = require_SetBottom()
@@ -579,7 +570,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetLeft.js
 	var require_GetLeft = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetLeft.js'(exports, module) {
 			var GetLeft = function (gameObject) {
 				return gameObject.x - gameObject.width * gameObject.originX
 			}
@@ -589,7 +580,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetLeft.js
 	var require_SetLeft = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetLeft.js'(exports, module) {
 			var SetLeft = function (gameObject, value) {
 				gameObject.x = value + gameObject.width * gameObject.originX
 				return gameObject
@@ -600,7 +591,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/BottomLeft.js
 	var require_BottomLeft = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/BottomLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/BottomLeft.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetLeft = require_GetLeft()
 			var SetBottom = require_SetBottom()
@@ -622,7 +613,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetRight.js
 	var require_GetRight = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetRight.js'(exports, module) {
 			var GetRight = function (gameObject) {
 				return gameObject.x + gameObject.width - gameObject.width * gameObject.originX
 			}
@@ -632,7 +623,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetRight.js
 	var require_SetRight = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetRight.js'(exports, module) {
 			var SetRight = function (gameObject, value) {
 				gameObject.x = value - gameObject.width + gameObject.width * gameObject.originX
 				return gameObject
@@ -643,7 +634,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/BottomRight.js
 	var require_BottomRight = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/BottomRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/BottomRight.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetRight = require_GetRight()
 			var SetBottom = require_SetBottom()
@@ -665,7 +656,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetCenterY.js
 	var require_SetCenterY = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetCenterY.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetCenterY.js'(exports, module) {
 			var SetCenterY = function (gameObject, y) {
 				var offsetY = gameObject.height * gameObject.originY
 				gameObject.y = y + offsetY - gameObject.height * 0.5
@@ -677,7 +668,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/CenterOn.js
 	var require_CenterOn = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/CenterOn.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/CenterOn.js'(exports, module) {
 			var SetCenterX = require_SetCenterX()
 			var SetCenterY = require_SetCenterY()
 			var CenterOn = function (gameObject, x, y) {
@@ -690,7 +681,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetCenterY.js
 	var require_GetCenterY = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetCenterY.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetCenterY.js'(exports, module) {
 			var GetCenterY = function (gameObject) {
 				return gameObject.y - gameObject.height * gameObject.originY + gameObject.height * 0.5
 			}
@@ -700,7 +691,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/Center.js
 	var require_Center = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/Center.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/Center.js'(exports, module) {
 			var CenterOn = require_CenterOn()
 			var GetCenterX = require_GetCenterX()
 			var GetCenterY = require_GetCenterY()
@@ -720,7 +711,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/LeftCenter.js
 	var require_LeftCenter = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/LeftCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/LeftCenter.js'(exports, module) {
 			var GetCenterY = require_GetCenterY()
 			var GetLeft = require_GetLeft()
 			var SetCenterY = require_SetCenterY()
@@ -742,7 +733,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/RightCenter.js
 	var require_RightCenter = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/RightCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/RightCenter.js'(exports, module) {
 			var GetCenterY = require_GetCenterY()
 			var GetRight = require_GetRight()
 			var SetCenterY = require_SetCenterY()
@@ -764,7 +755,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetTop.js
 	var require_GetTop = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetTop.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetTop.js'(exports, module) {
 			var GetTop = function (gameObject) {
 				return gameObject.y - gameObject.height * gameObject.originY
 			}
@@ -774,7 +765,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/SetTop.js
 	var require_SetTop = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/SetTop.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/SetTop.js'(exports, module) {
 			var SetTop = function (gameObject, value) {
 				gameObject.y = value + gameObject.height * gameObject.originY
 				return gameObject
@@ -785,7 +776,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/TopCenter.js
 	var require_TopCenter = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/TopCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/TopCenter.js'(exports, module) {
 			var GetCenterX = require_GetCenterX()
 			var GetTop = require_GetTop()
 			var SetCenterX = require_SetCenterX()
@@ -807,7 +798,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/TopLeft.js
 	var require_TopLeft = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/TopLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/TopLeft.js'(exports, module) {
 			var GetLeft = require_GetLeft()
 			var GetTop = require_GetTop()
 			var SetLeft = require_SetLeft()
@@ -829,7 +820,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/TopRight.js
 	var require_TopRight = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/TopRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/TopRight.js'(exports, module) {
 			var GetRight = require_GetRight()
 			var GetTop = require_GetTop()
 			var SetRight = require_SetRight()
@@ -851,7 +842,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/QuickSet.js
 	var require_QuickSet = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/QuickSet.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/QuickSet.js'(exports, module) {
 			var ALIGN_CONST = require_const2()
 			var AlignInMap = []
 			AlignInMap[ALIGN_CONST.BOTTOM_CENTER] = require_BottomCenter()
@@ -876,7 +867,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/GetFastValue.js
 	var require_GetFastValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/GetFastValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/GetFastValue.js'(exports, module) {
 			var GetFastValue = function (source, key, defaultValue) {
 				var t = typeof source
 				if (!source || t === 'number' || t === 'string') {
@@ -893,7 +884,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/NOOP.js
 	var require_NOOP = __commonJS({
-		'../../node_modules/phaser/src/utils/NOOP.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/NOOP.js'(exports, module) {
 			var NOOP = function () {}
 			module.exports = NOOP
 		},
@@ -901,7 +892,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/Class.js
 	var require_Class = __commonJS({
-		'../../node_modules/phaser/src/utils/Class.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/Class.js'(exports, module) {
 			function hasGetterOrSetter(def) {
 				return (!!def.get && typeof def.get === 'function') || (!!def.set && typeof def.set === 'function')
 			}
@@ -1012,7 +1003,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Contains.js
 	var require_Contains = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Contains.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Contains.js'(exports, module) {
 			var Contains = function (circle, x, y) {
 				if (circle.radius > 0 && x >= circle.left && x <= circle.right && y >= circle.top && y <= circle.bottom) {
 					var dx = (circle.x - x) * (circle.x - x)
@@ -1028,7 +1019,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/const.js
 	var require_const3 = __commonJS({
-		'../../node_modules/phaser/src/geom/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/const.js'(exports, module) {
 			var GEOM_CONST = {
 				CIRCLE: 0,
 				ELLIPSE: 1,
@@ -1044,7 +1035,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Point.js
 	var require_Point = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Point.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Point.js'(exports, module) {
 			var Class = require_Class()
 			var GEOM_CONST = require_const3()
 			var Point = new Class({
@@ -1077,7 +1068,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/CircumferencePoint.js
 	var require_CircumferencePoint = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/CircumferencePoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/CircumferencePoint.js'(exports, module) {
 			var Point = require_Point()
 			var CircumferencePoint = function (circle, angle, out) {
 				if (out === void 0) {
@@ -1093,7 +1084,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Clamp.js
 	var require_Clamp = __commonJS({
-		'../../node_modules/phaser/src/math/Clamp.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Clamp.js'(exports, module) {
 			var Clamp = function (value, min, max) {
 				return Math.max(min, Math.min(max, value))
 			}
@@ -1103,7 +1094,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/FromPercent.js
 	var require_FromPercent = __commonJS({
-		'../../node_modules/phaser/src/math/FromPercent.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/FromPercent.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var FromPercent = function (percent, min, max) {
 				percent = Clamp(percent, 0, 1)
@@ -1115,7 +1106,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/const.js
 	var require_const4 = __commonJS({
-		'../../node_modules/phaser/src/math/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/const.js'(exports, module) {
 			var MATH_CONST = {
 				PI2: Math.PI * 2,
 				TAU: Math.PI * 0.5,
@@ -1132,7 +1123,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/GetPoint.js
 	var require_GetPoint = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/GetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/GetPoint.js'(exports, module) {
 			var CircumferencePoint = require_CircumferencePoint()
 			var FromPercent = require_FromPercent()
 			var MATH_CONST = require_const4()
@@ -1150,7 +1141,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Circumference.js
 	var require_Circumference = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Circumference.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Circumference.js'(exports, module) {
 			var Circumference = function (circle) {
 				return 2 * (Math.PI * circle.radius)
 			}
@@ -1160,7 +1151,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/GetPoints.js
 	var require_GetPoints = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/GetPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/GetPoints.js'(exports, module) {
 			var Circumference = require_Circumference()
 			var CircumferencePoint = require_CircumferencePoint()
 			var FromPercent = require_FromPercent()
@@ -1184,7 +1175,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Random.js
 	var require_Random = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Random.js'(exports, module) {
 			var Point = require_Point()
 			var Random = function (circle, out) {
 				if (out === void 0) {
@@ -1205,7 +1196,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Circle.js
 	var require_Circle = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Circle.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Circle.js'(exports, module) {
 			var Class = require_Class()
 			var Contains = require_Contains()
 			var GetPoint = require_GetPoint()
@@ -1321,7 +1312,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Alpha.js
 	var require_Alpha = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Alpha.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Alpha.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var _FLAG = 2
 			var Alpha = {
@@ -1420,7 +1411,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/AlphaSingle.js
 	var require_AlphaSingle = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/AlphaSingle.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/AlphaSingle.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var _FLAG = 2
 			var AlphaSingle = {
@@ -1456,7 +1447,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/BlendMode.js
 	var require_BlendMode = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/BlendMode.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/BlendMode.js'(exports, module) {
 			var BlendModes = require_BlendModes()
 			var BlendMode = {
 				_blendMode: BlendModes.NORMAL,
@@ -1485,7 +1476,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/ComputedSize.js
 	var require_ComputedSize = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/ComputedSize.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/ComputedSize.js'(exports, module) {
 			var ComputedSize = {
 				width: 0,
 				height: 0,
@@ -1522,7 +1513,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Crop.js
 	var require_Crop = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Crop.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Crop.js'(exports, module) {
 			var Crop = {
 				texture: null,
 				frame: null,
@@ -1551,7 +1542,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/CheckMatrix.js
 	var require_CheckMatrix = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/CheckMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/CheckMatrix.js'(exports, module) {
 			var CheckMatrix = function (matrix) {
 				if (!Array.isArray(matrix) || !Array.isArray(matrix[0])) {
 					return false
@@ -1570,7 +1561,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/string/Pad.js
 	var require_Pad = __commonJS({
-		'../../node_modules/phaser/src/utils/string/Pad.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/string/Pad.js'(exports, module) {
 			var Pad = function (str, len, pad, dir) {
 				if (len === void 0) {
 					len = 0
@@ -1606,7 +1597,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/MatrixToString.js
 	var require_MatrixToString = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/MatrixToString.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/MatrixToString.js'(exports, module) {
 			var Pad = require_Pad()
 			var CheckMatrix = require_CheckMatrix()
 			var MatrixToString = function (matrix) {
@@ -1645,7 +1636,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/ReverseColumns.js
 	var require_ReverseColumns = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/ReverseColumns.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/ReverseColumns.js'(exports, module) {
 			var ReverseColumns = function (matrix) {
 				return matrix.reverse()
 			}
@@ -1655,7 +1646,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/ReverseRows.js
 	var require_ReverseRows = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/ReverseRows.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/ReverseRows.js'(exports, module) {
 			var ReverseRows = function (matrix) {
 				for (var i = 0; i < matrix.length; i++) {
 					matrix[i].reverse()
@@ -1668,7 +1659,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/TransposeMatrix.js
 	var require_TransposeMatrix = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/TransposeMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/TransposeMatrix.js'(exports, module) {
 			var TransposeMatrix = function (array) {
 				var sourceRowCount = array.length
 				var sourceColCount = array[0].length
@@ -1687,7 +1678,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/RotateMatrix.js
 	var require_RotateMatrix = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/RotateMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/RotateMatrix.js'(exports, module) {
 			var CheckMatrix = require_CheckMatrix()
 			var TransposeMatrix = require_TransposeMatrix()
 			var RotateMatrix = function (matrix, direction) {
@@ -1720,7 +1711,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/Rotate180.js
 	var require_Rotate180 = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/Rotate180.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/Rotate180.js'(exports, module) {
 			var RotateMatrix = require_RotateMatrix()
 			var Rotate180 = function (matrix) {
 				return RotateMatrix(matrix, 180)
@@ -1731,7 +1722,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/RotateLeft.js
 	var require_RotateLeft = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/RotateLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/RotateLeft.js'(exports, module) {
 			var RotateMatrix = require_RotateMatrix()
 			var RotateLeft = function (matrix, amount) {
 				if (amount === void 0) {
@@ -1748,7 +1739,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/RotateRight.js
 	var require_RotateRight = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/RotateRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/RotateRight.js'(exports, module) {
 			var RotateMatrix = require_RotateMatrix()
 			var RotateRight = function (matrix, amount) {
 				if (amount === void 0) {
@@ -1765,7 +1756,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/RotateLeft.js
 	var require_RotateLeft2 = __commonJS({
-		'../../node_modules/phaser/src/utils/array/RotateLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/RotateLeft.js'(exports, module) {
 			var RotateLeft = function (array, total) {
 				if (total === void 0) {
 					total = 1
@@ -1783,7 +1774,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/RotateRight.js
 	var require_RotateRight2 = __commonJS({
-		'../../node_modules/phaser/src/utils/array/RotateRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/RotateRight.js'(exports, module) {
 			var RotateRight = function (array, total) {
 				if (total === void 0) {
 					total = 1
@@ -1801,7 +1792,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/TranslateMatrix.js
 	var require_TranslateMatrix = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/TranslateMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/TranslateMatrix.js'(exports, module) {
 			var RotateLeft = require_RotateLeft2()
 			var RotateRight = require_RotateRight2()
 			var TranslateMatrix = function (matrix, x, y) {
@@ -1836,7 +1827,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/matrix/index.js
 	var require_matrix = __commonJS({
-		'../../node_modules/phaser/src/utils/array/matrix/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/matrix/index.js'(exports, module) {
 			module.exports = {
 				CheckMatrix: require_CheckMatrix(),
 				MatrixToString: require_MatrixToString(),
@@ -1854,7 +1845,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Add.js
 	var require_Add = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Add.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Add.js'(exports, module) {
 			var Add = function (array, item, limit, callback, context) {
 				if (context === void 0) {
 					context = array
@@ -1906,7 +1897,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/AddAt.js
 	var require_AddAt = __commonJS({
-		'../../node_modules/phaser/src/utils/array/AddAt.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/AddAt.js'(exports, module) {
 			var AddAt = function (array, item, index, limit, callback, context) {
 				if (index === void 0) {
 					index = 0
@@ -1961,7 +1952,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/BringToTop.js
 	var require_BringToTop = __commonJS({
-		'../../node_modules/phaser/src/utils/array/BringToTop.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/BringToTop.js'(exports, module) {
 			var BringToTop = function (array, item) {
 				var currentIndex = array.indexOf(item)
 				if (currentIndex !== -1 && currentIndex < array.length) {
@@ -1976,7 +1967,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/SafeRange.js
 	var require_SafeRange = __commonJS({
-		'../../node_modules/phaser/src/utils/array/SafeRange.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/SafeRange.js'(exports, module) {
 			var SafeRange = function (array, startIndex, endIndex, throwError) {
 				var len = array.length
 				if (startIndex < 0 || startIndex > len || startIndex >= endIndex || endIndex > len) {
@@ -1994,7 +1985,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/CountAllMatching.js
 	var require_CountAllMatching = __commonJS({
-		'../../node_modules/phaser/src/utils/array/CountAllMatching.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/CountAllMatching.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var CountAllMatching = function (array, property, value, startIndex, endIndex) {
 				if (startIndex === void 0) {
@@ -2020,7 +2011,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Each.js
 	var require_Each = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Each.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Each.js'(exports, module) {
 			var Each = function (array, callback, context) {
 				var i
 				var args = [null]
@@ -2039,7 +2030,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/EachInRange.js
 	var require_EachInRange = __commonJS({
-		'../../node_modules/phaser/src/utils/array/EachInRange.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/EachInRange.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var EachInRange = function (array, callback, context, startIndex, endIndex) {
 				if (startIndex === void 0) {
@@ -2067,7 +2058,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/FindClosestInSorted.js
 	var require_FindClosestInSorted = __commonJS({
-		'../../node_modules/phaser/src/utils/array/FindClosestInSorted.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/FindClosestInSorted.js'(exports, module) {
 			var FindClosestInSorted = function (value, array, key) {
 				if (!array.length) {
 					return NaN
@@ -2108,7 +2099,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Flatten.js
 	var require_Flatten = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Flatten.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Flatten.js'(exports, module) {
 			var Flatten = function (array, output) {
 				if (output === void 0) {
 					output = []
@@ -2128,7 +2119,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/GetAll.js
 	var require_GetAll = __commonJS({
-		'../../node_modules/phaser/src/utils/array/GetAll.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/GetAll.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var GetAll = function (array, property, value, startIndex, endIndex) {
 				if (startIndex === void 0) {
@@ -2154,7 +2145,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/GetFirst.js
 	var require_GetFirst = __commonJS({
-		'../../node_modules/phaser/src/utils/array/GetFirst.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/GetFirst.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var GetFirst = function (array, property, value, startIndex, endIndex) {
 				if (startIndex === void 0) {
@@ -2179,7 +2170,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/GetRandom.js
 	var require_GetRandom = __commonJS({
-		'../../node_modules/phaser/src/utils/array/GetRandom.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/GetRandom.js'(exports, module) {
 			var GetRandom = function (array, startIndex, length) {
 				if (startIndex === void 0) {
 					startIndex = 0
@@ -2196,7 +2187,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/MoveDown.js
 	var require_MoveDown = __commonJS({
-		'../../node_modules/phaser/src/utils/array/MoveDown.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/MoveDown.js'(exports, module) {
 			var MoveDown = function (array, item) {
 				var currentIndex = array.indexOf(item)
 				if (currentIndex > 0) {
@@ -2213,7 +2204,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/MoveTo.js
 	var require_MoveTo = __commonJS({
-		'../../node_modules/phaser/src/utils/array/MoveTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/MoveTo.js'(exports, module) {
 			var MoveTo = function (array, item, index) {
 				var currentIndex = array.indexOf(item)
 				if (currentIndex === -1 || index < 0 || index >= array.length) {
@@ -2231,7 +2222,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/MoveUp.js
 	var require_MoveUp = __commonJS({
-		'../../node_modules/phaser/src/utils/array/MoveUp.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/MoveUp.js'(exports, module) {
 			var MoveUp = function (array, item) {
 				var currentIndex = array.indexOf(item)
 				if (currentIndex !== -1 && currentIndex < array.length - 1) {
@@ -2248,7 +2239,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/MoveAbove.js
 	var require_MoveAbove = __commonJS({
-		'../../node_modules/phaser/src/utils/array/MoveAbove.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/MoveAbove.js'(exports, module) {
 			var MoveAbove = function (array, item1, item2) {
 				if (item1 === item2) {
 					return array
@@ -2272,7 +2263,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/MoveBelow.js
 	var require_MoveBelow = __commonJS({
-		'../../node_modules/phaser/src/utils/array/MoveBelow.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/MoveBelow.js'(exports, module) {
 			var MoveBelow = function (array, item1, item2) {
 				if (item1 === item2) {
 					return array
@@ -2299,7 +2290,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/NumberArray.js
 	var require_NumberArray = __commonJS({
-		'../../node_modules/phaser/src/utils/array/NumberArray.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/NumberArray.js'(exports, module) {
 			var NumberArray = function (start, end, prefix, suffix) {
 				var result = []
 				var i
@@ -2338,7 +2329,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RoundAwayFromZero.js
 	var require_RoundAwayFromZero = __commonJS({
-		'../../node_modules/phaser/src/math/RoundAwayFromZero.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RoundAwayFromZero.js'(exports, module) {
 			var RoundAwayFromZero = function (value) {
 				return value > 0 ? Math.ceil(value) : Math.floor(value)
 			}
@@ -2348,7 +2339,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/NumberArrayStep.js
 	var require_NumberArrayStep = __commonJS({
-		'../../node_modules/phaser/src/utils/array/NumberArrayStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/NumberArrayStep.js'(exports, module) {
 			var RoundAwayFromZero = require_RoundAwayFromZero()
 			var NumberArrayStep = function (start, end, step) {
 				if (start === void 0) {
@@ -2378,7 +2369,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/QuickSelect.js
 	var require_QuickSelect = __commonJS({
-		'../../node_modules/phaser/src/utils/array/QuickSelect.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/QuickSelect.js'(exports, module) {
 			function swap(arr, i, j) {
 				var tmp = arr[i]
 				arr[i] = arr[j]
@@ -2446,7 +2437,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/GetValue.js
 	var require_GetValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/GetValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/GetValue.js'(exports, module) {
 			var GetValue = function (source, key, defaultValue, altSource) {
 				if ((!source && !altSource) || typeof source === 'number') {
 					return defaultValue
@@ -2493,7 +2484,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Shuffle.js
 	var require_Shuffle = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Shuffle.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Shuffle.js'(exports, module) {
 			var Shuffle = function (array) {
 				for (var i = array.length - 1; i > 0; i--) {
 					var j = Math.floor(Math.random() * (i + 1))
@@ -2509,7 +2500,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Range.js
 	var require_Range = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Range.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Range.js'(exports, module) {
 			var GetValue = require_GetValue()
 			var Shuffle = require_Shuffle()
 			var BuildChunk = function (a, b, qty) {
@@ -2567,7 +2558,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/SpliceOne.js
 	var require_SpliceOne = __commonJS({
-		'../../node_modules/phaser/src/utils/array/SpliceOne.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/SpliceOne.js'(exports, module) {
 			var SpliceOne = function (array, index) {
 				if (index >= array.length) {
 					return
@@ -2586,7 +2577,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Remove.js
 	var require_Remove = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Remove.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Remove.js'(exports, module) {
 			var SpliceOne = require_SpliceOne()
 			var Remove = function (array, item, callback, context) {
 				if (context === void 0) {
@@ -2627,7 +2618,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/RemoveAt.js
 	var require_RemoveAt = __commonJS({
-		'../../node_modules/phaser/src/utils/array/RemoveAt.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/RemoveAt.js'(exports, module) {
 			var SpliceOne = require_SpliceOne()
 			var RemoveAt = function (array, index, callback, context) {
 				if (context === void 0) {
@@ -2648,7 +2639,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/RemoveBetween.js
 	var require_RemoveBetween = __commonJS({
-		'../../node_modules/phaser/src/utils/array/RemoveBetween.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/RemoveBetween.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var RemoveBetween = function (array, startIndex, endIndex, callback, context) {
 				if (startIndex === void 0) {
@@ -2680,7 +2671,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/RemoveRandomElement.js
 	var require_RemoveRandomElement = __commonJS({
-		'../../node_modules/phaser/src/utils/array/RemoveRandomElement.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/RemoveRandomElement.js'(exports, module) {
 			var SpliceOne = require_SpliceOne()
 			var RemoveRandomElement = function (array, start, length) {
 				if (start === void 0) {
@@ -2698,7 +2689,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Replace.js
 	var require_Replace = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Replace.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Replace.js'(exports, module) {
 			var Replace = function (array, oldChild, newChild) {
 				var index1 = array.indexOf(oldChild)
 				var index2 = array.indexOf(newChild)
@@ -2715,7 +2706,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/SendToBack.js
 	var require_SendToBack = __commonJS({
-		'../../node_modules/phaser/src/utils/array/SendToBack.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/SendToBack.js'(exports, module) {
 			var SendToBack = function (array, item) {
 				var currentIndex = array.indexOf(item)
 				if (currentIndex !== -1 && currentIndex > 0) {
@@ -2730,7 +2721,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/SetAll.js
 	var require_SetAll = __commonJS({
-		'../../node_modules/phaser/src/utils/array/SetAll.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/SetAll.js'(exports, module) {
 			var SafeRange = require_SafeRange()
 			var SetAll = function (array, property, value, startIndex, endIndex) {
 				if (startIndex === void 0) {
@@ -2755,7 +2746,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/SortByDigits.js
 	var require_SortByDigits = __commonJS({
-		'../../node_modules/phaser/src/utils/array/SortByDigits.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/SortByDigits.js'(exports, module) {
 			var SortByDigits = function (array) {
 				var re = /\D/g
 				array.sort(function (a, b) {
@@ -2769,7 +2760,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/OS.js
 	var require_OS = __commonJS({
-		'../../node_modules/phaser/src/device/OS.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/OS.js'(exports, module) {
 			var OS = {
 				android: false,
 				chromeOS: false,
@@ -2867,7 +2858,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Browser.js
 	var require_Browser = __commonJS({
-		'../../node_modules/phaser/src/device/Browser.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Browser.js'(exports, module) {
 			var OS = require_OS()
 			var Browser = {
 				chrome: false,
@@ -2929,7 +2920,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/Smoothing.js
 	var require_Smoothing = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/Smoothing.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/Smoothing.js'(exports, module) {
 			var prefix = ''
 			var Smoothing = function () {
 				var getPrefix = function (context) {
@@ -2964,10 +2955,10 @@ var Phaser = (function () {
 					return prefix !== null ? context[prefix] : null
 				}
 				return {
-					disable: disable,
-					enable: enable,
-					getPrefix: getPrefix,
-					isEnabled: isEnabled,
+					disable,
+					enable,
+					getPrefix,
+					isEnabled,
 				}
 			}
 			module.exports = Smoothing()
@@ -2976,7 +2967,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/CanvasPool.js
 	var require_CanvasPool = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/CanvasPool.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/CanvasPool.js'(exports, module) {
 			var CONST = require_const()
 			var Smoothing = require_Smoothing()
 			var pool = []
@@ -2999,7 +2990,7 @@ var Phaser = (function () {
 					var container = first(canvasType)
 					if (container === null) {
 						container = {
-							parent: parent,
+							parent,
 							canvas: document.createElement('canvas'),
 							type: canvasType,
 						}
@@ -3071,16 +3062,16 @@ var Phaser = (function () {
 					_disableContextSmoothing = false
 				}
 				return {
-					create2D: create2D,
-					create: create,
-					createWebGL: createWebGL,
-					disableSmoothing: disableSmoothing,
-					enableSmoothing: enableSmoothing,
-					first: first,
-					free: free,
-					pool: pool,
-					remove: remove,
-					total: total,
+					create2D,
+					create,
+					createWebGL,
+					disableSmoothing,
+					enableSmoothing,
+					first,
+					free,
+					pool,
+					remove,
+					total,
 				}
 			}
 			module.exports = CanvasPool()
@@ -3089,7 +3080,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Features.js
 	var require_Features = __commonJS({
-		'../../node_modules/phaser/src/device/Features.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Features.js'(exports, module) {
 			var OS = require_OS()
 			var Browser = require_Browser()
 			var CanvasPool = require_CanvasPool()
@@ -3187,7 +3178,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Input.js
 	var require_Input = __commonJS({
-		'../../node_modules/phaser/src/device/Input.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Input.js'(exports, module) {
 			var Browser = require_Browser()
 			var Input = {
 				gamepads: false,
@@ -3223,7 +3214,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Audio.js
 	var require_Audio = __commonJS({
-		'../../node_modules/phaser/src/device/Audio.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Audio.js'(exports, module) {
 			var Browser = require_Browser()
 			var Audio = {
 				flac: false,
@@ -3287,7 +3278,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Video.js
 	var require_Video = __commonJS({
-		'../../node_modules/phaser/src/device/Video.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Video.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var Video = {
 				h264: false,
@@ -3340,7 +3331,7 @@ var Phaser = (function () {
 						var url = GetFastValue(urls[i], 'url', urls[i])
 						if (url.indexOf('blob:') === 0) {
 							return {
-								url: url,
+								url,
 								type: '',
 							}
 						}
@@ -3353,7 +3344,7 @@ var Phaser = (function () {
 						videoType = GetFastValue(urls[i], 'type', videoType ? videoType[1] : '').toLowerCase()
 						if (Video[videoType]) {
 							return {
-								url: url,
+								url,
 								type: videoType,
 							}
 						}
@@ -3368,7 +3359,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/Fullscreen.js
 	var require_Fullscreen = __commonJS({
-		'../../node_modules/phaser/src/device/Fullscreen.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/Fullscreen.js'(exports, module) {
 			var Fullscreen = {
 				available: false,
 				cancel: '',
@@ -3424,7 +3415,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/CanvasFeatures.js
 	var require_CanvasFeatures = __commonJS({
-		'../../node_modules/phaser/src/device/CanvasFeatures.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/CanvasFeatures.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var CanvasFeatures = {
 				supportInverseAlpha: false,
@@ -3482,7 +3473,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/device/index.js
 	var require_device = __commonJS({
-		'../../node_modules/phaser/src/device/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/device/index.js'(exports, module) {
 			module.exports = {
 				os: require_OS(),
 				browser: require_Browser(),
@@ -3498,7 +3489,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/StableSort.js
 	var require_StableSort = __commonJS({
-		'../../node_modules/phaser/src/utils/array/StableSort.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/StableSort.js'(exports, module) {
 			var Device = require_device()
 			function Compare(a, b) {
 				return String(a).localeCompare(b)
@@ -3573,7 +3564,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/Swap.js
 	var require_Swap = __commonJS({
-		'../../node_modules/phaser/src/utils/array/Swap.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/Swap.js'(exports, module) {
 			var Swap = function (array, item1, item2) {
 				if (item1 === item2) {
 					return array
@@ -3593,7 +3584,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/array/index.js
 	var require_array = __commonJS({
-		'../../node_modules/phaser/src/utils/array/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/array/index.js'(exports, module) {
 			module.exports = {
 				Matrix: require_matrix(),
 				Add: require_Add(),
@@ -3637,7 +3628,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Depth.js
 	var require_Depth = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Depth.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Depth.js'(exports, module) {
 			var ArrayUtils = require_array()
 			var Depth = {
 				_depth: 0,
@@ -3694,7 +3685,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Flip.js
 	var require_Flip = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Flip.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Flip.js'(exports, module) {
 			var Flip = {
 				flipX: false,
 				flipY: false,
@@ -3731,7 +3722,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/const.js
 	var require_const5 = __commonJS({
-		'../../node_modules/phaser/src/fx/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/const.js'(exports, module) {
 			var FX_CONST = {
 				GLOW: 4,
 				SHADOW: 5,
@@ -3754,7 +3745,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Controller.js
 	var require_Controller = __commonJS({
-		'../../node_modules/phaser/src/fx/Controller.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Controller.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = new Class({
 				initialize: function Controller2(type, gameObject) {
@@ -3777,7 +3768,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Barrel.js
 	var require_Barrel = __commonJS({
-		'../../node_modules/phaser/src/fx/Barrel.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Barrel.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -3797,7 +3788,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Bloom.js
 	var require_Bloom = __commonJS({
-		'../../node_modules/phaser/src/fx/Bloom.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Bloom.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -3849,7 +3840,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Blur.js
 	var require_Blur = __commonJS({
-		'../../node_modules/phaser/src/fx/Blur.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Blur.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -3901,7 +3892,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Bokeh.js
 	var require_Bokeh = __commonJS({
-		'../../node_modules/phaser/src/fx/Bokeh.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Bokeh.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -3945,7 +3936,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Circle.js
 	var require_Circle2 = __commonJS({
-		'../../node_modules/phaser/src/fx/Circle.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Circle.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4013,7 +4004,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/ColorMatrix.js
 	var require_ColorMatrix = __commonJS({
-		'../../node_modules/phaser/src/display/ColorMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/ColorMatrix.js'(exports, module) {
 			var Class = require_Class()
 			var tempMatrix = new Float32Array(20)
 			var ColorMatrix = new Class({
@@ -4278,7 +4269,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/ColorMatrix.js
 	var require_ColorMatrix2 = __commonJS({
-		'../../node_modules/phaser/src/fx/ColorMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/ColorMatrix.js'(exports, module) {
 			var Class = require_Class()
 			var BaseColorMatrix = require_ColorMatrix()
 			var FX_CONST = require_const5()
@@ -4302,7 +4293,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Displacement.js
 	var require_Displacement = __commonJS({
-		'../../node_modules/phaser/src/fx/Displacement.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Displacement.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4338,7 +4329,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Glow.js
 	var require_Glow = __commonJS({
-		'../../node_modules/phaser/src/fx/Glow.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Glow.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4382,7 +4373,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Gradient.js
 	var require_Gradient = __commonJS({
-		'../../node_modules/phaser/src/fx/Gradient.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Gradient.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4454,7 +4445,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Pixelate.js
 	var require_Pixelate = __commonJS({
-		'../../node_modules/phaser/src/fx/Pixelate.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Pixelate.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4474,7 +4465,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Shadow.js
 	var require_Shadow = __commonJS({
-		'../../node_modules/phaser/src/fx/Shadow.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Shadow.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4530,7 +4521,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Shine.js
 	var require_Shine = __commonJS({
-		'../../node_modules/phaser/src/fx/Shine.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Shine.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4562,7 +4553,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Vignette.js
 	var require_Vignette = __commonJS({
-		'../../node_modules/phaser/src/fx/Vignette.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Vignette.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4594,7 +4585,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/Wipe.js
 	var require_Wipe = __commonJS({
-		'../../node_modules/phaser/src/fx/Wipe.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/Wipe.js'(exports, module) {
 			var Class = require_Class()
 			var Controller = require_Controller()
 			var FX_CONST = require_const5()
@@ -4627,7 +4618,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/fx/index.js
 	var require_fx = __commonJS({
-		'../../node_modules/phaser/src/fx/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/fx/index.js'(exports, module) {
 			var Extend = require_Extend()
 			var FX_CONST = require_const5()
 			var FX = {
@@ -4654,7 +4645,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/FX.js
 	var require_FX = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/FX.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/FX.js'(exports, module) {
 			var Class = require_Class()
 			var Effects = require_fx()
 			var SpliceOne = require_SpliceOne()
@@ -4765,7 +4756,7 @@ var Phaser = (function () {
 					}
 				},
 				addGlow: function (color, outerStrength, innerStrength, knockout, quality, distance) {
-					return this.add(new Effects.Glow(this.gameObject, color, outerStrength, innerStrength, knockout), { quality: quality, distance: distance })
+					return this.add(new Effects.Glow(this.gameObject, color, outerStrength, innerStrength, knockout), { quality, distance })
 				},
 				addShadow: function (x, y, decay, power, color, samples, intensity) {
 					return this.add(new Effects.Shadow(this.gameObject, x, y, decay, power, color, samples, intensity))
@@ -4823,7 +4814,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Contains.js
 	var require_Contains2 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Contains.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Contains.js'(exports, module) {
 			var Contains = function (rect, x, y) {
 				if (rect.width <= 0 || rect.height <= 0) {
 					return false
@@ -4836,7 +4827,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Perimeter.js
 	var require_Perimeter = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Perimeter.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Perimeter.js'(exports, module) {
 			var Perimeter = function (rect) {
 				return 2 * (rect.width + rect.height)
 			}
@@ -4846,7 +4837,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/GetPoint.js
 	var require_GetPoint2 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/GetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/GetPoint.js'(exports, module) {
 			var Perimeter = require_Perimeter()
 			var Point = require_Point()
 			var GetPoint = function (rectangle, position, out) {
@@ -4883,7 +4874,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/GetPoints.js
 	var require_GetPoints2 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/GetPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/GetPoints.js'(exports, module) {
 			var GetPoint = require_GetPoint2()
 			var Perimeter = require_Perimeter()
 			var GetPoints = function (rectangle, quantity, stepRate, out) {
@@ -4905,7 +4896,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/GetPoint.js
 	var require_GetPoint3 = __commonJS({
-		'../../node_modules/phaser/src/geom/line/GetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/GetPoint.js'(exports, module) {
 			var Point = require_Point()
 			var GetPoint = function (line, position, out) {
 				if (out === void 0) {
@@ -4921,7 +4912,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/Length.js
 	var require_Length = __commonJS({
-		'../../node_modules/phaser/src/geom/line/Length.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/Length.js'(exports, module) {
 			var Length = function (line) {
 				return Math.sqrt((line.x2 - line.x1) * (line.x2 - line.x1) + (line.y2 - line.y1) * (line.y2 - line.y1))
 			}
@@ -4931,7 +4922,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/GetPoints.js
 	var require_GetPoints3 = __commonJS({
-		'../../node_modules/phaser/src/geom/line/GetPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/GetPoints.js'(exports, module) {
 			var Length = require_Length()
 			var Point = require_Point()
 			var GetPoints = function (line, quantity, stepRate, out) {
@@ -4959,7 +4950,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/Random.js
 	var require_Random2 = __commonJS({
-		'../../node_modules/phaser/src/geom/line/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/Random.js'(exports, module) {
 			var Point = require_Point()
 			var Random = function (line, out) {
 				if (out === void 0) {
@@ -4976,7 +4967,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/Equal.js
 	var require_Equal = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/Equal.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/Equal.js'(exports, module) {
 			var Equal = function (a, b, epsilon) {
 				if (epsilon === void 0) {
 					epsilon = 1e-4
@@ -4989,7 +4980,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Vector2.js
 	var require_Vector2 = __commonJS({
-		'../../node_modules/phaser/src/math/Vector2.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Vector2.js'(exports, module) {
 			var Class = require_Class()
 			var FuzzyEqual = require_Equal()
 			var Vector2 = new Class({
@@ -5209,7 +5200,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/Line.js
 	var require_Line = __commonJS({
-		'../../node_modules/phaser/src/geom/line/Line.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/Line.js'(exports, module) {
 			var Class = require_Class()
 			var GetPoint = require_GetPoint3()
 			var GetPoints = require_GetPoints3()
@@ -5340,7 +5331,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Random.js
 	var require_Random3 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Random.js'(exports, module) {
 			var Point = require_Point()
 			var Random = function (rect, out) {
 				if (out === void 0) {
@@ -5356,7 +5347,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Rectangle.js
 	var require_Rectangle = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Rectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Rectangle.js'(exports, module) {
 			var Class = require_Class()
 			var Contains = require_Contains2()
 			var GetPoint = require_GetPoint2()
@@ -5526,7 +5517,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RotateAround.js
 	var require_RotateAround = __commonJS({
-		'../../node_modules/phaser/src/math/RotateAround.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RotateAround.js'(exports, module) {
 			var RotateAround = function (point, x, y, angle) {
 				var c = Math.cos(angle)
 				var s = Math.sin(angle)
@@ -5542,7 +5533,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/GetBounds.js
 	var require_GetBounds = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/GetBounds.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/GetBounds.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var RotateAround = require_RotateAround()
 			var Vector2 = require_Vector2()
@@ -5682,7 +5673,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/PluginCache.js
 	var require_PluginCache = __commonJS({
-		'../../node_modules/phaser/src/plugins/PluginCache.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/PluginCache.js'(exports, module) {
 			var corePlugins = {}
 			var customPlugins = {}
 			var PluginCache = {}
@@ -5690,10 +5681,10 @@ var Phaser = (function () {
 				if (custom === void 0) {
 					custom = false
 				}
-				corePlugins[key] = { plugin: plugin, mapping: mapping, custom: custom }
+				corePlugins[key] = { plugin, mapping, custom }
 			}
 			PluginCache.registerCustom = function (key, plugin, mapping, data) {
-				customPlugins[key] = { plugin: plugin, mapping: mapping, data: data }
+				customPlugins[key] = { plugin, mapping, data }
 			}
 			PluginCache.hasCore = function (key) {
 				return corePlugins.hasOwnProperty(key)
@@ -5740,161 +5731,161 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js
 	var require_ADDED_TO_SCENE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/ADDED_TO_SCENE_EVENT.js'(exports, module) {
 			module.exports = 'addedtoscene'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/BOOT_EVENT.js
 	var require_BOOT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/BOOT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/BOOT_EVENT.js'(exports, module) {
 			module.exports = 'boot'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/CREATE_EVENT.js
 	var require_CREATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/CREATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/CREATE_EVENT.js'(exports, module) {
 			module.exports = 'create'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js
 	var require_PAUSE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/PAUSE_EVENT.js'(exports, module) {
 			module.exports = 'pause'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js
 	var require_POST_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/POST_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'postupdate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js
 	var require_PRE_RENDER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/PRE_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'prerender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js
 	var require_PRE_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/PRE_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'preupdate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/READY_EVENT.js
 	var require_READY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/READY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/READY_EVENT.js'(exports, module) {
 			module.exports = 'ready'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js
 	var require_REMOVED_FROM_SCENE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/REMOVED_FROM_SCENE_EVENT.js'(exports, module) {
 			module.exports = 'removedfromscene'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/RENDER_EVENT.js
 	var require_RENDER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/RENDER_EVENT.js'(exports, module) {
 			module.exports = 'render'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/RESUME_EVENT.js
 	var require_RESUME_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/RESUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/RESUME_EVENT.js'(exports, module) {
 			module.exports = 'resume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js
 	var require_SHUTDOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/SHUTDOWN_EVENT.js'(exports, module) {
 			module.exports = 'shutdown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js
 	var require_SLEEP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/SLEEP_EVENT.js'(exports, module) {
 			module.exports = 'sleep'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/START_EVENT.js
 	var require_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/START_EVENT.js'(exports, module) {
 			module.exports = 'start'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js
 	var require_TRANSITION_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/TRANSITION_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'transitioncomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js
 	var require_TRANSITION_INIT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/TRANSITION_INIT_EVENT.js'(exports, module) {
 			module.exports = 'transitioninit'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js
 	var require_TRANSITION_OUT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/TRANSITION_OUT_EVENT.js'(exports, module) {
 			module.exports = 'transitionout'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js
 	var require_TRANSITION_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/TRANSITION_START_EVENT.js'(exports, module) {
 			module.exports = 'transitionstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js
 	var require_TRANSITION_WAKE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/TRANSITION_WAKE_EVENT.js'(exports, module) {
 			module.exports = 'transitionwake'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js
 	var require_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'update'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/WAKE_EVENT.js
 	var require_WAKE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scene/events/WAKE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/WAKE_EVENT.js'(exports, module) {
 			module.exports = 'wake'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scene/events/index.js
 	var require_events = __commonJS({
-		'../../node_modules/phaser/src/scene/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/events/index.js'(exports, module) {
 			module.exports = {
 				ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT(),
 				BOOT: require_BOOT_EVENT(),
@@ -5924,7 +5915,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/GameObjectFactory.js
 	var require_GameObjectFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/GameObjectFactory.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/GameObjectFactory.js'(exports, module) {
 			var Class = require_Class()
 			var PluginCache = require_PluginCache()
 			var SceneEvents = require_events()
@@ -5985,13 +5976,13 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/mask/BitmapMask.js
 	var require_BitmapMask = __commonJS({
-		'../../node_modules/phaser/src/display/mask/BitmapMask.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/mask/BitmapMask.js'(exports, module) {
 			var Class = require_Class()
 			var GameObjectFactory = require_GameObjectFactory()
 			var BitmapMask = new Class({
 				initialize: function BitmapMask2(scene, maskObject, x, y, texture, frame) {
 					if (!maskObject) {
-						maskObject = scene.sys.make.image({ x: x, y: y, key: texture, frame: frame, add: false })
+						maskObject = scene.sys.make.image({ x, y, key: texture, frame, add: false })
 					}
 					this.bitmapMask = maskObject
 					this.invertAlpha = false
@@ -6021,7 +6012,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/mask/GeometryMask.js
 	var require_GeometryMask = __commonJS({
-		'../../node_modules/phaser/src/display/mask/GeometryMask.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/mask/GeometryMask.js'(exports, module) {
 			var Class = require_Class()
 			var GeometryMask = new Class({
 				initialize: function GeometryMask2(scene, graphicsGeometry) {
@@ -6052,7 +6043,7 @@ var Phaser = (function () {
 					if (renderer.currentCameraMask.mask !== this) {
 						renderer.currentMask.mask = this
 					}
-					renderer.maskStack.push({ mask: this, camera: camera })
+					renderer.maskStack.push({ mask: this, camera })
 					this.applyStencil(renderer, camera, true)
 					renderer.maskCount++
 				},
@@ -6120,7 +6111,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Mask.js
 	var require_Mask = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Mask.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Mask.js'(exports, module) {
 			var BitmapMask = require_BitmapMask()
 			var GeometryMask = require_GeometryMask()
 			var Mask = {
@@ -6158,7 +6149,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Origin.js
 	var require_Origin = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Origin.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Origin.js'(exports, module) {
 			var Origin = {
 				_originComponent: true,
 				originX: 0.5,
@@ -6226,7 +6217,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/DegToRad.js
 	var require_DegToRad = __commonJS({
-		'../../node_modules/phaser/src/math/DegToRad.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/DegToRad.js'(exports, module) {
 			var CONST = require_const4()
 			var DegToRad = function (degrees) {
 				return degrees * CONST.DEG_TO_RAD
@@ -6237,7 +6228,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetBoolean.js
 	var require_GetBoolean = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetBoolean.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetBoolean.js'(exports, module) {
 			var GetBoolean = function (source, key, defaultValue) {
 				if (!source) {
 					return defaultValue
@@ -6253,7 +6244,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/const.js
 	var require_const6 = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/const.js'(exports, module) {
 			var TWEEN_CONST = {
 				CREATED: 0,
 				DELAY: 2,
@@ -6280,7 +6271,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/PathFollower.js
 	var require_PathFollower = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/PathFollower.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/PathFollower.js'(exports, module) {
 			var DegToRad = require_DegToRad()
 			var GetBoolean = require_GetBoolean()
 			var GetValue = require_GetValue()
@@ -6443,7 +6434,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/DeepCopy.js
 	var require_DeepCopy = __commonJS({
-		'../../node_modules/phaser/src/utils/object/DeepCopy.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/DeepCopy.js'(exports, module) {
 			var DeepCopy = function (inObject) {
 				var outObject
 				var value
@@ -6464,7 +6455,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Pipeline.js
 	var require_Pipeline = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Pipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Pipeline.js'(exports, module) {
 			var DeepCopy = require_DeepCopy()
 			var Pipeline = {
 				defaultPipeline: null,
@@ -6536,7 +6527,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/PostPipeline.js
 	var require_PostPipeline = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/PostPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/PostPipeline.js'(exports, module) {
 			var DeepCopy = require_DeepCopy()
 			var FX = require_FX()
 			var SpliceOne = require_SpliceOne()
@@ -6641,7 +6632,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/ScrollFactor.js
 	var require_ScrollFactor = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/ScrollFactor.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/ScrollFactor.js'(exports, module) {
 			var ScrollFactor = {
 				scrollFactorX: 1,
 				scrollFactorY: 1,
@@ -6660,7 +6651,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Size.js
 	var require_Size = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Size.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Size.js'(exports, module) {
 			var Size = {
 				_sizeComponent: true,
 				width: 0,
@@ -6711,7 +6702,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/Frame.js
 	var require_Frame = __commonJS({
-		'../../node_modules/phaser/src/textures/Frame.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/Frame.js'(exports, module) {
 			var Class = require_Class()
 			var Clamp = require_Clamp()
 			var Extend = require_Extend()
@@ -7052,7 +7043,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Texture.js
 	var require_Texture = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Texture.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Texture.js'(exports, module) {
 			var Frame = require_Frame()
 			var _FLAG = 8
 			var Texture = {
@@ -7100,7 +7091,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/TextureCrop.js
 	var require_TextureCrop = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/TextureCrop.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/TextureCrop.js'(exports, module) {
 			var Frame = require_Frame()
 			var _FLAG = 8
 			var TextureCrop = {
@@ -7168,7 +7159,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Tint.js
 	var require_Tint = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Tint.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Tint.js'(exports, module) {
 			var Tint = {
 				tintTopLeft: 16777215,
 				tintTopRight: 16777215,
@@ -7221,7 +7212,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/ToJSON.js
 	var require_ToJSON = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/ToJSON.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/ToJSON.js'(exports, module) {
 			var ToJSON = function (gameObject) {
 				var out = {
 					name: gameObject.name,
@@ -7259,7 +7250,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/TransformMatrix.js
 	var require_TransformMatrix = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/TransformMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/TransformMatrix.js'(exports, module) {
 			var Class = require_Class()
 			var MATH_CONST = require_const4()
 			var Vector2 = require_Vector2()
@@ -7714,7 +7705,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/TransformXY.js
 	var require_TransformXY = __commonJS({
-		'../../node_modules/phaser/src/math/TransformXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/TransformXY.js'(exports, module) {
 			var Vector2 = require_Vector2()
 			var TransformXY = function (x, y, positionX, positionY, rotation, scaleX, scaleY, output) {
 				if (output === void 0) {
@@ -7737,7 +7728,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Wrap.js
 	var require_Wrap = __commonJS({
-		'../../node_modules/phaser/src/math/Wrap.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Wrap.js'(exports, module) {
 			var Wrap = function (value, min, max) {
 				var range = max - min
 				return min + ((((value - min) % range) + range) % range)
@@ -7748,7 +7739,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/Wrap.js
 	var require_Wrap2 = __commonJS({
-		'../../node_modules/phaser/src/math/angle/Wrap.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/Wrap.js'(exports, module) {
 			var MathWrap = require_Wrap()
 			var Wrap = function (angle) {
 				return MathWrap(angle, -Math.PI, Math.PI)
@@ -7759,7 +7750,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/WrapDegrees.js
 	var require_WrapDegrees = __commonJS({
-		'../../node_modules/phaser/src/math/angle/WrapDegrees.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/WrapDegrees.js'(exports, module) {
 			var Wrap = require_Wrap()
 			var WrapDegrees = function (angle) {
 				return Wrap(angle, -180, 180)
@@ -7770,7 +7761,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Transform.js
 	var require_Transform = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Transform.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Transform.js'(exports, module) {
 			var MATH_CONST = require_const4()
 			var TransformMatrix = require_TransformMatrix()
 			var TransformXY = require_TransformXY()
@@ -8010,7 +8001,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/Visible.js
 	var require_Visible = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/Visible.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/Visible.js'(exports, module) {
 			var _FLAG = 1
 			var Visible = {
 				_visible: true,
@@ -8039,7 +8030,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/components/index.js
 	var require_components = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/components/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/components/index.js'(exports, module) {
 			module.exports = {
 				Alpha: require_Alpha(),
 				AlphaSingle: require_AlphaSingle(),
@@ -8070,42 +8061,42 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/data/events/CHANGE_DATA_EVENT.js
 	var require_CHANGE_DATA_EVENT = __commonJS({
-		'../../node_modules/phaser/src/data/events/CHANGE_DATA_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/CHANGE_DATA_EVENT.js'(exports, module) {
 			module.exports = 'changedata'
 		},
 	})
 
 	// ../../node_modules/phaser/src/data/events/CHANGE_DATA_KEY_EVENT.js
 	var require_CHANGE_DATA_KEY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/data/events/CHANGE_DATA_KEY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/CHANGE_DATA_KEY_EVENT.js'(exports, module) {
 			module.exports = 'changedata-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/data/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/data/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/data/events/REMOVE_DATA_EVENT.js
 	var require_REMOVE_DATA_EVENT = __commonJS({
-		'../../node_modules/phaser/src/data/events/REMOVE_DATA_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/REMOVE_DATA_EVENT.js'(exports, module) {
 			module.exports = 'removedata'
 		},
 	})
 
 	// ../../node_modules/phaser/src/data/events/SET_DATA_EVENT.js
 	var require_SET_DATA_EVENT = __commonJS({
-		'../../node_modules/phaser/src/data/events/SET_DATA_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/SET_DATA_EVENT.js'(exports, module) {
 			module.exports = 'setdata'
 		},
 	})
 
 	// ../../node_modules/phaser/src/data/events/index.js
 	var require_events2 = __commonJS({
-		'../../node_modules/phaser/src/data/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/events/index.js'(exports, module) {
 			module.exports = {
 				CHANGE_DATA: require_CHANGE_DATA_EVENT(),
 				CHANGE_DATA_KEY: require_CHANGE_DATA_KEY_EVENT(),
@@ -8118,7 +8109,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/data/DataManager.js
 	var require_DataManager = __commonJS({
-		'../../node_modules/phaser/src/data/DataManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/DataManager.js'(exports, module) {
 			var Class = require_Class()
 			var Events = require_events2()
 			var DataManager = new Class({
@@ -8333,7 +8324,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/node_modules/eventemitter3/index.js
 	var require_eventemitter3 = __commonJS({
-		'../../node_modules/phaser/node_modules/eventemitter3/index.js': function (exports, module) {
+		'../../node_modules/phaser/node_modules/eventemitter3/index.js'(exports, module) {
 			'use strict'
 			var has = Object.prototype.hasOwnProperty
 			var prefix = '~'
@@ -8504,133 +8495,133 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/events/ADDED_TO_SCENE_EVENT.js
 	var require_ADDED_TO_SCENE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/ADDED_TO_SCENE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/ADDED_TO_SCENE_EVENT.js'(exports, module) {
 			module.exports = 'addedtoscene'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/REMOVED_FROM_SCENE_EVENT.js
 	var require_REMOVED_FROM_SCENE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/REMOVED_FROM_SCENE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/REMOVED_FROM_SCENE_EVENT.js'(exports, module) {
 			module.exports = 'removedfromscene'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_COMPLETE_EVENT.js
 	var require_VIDEO_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_CREATED_EVENT.js
 	var require_VIDEO_CREATED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_CREATED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_CREATED_EVENT.js'(exports, module) {
 			module.exports = 'created'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_ERROR_EVENT.js
 	var require_VIDEO_ERROR_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_ERROR_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_ERROR_EVENT.js'(exports, module) {
 			module.exports = 'error'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_LOCKED_EVENT.js
 	var require_VIDEO_LOCKED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_LOCKED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_LOCKED_EVENT.js'(exports, module) {
 			module.exports = 'locked'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_LOOP_EVENT.js
 	var require_VIDEO_LOOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_LOOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_LOOP_EVENT.js'(exports, module) {
 			module.exports = 'loop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_METADATA_EVENT.js
 	var require_VIDEO_METADATA_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_METADATA_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_METADATA_EVENT.js'(exports, module) {
 			module.exports = 'metadata'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAY_EVENT.js
 	var require_VIDEO_PLAY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAY_EVENT.js'(exports, module) {
 			module.exports = 'play'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAYING_EVENT.js
 	var require_VIDEO_PLAYING_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAYING_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_PLAYING_EVENT.js'(exports, module) {
 			module.exports = 'playing'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKED_EVENT.js
 	var require_VIDEO_SEEKED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKED_EVENT.js'(exports, module) {
 			module.exports = 'seeked'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKING_EVENT.js
 	var require_VIDEO_SEEKING_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKING_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_SEEKING_EVENT.js'(exports, module) {
 			module.exports = 'seeking'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_STALLED_EVENT.js
 	var require_VIDEO_STALLED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_STALLED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_STALLED_EVENT.js'(exports, module) {
 			module.exports = 'stalled'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_STOP_EVENT.js
 	var require_VIDEO_STOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_STOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_STOP_EVENT.js'(exports, module) {
 			module.exports = 'stop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_TEXTURE_EVENT.js
 	var require_VIDEO_TEXTURE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_TEXTURE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_TEXTURE_EVENT.js'(exports, module) {
 			module.exports = 'textureready'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_UNLOCKED_EVENT.js
 	var require_VIDEO_UNLOCKED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_UNLOCKED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_UNLOCKED_EVENT.js'(exports, module) {
 			module.exports = 'unlocked'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/VIDEO_UNSUPPORTED_EVENT.js
 	var require_VIDEO_UNSUPPORTED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/VIDEO_UNSUPPORTED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/VIDEO_UNSUPPORTED_EVENT.js'(exports, module) {
 			module.exports = 'unsupported'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/events/index.js
 	var require_events3 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/events/index.js'(exports, module) {
 			module.exports = {
 				ADDED_TO_SCENE: require_ADDED_TO_SCENE_EVENT2(),
 				DESTROY: require_DESTROY_EVENT3(),
@@ -8656,7 +8647,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/GameObject.js
 	var require_GameObject = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/GameObject.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/GameObject.js'(exports, module) {
 			var Class = require_Class()
 			var ComponentsToJSON = require_ToJSON()
 			var DataManager = require_DataManager()
@@ -8880,7 +8871,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/zone/Zone.js
 	var require_Zone = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/zone/Zone.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/zone/Zone.js'(exports, module) {
 			var BlendModes = require_BlendModes()
 			var Circle = require_Circle()
 			var CircleContains = require_Contains()
@@ -8968,7 +8959,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/GridAlign.js
 	var require_GridAlign = __commonJS({
-		'../../node_modules/phaser/src/actions/GridAlign.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/GridAlign.js'(exports, module) {
 			var AlignIn = require_QuickSet()
 			var CONST = require_const2()
 			var GetFastValue = require_GetFastValue()
@@ -9034,7 +9025,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/Map.js
 	var require_Map = __commonJS({
-		'../../node_modules/phaser/src/structs/Map.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/Map.js'(exports, module) {
 			var Class = require_Class()
 			var Map = new Class({
 				initialize: function Map2(elements) {
@@ -9146,21 +9137,21 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cache/events/ADD_EVENT.js
 	var require_ADD_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cache/events/ADD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/events/ADD_EVENT.js'(exports, module) {
 			module.exports = 'add'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cache/events/REMOVE_EVENT.js
 	var require_REMOVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cache/events/REMOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/events/REMOVE_EVENT.js'(exports, module) {
 			module.exports = 'remove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cache/events/index.js
 	var require_events4 = __commonJS({
-		'../../node_modules/phaser/src/cache/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/events/index.js'(exports, module) {
 			module.exports = {
 				ADD: require_ADD_EVENT(),
 				REMOVE: require_REMOVE_EVENT(),
@@ -9170,7 +9161,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cache/BaseCache.js
 	var require_BaseCache = __commonJS({
-		'../../node_modules/phaser/src/cache/BaseCache.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/BaseCache.js'(exports, module) {
 			var Class = require_Class()
 			var CustomMap = require_Map()
 			var EventEmitter = require_eventemitter3()
@@ -9218,119 +9209,119 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/events/BLUR_EVENT.js
 	var require_BLUR_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/BLUR_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/BLUR_EVENT.js'(exports, module) {
 			module.exports = 'blur'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/BOOT_EVENT.js
 	var require_BOOT_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/core/events/BOOT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/BOOT_EVENT.js'(exports, module) {
 			module.exports = 'boot'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js
 	var require_CONTEXT_LOST_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/CONTEXT_LOST_EVENT.js'(exports, module) {
 			module.exports = 'contextlost'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT4 = __commonJS({
-		'../../node_modules/phaser/src/core/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/FOCUS_EVENT.js
 	var require_FOCUS_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/FOCUS_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/FOCUS_EVENT.js'(exports, module) {
 			module.exports = 'focus'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js
 	var require_HIDDEN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/HIDDEN_EVENT.js'(exports, module) {
 			module.exports = 'hidden'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/PAUSE_EVENT.js
 	var require_PAUSE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/core/events/PAUSE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/PAUSE_EVENT.js'(exports, module) {
 			module.exports = 'pause'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js
 	var require_POST_RENDER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/POST_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'postrender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js
 	var require_POST_STEP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/POST_STEP_EVENT.js'(exports, module) {
 			module.exports = 'poststep'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js
 	var require_PRE_RENDER_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/PRE_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'prerender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js
 	var require_PRE_STEP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/PRE_STEP_EVENT.js'(exports, module) {
 			module.exports = 'prestep'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/READY_EVENT.js
 	var require_READY_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/core/events/READY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/READY_EVENT.js'(exports, module) {
 			module.exports = 'ready'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/RESUME_EVENT.js
 	var require_RESUME_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/core/events/RESUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/RESUME_EVENT.js'(exports, module) {
 			module.exports = 'resume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/STEP_EVENT.js
 	var require_STEP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/STEP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/STEP_EVENT.js'(exports, module) {
 			module.exports = 'step'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/SYSTEM_READY_EVENT.js
 	var require_SYSTEM_READY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/SYSTEM_READY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/SYSTEM_READY_EVENT.js'(exports, module) {
 			module.exports = 'systemready'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js
 	var require_VISIBLE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/VISIBLE_EVENT.js'(exports, module) {
 			module.exports = 'visible'
 		},
 	})
 
 	// ../../node_modules/phaser/src/core/events/index.js
 	var require_events5 = __commonJS({
-		'../../node_modules/phaser/src/core/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/events/index.js'(exports, module) {
 			module.exports = {
 				BLUR: require_BLUR_EVENT(),
 				BOOT: require_BOOT_EVENT2(),
@@ -9354,7 +9345,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cache/CacheManager.js
 	var require_CacheManager = __commonJS({
-		'../../node_modules/phaser/src/cache/CacheManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/CacheManager.js'(exports, module) {
 			var BaseCache = require_BaseCache()
 			var Class = require_Class()
 			var GameEvents = require_events5()
@@ -9401,7 +9392,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cache/index.js
 	var require_cache = __commonJS({
-		'../../node_modules/phaser/src/cache/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cache/index.js'(exports, module) {
 			module.exports = {
 				BaseCache: require_BaseCache(),
 				CacheManager: require_CacheManager(),
@@ -9412,7 +9403,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/controls/FixedKeyControl.js
 	var require_FixedKeyControl = __commonJS({
-		'../../node_modules/phaser/src/cameras/controls/FixedKeyControl.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/controls/FixedKeyControl.js'(exports, module) {
 			var Class = require_Class()
 			var GetValue = require_GetValue()
 			var FixedKeyControl = new Class({
@@ -9498,7 +9489,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/controls/SmoothedKeyControl.js
 	var require_SmoothedKeyControl = __commonJS({
-		'../../node_modules/phaser/src/cameras/controls/SmoothedKeyControl.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/controls/SmoothedKeyControl.js'(exports, module) {
 			var Class = require_Class()
 			var GetValue = require_GetValue()
 			var SmoothedKeyControl = new Class({
@@ -9650,7 +9641,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/controls/index.js
 	var require_controls = __commonJS({
-		'../../node_modules/phaser/src/cameras/controls/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/controls/index.js'(exports, module) {
 			module.exports = {
 				FixedKeyControl: require_FixedKeyControl(),
 				SmoothedKeyControl: require_SmoothedKeyControl(),
@@ -9660,133 +9651,133 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT5 = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'cameradestroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FADE_IN_COMPLETE_EVENT.js
 	var require_FADE_IN_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FADE_IN_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FADE_IN_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerafadeincomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FADE_IN_START_EVENT.js
 	var require_FADE_IN_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FADE_IN_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FADE_IN_START_EVENT.js'(exports, module) {
 			module.exports = 'camerafadeinstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_COMPLETE_EVENT.js
 	var require_FADE_OUT_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerafadeoutcomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_START_EVENT.js
 	var require_FADE_OUT_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FADE_OUT_START_EVENT.js'(exports, module) {
 			module.exports = 'camerafadeoutstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FLASH_COMPLETE_EVENT.js
 	var require_FLASH_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FLASH_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FLASH_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'cameraflashcomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FLASH_START_EVENT.js
 	var require_FLASH_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FLASH_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FLASH_START_EVENT.js'(exports, module) {
 			module.exports = 'cameraflashstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/FOLLOW_UPDATE_EVENT.js
 	var require_FOLLOW_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/FOLLOW_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/FOLLOW_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'followupdate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/PAN_COMPLETE_EVENT.js
 	var require_PAN_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/PAN_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/PAN_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerapancomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/PAN_START_EVENT.js
 	var require_PAN_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/PAN_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/PAN_START_EVENT.js'(exports, module) {
 			module.exports = 'camerapanstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/POST_RENDER_EVENT.js
 	var require_POST_RENDER_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/POST_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/POST_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'postrender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/PRE_RENDER_EVENT.js
 	var require_PRE_RENDER_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/PRE_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/PRE_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'prerender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/ROTATE_COMPLETE_EVENT.js
 	var require_ROTATE_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/ROTATE_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/ROTATE_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerarotatecomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/ROTATE_START_EVENT.js
 	var require_ROTATE_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/ROTATE_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/ROTATE_START_EVENT.js'(exports, module) {
 			module.exports = 'camerarotatestart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/SHAKE_COMPLETE_EVENT.js
 	var require_SHAKE_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/SHAKE_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/SHAKE_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerashakecomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/SHAKE_START_EVENT.js
 	var require_SHAKE_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/SHAKE_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/SHAKE_START_EVENT.js'(exports, module) {
 			module.exports = 'camerashakestart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/ZOOM_COMPLETE_EVENT.js
 	var require_ZOOM_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/ZOOM_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/ZOOM_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'camerazoomcomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/ZOOM_START_EVENT.js
 	var require_ZOOM_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/ZOOM_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/ZOOM_START_EVENT.js'(exports, module) {
 			module.exports = 'camerazoomstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/cameras/2d/events/index.js
 	var require_events6 = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/events/index.js'(exports, module) {
 			module.exports = {
 				DESTROY: require_DESTROY_EVENT5(),
 				FADE_IN_COMPLETE: require_FADE_IN_COMPLETE_EVENT(),
@@ -9812,7 +9803,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/GetColor.js
 	var require_GetColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/GetColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/GetColor.js'(exports, module) {
 			var GetColor = function (red, green, blue) {
 				return (red << 16) | (green << 8) | blue
 			}
@@ -9822,7 +9813,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/GetColor32.js
 	var require_GetColor32 = __commonJS({
-		'../../node_modules/phaser/src/display/color/GetColor32.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/GetColor32.js'(exports, module) {
 			var GetColor32 = function (red, green, blue, alpha) {
 				return (alpha << 24) | (red << 16) | (green << 8) | blue
 			}
@@ -9832,7 +9823,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/HSVToRGB.js
 	var require_HSVToRGB = __commonJS({
-		'../../node_modules/phaser/src/display/color/HSVToRGB.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/HSVToRGB.js'(exports, module) {
 			var GetColor = require_GetColor()
 			function ConvertValue(n, h, s, v) {
 				var k = (n + h * 6) % 6
@@ -9850,7 +9841,7 @@ var Phaser = (function () {
 				var g = ConvertValue(3, h, s, v)
 				var b = ConvertValue(1, h, s, v)
 				if (!out) {
-					return { r: r, g: g, b: b, color: GetColor(r, g, b) }
+					return { r, g, b, color: GetColor(r, g, b) }
 				} else if (out.setTo) {
 					return out.setTo(r, g, b, out.alpha, true)
 				} else {
@@ -9867,7 +9858,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/RGBToHSV.js
 	var require_RGBToHSV = __commonJS({
-		'../../node_modules/phaser/src/display/color/RGBToHSV.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/RGBToHSV.js'(exports, module) {
 			var RGBToHSV = function (r, g, b, out) {
 				if (out === void 0) {
 					out = { h: 0, s: 0, v: 0 }
@@ -9908,7 +9899,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/Color.js
 	var require_Color = __commonJS({
-		'../../node_modules/phaser/src/display/color/Color.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/Color.js'(exports, module) {
 			var Class = require_Class()
 			var GetColor = require_GetColor()
 			var GetColor32 = require_GetColor32()
@@ -10204,7 +10195,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/HexStringToColor.js
 	var require_HexStringToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/HexStringToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/HexStringToColor.js'(exports, module) {
 			var Color = require_Color()
 			var HexStringToColor = function (hex) {
 				var color = new Color()
@@ -10226,7 +10217,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/IntegerToRGB.js
 	var require_IntegerToRGB = __commonJS({
-		'../../node_modules/phaser/src/display/color/IntegerToRGB.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/IntegerToRGB.js'(exports, module) {
 			var IntegerToRGB = function (color) {
 				if (color > 16777215) {
 					return {
@@ -10250,7 +10241,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/IntegerToColor.js
 	var require_IntegerToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/IntegerToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/IntegerToColor.js'(exports, module) {
 			var Color = require_Color()
 			var IntegerToRGB = require_IntegerToRGB()
 			var IntegerToColor = function (input) {
@@ -10263,7 +10254,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/ObjectToColor.js
 	var require_ObjectToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/ObjectToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/ObjectToColor.js'(exports, module) {
 			var Color = require_Color()
 			var ObjectToColor = function (input) {
 				return new Color(input.r, input.g, input.b, input.a)
@@ -10274,7 +10265,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/RGBStringToColor.js
 	var require_RGBStringToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/RGBStringToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/RGBStringToColor.js'(exports, module) {
 			var Color = require_Color()
 			var RGBStringToColor = function (rgb) {
 				var color = new Color()
@@ -10294,7 +10285,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/ValueToColor.js
 	var require_ValueToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/ValueToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/ValueToColor.js'(exports, module) {
 			var HexStringToColor = require_HexStringToColor()
 			var IntegerToColor = require_IntegerToColor()
 			var ObjectToColor = require_ObjectToColor()
@@ -10320,7 +10311,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/BaseCamera.js
 	var require_BaseCamera = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/BaseCamera.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/BaseCamera.js'(exports, module) {
 			var Class = require_Class()
 			var Components = require_components()
 			var DegToRad = require_DegToRad()
@@ -10897,7 +10888,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/CenterOn.js
 	var require_CenterOn2 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/CenterOn.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/CenterOn.js'(exports, module) {
 			var CenterOn = function (rect, x, y) {
 				rect.x = x - rect.width / 2
 				rect.y = y - rect.height / 2
@@ -10909,7 +10900,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/Fade.js
 	var require_Fade = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/Fade.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/Fade.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events6()
@@ -11034,7 +11025,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/Flash.js
 	var require_Flash = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/Flash.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/Flash.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events6()
@@ -11149,7 +11140,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/back/In.js
 	var require_In = __commonJS({
-		'../../node_modules/phaser/src/math/easing/back/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/back/In.js'(exports, module) {
 			var In = function (v, overshoot) {
 				if (overshoot === void 0) {
 					overshoot = 1.70158
@@ -11162,7 +11153,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/back/Out.js
 	var require_Out = __commonJS({
-		'../../node_modules/phaser/src/math/easing/back/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/back/Out.js'(exports, module) {
 			var Out = function (v, overshoot) {
 				if (overshoot === void 0) {
 					overshoot = 1.70158
@@ -11175,7 +11166,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/back/InOut.js
 	var require_InOut = __commonJS({
-		'../../node_modules/phaser/src/math/easing/back/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/back/InOut.js'(exports, module) {
 			var InOut = function (v, overshoot) {
 				if (overshoot === void 0) {
 					overshoot = 1.70158
@@ -11193,7 +11184,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/back/index.js
 	var require_back = __commonJS({
-		'../../node_modules/phaser/src/math/easing/back/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/back/index.js'(exports, module) {
 			module.exports = {
 				In: require_In(),
 				Out: require_Out(),
@@ -11204,7 +11195,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/bounce/In.js
 	var require_In2 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/bounce/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/bounce/In.js'(exports, module) {
 			var In = function (v) {
 				v = 1 - v
 				if (v < 1 / 2.75) {
@@ -11223,7 +11214,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/bounce/Out.js
 	var require_Out2 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/bounce/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/bounce/Out.js'(exports, module) {
 			var Out = function (v) {
 				if (v < 1 / 2.75) {
 					return 7.5625 * v * v
@@ -11241,7 +11232,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/bounce/InOut.js
 	var require_InOut2 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/bounce/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/bounce/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				var reverse = false
 				if (v < 0.5) {
@@ -11271,7 +11262,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/bounce/index.js
 	var require_bounce = __commonJS({
-		'../../node_modules/phaser/src/math/easing/bounce/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/bounce/index.js'(exports, module) {
 			module.exports = {
 				In: require_In2(),
 				Out: require_Out2(),
@@ -11282,7 +11273,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/circular/In.js
 	var require_In3 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/circular/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/circular/In.js'(exports, module) {
 			var In = function (v) {
 				return 1 - Math.sqrt(1 - v * v)
 			}
@@ -11292,7 +11283,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/circular/Out.js
 	var require_Out3 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/circular/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/circular/Out.js'(exports, module) {
 			var Out = function (v) {
 				return Math.sqrt(1 - --v * v)
 			}
@@ -11302,7 +11293,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/circular/InOut.js
 	var require_InOut3 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/circular/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/circular/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return -0.5 * (Math.sqrt(1 - v * v) - 1)
@@ -11316,7 +11307,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/circular/index.js
 	var require_circular = __commonJS({
-		'../../node_modules/phaser/src/math/easing/circular/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/circular/index.js'(exports, module) {
 			module.exports = {
 				In: require_In3(),
 				Out: require_Out3(),
@@ -11327,7 +11318,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/cubic/In.js
 	var require_In4 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/cubic/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/cubic/In.js'(exports, module) {
 			var In = function (v) {
 				return v * v * v
 			}
@@ -11337,7 +11328,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/cubic/Out.js
 	var require_Out4 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/cubic/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/cubic/Out.js'(exports, module) {
 			var Out = function (v) {
 				return --v * v * v + 1
 			}
@@ -11347,7 +11338,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/cubic/InOut.js
 	var require_InOut4 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/cubic/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/cubic/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return 0.5 * v * v * v
@@ -11361,7 +11352,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/cubic/index.js
 	var require_cubic = __commonJS({
-		'../../node_modules/phaser/src/math/easing/cubic/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/cubic/index.js'(exports, module) {
 			module.exports = {
 				In: require_In4(),
 				Out: require_Out4(),
@@ -11372,7 +11363,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/elastic/In.js
 	var require_In5 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/elastic/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/elastic/In.js'(exports, module) {
 			var In = function (v, amplitude, period) {
 				if (amplitude === void 0) {
 					amplitude = 0.1
@@ -11400,7 +11391,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/elastic/Out.js
 	var require_Out5 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/elastic/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/elastic/Out.js'(exports, module) {
 			var Out = function (v, amplitude, period) {
 				if (amplitude === void 0) {
 					amplitude = 0.1
@@ -11428,7 +11419,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/elastic/InOut.js
 	var require_InOut5 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/elastic/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/elastic/InOut.js'(exports, module) {
 			var InOut = function (v, amplitude, period) {
 				if (amplitude === void 0) {
 					amplitude = 0.1
@@ -11460,7 +11451,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/elastic/index.js
 	var require_elastic = __commonJS({
-		'../../node_modules/phaser/src/math/easing/elastic/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/elastic/index.js'(exports, module) {
 			module.exports = {
 				In: require_In5(),
 				Out: require_Out5(),
@@ -11471,7 +11462,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/expo/In.js
 	var require_In6 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/expo/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/expo/In.js'(exports, module) {
 			var In = function (v) {
 				return Math.pow(2, 10 * (v - 1)) - 1e-3
 			}
@@ -11481,7 +11472,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/expo/Out.js
 	var require_Out6 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/expo/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/expo/Out.js'(exports, module) {
 			var Out = function (v) {
 				return 1 - Math.pow(2, -10 * v)
 			}
@@ -11491,7 +11482,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/expo/InOut.js
 	var require_InOut6 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/expo/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/expo/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return 0.5 * Math.pow(2, 10 * (v - 1))
@@ -11505,7 +11496,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/expo/index.js
 	var require_expo = __commonJS({
-		'../../node_modules/phaser/src/math/easing/expo/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/expo/index.js'(exports, module) {
 			module.exports = {
 				In: require_In6(),
 				Out: require_Out6(),
@@ -11516,7 +11507,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/linear/Linear.js
 	var require_Linear = __commonJS({
-		'../../node_modules/phaser/src/math/easing/linear/Linear.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/linear/Linear.js'(exports, module) {
 			var Linear = function (v) {
 				return v
 			}
@@ -11526,14 +11517,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/linear/index.js
 	var require_linear = __commonJS({
-		'../../node_modules/phaser/src/math/easing/linear/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/linear/index.js'(exports, module) {
 			module.exports = require_Linear()
 		},
 	})
 
 	// ../../node_modules/phaser/src/math/easing/quadratic/In.js
 	var require_In7 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quadratic/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quadratic/In.js'(exports, module) {
 			var In = function (v) {
 				return v * v
 			}
@@ -11543,7 +11534,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quadratic/Out.js
 	var require_Out7 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quadratic/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quadratic/Out.js'(exports, module) {
 			var Out = function (v) {
 				return v * (2 - v)
 			}
@@ -11553,7 +11544,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quadratic/InOut.js
 	var require_InOut7 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quadratic/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quadratic/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return 0.5 * v * v
@@ -11567,7 +11558,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quadratic/index.js
 	var require_quadratic = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quadratic/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quadratic/index.js'(exports, module) {
 			module.exports = {
 				In: require_In7(),
 				Out: require_Out7(),
@@ -11578,7 +11569,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quartic/In.js
 	var require_In8 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quartic/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quartic/In.js'(exports, module) {
 			var In = function (v) {
 				return v * v * v * v
 			}
@@ -11588,7 +11579,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quartic/Out.js
 	var require_Out8 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quartic/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quartic/Out.js'(exports, module) {
 			var Out = function (v) {
 				return 1 - --v * v * v * v
 			}
@@ -11598,7 +11589,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quartic/InOut.js
 	var require_InOut8 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quartic/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quartic/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return 0.5 * v * v * v * v
@@ -11612,7 +11603,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quartic/index.js
 	var require_quartic = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quartic/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quartic/index.js'(exports, module) {
 			module.exports = {
 				In: require_In8(),
 				Out: require_Out8(),
@@ -11623,7 +11614,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quintic/In.js
 	var require_In9 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quintic/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quintic/In.js'(exports, module) {
 			var In = function (v) {
 				return v * v * v * v * v
 			}
@@ -11633,7 +11624,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quintic/Out.js
 	var require_Out9 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quintic/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quintic/Out.js'(exports, module) {
 			var Out = function (v) {
 				return --v * v * v * v * v + 1
 			}
@@ -11643,7 +11634,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quintic/InOut.js
 	var require_InOut9 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quintic/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quintic/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if ((v *= 2) < 1) {
 					return 0.5 * v * v * v * v * v
@@ -11657,7 +11648,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/quintic/index.js
 	var require_quintic = __commonJS({
-		'../../node_modules/phaser/src/math/easing/quintic/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/quintic/index.js'(exports, module) {
 			module.exports = {
 				In: require_In9(),
 				Out: require_Out9(),
@@ -11668,7 +11659,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/sine/In.js
 	var require_In10 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/sine/In.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/sine/In.js'(exports, module) {
 			var In = function (v) {
 				if (v === 0) {
 					return 0
@@ -11684,7 +11675,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/sine/Out.js
 	var require_Out10 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/sine/Out.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/sine/Out.js'(exports, module) {
 			var Out = function (v) {
 				if (v === 0) {
 					return 0
@@ -11700,7 +11691,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/sine/InOut.js
 	var require_InOut10 = __commonJS({
-		'../../node_modules/phaser/src/math/easing/sine/InOut.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/sine/InOut.js'(exports, module) {
 			var InOut = function (v) {
 				if (v === 0) {
 					return 0
@@ -11716,7 +11707,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/sine/index.js
 	var require_sine = __commonJS({
-		'../../node_modules/phaser/src/math/easing/sine/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/sine/index.js'(exports, module) {
 			module.exports = {
 				In: require_In10(),
 				Out: require_Out10(),
@@ -11727,7 +11718,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/stepped/Stepped.js
 	var require_Stepped = __commonJS({
-		'../../node_modules/phaser/src/math/easing/stepped/Stepped.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/stepped/Stepped.js'(exports, module) {
 			var Stepped = function (v, steps) {
 				if (steps === void 0) {
 					steps = 1
@@ -11746,14 +11737,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/stepped/index.js
 	var require_stepped = __commonJS({
-		'../../node_modules/phaser/src/math/easing/stepped/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/stepped/index.js'(exports, module) {
 			module.exports = require_Stepped()
 		},
 	})
 
 	// ../../node_modules/phaser/src/math/easing/EaseMap.js
 	var require_EaseMap = __commonJS({
-		'../../node_modules/phaser/src/math/easing/EaseMap.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/EaseMap.js'(exports, module) {
 			var Back = require_back()
 			var Bounce = require_bounce()
 			var Circular = require_circular()
@@ -11772,7 +11763,7 @@ var Phaser = (function () {
 				Power2: Cubic.Out,
 				Power3: Quartic.Out,
 				Power4: Quintic.Out,
-				Linear: Linear,
+				Linear,
 				Quad: Quadratic.Out,
 				Cubic: Cubic.Out,
 				Quart: Quartic.Out,
@@ -11783,7 +11774,7 @@ var Phaser = (function () {
 				Elastic: Elastic.Out,
 				Back: Back.Out,
 				Bounce: Bounce.Out,
-				Stepped: Stepped,
+				Stepped,
 				'Quad.easeIn': Quadratic.In,
 				'Cubic.easeIn': Cubic.In,
 				'Quart.easeIn': Quartic.In,
@@ -11820,7 +11811,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/Pan.js
 	var require_Pan = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/Pan.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/Pan.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var EaseMap = require_EaseMap()
@@ -11926,7 +11917,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/Shake.js
 	var require_Shake = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/Shake.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/Shake.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events6()
@@ -12035,7 +12026,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/RotateTo.js
 	var require_RotateTo = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/RotateTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/RotateTo.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events6()
@@ -12190,7 +12181,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/Zoom.js
 	var require_Zoom = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/Zoom.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/Zoom.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var EaseMap = require_EaseMap()
@@ -12285,7 +12276,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/effects/index.js
 	var require_effects = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/effects/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/effects/index.js'(exports, module) {
 			module.exports = {
 				Fade: require_Fade(),
 				Flash: require_Flash(),
@@ -12299,7 +12290,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Linear.js
 	var require_Linear2 = __commonJS({
-		'../../node_modules/phaser/src/math/Linear.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Linear.js'(exports, module) {
 			var Linear = function (p0, p1, t) {
 				return (p1 - p0) * t + p0
 			}
@@ -12309,7 +12300,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/Camera.js
 	var require_Camera = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/Camera.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/Camera.js'(exports, module) {
 			var BaseCamera = require_BaseCamera()
 			var CenterOn = require_CenterOn2()
 			var Clamp = require_Clamp()
@@ -12544,49 +12535,49 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/events/ENTER_FULLSCREEN_EVENT.js
 	var require_ENTER_FULLSCREEN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/ENTER_FULLSCREEN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/ENTER_FULLSCREEN_EVENT.js'(exports, module) {
 			module.exports = 'enterfullscreen'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/FULLSCREEN_FAILED_EVENT.js
 	var require_FULLSCREEN_FAILED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/FULLSCREEN_FAILED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/FULLSCREEN_FAILED_EVENT.js'(exports, module) {
 			module.exports = 'fullscreenfailed'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/FULLSCREEN_UNSUPPORTED_EVENT.js
 	var require_FULLSCREEN_UNSUPPORTED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/FULLSCREEN_UNSUPPORTED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/FULLSCREEN_UNSUPPORTED_EVENT.js'(exports, module) {
 			module.exports = 'fullscreenunsupported'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/LEAVE_FULLSCREEN_EVENT.js
 	var require_LEAVE_FULLSCREEN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/LEAVE_FULLSCREEN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/LEAVE_FULLSCREEN_EVENT.js'(exports, module) {
 			module.exports = 'leavefullscreen'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/ORIENTATION_CHANGE_EVENT.js
 	var require_ORIENTATION_CHANGE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/ORIENTATION_CHANGE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/ORIENTATION_CHANGE_EVENT.js'(exports, module) {
 			module.exports = 'orientationchange'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/RESIZE_EVENT.js
 	var require_RESIZE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/scale/events/RESIZE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/RESIZE_EVENT.js'(exports, module) {
 			module.exports = 'resize'
 		},
 	})
 
 	// ../../node_modules/phaser/src/scale/events/index.js
 	var require_events7 = __commonJS({
-		'../../node_modules/phaser/src/scale/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/events/index.js'(exports, module) {
 			module.exports = {
 				ENTER_FULLSCREEN: require_ENTER_FULLSCREEN_EVENT(),
 				FULLSCREEN_FAILED: require_FULLSCREEN_FAILED_EVENT(),
@@ -12600,7 +12591,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/CameraManager.js
 	var require_CameraManager = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/CameraManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/CameraManager.js'(exports, module) {
 			var Camera = require_Camera()
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
@@ -12878,7 +12869,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/2d/index.js
 	var require_d = __commonJS({
-		'../../node_modules/phaser/src/cameras/2d/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/2d/index.js'(exports, module) {
 			module.exports = {
 				Camera: require_Camera(),
 				BaseCamera: require_BaseCamera(),
@@ -12891,7 +12882,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/cameras/index.js
 	var require_cameras = __commonJS({
-		'../../node_modules/phaser/src/cameras/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/cameras/index.js'(exports, module) {
 			module.exports = {
 				Controls: require_controls(),
 				Scene2D: require_d(),
@@ -12901,7 +12892,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/DefaultPlugins.js
 	var require_DefaultPlugins = __commonJS({
-		'../../node_modules/phaser/src/plugins/DefaultPlugins.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/DefaultPlugins.js'(exports, module) {
 			var DefaultPlugins = {
 				Global: ['game', 'anims', 'cache', 'plugins', 'registry', 'scale', 'sound', 'textures', 'renderer'],
 				CoreScene: ['EventEmitter', 'CameraManager', 'GameObjectCreator', 'GameObjectFactory', 'ScenePlugin', 'DisplayList', 'UpdateList'],
@@ -12919,7 +12910,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/Between.js
 	var require_Between = __commonJS({
-		'../../node_modules/phaser/src/math/angle/Between.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/Between.js'(exports, module) {
 			var Between = function (x1, y1, x2, y2) {
 				return Math.atan2(y2 - y1, x2 - x1)
 			}
@@ -12929,7 +12920,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/BetweenPoints.js
 	var require_BetweenPoints = __commonJS({
-		'../../node_modules/phaser/src/math/angle/BetweenPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/BetweenPoints.js'(exports, module) {
 			var BetweenPoints = function (point1, point2) {
 				return Math.atan2(point2.y - point1.y, point2.x - point1.x)
 			}
@@ -12939,7 +12930,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/BetweenPointsY.js
 	var require_BetweenPointsY = __commonJS({
-		'../../node_modules/phaser/src/math/angle/BetweenPointsY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/BetweenPointsY.js'(exports, module) {
 			var BetweenPointsY = function (point1, point2) {
 				return Math.atan2(point2.x - point1.x, point2.y - point1.y)
 			}
@@ -12949,7 +12940,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/BetweenY.js
 	var require_BetweenY = __commonJS({
-		'../../node_modules/phaser/src/math/angle/BetweenY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/BetweenY.js'(exports, module) {
 			var BetweenY = function (x1, y1, x2, y2) {
 				return Math.atan2(x2 - x1, y2 - y1)
 			}
@@ -12959,7 +12950,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/CounterClockwise.js
 	var require_CounterClockwise = __commonJS({
-		'../../node_modules/phaser/src/math/angle/CounterClockwise.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/CounterClockwise.js'(exports, module) {
 			var CONST = require_const4()
 			var CounterClockwise = function (angle) {
 				if (angle > Math.PI) {
@@ -12973,7 +12964,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/Normalize.js
 	var require_Normalize = __commonJS({
-		'../../node_modules/phaser/src/math/angle/Normalize.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/Normalize.js'(exports, module) {
 			var Normalize = function (angle) {
 				angle = angle % (2 * Math.PI)
 				if (angle >= 0) {
@@ -12988,7 +12979,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/FloatBetween.js
 	var require_FloatBetween = __commonJS({
-		'../../node_modules/phaser/src/math/FloatBetween.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/FloatBetween.js'(exports, module) {
 			var FloatBetween = function (min, max) {
 				return Math.random() * (max - min) + min
 			}
@@ -12998,7 +12989,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/Random.js
 	var require_Random4 = __commonJS({
-		'../../node_modules/phaser/src/math/angle/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/Random.js'(exports, module) {
 			var FloatBetween = require_FloatBetween()
 			var Random = function () {
 				return FloatBetween(-Math.PI, Math.PI)
@@ -13009,7 +13000,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/RandomDegrees.js
 	var require_RandomDegrees = __commonJS({
-		'../../node_modules/phaser/src/math/angle/RandomDegrees.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/RandomDegrees.js'(exports, module) {
 			var FloatBetween = require_FloatBetween()
 			var RandomDegrees = function () {
 				return FloatBetween(-180, 180)
@@ -13020,7 +13011,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/Reverse.js
 	var require_Reverse = __commonJS({
-		'../../node_modules/phaser/src/math/angle/Reverse.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/Reverse.js'(exports, module) {
 			var Normalize = require_Normalize()
 			var Reverse = function (angle) {
 				return Normalize(angle + Math.PI)
@@ -13031,7 +13022,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/RotateTo.js
 	var require_RotateTo2 = __commonJS({
-		'../../node_modules/phaser/src/math/angle/RotateTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/RotateTo.js'(exports, module) {
 			var MATH_CONST = require_const4()
 			var RotateTo = function (currentAngle, targetAngle, lerp) {
 				if (lerp === void 0) {
@@ -13064,7 +13055,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/ShortestBetween.js
 	var require_ShortestBetween = __commonJS({
-		'../../node_modules/phaser/src/math/angle/ShortestBetween.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/ShortestBetween.js'(exports, module) {
 			var ShortestBetween = function (angle1, angle2) {
 				var difference = angle2 - angle1
 				if (difference === 0) {
@@ -13079,7 +13070,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/angle/index.js
 	var require_angle = __commonJS({
-		'../../node_modules/phaser/src/math/angle/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/angle/index.js'(exports, module) {
 			module.exports = {
 				Between: require_Between(),
 				BetweenPoints: require_BetweenPoints(),
@@ -13100,7 +13091,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceBetween.js
 	var require_DistanceBetween = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceBetween.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceBetween.js'(exports, module) {
 			var DistanceBetween = function (x1, y1, x2, y2) {
 				var dx = x1 - x2
 				var dy = y1 - y2
@@ -13112,7 +13103,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceBetweenPoints.js
 	var require_DistanceBetweenPoints = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceBetweenPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceBetweenPoints.js'(exports, module) {
 			var DistanceBetweenPoints = function (a, b) {
 				var dx = a.x - b.x
 				var dy = a.y - b.y
@@ -13124,7 +13115,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceBetweenPointsSquared.js
 	var require_DistanceBetweenPointsSquared = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceBetweenPointsSquared.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceBetweenPointsSquared.js'(exports, module) {
 			var DistanceBetweenPointsSquared = function (a, b) {
 				var dx = a.x - b.x
 				var dy = a.y - b.y
@@ -13136,7 +13127,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceChebyshev.js
 	var require_DistanceChebyshev = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceChebyshev.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceChebyshev.js'(exports, module) {
 			var ChebyshevDistance = function (x1, y1, x2, y2) {
 				return Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2))
 			}
@@ -13146,7 +13137,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistancePower.js
 	var require_DistancePower = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistancePower.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistancePower.js'(exports, module) {
 			var DistancePower = function (x1, y1, x2, y2, pow) {
 				if (pow === void 0) {
 					pow = 2
@@ -13159,7 +13150,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceSnake.js
 	var require_DistanceSnake = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceSnake.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceSnake.js'(exports, module) {
 			var SnakeDistance = function (x1, y1, x2, y2) {
 				return Math.abs(x1 - x2) + Math.abs(y1 - y2)
 			}
@@ -13169,7 +13160,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/DistanceSquared.js
 	var require_DistanceSquared = __commonJS({
-		'../../node_modules/phaser/src/math/distance/DistanceSquared.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/DistanceSquared.js'(exports, module) {
 			var DistanceSquared = function (x1, y1, x2, y2) {
 				var dx = x1 - x2
 				var dy = y1 - y2
@@ -13181,7 +13172,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/distance/index.js
 	var require_distance = __commonJS({
-		'../../node_modules/phaser/src/math/distance/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/distance/index.js'(exports, module) {
 			module.exports = {
 				Between: require_DistanceBetween(),
 				BetweenPoints: require_DistanceBetweenPoints(),
@@ -13196,7 +13187,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/easing/index.js
 	var require_easing = __commonJS({
-		'../../node_modules/phaser/src/math/easing/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/easing/index.js'(exports, module) {
 			module.exports = {
 				Back: require_back(),
 				Bounce: require_bounce(),
@@ -13216,7 +13207,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/Ceil.js
 	var require_Ceil = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/Ceil.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/Ceil.js'(exports, module) {
 			var Ceil = function (value, epsilon) {
 				if (epsilon === void 0) {
 					epsilon = 1e-4
@@ -13229,7 +13220,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/Floor.js
 	var require_Floor = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/Floor.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/Floor.js'(exports, module) {
 			var Floor = function (value, epsilon) {
 				if (epsilon === void 0) {
 					epsilon = 1e-4
@@ -13242,7 +13233,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/GreaterThan.js
 	var require_GreaterThan = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/GreaterThan.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/GreaterThan.js'(exports, module) {
 			var GreaterThan = function (a, b, epsilon) {
 				if (epsilon === void 0) {
 					epsilon = 1e-4
@@ -13255,7 +13246,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/LessThan.js
 	var require_LessThan = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/LessThan.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/LessThan.js'(exports, module) {
 			var LessThan = function (a, b, epsilon) {
 				if (epsilon === void 0) {
 					epsilon = 1e-4
@@ -13268,7 +13259,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/fuzzy/index.js
 	var require_fuzzy = __commonJS({
-		'../../node_modules/phaser/src/math/fuzzy/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/fuzzy/index.js'(exports, module) {
 			module.exports = {
 				Ceil: require_Ceil(),
 				Equal: require_Equal(),
@@ -13281,7 +13272,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Factorial.js
 	var require_Factorial = __commonJS({
-		'../../node_modules/phaser/src/math/Factorial.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Factorial.js'(exports, module) {
 			var Factorial = function (value) {
 				if (value === 0) {
 					return 1
@@ -13298,7 +13289,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Bernstein.js
 	var require_Bernstein = __commonJS({
-		'../../node_modules/phaser/src/math/Bernstein.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Bernstein.js'(exports, module) {
 			var Factorial = require_Factorial()
 			var Bernstein = function (n, i) {
 				return Factorial(n) / Factorial(i) / Factorial(n - i)
@@ -13309,7 +13300,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/BezierInterpolation.js
 	var require_BezierInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/BezierInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/BezierInterpolation.js'(exports, module) {
 			var Bernstein = require_Bernstein()
 			var BezierInterpolation = function (v, k) {
 				var b = 0
@@ -13325,7 +13316,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/CatmullRom.js
 	var require_CatmullRom = __commonJS({
-		'../../node_modules/phaser/src/math/CatmullRom.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/CatmullRom.js'(exports, module) {
 			var CatmullRom = function (t, p0, p1, p2, p3) {
 				var v0 = (p2 - p0) * 0.5
 				var v1 = (p3 - p1) * 0.5
@@ -13339,7 +13330,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/CatmullRomInterpolation.js
 	var require_CatmullRomInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/CatmullRomInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/CatmullRomInterpolation.js'(exports, module) {
 			var CatmullRom = require_CatmullRom()
 			var CatmullRomInterpolation = function (v, k) {
 				var m = v.length - 1
@@ -13366,7 +13357,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/CubicBezierInterpolation.js
 	var require_CubicBezierInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/CubicBezierInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/CubicBezierInterpolation.js'(exports, module) {
 			function P0(t, p) {
 				var k = 1 - t
 				return k * k * k * p
@@ -13390,7 +13381,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/LinearInterpolation.js
 	var require_LinearInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/LinearInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/LinearInterpolation.js'(exports, module) {
 			var Linear = require_Linear2()
 			var LinearInterpolation = function (v, k) {
 				var m = v.length - 1
@@ -13410,7 +13401,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/QuadraticBezierInterpolation.js
 	var require_QuadraticBezierInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/QuadraticBezierInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/QuadraticBezierInterpolation.js'(exports, module) {
 			function P0(t, p) {
 				var k = 1 - t
 				return k * k * p
@@ -13430,7 +13421,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/SmoothStep.js
 	var require_SmoothStep = __commonJS({
-		'../../node_modules/phaser/src/math/SmoothStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/SmoothStep.js'(exports, module) {
 			var SmoothStep = function (x, min, max) {
 				if (x <= min) {
 					return 0
@@ -13447,7 +13438,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/SmoothStepInterpolation.js
 	var require_SmoothStepInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/SmoothStepInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/SmoothStepInterpolation.js'(exports, module) {
 			var SmoothStep = require_SmoothStep()
 			var SmoothStepInterpolation = function (t, min, max) {
 				return min + (max - min) * SmoothStep(t, 0, 1)
@@ -13458,7 +13449,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/SmootherStep.js
 	var require_SmootherStep = __commonJS({
-		'../../node_modules/phaser/src/math/SmootherStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/SmootherStep.js'(exports, module) {
 			var SmootherStep = function (x, min, max) {
 				x = Math.max(0, Math.min(1, (x - min) / (max - min)))
 				return x * x * x * (x * (x * 6 - 15) + 10)
@@ -13469,7 +13460,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/SmootherStepInterpolation.js
 	var require_SmootherStepInterpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/SmootherStepInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/SmootherStepInterpolation.js'(exports, module) {
 			var SmootherStep = require_SmootherStep()
 			var SmootherStepInterpolation = function (t, min, max) {
 				return min + (max - min) * SmootherStep(t, 0, 1)
@@ -13480,7 +13471,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/interpolation/index.js
 	var require_interpolation = __commonJS({
-		'../../node_modules/phaser/src/math/interpolation/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/interpolation/index.js'(exports, module) {
 			module.exports = {
 				Bezier: require_BezierInterpolation(),
 				CatmullRom: require_CatmullRomInterpolation(),
@@ -13495,7 +13486,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/pow2/GetPowerOfTwo.js
 	var require_GetPowerOfTwo = __commonJS({
-		'../../node_modules/phaser/src/math/pow2/GetPowerOfTwo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/pow2/GetPowerOfTwo.js'(exports, module) {
 			var GetPowerOfTwo = function (value) {
 				var index = Math.log(value) / 0.6931471805599453
 				return 1 << Math.ceil(index)
@@ -13506,7 +13497,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/pow2/IsSizePowerOfTwo.js
 	var require_IsSizePowerOfTwo = __commonJS({
-		'../../node_modules/phaser/src/math/pow2/IsSizePowerOfTwo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/pow2/IsSizePowerOfTwo.js'(exports, module) {
 			var IsSizePowerOfTwo = function (width, height) {
 				return width > 0 && (width & (width - 1)) === 0 && height > 0 && (height & (height - 1)) === 0
 			}
@@ -13516,7 +13507,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/pow2/IsValuePowerOfTwo.js
 	var require_IsValuePowerOfTwo = __commonJS({
-		'../../node_modules/phaser/src/math/pow2/IsValuePowerOfTwo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/pow2/IsValuePowerOfTwo.js'(exports, module) {
 			var IsValuePowerOfTwo = function (value) {
 				return value > 0 && (value & (value - 1)) === 0
 			}
@@ -13526,7 +13517,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/pow2/index.js
 	var require_pow2 = __commonJS({
-		'../../node_modules/phaser/src/math/pow2/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/pow2/index.js'(exports, module) {
 			module.exports = {
 				GetNext: require_GetPowerOfTwo(),
 				IsSize: require_IsSizePowerOfTwo(),
@@ -13537,7 +13528,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/snap/SnapCeil.js
 	var require_SnapCeil = __commonJS({
-		'../../node_modules/phaser/src/math/snap/SnapCeil.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/snap/SnapCeil.js'(exports, module) {
 			var SnapCeil = function (value, gap, start, divide) {
 				if (start === void 0) {
 					start = 0
@@ -13555,7 +13546,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/snap/SnapFloor.js
 	var require_SnapFloor = __commonJS({
-		'../../node_modules/phaser/src/math/snap/SnapFloor.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/snap/SnapFloor.js'(exports, module) {
 			var SnapFloor = function (value, gap, start, divide) {
 				if (start === void 0) {
 					start = 0
@@ -13573,7 +13564,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/snap/SnapTo.js
 	var require_SnapTo = __commonJS({
-		'../../node_modules/phaser/src/math/snap/SnapTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/snap/SnapTo.js'(exports, module) {
 			var SnapTo = function (value, gap, start, divide) {
 				if (start === void 0) {
 					start = 0
@@ -13591,7 +13582,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/snap/index.js
 	var require_snap = __commonJS({
-		'../../node_modules/phaser/src/math/snap/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/snap/index.js'(exports, module) {
 			module.exports = {
 				Ceil: require_SnapCeil(),
 				Floor: require_SnapFloor(),
@@ -13602,7 +13593,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/random-data-generator/RandomDataGenerator.js
 	var require_RandomDataGenerator = __commonJS({
-		'../../node_modules/phaser/src/math/random-data-generator/RandomDataGenerator.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/random-data-generator/RandomDataGenerator.js'(exports, module) {
 			var Class = require_Class()
 			var RandomDataGenerator = new Class({
 				initialize: function RandomDataGenerator2(seeds) {
@@ -13742,7 +13733,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Average.js
 	var require_Average = __commonJS({
-		'../../node_modules/phaser/src/math/Average.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Average.js'(exports, module) {
 			var Average = function (values) {
 				var sum = 0
 				for (var i = 0; i < values.length; i++) {
@@ -13756,7 +13747,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Between.js
 	var require_Between2 = __commonJS({
-		'../../node_modules/phaser/src/math/Between.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Between.js'(exports, module) {
 			var Between = function (min, max) {
 				return Math.floor(Math.random() * (max - min + 1) + min)
 			}
@@ -13766,7 +13757,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/CeilTo.js
 	var require_CeilTo = __commonJS({
-		'../../node_modules/phaser/src/math/CeilTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/CeilTo.js'(exports, module) {
 			var CeilTo = function (value, place, base) {
 				if (place === void 0) {
 					place = 0
@@ -13783,7 +13774,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Difference.js
 	var require_Difference = __commonJS({
-		'../../node_modules/phaser/src/math/Difference.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Difference.js'(exports, module) {
 			var Difference = function (a, b) {
 				return Math.abs(a - b)
 			}
@@ -13793,7 +13784,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Vector3.js
 	var require_Vector3 = __commonJS({
-		'../../node_modules/phaser/src/math/Vector3.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Vector3.js'(exports, module) {
 			var Class = require_Class()
 			var Vector3 = new Class({
 				initialize: function Vector32(x, y, z) {
@@ -14148,7 +14139,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Matrix4.js
 	var require_Matrix4 = __commonJS({
-		'../../node_modules/phaser/src/math/Matrix4.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Matrix4.js'(exports, module) {
 			var Class = require_Class()
 			var Vector3 = require_Vector3()
 			var EPSILON = 1e-6
@@ -14976,7 +14967,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Euler.js
 	var require_Euler = __commonJS({
-		'../../node_modules/phaser/src/math/Euler.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Euler.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Matrix4 = require_Matrix4()
@@ -15163,7 +15154,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/FloorTo.js
 	var require_FloorTo = __commonJS({
-		'../../node_modules/phaser/src/math/FloorTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/FloorTo.js'(exports, module) {
 			var FloorTo = function (value, place, base) {
 				if (place === void 0) {
 					place = 0
@@ -15180,7 +15171,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/GetSpeed.js
 	var require_GetSpeed = __commonJS({
-		'../../node_modules/phaser/src/math/GetSpeed.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/GetSpeed.js'(exports, module) {
 			var GetSpeed = function (distance, time) {
 				return distance / time / 1e3
 			}
@@ -15190,7 +15181,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/IsEven.js
 	var require_IsEven = __commonJS({
-		'../../node_modules/phaser/src/math/IsEven.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/IsEven.js'(exports, module) {
 			var IsEven = function (value) {
 				return value == parseFloat(value) ? !(value % 2) : void 0
 			}
@@ -15200,7 +15191,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/IsEvenStrict.js
 	var require_IsEvenStrict = __commonJS({
-		'../../node_modules/phaser/src/math/IsEvenStrict.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/IsEvenStrict.js'(exports, module) {
 			var IsEvenStrict = function (value) {
 				return value === parseFloat(value) ? !(value % 2) : void 0
 			}
@@ -15210,7 +15201,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/LinearXY.js
 	var require_LinearXY = __commonJS({
-		'../../node_modules/phaser/src/math/LinearXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/LinearXY.js'(exports, module) {
 			var LinearXY = function (vector1, vector2, t) {
 				if (t === void 0) {
 					t = 0
@@ -15223,7 +15214,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/MaxAdd.js
 	var require_MaxAdd = __commonJS({
-		'../../node_modules/phaser/src/math/MaxAdd.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/MaxAdd.js'(exports, module) {
 			var MaxAdd = function (value, amount, max) {
 				return Math.min(value + amount, max)
 			}
@@ -15233,7 +15224,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Median.js
 	var require_Median = __commonJS({
-		'../../node_modules/phaser/src/math/Median.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Median.js'(exports, module) {
 			var Median = function (values) {
 				var valuesNum = values.length
 				if (valuesNum === 0) {
@@ -15251,7 +15242,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/MinSub.js
 	var require_MinSub = __commonJS({
-		'../../node_modules/phaser/src/math/MinSub.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/MinSub.js'(exports, module) {
 			var MinSub = function (value, amount, min) {
 				return Math.max(value - amount, min)
 			}
@@ -15261,7 +15252,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Percent.js
 	var require_Percent = __commonJS({
-		'../../node_modules/phaser/src/math/Percent.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Percent.js'(exports, module) {
 			var Percent = function (value, min, max, upperMax) {
 				if (max === void 0) {
 					max = min + 1
@@ -15287,7 +15278,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RadToDeg.js
 	var require_RadToDeg = __commonJS({
-		'../../node_modules/phaser/src/math/RadToDeg.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RadToDeg.js'(exports, module) {
 			var CONST = require_const4()
 			var RadToDeg = function (radians) {
 				return radians * CONST.RAD_TO_DEG
@@ -15298,7 +15289,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RandomXY.js
 	var require_RandomXY = __commonJS({
-		'../../node_modules/phaser/src/math/RandomXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RandomXY.js'(exports, module) {
 			var RandomXY = function (vector, scale) {
 				if (scale === void 0) {
 					scale = 1
@@ -15314,7 +15305,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RandomXYZ.js
 	var require_RandomXYZ = __commonJS({
-		'../../node_modules/phaser/src/math/RandomXYZ.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RandomXYZ.js'(exports, module) {
 			var RandomXYZ = function (vec3, radius) {
 				if (radius === void 0) {
 					radius = 1
@@ -15333,7 +15324,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RandomXYZW.js
 	var require_RandomXYZW = __commonJS({
-		'../../node_modules/phaser/src/math/RandomXYZW.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RandomXYZW.js'(exports, module) {
 			var RandomXYZW = function (vec4, scale) {
 				if (scale === void 0) {
 					scale = 1
@@ -15350,7 +15341,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Rotate.js
 	var require_Rotate = __commonJS({
-		'../../node_modules/phaser/src/math/Rotate.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Rotate.js'(exports, module) {
 			var Rotate = function (point, angle) {
 				var x = point.x
 				var y = point.y
@@ -15364,7 +15355,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RotateAroundDistance.js
 	var require_RotateAroundDistance = __commonJS({
-		'../../node_modules/phaser/src/math/RotateAroundDistance.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RotateAroundDistance.js'(exports, module) {
 			var RotateAroundDistance = function (point, x, y, angle, distance) {
 				var t = angle + Math.atan2(point.y - y, point.x - x)
 				point.x = x + distance * Math.cos(t)
@@ -15377,7 +15368,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RotateTo.js
 	var require_RotateTo3 = __commonJS({
-		'../../node_modules/phaser/src/math/RotateTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RotateTo.js'(exports, module) {
 			var RotateTo = function (point, x, y, angle, distance) {
 				point.x = x + distance * Math.cos(angle)
 				point.y = y + distance * Math.sin(angle)
@@ -15389,7 +15380,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RoundTo.js
 	var require_RoundTo = __commonJS({
-		'../../node_modules/phaser/src/math/RoundTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RoundTo.js'(exports, module) {
 			var RoundTo = function (value, place, base) {
 				if (place === void 0) {
 					place = 0
@@ -15406,7 +15397,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/SinCosTableGenerator.js
 	var require_SinCosTableGenerator = __commonJS({
-		'../../node_modules/phaser/src/math/SinCosTableGenerator.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/SinCosTableGenerator.js'(exports, module) {
 			var SinCosTableGenerator = function (length, sinAmp, cosAmp, frequency) {
 				if (sinAmp === void 0) {
 					sinAmp = 1
@@ -15427,9 +15418,9 @@ var Phaser = (function () {
 					sin[c] = sinAmp
 				}
 				return {
-					sin: sin,
-					cos: cos,
-					length: length,
+					sin,
+					cos,
+					length,
 				}
 			}
 			module.exports = SinCosTableGenerator
@@ -15438,7 +15429,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/ToXY.js
 	var require_ToXY = __commonJS({
-		'../../node_modules/phaser/src/math/ToXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/ToXY.js'(exports, module) {
 			var Vector2 = require_Vector2()
 			var ToXY = function (index, width, height, out) {
 				if (out === void 0) {
@@ -15463,7 +15454,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Within.js
 	var require_Within = __commonJS({
-		'../../node_modules/phaser/src/math/Within.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Within.js'(exports, module) {
 			var Within = function (a, b, tolerance) {
 				return Math.abs(a - b) <= tolerance
 			}
@@ -15473,7 +15464,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Vector4.js
 	var require_Vector4 = __commonJS({
-		'../../node_modules/phaser/src/math/Vector4.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Vector4.js'(exports, module) {
 			var Class = require_Class()
 			var Vector4 = new Class({
 				initialize: function Vector42(x, y, z, w) {
@@ -15672,7 +15663,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Matrix3.js
 	var require_Matrix3 = __commonJS({
-		'../../node_modules/phaser/src/math/Matrix3.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Matrix3.js'(exports, module) {
 			var Class = require_Class()
 			var Matrix3 = new Class({
 				initialize: function Matrix32(m) {
@@ -15975,7 +15966,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/Quaternion.js
 	var require_Quaternion = __commonJS({
-		'../../node_modules/phaser/src/math/Quaternion.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/Quaternion.js'(exports, module) {
 			var Class = require_Class()
 			var Matrix3 = require_Matrix3()
 			var NOOP = require_NOOP()
@@ -16356,7 +16347,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/RotateVec3.js
 	var require_RotateVec3 = __commonJS({
-		'../../node_modules/phaser/src/math/RotateVec3.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/RotateVec3.js'(exports, module) {
 			var Vector3 = require_Vector3()
 			var Matrix4 = require_Matrix4()
 			var Quaternion = require_Quaternion()
@@ -16374,7 +16365,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/math/index.js
 	var require_math = __commonJS({
-		'../../node_modules/phaser/src/math/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/math/index.js'(exports, module) {
 			var CONST = require_const4()
 			var Extend = require_Extend()
 			var PhaserMath = {
@@ -16440,7 +16431,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/const.js
 	var require_const7 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/const.js'(exports, module) {
 			var PIPELINE_CONST = {
 				BITMAPMASK_PIPELINE: 'BitmapMaskPipeline',
 				LIGHT_PIPELINE: 'Light2D',
@@ -16460,7 +16451,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/Config.js
 	var require_Config = __commonJS({
-		'../../node_modules/phaser/src/core/Config.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/Config.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const()
 			var DefaultPlugins = require_DefaultPlugins()
@@ -16643,7 +16634,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/CanvasInterpolation.js
 	var require_CanvasInterpolation = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/CanvasInterpolation.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/CanvasInterpolation.js'(exports, module) {
 			var CanvasInterpolation = {
 				setCrisp: function (canvas) {
 					var types = ['optimizeSpeed', '-moz-crisp-edges', '-o-crisp-edges', '-webkit-optimize-contrast', 'optimize-contrast', 'crisp-edges', 'pixelated']
@@ -16665,7 +16656,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/snapshot/CanvasSnapshot.js
 	var require_CanvasSnapshot = __commonJS({
-		'../../node_modules/phaser/src/renderer/snapshot/CanvasSnapshot.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/snapshot/CanvasSnapshot.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var Color = require_Color()
 			var GetFastValue = require_GetFastValue()
@@ -16716,49 +16707,49 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/events/LOSE_WEBGL_EVENT.js
 	var require_LOSE_WEBGL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/LOSE_WEBGL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/LOSE_WEBGL_EVENT.js'(exports, module) {
 			module.exports = 'losewebgl'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js
 	var require_POST_RENDER_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/POST_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'postrender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js
 	var require_PRE_RENDER_EVENT4 = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/PRE_RENDER_EVENT.js'(exports, module) {
 			module.exports = 'prerender'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js
 	var require_RENDER_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/RENDER_EVENT.js'(exports, module) {
 			module.exports = 'render'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js
 	var require_RESIZE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/RESIZE_EVENT.js'(exports, module) {
 			module.exports = 'resize'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/RESTORE_WEBGL_EVENT.js
 	var require_RESTORE_WEBGL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/RESTORE_WEBGL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/RESTORE_WEBGL_EVENT.js'(exports, module) {
 			module.exports = 'restorewebgl'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/events/index.js
 	var require_events8 = __commonJS({
-		'../../node_modules/phaser/src/renderer/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/events/index.js'(exports, module) {
 			module.exports = {
 				LOSE_WEBGL: require_LOSE_WEBGL_EVENT(),
 				POST_RENDER: require_POST_RENDER_EVENT3(),
@@ -16772,7 +16763,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/canvas/utils/GetBlendModes.js
 	var require_GetBlendModes = __commonJS({
-		'../../node_modules/phaser/src/renderer/canvas/utils/GetBlendModes.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/canvas/utils/GetBlendModes.js'(exports, module) {
 			var modes = require_BlendModes()
 			var CanvasFeatures = require_CanvasFeatures()
 			var GetBlendModes = function () {
@@ -16815,56 +16806,56 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/events/ADD_EVENT.js
 	var require_ADD_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/textures/events/ADD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/ADD_EVENT.js'(exports, module) {
 			module.exports = 'addtexture'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/ADD_KEY_EVENT.js
 	var require_ADD_KEY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/textures/events/ADD_KEY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/ADD_KEY_EVENT.js'(exports, module) {
 			module.exports = 'addtexture-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/ERROR_EVENT.js
 	var require_ERROR_EVENT = __commonJS({
-		'../../node_modules/phaser/src/textures/events/ERROR_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/ERROR_EVENT.js'(exports, module) {
 			module.exports = 'onerror'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/LOAD_EVENT.js
 	var require_LOAD_EVENT = __commonJS({
-		'../../node_modules/phaser/src/textures/events/LOAD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/LOAD_EVENT.js'(exports, module) {
 			module.exports = 'onload'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/READY_EVENT.js
 	var require_READY_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/textures/events/READY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/READY_EVENT.js'(exports, module) {
 			module.exports = 'ready'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/REMOVE_EVENT.js
 	var require_REMOVE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/textures/events/REMOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/REMOVE_EVENT.js'(exports, module) {
 			module.exports = 'removetexture'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/REMOVE_KEY_EVENT.js
 	var require_REMOVE_KEY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/textures/events/REMOVE_KEY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/REMOVE_KEY_EVENT.js'(exports, module) {
 			module.exports = 'removetexture-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/textures/events/index.js
 	var require_events9 = __commonJS({
-		'../../node_modules/phaser/src/textures/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/events/index.js'(exports, module) {
 			module.exports = {
 				ADD: require_ADD_EVENT2(),
 				ADD_KEY: require_ADD_KEY_EVENT(),
@@ -16879,7 +16870,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/canvas/CanvasRenderer.js
 	var require_CanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/renderer/canvas/CanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/canvas/CanvasRenderer.js'(exports, module) {
 			var CameraEvents = require_events6()
 			var CanvasSnapshot = require_CanvasSnapshot()
 			var Class = require_Class()
@@ -17206,7 +17197,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/RenderTarget.js
 	var require_RenderTarget = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/RenderTarget.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/RenderTarget.js'(exports, module) {
 			var Class = require_Class()
 			var Events = require_events8()
 			var RenderTarget = new Class({
@@ -17354,7 +17345,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-frag.js
 	var require_BitmapMask_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_BITMAP_MASK_FS',
 				'precision mediump float;',
@@ -17383,7 +17374,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-vert.js
 	var require_BitmapMask_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/BitmapMask-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_BITMAP_MASK_VS',
 				'precision mediump float;',
@@ -17398,7 +17389,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/const.js
 	var require_const8 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/const.js'(exports, module) {
 			var WEBGL_CONST = {
 				BYTE: { enum: 5120, size: 1 },
 				UNSIGNED_BYTE: { enum: 5121, size: 1 },
@@ -17414,56 +17405,56 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/AFTER_FLUSH_EVENT.js
 	var require_AFTER_FLUSH_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/AFTER_FLUSH_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/AFTER_FLUSH_EVENT.js'(exports, module) {
 			module.exports = 'pipelineafterflush'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/BEFORE_FLUSH_EVENT.js
 	var require_BEFORE_FLUSH_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BEFORE_FLUSH_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BEFORE_FLUSH_EVENT.js'(exports, module) {
 			module.exports = 'pipelinebeforeflush'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/BIND_EVENT.js
 	var require_BIND_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BIND_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BIND_EVENT.js'(exports, module) {
 			module.exports = 'pipelinebind'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/BOOT_EVENT.js
 	var require_BOOT_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BOOT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/BOOT_EVENT.js'(exports, module) {
 			module.exports = 'pipelineboot'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT6 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'pipelinedestroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/REBIND_EVENT.js
 	var require_REBIND_EVENT = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/REBIND_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/REBIND_EVENT.js'(exports, module) {
 			module.exports = 'pipelinerebind'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/RESIZE_EVENT.js
 	var require_RESIZE_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/RESIZE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/RESIZE_EVENT.js'(exports, module) {
 			module.exports = 'pipelineresize'
 		},
 	})
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/events/index.js
 	var require_events10 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/events/index.js'(exports, module) {
 			module.exports = {
 				AFTER_FLUSH: require_AFTER_FLUSH_EVENT(),
 				BEFORE_FLUSH: require_BEFORE_FLUSH_EVENT(),
@@ -17478,7 +17469,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/Utils.js
 	var require_Utils = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/Utils.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/Utils.js'(exports, module) {
 			module.exports = {
 				getTintFromFloats: function (r, g, b, a) {
 					var ur = ((r * 255) | 0) & 255
@@ -17548,7 +17539,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/WebGLShader.js
 	var require_WebGLShader = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/WebGLShader.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/WebGLShader.js'(exports, module) {
 			var Class = require_Class()
 			var ArrayEach = require_Each()
 			var GetFastValue = require_GetFastValue()
@@ -17583,11 +17574,11 @@ var Phaser = (function () {
 						var typeSize = glType.size
 						var normalized = element.normalized ? true : false
 						result.push({
-							name: name,
-							size: size,
-							type: type,
-							normalized: normalized,
-							offset: offset,
+							name,
+							size,
+							type,
+							normalized,
+							offset,
 							enabled: false,
 							location: -1,
 						})
@@ -17677,8 +17668,8 @@ var Phaser = (function () {
 							location = this.renderer.createUniformLocation(program, name)
 							if (location !== null) {
 								uniforms[name] = {
-									name: name,
-									location: location,
+									name,
+									location,
 									setter: null,
 									value1: null,
 									value2: null,
@@ -17693,8 +17684,8 @@ var Phaser = (function () {
 									location = this.renderer.createUniformLocation(program, name)
 									if (location !== null) {
 										uniforms[name] = {
-											name: name,
-											location: location,
+											name,
+											location,
 											setter: null,
 											value1: null,
 											value2: null,
@@ -17900,7 +17891,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/WebGLPipeline.js
 	var require_WebGLPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/WebGLPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/WebGLPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var DeepCopy = require_DeepCopy()
 			var EventEmitter = require_eventemitter3()
@@ -18738,7 +18729,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/BitmapMaskPipeline.js
 	var require_BitmapMaskPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/BitmapMaskPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/BitmapMaskPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var ShaderSourceFS = require_BitmapMask_frag()
@@ -18797,7 +18788,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBarrel-frag.js
 	var require_FXBarrel_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBarrel-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBarrel-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BARREL_FS',
 				'precision mediump float;',
@@ -18829,7 +18820,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/PostFX-frag.js
 	var require_PostFX_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/PostFX-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/PostFX-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_POSTFX_FS',
 				'precision mediump float;',
@@ -18845,7 +18836,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Quad-vert.js
 	var require_Quad_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Quad-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Quad-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_QUAD_VS',
 				'precision mediump float;',
@@ -18865,7 +18856,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/PostFXPipeline.js
 	var require_PostFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/PostFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/PostFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var ColorMatrix = require_ColorMatrix()
 			var GetFastValue = require_GetFastValue()
@@ -19045,7 +19036,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BarrelFXPipeline.js
 	var require_BarrelFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BarrelFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BarrelFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var BarrelFrag = require_FXBarrel_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19053,7 +19044,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function BarrelFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: BarrelFrag,
 					})
 					this.amount = 1
@@ -19069,7 +19060,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBloom-frag.js
 	var require_FXBloom_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBloom-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBloom-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BLOOM_FS',
 				'precision mediump float;',
@@ -19092,7 +19083,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BloomFXPipeline.js
 	var require_BloomFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BloomFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BloomFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var BloomFrag = require_FXBloom_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19100,7 +19091,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function BloomFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: BloomFrag,
 					})
 					this.steps = 4
@@ -19138,7 +19129,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurLow-frag.js
 	var require_FXBlurLow_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurLow-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurLow-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BLUR_LOW_FS',
 				'precision mediump float;',
@@ -19164,7 +19155,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurMed-frag.js
 	var require_FXBlurMed_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurMed-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurMed-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BLUR_MED_FS',
 				'precision mediump float;',
@@ -19193,7 +19184,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurHigh-frag.js
 	var require_FXBlurHigh_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurHigh-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBlurHigh-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BLUR_HIGH_FS',
 				'precision mediump float;',
@@ -19225,7 +19216,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BlurFXPipeline.js
 	var require_BlurFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BlurFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BlurFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var BlurLowFrag = require_FXBlurLow_frag()
 			var BlurMedFrag = require_FXBlurMed_frag()
@@ -19235,7 +19226,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function BlurFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						shaders: [
 							{
 								name: 'Gaussian5',
@@ -19299,7 +19290,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXBokeh-frag.js
 	var require_FXBokeh_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBokeh-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXBokeh-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME BOKEH_FS',
 				'precision mediump float;',
@@ -19354,7 +19345,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BokehFXPipeline.js
 	var require_BokehFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BokehFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/BokehFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var BokehFrag = require_FXBokeh_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19362,7 +19353,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function BokehFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: BokehFrag,
 					})
 					this.isTiltShift = false
@@ -19396,7 +19387,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXCircle-frag.js
 	var require_FXCircle_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXCircle-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXCircle-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME CIRCLE_FS',
 				'precision mediump float;',
@@ -19437,7 +19428,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/CircleFXPipeline.js
 	var require_CircleFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/CircleFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/CircleFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var CircleFrag = require_FXCircle_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19445,7 +19436,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function CircleFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: CircleFrag,
 					})
 					this.scale = 1
@@ -19476,14 +19467,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ColorMatrixFXPipeline.js
 	var require_ColorMatrixFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ColorMatrixFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ColorMatrixFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var PostFXPipeline = require_PostFXPipeline()
 			var ColorMatrixFXPipeline = new Class({
 				Extends: PostFXPipeline,
 				initialize: function ColorMatrixFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 					})
 				},
 				onDraw: function (source) {
@@ -19502,7 +19493,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXDisplacement-frag.js
 	var require_FXDisplacement_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXDisplacement-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXDisplacement-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME DISPLACEMENT_FS',
 				'precision mediump float;',
@@ -19521,7 +19512,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/DisplacementFXPipeline.js
 	var require_DisplacementFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/DisplacementFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/DisplacementFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var DisplacementFrag = require_FXDisplacement_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19529,7 +19520,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function DisplacementFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: DisplacementFrag,
 					})
 					this.x = 5e-3
@@ -19563,7 +19554,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXGlow-frag.js
 	var require_FXGlow_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXGlow-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXGlow-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME GLOW_FS',
 				'precision mediump float;',
@@ -19620,7 +19611,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GlowFXPipeline.js
 	var require_GlowFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GlowFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GlowFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var GlowFrag = require_FXGlow_frag()
@@ -19632,7 +19623,7 @@ var Phaser = (function () {
 					var quality = GetFastValue(config, 'quality', 0.1)
 					var distance = GetFastValue(config, 'distance', 10)
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: Utils.setGlowQuality(GlowFrag, game, quality, distance),
 					})
 					this.outerStrength = 4
@@ -19661,7 +19652,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXGradient-frag.js
 	var require_FXGradient_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXGradient-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXGradient-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME GRADIENT_FS',
 				'#define SRGB_TO_LINEAR(c) pow((c), vec3(2.2))',
@@ -19705,7 +19696,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GradientFXPipeline.js
 	var require_GradientFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GradientFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/GradientFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GradientFrag = require_FXGradient_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19713,7 +19704,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function GradientFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: GradientFrag,
 					})
 					this.alpha = 0.2
@@ -19741,7 +19732,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXPixelate-frag.js
 	var require_FXPixelate_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXPixelate-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXPixelate-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PIXELATE_FS',
 				'precision mediump float;',
@@ -19770,7 +19761,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/PixelateFXPipeline.js
 	var require_PixelateFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/PixelateFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/PixelateFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var PixelateFrag = require_FXPixelate_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19778,7 +19769,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function PixelateFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: PixelateFrag,
 					})
 					this.amount = 1
@@ -19801,7 +19792,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXShadow-frag.js
 	var require_FXShadow_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXShadow-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXShadow-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME SHADOW_FS',
 				'precision mediump float;',
@@ -19837,7 +19828,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShadowFXPipeline.js
 	var require_ShadowFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShadowFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShadowFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var ShadowFrag = require_FXShadow_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19845,7 +19836,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function ShadowFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: ShadowFrag,
 					})
 					this.x = 0
@@ -19873,7 +19864,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXShine-frag.js
 	var require_FXShine_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXShine-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXShine-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME SHINE_FS',
 				'precision mediump float;',
@@ -19906,7 +19897,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShineFXPipeline.js
 	var require_ShineFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShineFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/ShineFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var ShineFrag = require_FXShine_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19914,7 +19905,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function ShineFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: ShineFrag,
 					})
 					this.speed = 0.5
@@ -19944,7 +19935,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXVignette-frag.js
 	var require_FXVignette_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXVignette-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXVignette-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME VIGNETTE_FS',
 				'precision mediump float;',
@@ -19972,7 +19963,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/VignetteFXPipeline.js
 	var require_VignetteFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/VignetteFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/VignetteFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var VignetteFrag = require_FXVignette_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -19980,7 +19971,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function VignetteFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: VignetteFrag,
 					})
 					this.x = 0.5
@@ -20001,7 +19992,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/FXWipe-frag.js
 	var require_FXWipe_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/FXWipe-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/FXWipe-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME WIPE_FS',
 				'precision mediump float;',
@@ -20042,7 +20033,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/WipeFXPipeline.js
 	var require_WipeFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/WipeFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/WipeFXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var WipeFrag = require_FXWipe_frag()
 			var PostFXPipeline = require_PostFXPipeline()
@@ -20050,7 +20041,7 @@ var Phaser = (function () {
 				Extends: PostFXPipeline,
 				initialize: function WipeFXPipeline2(game) {
 					PostFXPipeline.call(this, {
-						game: game,
+						game,
 						fragShader: WipeFrag,
 					})
 					this.progress = 0
@@ -20075,7 +20066,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/fx/index.js
 	var require_fx2 = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/fx/index.js'(exports, module) {
 			var FX = {
 				Barrel: require_BarrelFXPipeline(),
 				Bloom: require_BloomFXPipeline(),
@@ -20098,7 +20089,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/ColorMatrix-frag.js
 	var require_ColorMatrix_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/ColorMatrix-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/ColorMatrix-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_COLORMATRIX_FS',
 				'precision mediump float;',
@@ -20133,7 +20124,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/polygon/Earcut.js
 	var require_Earcut = __commonJS({
-		'../../node_modules/phaser/src/geom/polygon/Earcut.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/polygon/Earcut.js'(exports, module) {
 			'use strict'
 			function earcut(data, holeIndices, dim) {
 				dim = dim || 2
@@ -20620,7 +20611,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Multi-frag.js
 	var require_Multi_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Multi-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Multi-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MULTI_FS',
 				'#ifdef GL_FRAGMENT_PRECISION_HIGH',
@@ -20655,7 +20646,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Multi-vert.js
 	var require_Multi_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Multi-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Multi-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MULTI_VS',
 				'precision mediump float;',
@@ -20684,7 +20675,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/MultiPipeline.js
 	var require_MultiPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/MultiPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/MultiPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var Earcut = require_Earcut()
 			var GetFastValue = require_GetFastValue()
@@ -21179,7 +21170,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js
 	var require_Single_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Single-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_SINGLE_FS',
 				'#ifdef GL_FRAGMENT_PRECISION_HIGH',
@@ -21212,7 +21203,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js
 	var require_Single_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Single-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_SINGLE_VS',
 				'precision mediump float;',
@@ -21239,7 +21230,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/PreFXPipeline.js
 	var require_PreFXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/PreFXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/PreFXPipeline.js'(exports, module) {
 			var BlendModes = require_BlendModes()
 			var CenterOn = require_CenterOn2()
 			var Class = require_Class()
@@ -21266,8 +21257,8 @@ var Phaser = (function () {
 						},
 						{
 							name: 'CopySprite',
-							fragShader: fragShader,
-							vertShader: vertShader,
+							fragShader,
+							vertShader,
 						},
 						{
 							name: 'DrawGame',
@@ -21562,7 +21553,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/AddBlend-frag.js
 	var require_AddBlend_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/AddBlend-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/AddBlend-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_ADD_BLEND_FS',
 				'precision mediump float;',
@@ -21582,7 +21573,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Copy-frag.js
 	var require_Copy_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Copy-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Copy-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_COPY_FS',
 				'precision mediump float;',
@@ -21599,7 +21590,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js
 	var require_Light_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Light-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_LIGHT_FS',
 				'precision mediump float;',
@@ -21664,7 +21655,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/LinearBlend-frag.js
 	var require_LinearBlend_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/LinearBlend-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/LinearBlend-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_LINEAR_BLEND_FS',
 				'precision mediump float;',
@@ -21684,7 +21675,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-frag.js
 	var require_Mesh_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MESH_FS',
 				'precision mediump float;',
@@ -21728,7 +21719,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-vert.js
 	var require_Mesh_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Mesh-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MESH_VS',
 				'precision mediump float;',
@@ -21754,7 +21745,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-frag.js
 	var require_Mobile_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MOBILE_FS',
 				'#ifdef GL_FRAGMENT_PRECISION_HIGH',
@@ -21787,7 +21778,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-vert.js
 	var require_Mobile_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/Mobile-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_MOBILE_VS',
 				'precision mediump float;',
@@ -21814,7 +21805,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-frag.js
 	var require_PointLight_frag = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-frag.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-frag.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_POINTLIGHT_FS',
 				'precision mediump float;',
@@ -21839,7 +21830,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-vert.js
 	var require_PointLight_vert = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-vert.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/PointLight-vert.js'(exports, module) {
 			module.exports = [
 				'#define SHADER_NAME PHASER_POINTLIGHT_VS',
 				'precision mediump float;',
@@ -21867,7 +21858,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/shaders/index.js
 	var require_shaders = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/shaders/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/shaders/index.js'(exports, module) {
 			module.exports = {
 				AddBlendFrag: require_AddBlend_frag(),
 				BitmapMaskFrag: require_BitmapMask_frag(),
@@ -21909,7 +21900,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/FXPipeline.js
 	var require_FXPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/FXPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/FXPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var FX = require_fx2()
 			var FX_CONST = require_const5()
@@ -22131,7 +22122,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/LightPipeline.js
 	var require_LightPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/LightPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/LightPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var LightShaderSourceFS = require_Light_frag()
@@ -22370,7 +22361,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/MobilePipeline.js
 	var require_MobilePipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/MobilePipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/MobilePipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var MultiPipeline = require_MultiPipeline()
@@ -22422,7 +22413,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/PointLightPipeline.js
 	var require_PointLightPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/PointLightPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/PointLightPipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var PointLightShaderSourceFS = require_PointLight_frag()
@@ -22504,7 +22495,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/RopePipeline.js
 	var require_RopePipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/RopePipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/RopePipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var MultiPipeline = require_MultiPipeline()
@@ -22522,7 +22513,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/SinglePipeline.js
 	var require_SinglePipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/SinglePipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/SinglePipeline.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var MultiPipeline = require_MultiPipeline()
@@ -22548,7 +22539,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/UtilityPipeline.js
 	var require_UtilityPipeline = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/UtilityPipeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/UtilityPipeline.js'(exports, module) {
 			var AddBlendFS = require_AddBlend_frag()
 			var BlendModes = require_BlendModes()
 			var Class = require_Class()
@@ -22889,7 +22880,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/PipelineManager.js
 	var require_PipelineManager = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/PipelineManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/PipelineManager.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const7()
 			var CustomMap = require_Map()
@@ -22990,7 +22981,7 @@ var Phaser = (function () {
 					var _this = this
 					var game = this.game
 					this.classes.each(function (pipelineName2, pipeline) {
-						instance = _this.add(pipelineName2, new pipeline({ game: game }))
+						instance = _this.add(pipelineName2, new pipeline({ game }))
 						if (pipelineName2 === CONST.UTILITY_PIPELINE) {
 							_this.UTILITY_PIPELINE = instance
 							_this.fullFrame1 = instance.fullFrame1
@@ -23335,7 +23326,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/snapshot/WebGLSnapshot.js
 	var require_WebGLSnapshot = __commonJS({
-		'../../node_modules/phaser/src/renderer/snapshot/WebGLSnapshot.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/snapshot/WebGLSnapshot.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var Color = require_Color()
 			var GetFastValue = require_GetFastValue()
@@ -23394,7 +23385,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLBufferWrapper.js
 	var require_WebGLBufferWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLBufferWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLBufferWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var WebGLBufferWrapper = new Class({
 				initialize: function WebGLBufferWrapper2(gl, initialDataOrSize, bufferType, bufferUsage) {
@@ -23436,7 +23427,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLProgramWrapper.js
 	var require_WebGLProgramWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLProgramWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLProgramWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var WebGLProgramWrapper = new Class({
 				initialize: function WebGLProgramWrapper2(gl, vertexSource, fragmentSource) {
@@ -23491,7 +23482,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLTextureWrapper.js
 	var require_WebGLTextureWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLTextureWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLTextureWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var IsSizePowerOfTwo = require_IsSizePowerOfTwo()
 			var WebGLTextureWrapper = new Class({
@@ -23625,7 +23616,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLFramebufferWrapper.js
 	var require_WebGLFramebufferWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLFramebufferWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLFramebufferWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var errors = {
 				36054: 'Incomplete Attachment',
@@ -23698,7 +23689,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLAttribLocationWrapper.js
 	var require_WebGLAttribLocationWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLAttribLocationWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLAttribLocationWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var WebGLAttribLocationWrapper = new Class({
 				initialize: function WebGLAttribLocationWrapper2(gl, program, name) {
@@ -23732,7 +23723,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLUniformLocationWrapper.js
 	var require_WebGLUniformLocationWrapper = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLUniformLocationWrapper.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/WebGLUniformLocationWrapper.js'(exports, module) {
 			var Class = require_Class()
 			var WebGLUniformLocationWrapper = new Class({
 				initialize: function WebGLUniformLocationWrapper2(gl, program, name) {
@@ -23766,7 +23757,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/WebGLRenderer.js
 	var require_WebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/WebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/WebGLRenderer.js'(exports, module) {
 			var ArrayEach = require_Each()
 			var ArrayRemove = require_Remove()
 			var CameraEvents = require_events6()
@@ -24326,7 +24317,7 @@ var Phaser = (function () {
 					return false
 				},
 				addBlendMode: function (func, equation) {
-					var index = this.blendModes.push({ func: func, equation: equation })
+					var index = this.blendModes.push({ func, equation })
 					return index - 1
 				},
 				updateBlendMode: function (index, func, equation) {
@@ -24958,7 +24949,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/CreateRenderer.js
 	var require_CreateRenderer = __commonJS({
-		'../../node_modules/phaser/src/core/CreateRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/CreateRenderer.js'(exports, module) {
 			var CanvasInterpolation = require_CanvasInterpolation()
 			var CanvasPool = require_CanvasPool()
 			var CONST = require_const()
@@ -25036,7 +25027,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/DebugHeader.js
 	var require_DebugHeader = __commonJS({
-		'../../node_modules/phaser/src/core/DebugHeader.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/DebugHeader.js'(exports, module) {
 			var CONST = require_const()
 			var DebugHeader = function (game) {
 				var config = game.config
@@ -25101,7 +25092,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/RequestAnimationFrame.js
 	var require_RequestAnimationFrame = __commonJS({
-		'../../node_modules/phaser/src/dom/RequestAnimationFrame.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/RequestAnimationFrame.js'(exports, module) {
 			var Class = require_Class()
 			var NOOP = require_NOOP()
 			var RequestAnimationFrame = new Class({
@@ -25154,7 +25145,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/TimeStep.js
 	var require_TimeStep = __commonJS({
-		'../../node_modules/phaser/src/core/TimeStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/TimeStep.js'(exports, module) {
 			var Class = require_Class()
 			var GetValue = require_GetValue()
 			var NOOP = require_NOOP()
@@ -25361,7 +25352,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/VisibilityHandler.js
 	var require_VisibilityHandler = __commonJS({
-		'../../node_modules/phaser/src/core/VisibilityHandler.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/VisibilityHandler.js'(exports, module) {
 			var Events = require_events5()
 			var VisibilityHandler = function (game) {
 				var hiddenVar
@@ -25405,7 +25396,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/index.js
 	var require_core = __commonJS({
-		'../../node_modules/phaser/src/core/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/index.js'(exports, module) {
 			module.exports = {
 				Config: require_Config(),
 				CreateRenderer: require_CreateRenderer(),
@@ -25419,7 +25410,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/FromPoints.js
 	var require_FromPoints = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/FromPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/FromPoints.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var MATH_CONST = require_const4()
 			var FromPoints = function (points, out) {
@@ -25462,7 +25453,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/curves/Curve.js
 	var require_Curve = __commonJS({
-		'../../node_modules/phaser/src/curves/Curve.js': function (exports, module) {
+		'../../node_modules/phaser/src/curves/Curve.js'(exports, module) {
 			var Class = require_Class()
 			var FromPoints = require_FromPoints()
 			var Rectangle = require_Rectangle()
@@ -25657,7 +25648,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/curves/SplineCurve.js
 	var require_SplineCurve = __commonJS({
-		'../../node_modules/phaser/src/curves/SplineCurve.js': function (exports, module) {
+		'../../node_modules/phaser/src/curves/SplineCurve.js'(exports, module) {
 			var CatmullRom = require_CatmullRom()
 			var Class = require_Class()
 			var Curve = require_Curve()
@@ -25726,7 +25717,7 @@ var Phaser = (function () {
 					}
 					return {
 						type: this.type,
-						points: points,
+						points,
 					}
 				},
 			})
@@ -25739,7 +25730,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/curves/EllipseCurve.js
 	var require_EllipseCurve = __commonJS({
-		'../../node_modules/phaser/src/curves/EllipseCurve.js': function (exports, module) {
+		'../../node_modules/phaser/src/curves/EllipseCurve.js'(exports, module) {
 			var Class = require_Class()
 			var Curve = require_Curve()
 			var DegToRad = require_DegToRad()
@@ -25961,7 +25952,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/data/DataManagerPlugin.js
 	var require_DataManagerPlugin = __commonJS({
-		'../../node_modules/phaser/src/data/DataManagerPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/DataManagerPlugin.js'(exports, module) {
 			var Class = require_Class()
 			var DataManager = require_DataManager()
 			var PluginCache = require_PluginCache()
@@ -25999,7 +25990,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/data/index.js
 	var require_data = __commonJS({
-		'../../node_modules/phaser/src/data/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/data/index.js'(exports, module) {
 			module.exports = {
 				DataManager: require_DataManager(),
 				DataManagerPlugin: require_DataManagerPlugin(),
@@ -26010,7 +26001,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/in/index.js
 	var require_in = __commonJS({
-		'../../node_modules/phaser/src/display/align/in/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/in/index.js'(exports, module) {
 			module.exports = {
 				BottomCenter: require_BottomCenter(),
 				BottomLeft: require_BottomLeft(),
@@ -26028,7 +26019,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/BottomCenter.js
 	var require_BottomCenter2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/BottomCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/BottomCenter.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetCenterX = require_GetCenterX()
 			var SetCenterX = require_SetCenterX()
@@ -26050,7 +26041,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/BottomLeft.js
 	var require_BottomLeft2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/BottomLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/BottomLeft.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetLeft = require_GetLeft()
 			var SetLeft = require_SetLeft()
@@ -26072,7 +26063,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/BottomRight.js
 	var require_BottomRight2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/BottomRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/BottomRight.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetRight = require_GetRight()
 			var SetRight = require_SetRight()
@@ -26094,7 +26085,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/LeftBottom.js
 	var require_LeftBottom = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/LeftBottom.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/LeftBottom.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetLeft = require_GetLeft()
 			var SetBottom = require_SetBottom()
@@ -26116,7 +26107,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/LeftCenter.js
 	var require_LeftCenter2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/LeftCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/LeftCenter.js'(exports, module) {
 			var GetCenterY = require_GetCenterY()
 			var GetLeft = require_GetLeft()
 			var SetCenterY = require_SetCenterY()
@@ -26138,7 +26129,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/LeftTop.js
 	var require_LeftTop = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/LeftTop.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/LeftTop.js'(exports, module) {
 			var GetLeft = require_GetLeft()
 			var GetTop = require_GetTop()
 			var SetRight = require_SetRight()
@@ -26160,7 +26151,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/RightBottom.js
 	var require_RightBottom = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/RightBottom.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/RightBottom.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetRight = require_GetRight()
 			var SetBottom = require_SetBottom()
@@ -26182,7 +26173,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/RightCenter.js
 	var require_RightCenter2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/RightCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/RightCenter.js'(exports, module) {
 			var GetCenterY = require_GetCenterY()
 			var GetRight = require_GetRight()
 			var SetCenterY = require_SetCenterY()
@@ -26204,7 +26195,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/RightTop.js
 	var require_RightTop = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/RightTop.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/RightTop.js'(exports, module) {
 			var GetRight = require_GetRight()
 			var GetTop = require_GetTop()
 			var SetLeft = require_SetLeft()
@@ -26226,7 +26217,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/TopCenter.js
 	var require_TopCenter2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/TopCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/TopCenter.js'(exports, module) {
 			var GetCenterX = require_GetCenterX()
 			var GetTop = require_GetTop()
 			var SetBottom = require_SetBottom()
@@ -26248,7 +26239,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/TopLeft.js
 	var require_TopLeft2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/TopLeft.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/TopLeft.js'(exports, module) {
 			var GetLeft = require_GetLeft()
 			var GetTop = require_GetTop()
 			var SetBottom = require_SetBottom()
@@ -26270,7 +26261,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/TopRight.js
 	var require_TopRight2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/TopRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/TopRight.js'(exports, module) {
 			var GetRight = require_GetRight()
 			var GetTop = require_GetTop()
 			var SetBottom = require_SetBottom()
@@ -26292,7 +26283,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/QuickSet.js
 	var require_QuickSet2 = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/QuickSet.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/QuickSet.js'(exports, module) {
 			var ALIGN_CONST = require_const2()
 			var AlignToMap = []
 			AlignToMap[ALIGN_CONST.BOTTOM_CENTER] = require_BottomCenter2()
@@ -26316,7 +26307,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/to/index.js
 	var require_to = __commonJS({
-		'../../node_modules/phaser/src/display/align/to/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/to/index.js'(exports, module) {
 			module.exports = {
 				BottomCenter: require_BottomCenter2(),
 				BottomLeft: require_BottomLeft2(),
@@ -26337,7 +26328,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/align/index.js
 	var require_align = __commonJS({
-		'../../node_modules/phaser/src/display/align/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/align/index.js'(exports, module) {
 			var CONST = require_const2()
 			var Extend = require_Extend()
 			var Align = {
@@ -26351,7 +26342,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetBounds.js
 	var require_GetBounds2 = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetBounds.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetBounds.js'(exports, module) {
 			var GetBottom = require_GetBottom()
 			var GetLeft = require_GetLeft()
 			var GetRight = require_GetRight()
@@ -26375,7 +26366,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetOffsetX.js
 	var require_GetOffsetX = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetOffsetX.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetOffsetX.js'(exports, module) {
 			var GetOffsetX = function (gameObject) {
 				return gameObject.width * gameObject.originX
 			}
@@ -26385,7 +26376,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/GetOffsetY.js
 	var require_GetOffsetY = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/GetOffsetY.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/GetOffsetY.js'(exports, module) {
 			var GetOffsetY = function (gameObject) {
 				return gameObject.height * gameObject.originY
 			}
@@ -26395,7 +26386,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/bounds/index.js
 	var require_bounds = __commonJS({
-		'../../node_modules/phaser/src/display/bounds/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/bounds/index.js'(exports, module) {
 			module.exports = {
 				CenterOn: require_CenterOn(),
 				GetBottom: require_GetBottom(),
@@ -26419,7 +26410,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/mask/index.js
 	var require_mask = __commonJS({
-		'../../node_modules/phaser/src/display/mask/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/mask/index.js'(exports, module) {
 			module.exports = {
 				BitmapMask: require_BitmapMask(),
 				GeometryMask: require_GeometryMask(),
@@ -26429,7 +26420,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/TouchAction.js
 	var require_TouchAction = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/TouchAction.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/TouchAction.js'(exports, module) {
 			var TouchAction = function (canvas, value) {
 				if (value === void 0) {
 					value = 'none'
@@ -26445,7 +26436,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/UserSelect.js
 	var require_UserSelect = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/UserSelect.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/UserSelect.js'(exports, module) {
 			var UserSelect = function (canvas, value) {
 				if (value === void 0) {
 					value = 'none'
@@ -26464,7 +26455,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/canvas/index.js
 	var require_canvas = __commonJS({
-		'../../node_modules/phaser/src/display/canvas/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/canvas/index.js'(exports, module) {
 			module.exports = {
 				CanvasInterpolation: require_CanvasInterpolation(),
 				CanvasPool: require_CanvasPool(),
@@ -26477,7 +26468,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/ColorSpectrum.js
 	var require_ColorSpectrum = __commonJS({
-		'../../node_modules/phaser/src/display/color/ColorSpectrum.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/ColorSpectrum.js'(exports, module) {
 			var GetColor = require_GetColor()
 			var ColorSpectrum = function (limit) {
 				if (limit === void 0) {
@@ -26490,20 +26481,20 @@ var Phaser = (function () {
 				var g = 0
 				var b = 0
 				for (i = 0; i <= range; i++) {
-					colors.push({ r: r, g: i, b: b, color: GetColor(r, i, b) })
+					colors.push({ r, g: i, b, color: GetColor(r, i, b) })
 				}
 				g = 255
 				for (i = range; i >= 0; i--) {
-					colors.push({ r: i, g: g, b: b, color: GetColor(i, g, b) })
+					colors.push({ r: i, g, b, color: GetColor(i, g, b) })
 				}
 				r = 0
 				for (i = 0; i <= range; i++, g--) {
-					colors.push({ r: r, g: g, b: i, color: GetColor(r, g, i) })
+					colors.push({ r, g, b: i, color: GetColor(r, g, i) })
 				}
 				g = 0
 				b = 255
 				for (i = 0; i <= range; i++, b--, r++) {
-					colors.push({ r: r, g: g, b: b, color: GetColor(r, g, b) })
+					colors.push({ r, g, b, color: GetColor(r, g, b) })
 				}
 				if (limit === 1024) {
 					return colors
@@ -26524,7 +26515,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/ColorToRGBA.js
 	var require_ColorToRGBA = __commonJS({
-		'../../node_modules/phaser/src/display/color/ColorToRGBA.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/ColorToRGBA.js'(exports, module) {
 			var ColorToRGBA = function (color) {
 				var output = {
 					r: (color >> 16) & 255,
@@ -26543,7 +26534,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/ComponentToHex.js
 	var require_ComponentToHex = __commonJS({
-		'../../node_modules/phaser/src/display/color/ComponentToHex.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/ComponentToHex.js'(exports, module) {
 			var ComponentToHex = function (color) {
 				var hex = color.toString(16)
 				return hex.length === 1 ? '0' + hex : hex
@@ -26554,7 +26545,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/HueToComponent.js
 	var require_HueToComponent = __commonJS({
-		'../../node_modules/phaser/src/display/color/HueToComponent.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/HueToComponent.js'(exports, module) {
 			var HueToComponent = function (p, q, t) {
 				if (t < 0) {
 					t += 1
@@ -26579,7 +26570,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/HSLToColor.js
 	var require_HSLToColor = __commonJS({
-		'../../node_modules/phaser/src/display/color/HSLToColor.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/HSLToColor.js'(exports, module) {
 			var Color = require_Color()
 			var HueToComponent = require_HueToComponent()
 			var HSLToColor = function (h, s, l) {
@@ -26602,7 +26593,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/HSVColorWheel.js
 	var require_HSVColorWheel = __commonJS({
-		'../../node_modules/phaser/src/display/color/HSVColorWheel.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/HSVColorWheel.js'(exports, module) {
 			var HSVToRGB = require_HSVToRGB()
 			var HSVColorWheel = function (s, v) {
 				if (s === void 0) {
@@ -26623,7 +26614,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/Interpolate.js
 	var require_Interpolate = __commonJS({
-		'../../node_modules/phaser/src/display/color/Interpolate.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/Interpolate.js'(exports, module) {
 			var Linear = require_Linear2()
 			var RGBWithRGB = function (r1, g1, b1, r2, g2, b2, length, index) {
 				if (length === void 0) {
@@ -26658,16 +26649,16 @@ var Phaser = (function () {
 				return RGBWithRGB(color.r, color.g, color.b, r, g, b, length, index)
 			}
 			module.exports = {
-				RGBWithRGB: RGBWithRGB,
-				ColorWithRGB: ColorWithRGB,
-				ColorWithColor: ColorWithColor,
+				RGBWithRGB,
+				ColorWithRGB,
+				ColorWithColor,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/display/color/RandomRGB.js
 	var require_RandomRGB = __commonJS({
-		'../../node_modules/phaser/src/display/color/RandomRGB.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/RandomRGB.js'(exports, module) {
 			var Between = require_Between2()
 			var Color = require_Color()
 			var RandomRGB = function (min, max) {
@@ -26685,7 +26676,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/RGBToString.js
 	var require_RGBToString = __commonJS({
-		'../../node_modules/phaser/src/display/color/RGBToString.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/RGBToString.js'(exports, module) {
 			var ComponentToHex = require_ComponentToHex()
 			var RGBToString = function (r, g, b, a, prefix) {
 				if (a === void 0) {
@@ -26706,7 +26697,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/display/color/index.js
 	var require_color = __commonJS({
-		'../../node_modules/phaser/src/display/color/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/display/color/index.js'(exports, module) {
 			var Color = require_Color()
 			Color.ColorSpectrum = require_ColorSpectrum()
 			Color.ColorToRGBA = require_ColorToRGBA()
@@ -26733,7 +26724,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/events/EventEmitter.js
 	var require_EventEmitter = __commonJS({
-		'../../node_modules/phaser/src/events/EventEmitter.js': function (exports, module) {
+		'../../node_modules/phaser/src/events/EventEmitter.js'(exports, module) {
 			var Class = require_Class()
 			var EE = require_eventemitter3()
 			var PluginCache = require_PluginCache()
@@ -26756,14 +26747,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/events/index.js
 	var require_events11 = __commonJS({
-		'../../node_modules/phaser/src/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/events/index.js'(exports, module) {
 			module.exports = { EventEmitter: require_EventEmitter() }
 		},
 	})
 
 	// ../../node_modules/phaser/src/dom/AddToDOM.js
 	var require_AddToDOM = __commonJS({
-		'../../node_modules/phaser/src/dom/AddToDOM.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/AddToDOM.js'(exports, module) {
 			var AddToDOM = function (element, parent) {
 				var target
 				if (parent) {
@@ -26787,84 +26778,84 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/animations/events/ADD_ANIMATION_EVENT.js
 	var require_ADD_ANIMATION_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ADD_ANIMATION_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ADD_ANIMATION_EVENT.js'(exports, module) {
 			module.exports = 'add'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_EVENT.js
 	var require_ANIMATION_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'animationcomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_KEY_EVENT.js
 	var require_ANIMATION_COMPLETE_KEY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_KEY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_COMPLETE_KEY_EVENT.js'(exports, module) {
 			module.exports = 'animationcomplete-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_REPEAT_EVENT.js
 	var require_ANIMATION_REPEAT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_REPEAT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_REPEAT_EVENT.js'(exports, module) {
 			module.exports = 'animationrepeat'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_RESTART_EVENT.js
 	var require_ANIMATION_RESTART_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_RESTART_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_RESTART_EVENT.js'(exports, module) {
 			module.exports = 'animationrestart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_START_EVENT.js
 	var require_ANIMATION_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_START_EVENT.js'(exports, module) {
 			module.exports = 'animationstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_STOP_EVENT.js
 	var require_ANIMATION_STOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_STOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_STOP_EVENT.js'(exports, module) {
 			module.exports = 'animationstop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/ANIMATION_UPDATE_EVENT.js
 	var require_ANIMATION_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/ANIMATION_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/ANIMATION_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'animationupdate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/PAUSE_ALL_EVENT.js
 	var require_PAUSE_ALL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/PAUSE_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/PAUSE_ALL_EVENT.js'(exports, module) {
 			module.exports = 'pauseall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/REMOVE_ANIMATION_EVENT.js
 	var require_REMOVE_ANIMATION_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/REMOVE_ANIMATION_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/REMOVE_ANIMATION_EVENT.js'(exports, module) {
 			module.exports = 'remove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/RESUME_ALL_EVENT.js
 	var require_RESUME_ALL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/animations/events/RESUME_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/RESUME_ALL_EVENT.js'(exports, module) {
 			module.exports = 'resumeall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/animations/events/index.js
 	var require_events12 = __commonJS({
-		'../../node_modules/phaser/src/animations/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/events/index.js'(exports, module) {
 			module.exports = {
 				ADD_ANIMATION: require_ADD_ANIMATION_EVENT(),
 				ANIMATION_COMPLETE: require_ANIMATION_COMPLETE_EVENT(),
@@ -26883,7 +26874,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/animations/AnimationFrame.js
 	var require_AnimationFrame = __commonJS({
-		'../../node_modules/phaser/src/animations/AnimationFrame.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/AnimationFrame.js'(exports, module) {
 			var Class = require_Class()
 			var AnimationFrame = new Class({
 				initialize: function AnimationFrame2(textureKey, textureFrame, index, frame, isKeyFrame) {
@@ -26920,7 +26911,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/animations/Animation.js
 	var require_Animation = __commonJS({
-		'../../node_modules/phaser/src/animations/Animation.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/Animation.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events12()
@@ -27250,7 +27241,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/animations/AnimationManager.js
 	var require_AnimationManager = __commonJS({
-		'../../node_modules/phaser/src/animations/AnimationManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/AnimationManager.js'(exports, module) {
 			var Animation = require_Animation()
 			var Class = require_Class()
 			var CustomMap = require_Map()
@@ -27362,7 +27353,7 @@ var Phaser = (function () {
 									var frame = frames[frameKey]
 									if (frame) {
 										var frameDuration = GetFastValue(frame, 'duration', MATH_CONST.MAX_SAFE_INTEGER)
-										animFrames.push({ key: key, frame: frameKey, duration: frameDuration })
+										animFrames.push({ key, frame: frameKey, duration: frameDuration })
 										totalDuration += frameDuration
 									}
 								}
@@ -27449,7 +27440,7 @@ var Phaser = (function () {
 					if (!config) {
 						frames = texture.getFrameNames()
 						for (i = 0; i < frames.length; i++) {
-							out.push({ key: key, frame: frames[i] })
+							out.push({ key, frame: frames[i] })
 						}
 					} else {
 						if (!frames) {
@@ -27458,7 +27449,7 @@ var Phaser = (function () {
 						for (i = 0; i < frames.length; i++) {
 							var frame = prefix + Pad(frames[i], zeroPad, '0', 1) + suffix
 							if (texture.has(frame)) {
-								out.push({ key: key, frame: frame })
+								out.push({ key, frame })
 							} else {
 								console.warn('Frame "%s" not found in texture "%s"', frame, key)
 							}
@@ -27481,7 +27472,7 @@ var Phaser = (function () {
 						return out
 					}
 					if (first && texture.has(first)) {
-						out.push({ key: key, frame: first })
+						out.push({ key, frame: first })
 					}
 					if (!frames) {
 						if (end === -1) {
@@ -27492,7 +27483,7 @@ var Phaser = (function () {
 					for (var i = 0; i < frames.length; i++) {
 						var frameName = frames[i]
 						if (texture.has(frameName)) {
-							out.push({ key: key, frame: frameName })
+							out.push({ key, frame: frameName })
 						} else {
 							console.warn('Frame "%s" not found in texture "%s"', frameName, key)
 						}
@@ -27598,7 +27589,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/CreateDOMContainer.js
 	var require_CreateDOMContainer = __commonJS({
-		'../../node_modules/phaser/src/dom/CreateDOMContainer.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/CreateDOMContainer.js'(exports, module) {
 			var AddToDOM = require_AddToDOM()
 			var CreateDOMContainer = function (game) {
 				var config = game.config
@@ -27626,7 +27617,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/DOMContentLoaded.js
 	var require_DOMContentLoaded = __commonJS({
-		'../../node_modules/phaser/src/dom/DOMContentLoaded.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/DOMContentLoaded.js'(exports, module) {
 			var OS = require_OS()
 			var DOMContentLoaded = function (callback) {
 				if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -27654,7 +27645,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/const.js
 	var require_const9 = __commonJS({
-		'../../node_modules/phaser/src/input/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/const.js'(exports, module) {
 			var INPUT_CONST = {
 				MOUSE_DOWN: 0,
 				MOUSE_MOVE: 1,
@@ -27672,329 +27663,329 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/events/BOOT_EVENT.js
 	var require_BOOT_EVENT4 = __commonJS({
-		'../../node_modules/phaser/src/input/events/BOOT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/BOOT_EVENT.js'(exports, module) {
 			module.exports = 'boot'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT7 = __commonJS({
-		'../../node_modules/phaser/src/input/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_END_EVENT.js
 	var require_DRAG_END_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_END_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_END_EVENT.js'(exports, module) {
 			module.exports = 'dragend'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_ENTER_EVENT.js
 	var require_DRAG_ENTER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_ENTER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_ENTER_EVENT.js'(exports, module) {
 			module.exports = 'dragenter'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_EVENT.js
 	var require_DRAG_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_EVENT.js'(exports, module) {
 			module.exports = 'drag'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_LEAVE_EVENT.js
 	var require_DRAG_LEAVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_LEAVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_LEAVE_EVENT.js'(exports, module) {
 			module.exports = 'dragleave'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_OVER_EVENT.js
 	var require_DRAG_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_OVER_EVENT.js'(exports, module) {
 			module.exports = 'dragover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DRAG_START_EVENT.js
 	var require_DRAG_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DRAG_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DRAG_START_EVENT.js'(exports, module) {
 			module.exports = 'dragstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/DROP_EVENT.js
 	var require_DROP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/DROP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/DROP_EVENT.js'(exports, module) {
 			module.exports = 'drop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAME_OUT_EVENT.js
 	var require_GAME_OUT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAME_OUT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAME_OUT_EVENT.js'(exports, module) {
 			module.exports = 'gameout'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAME_OVER_EVENT.js
 	var require_GAME_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAME_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAME_OVER_EVENT.js'(exports, module) {
 			module.exports = 'gameover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DOWN_EVENT.js
 	var require_GAMEOBJECT_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectdown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_END_EVENT.js
 	var require_GAMEOBJECT_DRAG_END_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_END_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_END_EVENT.js'(exports, module) {
 			module.exports = 'dragend'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_ENTER_EVENT.js
 	var require_GAMEOBJECT_DRAG_ENTER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_ENTER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_ENTER_EVENT.js'(exports, module) {
 			module.exports = 'dragenter'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_EVENT.js
 	var require_GAMEOBJECT_DRAG_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_EVENT.js'(exports, module) {
 			module.exports = 'drag'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_LEAVE_EVENT.js
 	var require_GAMEOBJECT_DRAG_LEAVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_LEAVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_LEAVE_EVENT.js'(exports, module) {
 			module.exports = 'dragleave'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_OVER_EVENT.js
 	var require_GAMEOBJECT_DRAG_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_OVER_EVENT.js'(exports, module) {
 			module.exports = 'dragover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_START_EVENT.js
 	var require_GAMEOBJECT_DRAG_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DRAG_START_EVENT.js'(exports, module) {
 			module.exports = 'dragstart'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_DROP_EVENT.js
 	var require_GAMEOBJECT_DROP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DROP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_DROP_EVENT.js'(exports, module) {
 			module.exports = 'drop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_MOVE_EVENT.js
 	var require_GAMEOBJECT_MOVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_MOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_MOVE_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectmove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_OUT_EVENT.js
 	var require_GAMEOBJECT_OUT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_OUT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_OUT_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectout'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_OVER_EVENT.js
 	var require_GAMEOBJECT_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_OVER_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_DOWN_EVENT.js
 	var require_GAMEOBJECT_POINTER_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'pointerdown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_MOVE_EVENT.js
 	var require_GAMEOBJECT_POINTER_MOVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_MOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_MOVE_EVENT.js'(exports, module) {
 			module.exports = 'pointermove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OUT_EVENT.js
 	var require_GAMEOBJECT_POINTER_OUT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OUT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OUT_EVENT.js'(exports, module) {
 			module.exports = 'pointerout'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OVER_EVENT.js
 	var require_GAMEOBJECT_POINTER_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_OVER_EVENT.js'(exports, module) {
 			module.exports = 'pointerover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_UP_EVENT.js
 	var require_GAMEOBJECT_POINTER_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_UP_EVENT.js'(exports, module) {
 			module.exports = 'pointerup'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_WHEEL_EVENT.js
 	var require_GAMEOBJECT_POINTER_WHEEL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_WHEEL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_POINTER_WHEEL_EVENT.js'(exports, module) {
 			module.exports = 'wheel'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_UP_EVENT.js
 	var require_GAMEOBJECT_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_UP_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectup'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/GAMEOBJECT_WHEEL_EVENT.js
 	var require_GAMEOBJECT_WHEEL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/GAMEOBJECT_WHEEL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/GAMEOBJECT_WHEEL_EVENT.js'(exports, module) {
 			module.exports = 'gameobjectwheel'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/MANAGER_BOOT_EVENT.js
 	var require_MANAGER_BOOT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/MANAGER_BOOT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/MANAGER_BOOT_EVENT.js'(exports, module) {
 			module.exports = 'boot'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/MANAGER_PROCESS_EVENT.js
 	var require_MANAGER_PROCESS_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/MANAGER_PROCESS_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/MANAGER_PROCESS_EVENT.js'(exports, module) {
 			module.exports = 'process'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/MANAGER_UPDATE_EVENT.js
 	var require_MANAGER_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/MANAGER_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/MANAGER_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'update'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_DOWN_EVENT.js
 	var require_POINTER_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'pointerdown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_DOWN_OUTSIDE_EVENT.js
 	var require_POINTER_DOWN_OUTSIDE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_DOWN_OUTSIDE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_DOWN_OUTSIDE_EVENT.js'(exports, module) {
 			module.exports = 'pointerdownoutside'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_MOVE_EVENT.js
 	var require_POINTER_MOVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_MOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_MOVE_EVENT.js'(exports, module) {
 			module.exports = 'pointermove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_OUT_EVENT.js
 	var require_POINTER_OUT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_OUT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_OUT_EVENT.js'(exports, module) {
 			module.exports = 'pointerout'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_OVER_EVENT.js
 	var require_POINTER_OVER_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_OVER_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_OVER_EVENT.js'(exports, module) {
 			module.exports = 'pointerover'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_UP_EVENT.js
 	var require_POINTER_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_UP_EVENT.js'(exports, module) {
 			module.exports = 'pointerup'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_UP_OUTSIDE_EVENT.js
 	var require_POINTER_UP_OUTSIDE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_UP_OUTSIDE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_UP_OUTSIDE_EVENT.js'(exports, module) {
 			module.exports = 'pointerupoutside'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTER_WHEEL_EVENT.js
 	var require_POINTER_WHEEL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTER_WHEEL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTER_WHEEL_EVENT.js'(exports, module) {
 			module.exports = 'wheel'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/POINTERLOCK_CHANGE_EVENT.js
 	var require_POINTERLOCK_CHANGE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/events/POINTERLOCK_CHANGE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/POINTERLOCK_CHANGE_EVENT.js'(exports, module) {
 			module.exports = 'pointerlockchange'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/PRE_UPDATE_EVENT.js
 	var require_PRE_UPDATE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/input/events/PRE_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/PRE_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'preupdate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/SHUTDOWN_EVENT.js
 	var require_SHUTDOWN_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/input/events/SHUTDOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/SHUTDOWN_EVENT.js'(exports, module) {
 			module.exports = 'shutdown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/START_EVENT.js
 	var require_START_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/input/events/START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/START_EVENT.js'(exports, module) {
 			module.exports = 'start'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/UPDATE_EVENT.js
 	var require_UPDATE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/input/events/UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'update'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/events/index.js
 	var require_events13 = __commonJS({
-		'../../node_modules/phaser/src/input/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/events/index.js'(exports, module) {
 			module.exports = {
 				BOOT: require_BOOT_EVENT4(),
 				DESTROY: require_DESTROY_EVENT7(),
@@ -28048,7 +28039,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/KeyCodes.js
 	var require_KeyCodes = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/KeyCodes.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/KeyCodes.js'(exports, module) {
 			var KeyCodes = {
 				BACKSPACE: 8,
 				TAB: 9,
@@ -28155,7 +28146,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/KeyboardManager.js
 	var require_KeyboardManager = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/KeyboardManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/KeyboardManager.js'(exports, module) {
 			var ArrayRemove = require_Remove()
 			var Class = require_Class()
 			var GameEvents = require_events5()
@@ -28283,7 +28274,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/mouse/MouseManager.js
 	var require_MouseManager = __commonJS({
-		'../../node_modules/phaser/src/input/mouse/MouseManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/mouse/MouseManager.js'(exports, module) {
 			var Class = require_Class()
 			var Features = require_Features()
 			var InputEvents = require_events13()
@@ -28485,7 +28476,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/Pointer.js
 	var require_Pointer = __commonJS({
-		'../../node_modules/phaser/src/input/Pointer.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/Pointer.js'(exports, module) {
 			var Angle = require_Between()
 			var Class = require_Class()
 			var Distance = require_DistanceBetween()
@@ -28840,7 +28831,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/touch/TouchManager.js
 	var require_TouchManager = __commonJS({
-		'../../node_modules/phaser/src/input/touch/TouchManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/touch/TouchManager.js'(exports, module) {
 			var Class = require_Class()
 			var InputEvents = require_events13()
 			var NOOP = require_NOOP()
@@ -28990,7 +28981,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/InputManager.js
 	var require_InputManager = __commonJS({
-		'../../node_modules/phaser/src/input/InputManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/InputManager.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const9()
 			var EventEmitter = require_eventemitter3()
@@ -29337,7 +29328,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/FileTypesManager.js
 	var require_FileTypesManager = __commonJS({
-		'../../node_modules/phaser/src/loader/FileTypesManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/FileTypesManager.js'(exports, module) {
 			var types = {}
 			var FileTypesManager = {
 				install: function (loader) {
@@ -29358,7 +29349,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/GameObjectCreator.js
 	var require_GameObjectCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/GameObjectCreator.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/GameObjectCreator.js'(exports, module) {
 			var Class = require_Class()
 			var PluginCache = require_PluginCache()
 			var SceneEvents = require_events()
@@ -29410,7 +29401,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/PluginManager.js
 	var require_PluginManager = __commonJS({
-		'../../node_modules/phaser/src/plugins/PluginManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/PluginManager.js'(exports, module) {
 			var Class = require_Class()
 			var GameEvents = require_events5()
 			var EventEmitter = require_eventemitter3()
@@ -29581,7 +29572,7 @@ var Phaser = (function () {
 						start = true
 					}
 					if (!this.game.isBooted) {
-						this._pendingGlobal.push({ key: key, plugin: plugin, start: start, mapping: mapping, data: data })
+						this._pendingGlobal.push({ key, plugin, start, mapping, data })
 					} else {
 						PluginCache.registerCustom(key, plugin, mapping, data)
 						if (start) {
@@ -29729,7 +29720,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/const/CENTER_CONST.js
 	var require_CENTER_CONST = __commonJS({
-		'../../node_modules/phaser/src/scale/const/CENTER_CONST.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/const/CENTER_CONST.js'(exports, module) {
 			module.exports = {
 				NO_CENTER: 0,
 				CENTER_BOTH: 1,
@@ -29741,7 +29732,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/const/ORIENTATION_CONST.js
 	var require_ORIENTATION_CONST = __commonJS({
-		'../../node_modules/phaser/src/scale/const/ORIENTATION_CONST.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/const/ORIENTATION_CONST.js'(exports, module) {
 			module.exports = {
 				LANDSCAPE: 'landscape-primary',
 				LANDSCAPE_SECONDARY: 'landscape-secondary',
@@ -29753,7 +29744,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/const/SCALE_MODE_CONST.js
 	var require_SCALE_MODE_CONST = __commonJS({
-		'../../node_modules/phaser/src/scale/const/SCALE_MODE_CONST.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/const/SCALE_MODE_CONST.js'(exports, module) {
 			module.exports = {
 				NONE: 0,
 				WIDTH_CONTROLS_HEIGHT: 1,
@@ -29768,7 +29759,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/const/ZOOM_CONST.js
 	var require_ZOOM_CONST = __commonJS({
-		'../../node_modules/phaser/src/scale/const/ZOOM_CONST.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/const/ZOOM_CONST.js'(exports, module) {
 			module.exports = {
 				NO_ZOOM: 1,
 				ZOOM_2X: 2,
@@ -29780,7 +29771,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/const/index.js
 	var require_const10 = __commonJS({
-		'../../node_modules/phaser/src/scale/const/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/const/index.js'(exports, module) {
 			var CONST = {
 				CENTER: require_CENTER_CONST(),
 				ORIENTATION: require_ORIENTATION_CONST(),
@@ -29793,7 +29784,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/GetInnerHeight.js
 	var require_GetInnerHeight = __commonJS({
-		'../../node_modules/phaser/src/dom/GetInnerHeight.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/GetInnerHeight.js'(exports, module) {
 			var GetInnerHeight = function (iOS) {
 				if (!iOS) {
 					return window.innerHeight
@@ -29819,7 +29810,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/GetTarget.js
 	var require_GetTarget = __commonJS({
-		'../../node_modules/phaser/src/dom/GetTarget.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/GetTarget.js'(exports, module) {
 			var GetTarget = function (element) {
 				var target
 				if (element !== '') {
@@ -29840,7 +29831,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/GetScreenOrientation.js
 	var require_GetScreenOrientation = __commonJS({
-		'../../node_modules/phaser/src/dom/GetScreenOrientation.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/GetScreenOrientation.js'(exports, module) {
 			var CONST = require_const10()
 			var GetScreenOrientation = function (width, height) {
 				var screen2 = window.screen
@@ -29868,7 +29859,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/Size.js
 	var require_Size2 = __commonJS({
-		'../../node_modules/phaser/src/structs/Size.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/Size.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var SnapFloor = require_SnapFloor()
@@ -30092,7 +30083,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/ScaleManager.js
 	var require_ScaleManager = __commonJS({
-		'../../node_modules/phaser/src/scale/ScaleManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/ScaleManager.js'(exports, module) {
 			var CONST = require_const10()
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
@@ -30749,7 +30740,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/const.js
 	var require_const11 = __commonJS({
-		'../../node_modules/phaser/src/scene/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/const.js'(exports, module) {
 			var CONST = {
 				PENDING: 0,
 				INIT: 1,
@@ -30768,77 +30759,77 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/events/ADD_EVENT.js
 	var require_ADD_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/loader/events/ADD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/ADD_EVENT.js'(exports, module) {
 			module.exports = 'addfile'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/COMPLETE_EVENT.js
 	var require_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/FILE_COMPLETE_EVENT.js
 	var require_FILE_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/FILE_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/FILE_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'filecomplete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/FILE_KEY_COMPLETE_EVENT.js
 	var require_FILE_KEY_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/FILE_KEY_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/FILE_KEY_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'filecomplete-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/FILE_LOAD_ERROR_EVENT.js
 	var require_FILE_LOAD_ERROR_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/FILE_LOAD_ERROR_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/FILE_LOAD_ERROR_EVENT.js'(exports, module) {
 			module.exports = 'loaderror'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/FILE_LOAD_EVENT.js
 	var require_FILE_LOAD_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/FILE_LOAD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/FILE_LOAD_EVENT.js'(exports, module) {
 			module.exports = 'load'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/FILE_PROGRESS_EVENT.js
 	var require_FILE_PROGRESS_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/FILE_PROGRESS_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/FILE_PROGRESS_EVENT.js'(exports, module) {
 			module.exports = 'fileprogress'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/POST_PROCESS_EVENT.js
 	var require_POST_PROCESS_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/POST_PROCESS_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/POST_PROCESS_EVENT.js'(exports, module) {
 			module.exports = 'postprocess'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/PROGRESS_EVENT.js
 	var require_PROGRESS_EVENT = __commonJS({
-		'../../node_modules/phaser/src/loader/events/PROGRESS_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/PROGRESS_EVENT.js'(exports, module) {
 			module.exports = 'progress'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/START_EVENT.js
 	var require_START_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/loader/events/START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/START_EVENT.js'(exports, module) {
 			module.exports = 'start'
 		},
 	})
 
 	// ../../node_modules/phaser/src/loader/events/index.js
 	var require_events14 = __commonJS({
-		'../../node_modules/phaser/src/loader/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/events/index.js'(exports, module) {
 			module.exports = {
 				ADD: require_ADD_EVENT3(),
 				COMPLETE: require_COMPLETE_EVENT(),
@@ -30856,7 +30847,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/string/UppercaseFirst.js
 	var require_UppercaseFirst = __commonJS({
-		'../../node_modules/phaser/src/utils/string/UppercaseFirst.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/string/UppercaseFirst.js'(exports, module) {
 			var UppercaseFirst = function (str) {
 				return str && str[0].toUpperCase() + str.slice(1)
 			}
@@ -30866,7 +30857,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/GetPhysicsPlugins.js
 	var require_GetPhysicsPlugins = __commonJS({
-		'../../node_modules/phaser/src/scene/GetPhysicsPlugins.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/GetPhysicsPlugins.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var UppercaseFirst = require_UppercaseFirst()
 			var GetPhysicsPlugins = function (sys) {
@@ -30895,7 +30886,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/GetScenePlugins.js
 	var require_GetScenePlugins = __commonJS({
-		'../../node_modules/phaser/src/scene/GetScenePlugins.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/GetScenePlugins.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var GetScenePlugins = function (sys) {
 				var defaultPlugins = sys.plugins.getDefaultScenePlugins()
@@ -30914,7 +30905,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/Clone.js
 	var require_Clone = __commonJS({
-		'../../node_modules/phaser/src/utils/object/Clone.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/Clone.js'(exports, module) {
 			var Clone = function (obj) {
 				var clone = {}
 				for (var key in obj) {
@@ -30932,7 +30923,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/Merge.js
 	var require_Merge = __commonJS({
-		'../../node_modules/phaser/src/utils/object/Merge.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/Merge.js'(exports, module) {
 			var Clone = require_Clone()
 			var Merge = function (obj1, obj2) {
 				var clone = Clone(obj1)
@@ -30949,7 +30940,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/InjectionMap.js
 	var require_InjectionMap = __commonJS({
-		'../../node_modules/phaser/src/scene/InjectionMap.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/InjectionMap.js'(exports, module) {
 			var InjectionMap = {
 				game: 'game',
 				renderer: 'renderer',
@@ -30988,7 +30979,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/Settings.js
 	var require_Settings = __commonJS({
-		'../../node_modules/phaser/src/scene/Settings.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/Settings.js'(exports, module) {
 			var CONST = require_const11()
 			var GetValue = require_GetValue()
 			var Merge = require_Merge()
@@ -31027,7 +31018,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/Systems.js
 	var require_Systems = __commonJS({
-		'../../node_modules/phaser/src/scene/Systems.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/Systems.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const11()
 			var DefaultPlugins = require_DefaultPlugins()
@@ -31230,7 +31221,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/Scene.js
 	var require_Scene = __commonJS({
-		'../../node_modules/phaser/src/scene/Scene.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/Scene.js'(exports, module) {
 			var Class = require_Class()
 			var Systems = require_Systems()
 			var Scene = new Class({
@@ -31271,7 +31262,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/SceneManager.js
 	var require_SceneManager = __commonJS({
-		'../../node_modules/phaser/src/scene/SceneManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/SceneManager.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const11()
 			var Events = require_events()
@@ -31388,13 +31379,13 @@ var Phaser = (function () {
 					}
 					if (this.isProcessing || !this.isBooted) {
 						this._pending.push({
-							key: key,
+							key,
 							scene: sceneConfig,
-							autoStart: autoStart,
-							data: data,
+							autoStart,
+							data,
 						})
 						if (!this.isBooted) {
-							this._data[key] = { data: data }
+							this._data[key] = { data }
 						}
 						return null
 					}
@@ -31698,7 +31689,7 @@ var Phaser = (function () {
 					if (!this.isBooted) {
 						this._data[key] = {
 							autoStart: true,
-							data: data,
+							data,
 						}
 						return this
 					}
@@ -31857,7 +31848,7 @@ var Phaser = (function () {
 					return this
 				},
 				queueOp: function (op, keyA, keyB, data) {
-					this._queue.push({ op: op, keyA: keyA, keyB: keyB, data: data })
+					this._queue.push({ op, keyA, keyB, data })
 					return this
 				},
 				swapPosition: function (keyA, keyB) {
@@ -31908,7 +31899,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/TextureSource.js
 	var require_TextureSource = __commonJS({
-		'../../node_modules/phaser/src/textures/TextureSource.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/TextureSource.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var Class = require_Class()
 			var IsSizePowerOfTwo = require_IsSizePowerOfTwo()
@@ -32022,7 +32013,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/Texture.js
 	var require_Texture2 = __commonJS({
-		'../../node_modules/phaser/src/textures/Texture.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/Texture.js'(exports, module) {
 			var Class = require_Class()
 			var Frame = require_Frame()
 			var TextureSource = require_TextureSource()
@@ -32220,7 +32211,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/CanvasTexture.js
 	var require_CanvasTexture = __commonJS({
-		'../../node_modules/phaser/src/textures/CanvasTexture.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/CanvasTexture.js'(exports, module) {
 			var Class = require_Class()
 			var Clamp = require_Clamp()
 			var Color = require_Color()
@@ -32468,7 +32459,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/DynamicTexture.js
 	var require_DynamicTexture = __commonJS({
-		'../../node_modules/phaser/src/textures/DynamicTexture.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/DynamicTexture.js'(exports, module) {
 			var BlendModes = require_BlendModes()
 			var Camera = require_Camera()
 			var CanvasPool = require_CanvasPool()
@@ -33019,7 +33010,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/create/palettes/Arne16.js
 	var require_Arne16 = __commonJS({
-		'../../node_modules/phaser/src/create/palettes/Arne16.js': function (exports, module) {
+		'../../node_modules/phaser/src/create/palettes/Arne16.js'(exports, module) {
 			module.exports = {
 				0: '#000',
 				1: '#9D9D9D',
@@ -33043,7 +33034,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/create/GenerateTexture.js
 	var require_GenerateTexture = __commonJS({
-		'../../node_modules/phaser/src/create/GenerateTexture.js': function (exports, module) {
+		'../../node_modules/phaser/src/create/GenerateTexture.js'(exports, module) {
 			var Arne16 = require_Arne16()
 			var CanvasPool = require_CanvasPool()
 			var GetValue = require_GetValue()
@@ -33096,7 +33087,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js
 	var require_ImageWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/image/ImageWebGLRenderer.js'(exports, module) {
 			var ImageWebGLRenderer = function (renderer, src, camera, parentMatrix) {
 				camera.addToRenderList(src)
 				this.pipeline.batchSprite(src, camera, parentMatrix)
@@ -33107,7 +33098,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js
 	var require_ImageCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/image/ImageCanvasRenderer.js'(exports, module) {
 			var ImageCanvasRenderer = function (renderer, src, camera, parentMatrix) {
 				camera.addToRenderList(src)
 				renderer.batchSprite(src, src.frame, camera, parentMatrix)
@@ -33118,7 +33109,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/image/ImageRender.js
 	var require_ImageRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/ImageRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/image/ImageRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -33129,15 +33120,15 @@ var Phaser = (function () {
 				renderCanvas = require_ImageCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/image/Image.js
 	var require_Image = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/Image.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/image/Image.js'(exports, module) {
 			var Class = require_Class()
 			var Components = require_components()
 			var GameObject = require_GameObject()
@@ -33179,7 +33170,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/AtlasXML.js
 	var require_AtlasXML = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/AtlasXML.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/AtlasXML.js'(exports, module) {
 			var AtlasXML = function (texture, sourceIndex, xml) {
 				if (!xml.getElementsByTagName('TextureAtlas')) {
 					console.warn('Invalid Texture Atlas XML given')
@@ -33213,7 +33204,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/Canvas.js
 	var require_Canvas = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/Canvas.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/Canvas.js'(exports, module) {
 			var Canvas = function (texture, sourceIndex) {
 				var source = texture.source[sourceIndex]
 				texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height)
@@ -33225,7 +33216,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/Image.js
 	var require_Image2 = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/Image.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/Image.js'(exports, module) {
 			var Image2 = function (texture, sourceIndex) {
 				var source = texture.source[sourceIndex]
 				texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height)
@@ -33237,7 +33228,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/JSONArray.js
 	var require_JSONArray = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/JSONArray.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/JSONArray.js'(exports, module) {
 			var Clone = require_Clone()
 			var JSONArray = function (texture, sourceIndex, json) {
 				if (!json['frames'] && !json['textures']) {
@@ -33291,7 +33282,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/JSONHash.js
 	var require_JSONHash = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/JSONHash.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/JSONHash.js'(exports, module) {
 			var Clone = require_Clone()
 			var JSONHash = function (texture, sourceIndex, json) {
 				if (!json['frames']) {
@@ -33348,7 +33339,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/KTXParser.js
 	var require_KTXParser = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/KTXParser.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/KTXParser.js'(exports, module) {
 			var KTXParser = function (data) {
 				var idCheck = [171, 75, 84, 88, 32, 49, 49, 187, 13, 10, 26, 10]
 				var i
@@ -33389,10 +33380,10 @@ var Phaser = (function () {
 					offset += levelSize
 				}
 				return {
-					mipmaps: mipmaps,
-					width: width,
-					height: height,
-					internalFormat: internalFormat,
+					mipmaps,
+					width,
+					height,
+					internalFormat,
 					compressed: true,
 					generateMipmap: false,
 				}
@@ -33403,7 +33394,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/PVRParser.js
 	var require_PVRParser = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/PVRParser.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/PVRParser.js'(exports, module) {
 			function GetSize(width, height, x, y, dx, dy, mult) {
 				if (mult === void 0) {
 					mult = 16
@@ -33529,10 +33520,10 @@ var Phaser = (function () {
 					offset += levelSize
 				}
 				return {
-					mipmaps: mipmaps,
-					width: width,
-					height: height,
-					internalFormat: internalFormat,
+					mipmaps,
+					width,
+					height,
+					internalFormat,
 					compressed: true,
 					generateMipmap: false,
 				}
@@ -33543,7 +33534,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/SpriteSheet.js
 	var require_SpriteSheet = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/SpriteSheet.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/SpriteSheet.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var SpriteSheet = function (texture, sourceIndex, x, y, width, height, config) {
 				var frameWidth = GetFastValue(config, 'frameWidth', null)
@@ -33606,7 +33597,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/SpriteSheetFromAtlas.js
 	var require_SpriteSheetFromAtlas = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/SpriteSheetFromAtlas.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/SpriteSheetFromAtlas.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var SpriteSheetFromAtlas = function (texture, frame, config) {
 				var frameWidth = GetFastValue(config, 'frameWidth', null)
@@ -33707,7 +33698,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/UnityYAML.js
 	var require_UnityYAML = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/UnityYAML.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/UnityYAML.js'(exports, module) {
 			var imageHeight = 0
 			var addFrame = function (texture, sourceIndex, name, frame) {
 				var y = imageHeight - frame.y - frame.height
@@ -33761,7 +33752,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/parsers/index.js
 	var require_parsers = __commonJS({
-		'../../node_modules/phaser/src/textures/parsers/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/parsers/index.js'(exports, module) {
 			module.exports = {
 				AtlasXML: require_AtlasXML(),
 				Canvas: require_Canvas(),
@@ -33779,7 +33770,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/TextureManager.js
 	var require_TextureManager = __commonJS({
-		'../../node_modules/phaser/src/textures/TextureManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/TextureManager.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var CanvasTexture = require_CanvasTexture()
 			var Class = require_Class()
@@ -34345,175 +34336,175 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/events/COMPLETE_EVENT.js
 	var require_COMPLETE_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/DECODED_EVENT.js
 	var require_DECODED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/DECODED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/DECODED_EVENT.js'(exports, module) {
 			module.exports = 'decoded'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js
 	var require_DECODED_ALL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/DECODED_ALL_EVENT.js'(exports, module) {
 			module.exports = 'decodedall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/DESTROY_EVENT.js
 	var require_DESTROY_EVENT8 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/DESTROY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/DESTROY_EVENT.js'(exports, module) {
 			module.exports = 'destroy'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/DETUNE_EVENT.js
 	var require_DETUNE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/DETUNE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/DETUNE_EVENT.js'(exports, module) {
 			module.exports = 'detune'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/GLOBAL_DETUNE_EVENT.js
 	var require_GLOBAL_DETUNE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/GLOBAL_DETUNE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/GLOBAL_DETUNE_EVENT.js'(exports, module) {
 			module.exports = 'detune'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/GLOBAL_MUTE_EVENT.js
 	var require_GLOBAL_MUTE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/GLOBAL_MUTE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/GLOBAL_MUTE_EVENT.js'(exports, module) {
 			module.exports = 'mute'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/GLOBAL_RATE_EVENT.js
 	var require_GLOBAL_RATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/GLOBAL_RATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/GLOBAL_RATE_EVENT.js'(exports, module) {
 			module.exports = 'rate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/GLOBAL_VOLUME_EVENT.js
 	var require_GLOBAL_VOLUME_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/GLOBAL_VOLUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/GLOBAL_VOLUME_EVENT.js'(exports, module) {
 			module.exports = 'volume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/LOOP_EVENT.js
 	var require_LOOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/LOOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/LOOP_EVENT.js'(exports, module) {
 			module.exports = 'loop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/LOOPED_EVENT.js
 	var require_LOOPED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/LOOPED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/LOOPED_EVENT.js'(exports, module) {
 			module.exports = 'looped'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/MUTE_EVENT.js
 	var require_MUTE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/MUTE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/MUTE_EVENT.js'(exports, module) {
 			module.exports = 'mute'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/PAN_EVENT.js
 	var require_PAN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/PAN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/PAN_EVENT.js'(exports, module) {
 			module.exports = 'pan'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/PAUSE_ALL_EVENT.js
 	var require_PAUSE_ALL_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/PAUSE_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/PAUSE_ALL_EVENT.js'(exports, module) {
 			module.exports = 'pauseall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/PAUSE_EVENT.js
 	var require_PAUSE_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/PAUSE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/PAUSE_EVENT.js'(exports, module) {
 			module.exports = 'pause'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/PLAY_EVENT.js
 	var require_PLAY_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/PLAY_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/PLAY_EVENT.js'(exports, module) {
 			module.exports = 'play'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/RATE_EVENT.js
 	var require_RATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/RATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/RATE_EVENT.js'(exports, module) {
 			module.exports = 'rate'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/RESUME_ALL_EVENT.js
 	var require_RESUME_ALL_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/RESUME_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/RESUME_ALL_EVENT.js'(exports, module) {
 			module.exports = 'resumeall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/RESUME_EVENT.js
 	var require_RESUME_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/RESUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/RESUME_EVENT.js'(exports, module) {
 			module.exports = 'resume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/SEEK_EVENT.js
 	var require_SEEK_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/SEEK_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/SEEK_EVENT.js'(exports, module) {
 			module.exports = 'seek'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/STOP_ALL_EVENT.js
 	var require_STOP_ALL_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/STOP_ALL_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/STOP_ALL_EVENT.js'(exports, module) {
 			module.exports = 'stopall'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/STOP_EVENT.js
 	var require_STOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/STOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/STOP_EVENT.js'(exports, module) {
 			module.exports = 'stop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/UNLOCKED_EVENT.js
 	var require_UNLOCKED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/UNLOCKED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/UNLOCKED_EVENT.js'(exports, module) {
 			module.exports = 'unlocked'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/VOLUME_EVENT.js
 	var require_VOLUME_EVENT = __commonJS({
-		'../../node_modules/phaser/src/sound/events/VOLUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/VOLUME_EVENT.js'(exports, module) {
 			module.exports = 'volume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/sound/events/index.js
 	var require_events15 = __commonJS({
-		'../../node_modules/phaser/src/sound/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/events/index.js'(exports, module) {
 			module.exports = {
 				COMPLETE: require_COMPLETE_EVENT2(),
 				DECODED: require_DECODED_EVENT(),
@@ -34545,7 +34536,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/BaseSoundManager.js
 	var require_BaseSoundManager = __commonJS({
-		'../../node_modules/phaser/src/sound/BaseSoundManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/BaseSoundManager.js'(exports, module) {
 			var Class = require_Class()
 			var Clone = require_Clone()
 			var EventEmitter = require_eventemitter3()
@@ -34795,7 +34786,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/BaseSound.js
 	var require_BaseSound = __commonJS({
-		'../../node_modules/phaser/src/sound/BaseSound.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/BaseSound.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events15()
@@ -34972,7 +34963,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/html5/HTML5AudioSound.js
 	var require_HTML5AudioSound = __commonJS({
-		'../../node_modules/phaser/src/sound/html5/HTML5AudioSound.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/html5/HTML5AudioSound.js'(exports, module) {
 			var BaseSound = require_BaseSound()
 			var Class = require_Class()
 			var Events = require_events15()
@@ -35341,7 +35332,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/html5/HTML5AudioSoundManager.js
 	var require_HTML5AudioSoundManager = __commonJS({
-		'../../node_modules/phaser/src/sound/html5/HTML5AudioSoundManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/html5/HTML5AudioSoundManager.js'(exports, module) {
 			var BaseSoundManager = require_BaseSoundManager()
 			var Class = require_Class()
 			var Events = require_events15()
@@ -35460,9 +35451,9 @@ var Phaser = (function () {
 				isLocked: function (sound, prop, value) {
 					if (sound.tags[0].dataset.locked === 'true') {
 						this.lockedActionsQueue.push({
-							sound: sound,
-							prop: prop,
-							value: value,
+							sound,
+							prop,
+							value,
 						})
 						return true
 					}
@@ -35507,7 +35498,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/noaudio/NoAudioSound.js
 	var require_NoAudioSound = __commonJS({
-		'../../node_modules/phaser/src/sound/noaudio/NoAudioSound.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/noaudio/NoAudioSound.js'(exports, module) {
 			var BaseSound = require_BaseSound()
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
@@ -35589,7 +35580,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/noaudio/NoAudioSoundManager.js
 	var require_NoAudioSoundManager = __commonJS({
-		'../../node_modules/phaser/src/sound/noaudio/NoAudioSoundManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/noaudio/NoAudioSoundManager.js'(exports, module) {
 			var BaseSoundManager = require_BaseSoundManager()
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
@@ -35668,7 +35659,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/base64/Base64ToArrayBuffer.js
 	var require_Base64ToArrayBuffer = __commonJS({
-		'../../node_modules/phaser/src/utils/base64/Base64ToArrayBuffer.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/base64/Base64ToArrayBuffer.js'(exports, module) {
 			var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 			var lookup = new Uint8Array(256)
 			for (i = 0; i < chars.length; i++) {
@@ -35709,7 +35700,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/webaudio/WebAudioSound.js
 	var require_WebAudioSound = __commonJS({
-		'../../node_modules/phaser/src/sound/webaudio/WebAudioSound.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/webaudio/WebAudioSound.js'(exports, module) {
 			var BaseSound = require_BaseSound()
 			var Class = require_Class()
 			var Events = require_events15()
@@ -36139,7 +36130,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/webaudio/WebAudioSoundManager.js
 	var require_WebAudioSoundManager = __commonJS({
-		'../../node_modules/phaser/src/sound/webaudio/WebAudioSoundManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/webaudio/WebAudioSoundManager.js'(exports, module) {
 			var Base64ToArrayBuffer = require_Base64ToArrayBuffer()
 			var BaseSoundManager = require_BaseSoundManager()
 			var Class = require_Class()
@@ -36350,7 +36341,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/sound/SoundManagerCreator.js
 	var require_SoundManagerCreator = __commonJS({
-		'../../node_modules/phaser/src/sound/SoundManagerCreator.js': function (exports, module) {
+		'../../node_modules/phaser/src/sound/SoundManagerCreator.js'(exports, module) {
 			var HTML5AudioSoundManager = require_HTML5AudioSoundManager()
 			var NoAudioSoundManager = require_NoAudioSoundManager()
 			var WebAudioSoundManager = require_WebAudioSoundManager()
@@ -36373,13 +36364,13 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/AdInstance.js
 	var require_AdInstance = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/AdInstance.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/AdInstance.js'(exports, module) {
 			var AdInstance = function (placementID, instance, video) {
 				return {
-					instance: instance,
-					placementID: placementID,
+					instance,
+					placementID,
 					shown: false,
-					video: video,
+					video,
 				}
 			}
 			module.exports = AdInstance
@@ -36388,7 +36379,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/LeaderboardScore.js
 	var require_LeaderboardScore = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/LeaderboardScore.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/LeaderboardScore.js'(exports, module) {
 			var LeaderboardScore = function (entry) {
 				return {
 					score: entry.getScore(),
@@ -36407,7 +36398,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/Leaderboard.js
 	var require_Leaderboard = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/Leaderboard.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/Leaderboard.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var LeaderboardScore = require_LeaderboardScore()
@@ -36524,7 +36515,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/Product.js
 	var require_Product = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/Product.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/Product.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var Product = function (data) {
 				return {
@@ -36542,7 +36533,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/Purchase.js
 	var require_Purchase = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/Purchase.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/Purchase.js'(exports, module) {
 			var GetFastValue = require_GetFastValue()
 			var Purchase = function (data) {
 				return {
@@ -36560,7 +36551,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/plugins/fbinstant/src/FacebookInstantGamesPlugin.js
 	var require_FacebookInstantGamesPlugin = __commonJS({
-		'../../node_modules/phaser/plugins/fbinstant/src/FacebookInstantGamesPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/plugins/fbinstant/src/FacebookInstantGamesPlugin.js'(exports, module) {
 			var AdInstance = require_AdInstance()
 			var Class = require_Class()
 			var DataManager = require_DataManager()
@@ -36933,9 +36924,9 @@ var Phaser = (function () {
 						var imageData = this.game.textures.getBase64(key, frame)
 					}
 					var payload = {
-						intent: intent,
+						intent,
 						image: imageData,
-						text: text,
+						text,
 						data: sessionData,
 					}
 					var _this = this
@@ -37047,7 +37038,7 @@ var Phaser = (function () {
 					if (!this.paymentsReady) {
 						return this
 					}
-					var config = { productID: productID }
+					var config = { productID }
 					if (developerPayload) {
 						config.developerPayload = developerPayload
 					}
@@ -37121,11 +37112,11 @@ var Phaser = (function () {
 						var imageData = this.game.textures.getBase64(key, frame)
 					}
 					var payload = {
-						action: action,
-						cta: cta,
+						action,
+						cta,
 						image: imageData,
-						text: text,
-						template: template,
+						text,
+						template,
 						data: updateData,
 						strategy: 'IMMEDIATE',
 						notification: 'NO_PUSH',
@@ -37378,7 +37369,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/core/Game.js
 	var require_Game = __commonJS({
-		'../../node_modules/phaser/src/core/Game.js': function (exports, module) {
+		'../../node_modules/phaser/src/core/Game.js'(exports, module) {
 			var AddToDOM = require_AddToDOM()
 			var AnimationManager = require_AnimationManager()
 			var CacheManager = require_CacheManager()
@@ -37586,7 +37577,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTexture.js
 	var require_RenderTexture = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTexture.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTexture.js'(exports, module) {
 			var Class = require_Class()
 			var DynamicTexture = require_DynamicTexture()
 			var Image2 = require_Image()
@@ -37702,7 +37693,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/container/ContainerWebGLRenderer.js
 	var require_ContainerWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/container/ContainerWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/container/ContainerWebGLRenderer.js'(exports, module) {
 			var ContainerWebGLRenderer = function (renderer, container, camera, parentMatrix) {
 				camera.addToRenderList(container)
 				var children = container.list
@@ -37782,7 +37773,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/container/ContainerCanvasRenderer.js
 	var require_ContainerCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/container/ContainerCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/container/ContainerCanvasRenderer.js'(exports, module) {
 			var ContainerCanvasRenderer = function (renderer, container, camera, parentMatrix) {
 				camera.addToRenderList(container)
 				var children = container.list
@@ -37836,7 +37827,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/container/ContainerRender.js
 	var require_ContainerRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/container/ContainerRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/container/ContainerRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -37847,15 +37838,15 @@ var Phaser = (function () {
 				renderCanvas = require_ContainerCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/geom/rectangle/Union.js
 	var require_Union = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Union.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Union.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var Union = function (rectA, rectB, out) {
 				if (out === void 0) {
@@ -37873,7 +37864,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/container/Container.js
 	var require_Container = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/container/Container.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/container/Container.js'(exports, module) {
 			var ArrayUtils = require_array()
 			var BlendModes = require_BlendModes()
 			var Class = require_Class()
@@ -38258,7 +38249,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/List.js
 	var require_List = __commonJS({
-		'../../node_modules/phaser/src/structs/List.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/List.js'(exports, module) {
 			var ArrayUtils = require_array()
 			var Class = require_Class()
 			var NOOP = require_NOOP()
@@ -38463,7 +38454,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/DisplayList.js
 	var require_DisplayList = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/DisplayList.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/DisplayList.js'(exports, module) {
 			var Class = require_Class()
 			var List = require_List()
 			var PluginCache = require_PluginCache()
@@ -38546,21 +38537,21 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_ADD_EVENT.js
 	var require_PROCESS_QUEUE_ADD_EVENT = __commonJS({
-		'../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_ADD_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_ADD_EVENT.js'(exports, module) {
 			module.exports = 'add'
 		},
 	})
 
 	// ../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_REMOVE_EVENT.js
 	var require_PROCESS_QUEUE_REMOVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_REMOVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/events/PROCESS_QUEUE_REMOVE_EVENT.js'(exports, module) {
 			module.exports = 'remove'
 		},
 	})
 
 	// ../../node_modules/phaser/src/structs/events/index.js
 	var require_events16 = __commonJS({
-		'../../node_modules/phaser/src/structs/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/events/index.js'(exports, module) {
 			module.exports = {
 				PROCESS_QUEUE_ADD: require_PROCESS_QUEUE_ADD_EVENT(),
 				PROCESS_QUEUE_REMOVE: require_PROCESS_QUEUE_REMOVE_EVENT(),
@@ -38570,7 +38561,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/ProcessQueue.js
 	var require_ProcessQueue = __commonJS({
-		'../../node_modules/phaser/src/structs/ProcessQueue.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/ProcessQueue.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events16()
@@ -38674,7 +38665,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/UpdateList.js
 	var require_UpdateList = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/UpdateList.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/UpdateList.js'(exports, module) {
 			var Class = require_Class()
 			var ProcessQueue = require_ProcessQueue()
 			var PluginCache = require_PluginCache()
@@ -38745,7 +38736,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/GetAdvancedValue.js
 	var require_GetAdvancedValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/GetAdvancedValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/GetAdvancedValue.js'(exports, module) {
 			var MATH = require_math()
 			var GetValue = require_GetValue()
 			var GetAdvancedValue = function (source, key, defaultValue) {
@@ -38771,7 +38762,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/BuildGameObject.js
 	var require_BuildGameObject = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/BuildGameObject.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/BuildGameObject.js'(exports, module) {
 			var BlendModes = require_BlendModes()
 			var GetAdvancedValue = require_GetAdvancedValue()
 			var BuildGameObject = function (scene, gameObject, config) {
@@ -38825,7 +38816,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/BuildGameObjectAnimation.js
 	var require_BuildGameObjectAnimation = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/BuildGameObjectAnimation.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/BuildGameObjectAnimation.js'(exports, module) {
 			var GetAdvancedValue = require_GetAdvancedValue()
 			var BuildGameObjectAnimation = function (sprite, config) {
 				var animConfig = GetAdvancedValue(config, 'anims', null)
@@ -38846,12 +38837,12 @@ var Phaser = (function () {
 						var play = GetAdvancedValue(animConfig, 'play', false)
 						var delayedPlay = GetAdvancedValue(animConfig, 'delayedPlay', 0)
 						var playConfig = {
-							key: key,
-							delay: delay,
-							repeat: repeat,
-							repeatDelay: repeatDelay,
-							yoyo: yoyo,
-							startFrame: startFrame,
+							key,
+							delay,
+							repeat,
+							repeatDelay,
+							yoyo,
+							startFrame,
 						}
 						if (play) {
 							anims.play(playConfig)
@@ -38870,7 +38861,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/Commands.js
 	var require_Commands = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/Commands.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/graphics/Commands.js'(exports, module) {
 			module.exports = {
 				ARC: 0,
 				BEGIN_PATH: 1,
@@ -38897,7 +38888,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/Contains.js
 	var require_Contains3 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/Contains.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/Contains.js'(exports, module) {
 			var Contains = function (ellipse, x, y) {
 				if (ellipse.width <= 0 || ellipse.height <= 0) {
 					return false
@@ -38914,7 +38905,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/CircumferencePoint.js
 	var require_CircumferencePoint2 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/CircumferencePoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/CircumferencePoint.js'(exports, module) {
 			var Point = require_Point()
 			var CircumferencePoint = function (ellipse, angle, out) {
 				if (out === void 0) {
@@ -38932,7 +38923,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/GetPoint.js
 	var require_GetPoint4 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/GetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/GetPoint.js'(exports, module) {
 			var CircumferencePoint = require_CircumferencePoint2()
 			var FromPercent = require_FromPercent()
 			var MATH_CONST = require_const4()
@@ -38950,7 +38941,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/Circumference.js
 	var require_Circumference2 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/Circumference.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/Circumference.js'(exports, module) {
 			var Circumference = function (ellipse) {
 				var rx = ellipse.width / 2
 				var ry = ellipse.height / 2
@@ -38963,7 +38954,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/GetPoints.js
 	var require_GetPoints4 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/GetPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/GetPoints.js'(exports, module) {
 			var Circumference = require_Circumference2()
 			var CircumferencePoint = require_CircumferencePoint2()
 			var FromPercent = require_FromPercent()
@@ -38987,7 +38978,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/Random.js
 	var require_Random5 = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/Random.js'(exports, module) {
 			var Point = require_Point()
 			var Random = function (ellipse, out) {
 				if (out === void 0) {
@@ -39005,7 +38996,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/ellipse/Ellipse.js
 	var require_Ellipse = __commonJS({
-		'../../node_modules/phaser/src/geom/ellipse/Ellipse.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/ellipse/Ellipse.js'(exports, module) {
 			var Class = require_Class()
 			var Contains = require_Contains3()
 			var GetPoint = require_GetPoint4()
@@ -39120,7 +39111,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/GetCalcMatrix.js
 	var require_GetCalcMatrix = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/GetCalcMatrix.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/GetCalcMatrix.js'(exports, module) {
 			var TransformMatrix = require_TransformMatrix()
 			var tempMatrix1 = new TransformMatrix()
 			var tempMatrix2 = new TransformMatrix()
@@ -39149,7 +39140,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/GraphicsWebGLRenderer.js
 	var require_GraphicsWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsWebGLRenderer.js'(exports, module) {
 			var Commands = require_Commands()
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var TransformMatrix = require_TransformMatrix()
@@ -39378,7 +39369,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/canvas/utils/SetTransform.js
 	var require_SetTransform = __commonJS({
-		'../../node_modules/phaser/src/renderer/canvas/utils/SetTransform.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/canvas/utils/SetTransform.js'(exports, module) {
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var SetTransform = function (renderer, ctx, src, camera, parentMatrix) {
 				var alpha = camera.alpha * src.alpha
@@ -39399,7 +39390,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/GraphicsCanvasRenderer.js
 	var require_GraphicsCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsCanvasRenderer.js'(exports, module) {
 			var Commands = require_Commands()
 			var SetTransform = require_SetTransform()
 			var GraphicsCanvasRenderer = function (renderer, src, camera, parentMatrix, renderTargetCtx, allowClip) {
@@ -39542,7 +39533,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/GraphicsRender.js
 	var require_GraphicsRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -39554,15 +39545,15 @@ var Phaser = (function () {
 				renderCanvas = require_GraphicsCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/Graphics.js
 	var require_Graphics = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/Graphics.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/graphics/Graphics.js'(exports, module) {
 			var BaseCamera = require_BaseCamera()
 			var Class = require_Class()
 			var Commands = require_Commands()
@@ -40065,7 +40056,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/Shape.js
 	var require_Shape = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/Shape.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/Shape.js'(exports, module) {
 			var Class = require_Class()
 			var Components = require_components()
 			var GameObject = require_GameObject()
@@ -40177,7 +40168,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/FillPathWebGL.js
 	var require_FillPathWebGL = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/FillPathWebGL.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/FillPathWebGL.js'(exports, module) {
 			var Utils = require_Utils()
 			var FillPathWebGL = function (pipeline, calcMatrix, src, alpha, dx, dy) {
 				var fillTintColor = Utils.getTintAppendFloatAlpha(src.fillColor, src.fillAlpha * alpha)
@@ -40208,7 +40199,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/StrokePathWebGL.js
 	var require_StrokePathWebGL = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/StrokePathWebGL.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/StrokePathWebGL.js'(exports, module) {
 			var Utils = require_Utils()
 			var StrokePathWebGL = function (pipeline, src, alpha, dx, dy) {
 				var strokeTint = pipeline.strokeTint
@@ -40240,7 +40231,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseWebGLRenderer.js
 	var require_EllipseWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseWebGLRenderer.js'(exports, module) {
 			var FillPathWebGL = require_FillPathWebGL()
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var StrokePathWebGL = require_StrokePathWebGL()
@@ -40267,7 +40258,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/FillStyleCanvas.js
 	var require_FillStyleCanvas = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/FillStyleCanvas.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/FillStyleCanvas.js'(exports, module) {
 			var FillStyleCanvas = function (ctx, src, altColor, altAlpha) {
 				var fillColor = altColor ? altColor : src.fillColor
 				var fillAlpha = altAlpha ? altAlpha : src.fillAlpha
@@ -40282,7 +40273,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/LineStyleCanvas.js
 	var require_LineStyleCanvas = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/LineStyleCanvas.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/LineStyleCanvas.js'(exports, module) {
 			var LineStyleCanvas = function (ctx, src, altColor, altAlpha) {
 				var strokeColor = altColor ? altColor : src.strokeColor
 				var strokeAlpha = altAlpha ? altAlpha : src.strokeAlpha
@@ -40298,7 +40289,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseCanvasRenderer.js
 	var require_EllipseCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseCanvasRenderer.js'(exports, module) {
 			var FillStyleCanvas = require_FillStyleCanvas()
 			var LineStyleCanvas = require_LineStyleCanvas()
 			var SetTransform = require_SetTransform()
@@ -40340,7 +40331,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseRender.js
 	var require_EllipseRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -40351,15 +40342,15 @@ var Phaser = (function () {
 				renderCanvas = require_EllipseCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/shape/ellipse/Ellipse.js
 	var require_Ellipse2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/ellipse/Ellipse.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/ellipse/Ellipse.js'(exports, module) {
 			var Class = require_Class()
 			var Earcut = require_Earcut()
 			var EllipseRender = require_EllipseRender()
@@ -40431,7 +40422,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/line/LineWebGLRenderer.js
 	var require_LineWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/line/LineWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/line/LineWebGLRenderer.js'(exports, module) {
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var Utils = require_Utils()
 			var LineWebGLRenderer = function (renderer, src, camera, parentMatrix) {
@@ -40460,7 +40451,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/line/LineCanvasRenderer.js
 	var require_LineCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/line/LineCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/line/LineCanvasRenderer.js'(exports, module) {
 			var LineStyleCanvas = require_LineStyleCanvas()
 			var SetTransform = require_SetTransform()
 			var LineCanvasRenderer = function (renderer, src, camera, parentMatrix) {
@@ -40485,7 +40476,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/line/LineRender.js
 	var require_LineRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/line/LineRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/line/LineRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -40496,15 +40487,15 @@ var Phaser = (function () {
 				renderCanvas = require_LineCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/shape/line/Line.js
 	var require_Line2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/line/Line.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/line/Line.js'(exports, module) {
 			var Class = require_Class()
 			var Shape = require_Shape()
 			var GeomLine = require_Line()
@@ -40564,7 +40555,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleWebGLRenderer.js
 	var require_RectangleWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleWebGLRenderer.js'(exports, module) {
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var StrokePathWebGL = require_StrokePathWebGL()
 			var Utils = require_Utils()
@@ -40597,7 +40588,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleCanvasRenderer.js
 	var require_RectangleCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleCanvasRenderer.js'(exports, module) {
 			var FillStyleCanvas = require_FillStyleCanvas()
 			var LineStyleCanvas = require_LineStyleCanvas()
 			var SetTransform = require_SetTransform()
@@ -40626,7 +40617,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleRender.js
 	var require_RectangleRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -40637,15 +40628,15 @@ var Phaser = (function () {
 				renderCanvas = require_RectangleCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/shape/rectangle/Rectangle.js
 	var require_Rectangle2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/rectangle/Rectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/shape/rectangle/Rectangle.js'(exports, module) {
 			var Class = require_Class()
 			var GeomRectangle = require_Rectangle()
 			var Shape = require_Shape()
@@ -40710,7 +40701,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/AlignTo.js
 	var require_AlignTo = __commonJS({
-		'../../node_modules/phaser/src/actions/AlignTo.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/AlignTo.js'(exports, module) {
 			var QuickSet = require_QuickSet2()
 			var AlignTo = function (items, position, offsetX, offsetY) {
 				var target = items[0]
@@ -40727,7 +40718,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PropertyValueInc.js
 	var require_PropertyValueInc = __commonJS({
-		'../../node_modules/phaser/src/actions/PropertyValueInc.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PropertyValueInc.js'(exports, module) {
 			var PropertyValueInc = function (items, key, value, step, index, direction) {
 				if (step === void 0) {
 					step = 0
@@ -40760,7 +40751,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/Angle.js
 	var require_Angle = __commonJS({
-		'../../node_modules/phaser/src/actions/Angle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/Angle.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var Angle = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'angle', value, step, index, direction)
@@ -40771,7 +40762,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/Call.js
 	var require_Call = __commonJS({
-		'../../node_modules/phaser/src/actions/Call.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/Call.js'(exports, module) {
 			var Call = function (items, callback, context) {
 				for (var i = 0; i < items.length; i++) {
 					var item = items[i]
@@ -40785,7 +40776,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/GetFirst.js
 	var require_GetFirst2 = __commonJS({
-		'../../node_modules/phaser/src/actions/GetFirst.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/GetFirst.js'(exports, module) {
 			var GetFirst = function (items, compare, index) {
 				if (index === void 0) {
 					index = 0
@@ -40810,7 +40801,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/GetLast.js
 	var require_GetLast = __commonJS({
-		'../../node_modules/phaser/src/actions/GetLast.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/GetLast.js'(exports, module) {
 			var GetLast = function (items, compare, index) {
 				if (index === void 0) {
 					index = 0
@@ -40835,7 +40826,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/IncAlpha.js
 	var require_IncAlpha = __commonJS({
-		'../../node_modules/phaser/src/actions/IncAlpha.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/IncAlpha.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var IncAlpha = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'alpha', value, step, index, direction)
@@ -40846,7 +40837,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/IncX.js
 	var require_IncX = __commonJS({
-		'../../node_modules/phaser/src/actions/IncX.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/IncX.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var IncX = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'x', value, step, index, direction)
@@ -40857,7 +40848,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/IncXY.js
 	var require_IncXY = __commonJS({
-		'../../node_modules/phaser/src/actions/IncXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/IncXY.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var IncXY = function (items, x, y, stepX, stepY, index, direction) {
 				if (y === void 0 || y === null) {
@@ -40872,7 +40863,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/IncY.js
 	var require_IncY = __commonJS({
-		'../../node_modules/phaser/src/actions/IncY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/IncY.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var IncY = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'y', value, step, index, direction)
@@ -40883,7 +40874,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlaceOnCircle.js
 	var require_PlaceOnCircle = __commonJS({
-		'../../node_modules/phaser/src/actions/PlaceOnCircle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlaceOnCircle.js'(exports, module) {
 			var PlaceOnCircle = function (items, circle, startAngle, endAngle) {
 				if (startAngle === void 0) {
 					startAngle = 0
@@ -40909,7 +40900,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlaceOnEllipse.js
 	var require_PlaceOnEllipse = __commonJS({
-		'../../node_modules/phaser/src/actions/PlaceOnEllipse.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlaceOnEllipse.js'(exports, module) {
 			var PlaceOnEllipse = function (items, ellipse, startAngle, endAngle) {
 				if (startAngle === void 0) {
 					startAngle = 0
@@ -40934,7 +40925,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetEaseFunction.js
 	var require_GetEaseFunction = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetEaseFunction.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetEaseFunction.js'(exports, module) {
 			var EaseMap = require_EaseMap()
 			var UppercaseFirst = require_UppercaseFirst()
 			var GetEaseFunction = function (ease, easeParams) {
@@ -40979,7 +40970,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/GetEasedPoints.js
 	var require_GetEasedPoints = __commonJS({
-		'../../node_modules/phaser/src/geom/line/GetEasedPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/GetEasedPoints.js'(exports, module) {
 			var DistanceBetweenPoints = require_DistanceBetweenPoints()
 			var GetEaseFunction = require_GetEaseFunction()
 			var Point = require_Point()
@@ -41031,7 +41022,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlaceOnLine.js
 	var require_PlaceOnLine = __commonJS({
-		'../../node_modules/phaser/src/actions/PlaceOnLine.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlaceOnLine.js'(exports, module) {
 			var GetPoints = require_GetPoints3()
 			var GetEasedPoints = require_GetEasedPoints()
 			var PlaceOnLine = function (items, line, ease) {
@@ -41055,7 +41046,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/MarchingAnts.js
 	var require_MarchingAnts = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/MarchingAnts.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/MarchingAnts.js'(exports, module) {
 			var Perimeter = require_Perimeter()
 			var Point = require_Point()
 			var MarchingAnts = function (rect, step, quantity, out) {
@@ -41117,7 +41108,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlaceOnRectangle.js
 	var require_PlaceOnRectangle = __commonJS({
-		'../../node_modules/phaser/src/actions/PlaceOnRectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlaceOnRectangle.js'(exports, module) {
 			var MarchingAnts = require_MarchingAnts()
 			var RotateLeft = require_RotateLeft2()
 			var RotateRight = require_RotateRight2()
@@ -41143,7 +41134,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/line/BresenhamPoints.js
 	var require_BresenhamPoints = __commonJS({
-		'../../node_modules/phaser/src/geom/line/BresenhamPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/line/BresenhamPoints.js'(exports, module) {
 			var BresenhamPoints = function (line, stepRate, results) {
 				if (stepRate === void 0) {
 					stepRate = 1
@@ -41185,7 +41176,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlaceOnTriangle.js
 	var require_PlaceOnTriangle = __commonJS({
-		'../../node_modules/phaser/src/actions/PlaceOnTriangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlaceOnTriangle.js'(exports, module) {
 			var BresenhamPoints = require_BresenhamPoints()
 			var PlaceOnTriangle = function (items, triangle, stepRate) {
 				var p1 = BresenhamPoints({ x1: triangle.x1, y1: triangle.y1, x2: triangle.x2, y2: triangle.y2 }, stepRate)
@@ -41212,7 +41203,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PlayAnimation.js
 	var require_PlayAnimation = __commonJS({
-		'../../node_modules/phaser/src/actions/PlayAnimation.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PlayAnimation.js'(exports, module) {
 			var PlayAnimation = function (items, key, ignoreIfPlaying) {
 				for (var i = 0; i < items.length; i++) {
 					var gameObject = items[i]
@@ -41228,7 +41219,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/PropertyValueSet.js
 	var require_PropertyValueSet = __commonJS({
-		'../../node_modules/phaser/src/actions/PropertyValueSet.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/PropertyValueSet.js'(exports, module) {
 			var PropertyValueSet = function (items, key, value, step, index, direction) {
 				if (step === void 0) {
 					step = 0
@@ -41261,7 +41252,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RandomCircle.js
 	var require_RandomCircle = __commonJS({
-		'../../node_modules/phaser/src/actions/RandomCircle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RandomCircle.js'(exports, module) {
 			var Random = require_Random()
 			var RandomCircle = function (items, circle) {
 				for (var i = 0; i < items.length; i++) {
@@ -41275,7 +41266,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RandomEllipse.js
 	var require_RandomEllipse = __commonJS({
-		'../../node_modules/phaser/src/actions/RandomEllipse.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RandomEllipse.js'(exports, module) {
 			var Random = require_Random5()
 			var RandomEllipse = function (items, ellipse) {
 				for (var i = 0; i < items.length; i++) {
@@ -41289,7 +41280,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RandomLine.js
 	var require_RandomLine = __commonJS({
-		'../../node_modules/phaser/src/actions/RandomLine.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RandomLine.js'(exports, module) {
 			var Random = require_Random2()
 			var RandomLine = function (items, line) {
 				for (var i = 0; i < items.length; i++) {
@@ -41303,7 +41294,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RandomRectangle.js
 	var require_RandomRectangle = __commonJS({
-		'../../node_modules/phaser/src/actions/RandomRectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RandomRectangle.js'(exports, module) {
 			var Random = require_Random3()
 			var RandomRectangle = function (items, rect) {
 				for (var i = 0; i < items.length; i++) {
@@ -41317,7 +41308,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/triangle/Random.js
 	var require_Random6 = __commonJS({
-		'../../node_modules/phaser/src/geom/triangle/Random.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/triangle/Random.js'(exports, module) {
 			var Point = require_Point()
 			var Random = function (triangle, out) {
 				if (out === void 0) {
@@ -41343,7 +41334,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RandomTriangle.js
 	var require_RandomTriangle = __commonJS({
-		'../../node_modules/phaser/src/actions/RandomTriangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RandomTriangle.js'(exports, module) {
 			var Random = require_Random6()
 			var RandomTriangle = function (items, triangle) {
 				for (var i = 0; i < items.length; i++) {
@@ -41357,7 +41348,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/Rotate.js
 	var require_Rotate2 = __commonJS({
-		'../../node_modules/phaser/src/actions/Rotate.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/Rotate.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var Rotate = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'rotation', value, step, index, direction)
@@ -41368,7 +41359,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RotateAround.js
 	var require_RotateAround2 = __commonJS({
-		'../../node_modules/phaser/src/actions/RotateAround.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RotateAround.js'(exports, module) {
 			var RotateAroundDistance = require_RotateAroundDistance()
 			var DistanceBetween = require_DistanceBetween()
 			var RotateAround = function (items, point, angle) {
@@ -41386,7 +41377,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/RotateAroundDistance.js
 	var require_RotateAroundDistance2 = __commonJS({
-		'../../node_modules/phaser/src/actions/RotateAroundDistance.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/RotateAroundDistance.js'(exports, module) {
 			var MathRotateAroundDistance = require_RotateAroundDistance()
 			var RotateAroundDistance = function (items, point, angle, distance) {
 				var x = point.x
@@ -41405,7 +41396,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/ScaleX.js
 	var require_ScaleX = __commonJS({
-		'../../node_modules/phaser/src/actions/ScaleX.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/ScaleX.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var ScaleX = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'scaleX', value, step, index, direction)
@@ -41416,7 +41407,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/ScaleXY.js
 	var require_ScaleXY = __commonJS({
-		'../../node_modules/phaser/src/actions/ScaleXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/ScaleXY.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var ScaleXY = function (items, scaleX, scaleY, stepX, stepY, index, direction) {
 				if (scaleY === void 0 || scaleY === null) {
@@ -41431,7 +41422,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/ScaleY.js
 	var require_ScaleY = __commonJS({
-		'../../node_modules/phaser/src/actions/ScaleY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/ScaleY.js'(exports, module) {
 			var PropertyValueInc = require_PropertyValueInc()
 			var ScaleY = function (items, value, step, index, direction) {
 				return PropertyValueInc(items, 'scaleY', value, step, index, direction)
@@ -41442,7 +41433,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetAlpha.js
 	var require_SetAlpha = __commonJS({
-		'../../node_modules/phaser/src/actions/SetAlpha.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetAlpha.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetAlpha = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'alpha', value, step, index, direction)
@@ -41453,7 +41444,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetBlendMode.js
 	var require_SetBlendMode = __commonJS({
-		'../../node_modules/phaser/src/actions/SetBlendMode.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetBlendMode.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetBlendMode = function (items, value, index, direction) {
 				return PropertyValueSet(items, 'blendMode', value, 0, index, direction)
@@ -41464,7 +41455,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetDepth.js
 	var require_SetDepth = __commonJS({
-		'../../node_modules/phaser/src/actions/SetDepth.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetDepth.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetDepth = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'depth', value, step, index, direction)
@@ -41475,7 +41466,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetHitArea.js
 	var require_SetHitArea = __commonJS({
-		'../../node_modules/phaser/src/actions/SetHitArea.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetHitArea.js'(exports, module) {
 			var SetHitArea = function (items, hitArea, hitAreaCallback) {
 				for (var i = 0; i < items.length; i++) {
 					items[i].setInteractive(hitArea, hitAreaCallback)
@@ -41488,7 +41479,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetOrigin.js
 	var require_SetOrigin = __commonJS({
-		'../../node_modules/phaser/src/actions/SetOrigin.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetOrigin.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetOrigin = function (items, originX, originY, stepX, stepY, index, direction) {
 				if (originY === void 0 || originY === null) {
@@ -41507,7 +41498,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetRotation.js
 	var require_SetRotation = __commonJS({
-		'../../node_modules/phaser/src/actions/SetRotation.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetRotation.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetRotation = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'rotation', value, step, index, direction)
@@ -41518,7 +41509,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScale.js
 	var require_SetScale = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScale.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScale.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScale = function (items, scaleX, scaleY, stepX, stepY, index, direction) {
 				if (scaleY === void 0 || scaleY === null) {
@@ -41533,7 +41524,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScaleX.js
 	var require_SetScaleX = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScaleX.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScaleX.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScaleX = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'scaleX', value, step, index, direction)
@@ -41544,7 +41535,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScaleY.js
 	var require_SetScaleY = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScaleY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScaleY.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScaleY = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'scaleY', value, step, index, direction)
@@ -41555,7 +41546,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScrollFactor.js
 	var require_SetScrollFactor = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScrollFactor.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScrollFactor.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScrollFactor = function (items, scrollFactorX, scrollFactorY, stepX, stepY, index, direction) {
 				if (scrollFactorY === void 0 || scrollFactorY === null) {
@@ -41570,7 +41561,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScrollFactorX.js
 	var require_SetScrollFactorX = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScrollFactorX.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScrollFactorX.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScrollFactorX = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'scrollFactorX', value, step, index, direction)
@@ -41581,7 +41572,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetScrollFactorY.js
 	var require_SetScrollFactorY = __commonJS({
-		'../../node_modules/phaser/src/actions/SetScrollFactorY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetScrollFactorY.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetScrollFactorY = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'scrollFactorY', value, step, index, direction)
@@ -41592,7 +41583,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetTint.js
 	var require_SetTint = __commonJS({
-		'../../node_modules/phaser/src/actions/SetTint.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetTint.js'(exports, module) {
 			var SetTint = function (items, topLeft, topRight, bottomLeft, bottomRight) {
 				for (var i = 0; i < items.length; i++) {
 					items[i].setTint(topLeft, topRight, bottomLeft, bottomRight)
@@ -41605,7 +41596,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetVisible.js
 	var require_SetVisible = __commonJS({
-		'../../node_modules/phaser/src/actions/SetVisible.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetVisible.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetVisible = function (items, value, index, direction) {
 				return PropertyValueSet(items, 'visible', value, 0, index, direction)
@@ -41616,7 +41607,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetX.js
 	var require_SetX = __commonJS({
-		'../../node_modules/phaser/src/actions/SetX.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetX.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetX = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'x', value, step, index, direction)
@@ -41627,7 +41618,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetXY.js
 	var require_SetXY = __commonJS({
-		'../../node_modules/phaser/src/actions/SetXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetXY.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetXY = function (items, x, y, stepX, stepY, index, direction) {
 				if (y === void 0 || y === null) {
@@ -41642,7 +41633,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SetY.js
 	var require_SetY = __commonJS({
-		'../../node_modules/phaser/src/actions/SetY.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SetY.js'(exports, module) {
 			var PropertyValueSet = require_PropertyValueSet()
 			var SetY = function (items, value, step, index, direction) {
 				return PropertyValueSet(items, 'y', value, step, index, direction)
@@ -41653,7 +41644,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/ShiftPosition.js
 	var require_ShiftPosition = __commonJS({
-		'../../node_modules/phaser/src/actions/ShiftPosition.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/ShiftPosition.js'(exports, module) {
 			var Vector2 = require_Vector2()
 			var ShiftPosition = function (items, x, y, direction, output) {
 				if (direction === void 0) {
@@ -41709,7 +41700,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/Shuffle.js
 	var require_Shuffle2 = __commonJS({
-		'../../node_modules/phaser/src/actions/Shuffle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/Shuffle.js'(exports, module) {
 			var ArrayShuffle = require_Shuffle()
 			var Shuffle = function (items) {
 				return ArrayShuffle(items)
@@ -41720,7 +41711,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SmootherStep.js
 	var require_SmootherStep2 = __commonJS({
-		'../../node_modules/phaser/src/actions/SmootherStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SmootherStep.js'(exports, module) {
 			var MathSmootherStep = require_SmootherStep()
 			var SmootherStep = function (items, property, min, max, inc) {
 				if (inc === void 0) {
@@ -41745,7 +41736,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/SmoothStep.js
 	var require_SmoothStep2 = __commonJS({
-		'../../node_modules/phaser/src/actions/SmoothStep.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/SmoothStep.js'(exports, module) {
 			var MathSmoothStep = require_SmoothStep()
 			var SmoothStep = function (items, property, min, max, inc) {
 				if (inc === void 0) {
@@ -41770,7 +41761,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/Spread.js
 	var require_Spread = __commonJS({
-		'../../node_modules/phaser/src/actions/Spread.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/Spread.js'(exports, module) {
 			var Spread = function (items, property, min, max, inc) {
 				if (inc === void 0) {
 					inc = false
@@ -41805,7 +41796,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/ToggleVisible.js
 	var require_ToggleVisible = __commonJS({
-		'../../node_modules/phaser/src/actions/ToggleVisible.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/ToggleVisible.js'(exports, module) {
 			var ToggleVisible = function (items) {
 				for (var i = 0; i < items.length; i++) {
 					items[i].visible = !items[i].visible
@@ -41818,7 +41809,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/WrapInRectangle.js
 	var require_WrapInRectangle = __commonJS({
-		'../../node_modules/phaser/src/actions/WrapInRectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/WrapInRectangle.js'(exports, module) {
 			var Wrap = require_Wrap()
 			var WrapInRectangle = function (items, rect, padding) {
 				if (padding === void 0) {
@@ -41837,7 +41828,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/actions/index.js
 	var require_actions = __commonJS({
-		'../../node_modules/phaser/src/actions/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/actions/index.js'(exports, module) {
 			module.exports = {
 				AlignTo: require_AlignTo(),
 				Angle: require_Angle(),
@@ -41898,7 +41889,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/HasValue.js
 	var require_HasValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/HasValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/HasValue.js'(exports, module) {
 			var HasValue = function (source, key) {
 				return source.hasOwnProperty(key)
 			}
@@ -41908,7 +41899,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/structs/Set.js
 	var require_Set = __commonJS({
-		'../../node_modules/phaser/src/structs/Set.js': function (exports, module) {
+		'../../node_modules/phaser/src/structs/Set.js'(exports, module) {
 			var Class = require_Class()
 			var Set = new Class({
 				initialize: function Set2(elements) {
@@ -42055,7 +42046,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/animations/AnimationState.js
 	var require_AnimationState = __commonJS({
-		'../../node_modules/phaser/src/animations/AnimationState.js': function (exports, module) {
+		'../../node_modules/phaser/src/animations/AnimationState.js'(exports, module) {
 			var Animation = require_Animation()
 			var Between = require_Between2()
 			var Class = require_Class()
@@ -42576,7 +42567,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/sprite/SpriteWebGLRenderer.js
 	var require_SpriteWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/sprite/SpriteWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/sprite/SpriteWebGLRenderer.js'(exports, module) {
 			var SpriteWebGLRenderer = function (renderer, src, camera, parentMatrix) {
 				camera.addToRenderList(src)
 				src.pipeline.batchSprite(src, camera, parentMatrix)
@@ -42587,7 +42578,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/sprite/SpriteCanvasRenderer.js
 	var require_SpriteCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/sprite/SpriteCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/sprite/SpriteCanvasRenderer.js'(exports, module) {
 			var SpriteCanvasRenderer = function (renderer, src, camera, parentMatrix) {
 				camera.addToRenderList(src)
 				renderer.batchSprite(src, src.frame, camera, parentMatrix)
@@ -42598,7 +42589,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/sprite/SpriteRender.js
 	var require_SpriteRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/sprite/SpriteRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/sprite/SpriteRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -42609,15 +42600,15 @@ var Phaser = (function () {
 				renderCanvas = require_SpriteCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/sprite/Sprite.js
 	var require_Sprite = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/sprite/Sprite.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/sprite/Sprite.js'(exports, module) {
 			var AnimationState = require_AnimationState()
 			var Class = require_Class()
 			var Components = require_components()
@@ -42704,7 +42695,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/group/Group.js
 	var require_Group = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/group/Group.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/group/Group.js'(exports, module) {
 			var Actions = require_actions()
 			var Class = require_Class()
 			var Events = require_events3()
@@ -42839,12 +42830,12 @@ var Phaser = (function () {
 					var frameQuantity = GetFastValue(options, 'frameQuantity', 1)
 					var max = GetFastValue(options, 'max', 0)
 					var range = Range(key, frame, {
-						max: max,
+						max,
 						qty: quantity ? quantity : frameQuantity,
 						random: randomKey,
 						randomB: randomFrame,
-						repeat: repeat,
-						yoyo: yoyo,
+						repeat,
+						yoyo,
 					})
 					if (options.createCallback) {
 						this.createCallback = options.createCallback
@@ -43271,7 +43262,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/GetTextSize.js
 	var require_GetTextSize = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/GetTextSize.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/GetTextSize.js'(exports, module) {
 			var GetTextSize = function (text, size, lines) {
 				var canvas = text.canvas
 				var context = text.context
@@ -43311,11 +43302,11 @@ var Phaser = (function () {
 				}
 				return {
 					width: maxLineWidth,
-					height: height,
+					height,
 					lines: drawnLines,
-					lineWidths: lineWidths,
-					lineSpacing: lineSpacing,
-					lineHeight: lineHeight,
+					lineWidths,
+					lineSpacing,
+					lineHeight,
 				}
 			}
 			module.exports = GetTextSize
@@ -43324,7 +43315,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/RemoveFromDOM.js
 	var require_RemoveFromDOM = __commonJS({
-		'../../node_modules/phaser/src/dom/RemoveFromDOM.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/RemoveFromDOM.js'(exports, module) {
 			var RemoveFromDOM = function (element) {
 				if (element.parentNode) {
 					element.parentNode.removeChild(element)
@@ -43336,7 +43327,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextWebGLRenderer.js
 	var require_TextWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/TextWebGLRenderer.js'(exports, module) {
 			var Utils = require_Utils()
 			var TextWebGLRenderer = function (renderer, src, camera, parentMatrix) {
 				if (src.width === 0 || src.height === 0) {
@@ -43390,7 +43381,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextCanvasRenderer.js
 	var require_TextCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/TextCanvasRenderer.js'(exports, module) {
 			var TextCanvasRenderer = function (renderer, src, camera, parentMatrix) {
 				if (src.width === 0 || src.height === 0) {
 					return
@@ -43404,7 +43395,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextRender.js
 	var require_TextRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/TextRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -43415,15 +43406,15 @@ var Phaser = (function () {
 				renderCanvas = require_TextCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/text/MeasureText.js
 	var require_MeasureText = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/MeasureText.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/MeasureText.js'(exports, module) {
 			var CanvasPool = require_CanvasPool()
 			var MeasureText = function (textStyle) {
 				var canvas = CanvasPool.create(this)
@@ -43435,8 +43426,8 @@ var Phaser = (function () {
 					var descent = metrics.actualBoundingBoxDescent
 					CanvasPool.remove(canvas)
 					return {
-						ascent: ascent,
-						descent: descent,
+						ascent,
+						descent,
 						fontSize: ascent + descent,
 					}
 				}
@@ -43512,7 +43503,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextStyle.js
 	var require_TextStyle = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextStyle.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/TextStyle.js'(exports, module) {
 			var Class = require_Class()
 			var GetAdvancedValue = require_GetAdvancedValue()
 			var GetValue = require_GetValue()
@@ -43863,7 +43854,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/string/UUID.js
 	var require_UUID = __commonJS({
-		'../../node_modules/phaser/src/utils/string/UUID.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/string/UUID.js'(exports, module) {
 			var UUID = function () {
 				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 					var r = (Math.random() * 16) | 0
@@ -43877,7 +43868,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/Text.js
 	var require_Text = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/Text.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/text/Text.js'(exports, module) {
 			var AddToDOM = require_AddToDOM()
 			var CanvasPool = require_CanvasPool()
 			var Class = require_Class()
@@ -44419,7 +44410,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/GetBitmapTextSize.js
 	var require_GetBitmapTextSize = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/GetBitmapTextSize.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/GetBitmapTextSize.js'(exports, module) {
 			var GetBitmapTextSize = function (src, round, updateOrigin, out) {
 				if (updateOrigin === void 0) {
 					updateOrigin = false
@@ -44617,7 +44608,7 @@ var Phaser = (function () {
 						r: gw * scale,
 						b: lineHeight * scale,
 						line: currentLine,
-						glyph: glyph,
+						glyph,
 					})
 					xAdvance += glyph.xAdvance + letterSpacing + (kerningOffset !== void 0 ? kerningOffset : 0)
 					lastGlyph = glyph
@@ -44706,7 +44697,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/ParseXMLBitmapFont.js
 	var require_ParseXMLBitmapFont = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/ParseXMLBitmapFont.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/ParseXMLBitmapFont.js'(exports, module) {
 			function getValue(node, attribute) {
 				return parseInt(node.getAttribute(attribute), 10)
 			}
@@ -44771,10 +44762,10 @@ var Phaser = (function () {
 						xAdvance: getValue(node, 'xadvance') + xSpacing,
 						data: {},
 						kerning: {},
-						u0: u0,
-						v0: v0,
-						u1: u1,
-						v1: v1,
+						u0,
+						v0,
+						u1,
+						v1,
 					}
 					if (texture && gw !== 0 && gh !== 0) {
 						var charFrame = texture.add(letter, sourceIndex, gx, gy, gw, gh)
@@ -44799,7 +44790,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/ParseFromAtlas.js
 	var require_ParseFromAtlas = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/ParseFromAtlas.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/ParseFromAtlas.js'(exports, module) {
 			var ParseXMLBitmapFont = require_ParseXMLBitmapFont()
 			var ParseFromAtlas = function (scene, fontName, textureKey, frameKey, xmlKey, xSpacing, ySpacing) {
 				var texture = scene.sys.textures.get(textureKey)
@@ -44807,7 +44798,7 @@ var Phaser = (function () {
 				var xml = scene.sys.cache.xml.get(xmlKey)
 				if (frame && xml) {
 					var data = ParseXMLBitmapFont(xml, frame, xSpacing, ySpacing, texture)
-					scene.sys.cache.bitmapFont.add(fontName, { data: data, texture: textureKey, frame: frameKey, fromAtlas: true })
+					scene.sys.cache.bitmapFont.add(fontName, { data, texture: textureKey, frame: frameKey, fromAtlas: true })
 					return true
 				} else {
 					return false
@@ -44819,7 +44810,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/BatchChar.js
 	var require_BatchChar = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/BatchChar.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/BatchChar.js'(exports, module) {
 			var BatchChar = function (pipeline, src, char, glyph, offsetX, offsetY, calcMatrix, roundPixels, tintTL, tintTR, tintBL, tintBR, tintEffect, texture, textureUnit) {
 				var x = char.x - src.displayOriginX + offsetX
 				var y = char.y - src.displayOriginY + offsetY
@@ -44857,7 +44848,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextWebGLRenderer.js
 	var require_BitmapTextWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextWebGLRenderer.js'(exports, module) {
 			var BatchChar = require_BatchChar()
 			var GetCalcMatrix = require_GetCalcMatrix()
 			var Utils = require_Utils()
@@ -44936,7 +44927,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCanvasRenderer.js
 	var require_BitmapTextCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCanvasRenderer.js'(exports, module) {
 			var SetTransform = require_SetTransform()
 			var BitmapTextCanvasRenderer = function (renderer, src, camera, parentMatrix) {
 				var text = src._text
@@ -45038,7 +45029,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextRender.js
 	var require_BitmapTextRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -45049,15 +45040,15 @@ var Phaser = (function () {
 				renderCanvas = require_BitmapTextCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapText.js
 	var require_BitmapText = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapText.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapText.js'(exports, module) {
 			var Class = require_Class()
 			var Clamp = require_Clamp()
 			var Components = require_components()
@@ -45231,7 +45222,7 @@ var Phaser = (function () {
 								color.tintBR = bottomRight
 							} else {
 								charColors[i] = {
-									tintEffect: tintEffect,
+									tintEffect,
 									tintTL: topLeft,
 									tintTR: topRight,
 									tintBL: bottomLeft,
@@ -45421,7 +45412,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetInterpolationFunction.js
 	var require_GetInterpolationFunction = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetInterpolationFunction.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetInterpolationFunction.js'(exports, module) {
 			var Bezier = require_BezierInterpolation()
 			var CatmullRom = require_CatmullRomInterpolation()
 			var Linear = require_LinearInterpolation()
@@ -45451,7 +45442,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/EmitterOp.js
 	var require_EmitterOp = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/EmitterOp.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/EmitterOp.js'(exports, module) {
 			var Between = require_Between2()
 			var Clamp = require_Clamp()
 			var Class = require_Class()
@@ -45754,7 +45745,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/EmitterColorOp.js
 	var require_EmitterColorOp = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/EmitterColorOp.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/EmitterColorOp.js'(exports, module) {
 			var Class = require_Class()
 			var EmitterOp = require_EmitterOp()
 			var GetColor = require_GetColor()
@@ -45823,42 +45814,42 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/COMPLETE_EVENT.js
 	var require_COMPLETE_EVENT3 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/DEATH_ZONE_EVENT.js
 	var require_DEATH_ZONE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/DEATH_ZONE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/DEATH_ZONE_EVENT.js'(exports, module) {
 			module.exports = 'deathzone'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/EXPLODE_EVENT.js
 	var require_EXPLODE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/EXPLODE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/EXPLODE_EVENT.js'(exports, module) {
 			module.exports = 'explode'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/START_EVENT.js
 	var require_START_EVENT4 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/START_EVENT.js'(exports, module) {
 			module.exports = 'start'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/STOP_EVENT.js
 	var require_STOP_EVENT2 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/STOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/STOP_EVENT.js'(exports, module) {
 			module.exports = 'stop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/events/index.js
 	var require_events17 = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/events/index.js'(exports, module) {
 			module.exports = {
 				COMPLETE: require_COMPLETE_EVENT3(),
 				DEATH_ZONE: require_DEATH_ZONE_EVENT(),
@@ -45871,7 +45862,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleProcessor.js
 	var require_ParticleProcessor = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleProcessor.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleProcessor.js'(exports, module) {
 			var Class = require_Class()
 			var ParticleProcessor = new Class({
 				initialize: function ParticleProcessor2(x, y, active) {
@@ -45900,7 +45891,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/GravityWell.js
 	var require_GravityWell = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/GravityWell.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/GravityWell.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var ParticleProcessor = require_ParticleProcessor()
@@ -45984,7 +45975,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/Particle.js
 	var require_Particle = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/Particle.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/Particle.js'(exports, module) {
 			var AnimationState = require_AnimationState()
 			var Clamp = require_Clamp()
 			var Class = require_Class()
@@ -46260,7 +46251,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleBounds.js
 	var require_ParticleBounds = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleBounds.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleBounds.js'(exports, module) {
 			var Class = require_Class()
 			var ParticleProcessor = require_ParticleProcessor()
 			var Rectangle = require_Rectangle()
@@ -46312,7 +46303,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/CopyFrom.js
 	var require_CopyFrom = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/CopyFrom.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/CopyFrom.js'(exports, module) {
 			var CopyFrom = function (source, dest) {
 				return dest.setTo(source.x, source.y, source.width, source.height)
 			}
@@ -46322,7 +46313,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/zones/DeathZone.js
 	var require_DeathZone = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/zones/DeathZone.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/zones/DeathZone.js'(exports, module) {
 			var Class = require_Class()
 			var DeathZone = new Class({
 				initialize: function DeathZone2(source, killOnEnter) {
@@ -46340,7 +46331,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/zones/EdgeZone.js
 	var require_EdgeZone = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/zones/EdgeZone.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/zones/EdgeZone.js'(exports, module) {
 			var Class = require_Class()
 			var EdgeZone = new Class({
 				initialize: function EdgeZone2(source, quantity, stepRate, yoyo, seamless, total) {
@@ -46420,7 +46411,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/HasAny.js
 	var require_HasAny = __commonJS({
-		'../../node_modules/phaser/src/utils/object/HasAny.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/HasAny.js'(exports, module) {
 			var HasAny = function (source, keys) {
 				for (var i = 0; i < keys.length; i++) {
 					if (source.hasOwnProperty(keys[i])) {
@@ -46435,7 +46426,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Inflate.js
 	var require_Inflate = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Inflate.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Inflate.js'(exports, module) {
 			var CenterOn = require_CenterOn2()
 			var Inflate = function (rect, x, y) {
 				var cx = rect.centerX
@@ -46449,7 +46440,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/MergeRect.js
 	var require_MergeRect = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/MergeRect.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/MergeRect.js'(exports, module) {
 			var MergeRect = function (target, source) {
 				var minX = Math.min(target.x, source.x)
 				var maxX = Math.max(target.right, source.right)
@@ -46467,7 +46458,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/MergeRight.js
 	var require_MergeRight = __commonJS({
-		'../../node_modules/phaser/src/utils/object/MergeRight.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/MergeRight.js'(exports, module) {
 			var Clone = require_Clone()
 			var MergeRight = function (obj1, obj2) {
 				var clone = Clone(obj1)
@@ -46484,7 +46475,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/zones/RandomZone.js
 	var require_RandomZone = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/zones/RandomZone.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/zones/RandomZone.js'(exports, module) {
 			var Class = require_Class()
 			var Vector2 = require_Vector2()
 			var RandomZone = new Class({
@@ -46506,7 +46497,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js
 	var require_RectangleToRectangle = __commonJS({
-		'../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/intersects/RectangleToRectangle.js'(exports, module) {
 			var RectangleToRectangle = function (rectA, rectB) {
 				if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0) {
 					return false
@@ -46519,7 +46510,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterWebGLRenderer.js
 	var require_ParticleEmitterWebGLRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterWebGLRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterWebGLRenderer.js'(exports, module) {
 			var RectangleToRectangle = require_RectangleToRectangle()
 			var TransformMatrix = require_TransformMatrix()
 			var Utils = require_Utils()
@@ -46623,7 +46614,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterCanvasRenderer.js
 	var require_ParticleEmitterCanvasRenderer = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterCanvasRenderer.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterCanvasRenderer.js'(exports, module) {
 			var RectangleToRectangle = require_RectangleToRectangle()
 			var TransformMatrix = require_TransformMatrix()
 			var tempMatrix1 = new TransformMatrix()
@@ -46699,7 +46690,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterRender.js
 	var require_ParticleEmitterRender = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterRender.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterRender.js'(exports, module) {
 			var NOOP = require_NOOP()
 			var renderWebGL = NOOP
 			var renderCanvas = NOOP
@@ -46710,15 +46701,15 @@ var Phaser = (function () {
 				renderCanvas = require_ParticleEmitterCanvasRenderer()
 			}
 			module.exports = {
-				renderWebGL: renderWebGL,
-				renderCanvas: renderCanvas,
+				renderWebGL,
+				renderCanvas,
 			}
 		},
 	})
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitter.js
 	var require_ParticleEmitter = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitter.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitter.js'(exports, module) {
 			var Class = require_Class()
 			var Components = require_components()
 			var ComponentsToJSON = require_ToJSON()
@@ -47594,7 +47585,7 @@ var Phaser = (function () {
 					for (i = 0; i < length; i++) {
 						var particle = particles[i]
 						if (particle.update(delta, step, processors)) {
-							rip.push({ index: i, particle: particle })
+							rip.push({ index: i, particle })
 						}
 					}
 					length = rip.length
@@ -48017,7 +48008,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/zones/index.js
 	var require_zones = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/zones/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/zones/index.js'(exports, module) {
 			module.exports = {
 				DeathZone: require_DeathZone(),
 				EdgeZone: require_EdgeZone(),
@@ -48028,7 +48019,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/index.js
 	var require_particles = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/gameobjects/particles/index.js'(exports, module) {
 			module.exports = {
 				EmitterColorOp: require_EmitterColorOp(),
 				EmitterOp: require_EmitterOp(),
@@ -48045,7 +48036,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/container/ContainerFactory.js
 	var require_ContainerFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/container/ContainerFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/container/ContainerFactory.js'() {
 			var Container = require_Container()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('container', function (x, y, children) {
@@ -48056,7 +48047,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/GraphicsFactory.js
 	var require_GraphicsFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsFactory.js'() {
 			var Graphics = require_Graphics()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('graphics', function (config) {
@@ -48067,7 +48058,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/group/GroupFactory.js
 	var require_GroupFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/group/GroupFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/group/GroupFactory.js'() {
 			var Group = require_Group()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('group', function (children, config) {
@@ -48078,7 +48069,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/image/ImageFactory.js
 	var require_ImageFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/ImageFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/image/ImageFactory.js'() {
 			var Image2 = require_Image()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('image', function (x, y, texture, frame) {
@@ -48089,7 +48080,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/sprite/SpriteFactory.js
 	var require_SpriteFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/sprite/SpriteFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/sprite/SpriteFactory.js'() {
 			var GameObjectFactory = require_GameObjectFactory()
 			var Sprite = require_Sprite()
 			GameObjectFactory.register('sprite', function (x, y, texture, frame) {
@@ -48100,7 +48091,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextFactory.js
 	var require_TextFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/text/TextFactory.js'() {
 			var Text = require_Text()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('text', function (x, y, text, style) {
@@ -48111,7 +48102,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextFactory.js
 	var require_BitmapTextFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextFactory.js'() {
 			var BitmapText = require_BitmapText()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('bitmapText', function (x, y, font, text, size, align) {
@@ -48122,7 +48113,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterFactory.js
 	var require_ParticleEmitterFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/particles/ParticleEmitterFactory.js'() {
 			var GameObjectFactory = require_GameObjectFactory()
 			var ParticleEmitter = require_ParticleEmitter()
 			GameObjectFactory.register('particles', function (x, y, texture, config) {
@@ -48136,7 +48127,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureFactory.js
 	var require_RenderTextureFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureFactory.js'() {
 			var GameObjectFactory = require_GameObjectFactory()
 			var RenderTexture = require_RenderTexture()
 			GameObjectFactory.register('renderTexture', function (x, y, width, height) {
@@ -48147,7 +48138,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/line/LineFactory.js
 	var require_LineFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/line/LineFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/shape/line/LineFactory.js'() {
 			var GameObjectFactory = require_GameObjectFactory()
 			var Line = require_Line2()
 			GameObjectFactory.register('line', function (x, y, x1, y1, x2, y2, strokeColor, strokeAlpha) {
@@ -48158,7 +48149,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleFactory.js
 	var require_RectangleFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/shape/rectangle/RectangleFactory.js'() {
 			var GameObjectFactory = require_GameObjectFactory()
 			var Rectangle = require_Rectangle2()
 			GameObjectFactory.register('rectangle', function (x, y, width, height, fillColor, fillAlpha) {
@@ -48169,7 +48160,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseFactory.js
 	var require_EllipseFactory = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseFactory.js': function () {
+		'../../node_modules/phaser/src/gameobjects/shape/ellipse/EllipseFactory.js'() {
 			var Ellipse = require_Ellipse2()
 			var GameObjectFactory = require_GameObjectFactory()
 			GameObjectFactory.register('ellipse', function (x, y, width, height, fillColor, fillAlpha) {
@@ -48180,7 +48171,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/graphics/GraphicsCreator.js
 	var require_GraphicsCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsCreator.js': function () {
+		'../../node_modules/phaser/src/gameobjects/graphics/GraphicsCreator.js'() {
 			var GameObjectCreator = require_GameObjectCreator()
 			var Graphics = require_Graphics()
 			GameObjectCreator.register('graphics', function (config, addToScene) {
@@ -48201,7 +48192,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/image/ImageCreator.js
 	var require_ImageCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/image/ImageCreator.js': function () {
+		'../../node_modules/phaser/src/gameobjects/image/ImageCreator.js'() {
 			var BuildGameObject = require_BuildGameObject()
 			var GameObjectCreator = require_GameObjectCreator()
 			var GetAdvancedValue = require_GetAdvancedValue()
@@ -48224,7 +48215,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/text/TextCreator.js
 	var require_TextCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/text/TextCreator.js': function () {
+		'../../node_modules/phaser/src/gameobjects/text/TextCreator.js'() {
 			var BuildGameObject = require_BuildGameObject()
 			var GameObjectCreator = require_GameObjectCreator()
 			var GetAdvancedValue = require_GetAdvancedValue()
@@ -48253,7 +48244,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCreator.js
 	var require_BitmapTextCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCreator.js': function () {
+		'../../node_modules/phaser/src/gameobjects/bitmaptext/static/BitmapTextCreator.js'() {
 			var BitmapText = require_BitmapText()
 			var BuildGameObject = require_BuildGameObject()
 			var GameObjectCreator = require_GameObjectCreator()
@@ -48279,7 +48270,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureCreator.js
 	var require_RenderTextureCreator = __commonJS({
-		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureCreator.js': function () {
+		'../../node_modules/phaser/src/gameobjects/rendertexture/RenderTextureCreator.js'() {
 			var BuildGameObject = require_BuildGameObject()
 			var GameObjectCreator = require_GameObjectCreator()
 			var GetAdvancedValue = require_GetAdvancedValue()
@@ -48304,7 +48295,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Ceil.js
 	var require_Ceil2 = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Ceil.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Ceil.js'(exports, module) {
 			var Ceil = function (point) {
 				return point.setTo(Math.ceil(point.x), Math.ceil(point.y))
 			}
@@ -48314,7 +48305,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Clone.js
 	var require_Clone2 = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Clone.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Clone.js'(exports, module) {
 			var Point = require_Point()
 			var Clone = function (source) {
 				return new Point(source.x, source.y)
@@ -48325,7 +48316,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/CopyFrom.js
 	var require_CopyFrom2 = __commonJS({
-		'../../node_modules/phaser/src/geom/point/CopyFrom.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/CopyFrom.js'(exports, module) {
 			var CopyFrom = function (source, dest) {
 				return dest.setTo(source.x, source.y)
 			}
@@ -48335,7 +48326,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Equals.js
 	var require_Equals = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Equals.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Equals.js'(exports, module) {
 			var Equals = function (point, toCompare) {
 				return point.x === toCompare.x && point.y === toCompare.y
 			}
@@ -48345,7 +48336,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Floor.js
 	var require_Floor2 = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Floor.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Floor.js'(exports, module) {
 			var Floor = function (point) {
 				return point.setTo(Math.floor(point.x), Math.floor(point.y))
 			}
@@ -48355,7 +48346,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/GetCentroid.js
 	var require_GetCentroid = __commonJS({
-		'../../node_modules/phaser/src/geom/point/GetCentroid.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/GetCentroid.js'(exports, module) {
 			var Point = require_Point()
 			var GetCentroid = function (points, out) {
 				if (out === void 0) {
@@ -48386,7 +48377,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/GetMagnitude.js
 	var require_GetMagnitude = __commonJS({
-		'../../node_modules/phaser/src/geom/point/GetMagnitude.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/GetMagnitude.js'(exports, module) {
 			var GetMagnitude = function (point) {
 				return Math.sqrt(point.x * point.x + point.y * point.y)
 			}
@@ -48396,7 +48387,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/GetMagnitudeSq.js
 	var require_GetMagnitudeSq = __commonJS({
-		'../../node_modules/phaser/src/geom/point/GetMagnitudeSq.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/GetMagnitudeSq.js'(exports, module) {
 			var GetMagnitudeSq = function (point) {
 				return point.x * point.x + point.y * point.y
 			}
@@ -48406,7 +48397,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/GetRectangleFromPoints.js
 	var require_GetRectangleFromPoints = __commonJS({
-		'../../node_modules/phaser/src/geom/point/GetRectangleFromPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/GetRectangleFromPoints.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var GetRectangleFromPoints = function (points, out) {
 				if (out === void 0) {
@@ -48443,7 +48434,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Interpolate.js
 	var require_Interpolate2 = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Interpolate.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Interpolate.js'(exports, module) {
 			var Point = require_Point()
 			var Interpolate = function (pointA, pointB, t, out) {
 				if (t === void 0) {
@@ -48462,7 +48453,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Invert.js
 	var require_Invert = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Invert.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Invert.js'(exports, module) {
 			var Invert = function (point) {
 				return point.setTo(point.y, point.x)
 			}
@@ -48472,7 +48463,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Negative.js
 	var require_Negative = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Negative.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Negative.js'(exports, module) {
 			var Point = require_Point()
 			var Negative = function (point, out) {
 				if (out === void 0) {
@@ -48486,7 +48477,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/Project.js
 	var require_Project = __commonJS({
-		'../../node_modules/phaser/src/geom/point/Project.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/Project.js'(exports, module) {
 			var Point = require_Point()
 			var GetMagnitudeSq = require_GetMagnitudeSq()
 			var Project = function (pointA, pointB, out) {
@@ -48507,7 +48498,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/ProjectUnit.js
 	var require_ProjectUnit = __commonJS({
-		'../../node_modules/phaser/src/geom/point/ProjectUnit.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/ProjectUnit.js'(exports, module) {
 			var Point = require_Point()
 			var ProjectUnit = function (pointA, pointB, out) {
 				if (out === void 0) {
@@ -48526,7 +48517,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/SetMagnitude.js
 	var require_SetMagnitude = __commonJS({
-		'../../node_modules/phaser/src/geom/point/SetMagnitude.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/SetMagnitude.js'(exports, module) {
 			var GetMagnitude = require_GetMagnitude()
 			var SetMagnitude = function (point, magnitude) {
 				if (point.x !== 0 || point.y !== 0) {
@@ -48544,7 +48535,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/point/index.js
 	var require_point = __commonJS({
-		'../../node_modules/phaser/src/geom/point/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/point/index.js'(exports, module) {
 			var Point = require_Point()
 			Point.Ceil = require_Ceil2()
 			Point.Clone = require_Clone2()
@@ -48567,7 +48558,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Area.js
 	var require_Area = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Area.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Area.js'(exports, module) {
 			var Area = function (rect) {
 				return rect.width * rect.height
 			}
@@ -48577,7 +48568,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Ceil.js
 	var require_Ceil3 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Ceil.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Ceil.js'(exports, module) {
 			var Ceil = function (rect) {
 				rect.x = Math.ceil(rect.x)
 				rect.y = Math.ceil(rect.y)
@@ -48589,7 +48580,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/CeilAll.js
 	var require_CeilAll = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/CeilAll.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/CeilAll.js'(exports, module) {
 			var CeilAll = function (rect) {
 				rect.x = Math.ceil(rect.x)
 				rect.y = Math.ceil(rect.y)
@@ -48603,7 +48594,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Clone.js
 	var require_Clone3 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Clone.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Clone.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var Clone = function (source) {
 				return new Rectangle(source.x, source.y, source.width, source.height)
@@ -48614,7 +48605,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/ContainsPoint.js
 	var require_ContainsPoint = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/ContainsPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/ContainsPoint.js'(exports, module) {
 			var Contains = require_Contains2()
 			var ContainsPoint = function (rect, point) {
 				return Contains(rect, point.x, point.y)
@@ -48625,7 +48616,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/ContainsRect.js
 	var require_ContainsRect = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/ContainsRect.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/ContainsRect.js'(exports, module) {
 			var ContainsRect = function (rectA, rectB) {
 				if (rectB.width * rectB.height > rectA.width * rectA.height) {
 					return false
@@ -48647,7 +48638,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Decompose.js
 	var require_Decompose = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Decompose.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Decompose.js'(exports, module) {
 			var Decompose = function (rect, out) {
 				if (out === void 0) {
 					out = []
@@ -48664,7 +48655,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Equals.js
 	var require_Equals2 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Equals.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Equals.js'(exports, module) {
 			var Equals = function (rect, toCompare) {
 				return rect.x === toCompare.x && rect.y === toCompare.y && rect.width === toCompare.width && rect.height === toCompare.height
 			}
@@ -48674,7 +48665,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/GetAspectRatio.js
 	var require_GetAspectRatio = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/GetAspectRatio.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/GetAspectRatio.js'(exports, module) {
 			var GetAspectRatio = function (rect) {
 				return rect.height === 0 ? NaN : rect.width / rect.height
 			}
@@ -48684,7 +48675,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/FitInside.js
 	var require_FitInside = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/FitInside.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/FitInside.js'(exports, module) {
 			var GetAspectRatio = require_GetAspectRatio()
 			var FitInside = function (target, source) {
 				var ratio = GetAspectRatio(target)
@@ -48701,7 +48692,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/FitOutside.js
 	var require_FitOutside = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/FitOutside.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/FitOutside.js'(exports, module) {
 			var GetAspectRatio = require_GetAspectRatio()
 			var FitOutside = function (target, source) {
 				var ratio = GetAspectRatio(target)
@@ -48718,7 +48709,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Floor.js
 	var require_Floor3 = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Floor.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Floor.js'(exports, module) {
 			var Floor = function (rect) {
 				rect.x = Math.floor(rect.x)
 				rect.y = Math.floor(rect.y)
@@ -48730,7 +48721,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/FloorAll.js
 	var require_FloorAll = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/FloorAll.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/FloorAll.js'(exports, module) {
 			var FloorAll = function (rect) {
 				rect.x = Math.floor(rect.x)
 				rect.y = Math.floor(rect.y)
@@ -48744,7 +48735,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/FromXY.js
 	var require_FromXY = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/FromXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/FromXY.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var FromXY = function (x1, y1, x2, y2, out) {
 				if (out === void 0) {
@@ -48758,7 +48749,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/GetCenter.js
 	var require_GetCenter = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/GetCenter.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/GetCenter.js'(exports, module) {
 			var Point = require_Point()
 			var GetCenter = function (rect, out) {
 				if (out === void 0) {
@@ -48774,7 +48765,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/GetSize.js
 	var require_GetSize = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/GetSize.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/GetSize.js'(exports, module) {
 			var Point = require_Point()
 			var GetSize = function (rect, out) {
 				if (out === void 0) {
@@ -48790,7 +48781,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Intersection.js
 	var require_Intersection = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Intersection.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Intersection.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var Intersects = require_RectangleToRectangle()
 			var Intersection = function (rectA, rectB, out) {
@@ -48813,7 +48804,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/MergePoints.js
 	var require_MergePoints = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/MergePoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/MergePoints.js'(exports, module) {
 			var MergePoints = function (target, points) {
 				var minX = target.x
 				var maxX = target.right
@@ -48837,7 +48828,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/MergeXY.js
 	var require_MergeXY = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/MergeXY.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/MergeXY.js'(exports, module) {
 			var MergeXY = function (target, x, y) {
 				var minX = Math.min(target.x, x)
 				var maxX = Math.max(target.right, x)
@@ -48855,7 +48846,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Offset.js
 	var require_Offset = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Offset.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Offset.js'(exports, module) {
 			var Offset = function (rect, x, y) {
 				rect.x += x
 				rect.y += y
@@ -48867,7 +48858,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/OffsetPoint.js
 	var require_OffsetPoint = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/OffsetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/OffsetPoint.js'(exports, module) {
 			var OffsetPoint = function (rect, point) {
 				rect.x += point.x
 				rect.y += point.y
@@ -48879,7 +48870,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Overlaps.js
 	var require_Overlaps = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Overlaps.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Overlaps.js'(exports, module) {
 			var Overlaps = function (rectA, rectB) {
 				return rectA.x < rectB.right && rectA.right > rectB.x && rectA.y < rectB.bottom && rectA.bottom > rectB.y
 			}
@@ -48889,7 +48880,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/PerimeterPoint.js
 	var require_PerimeterPoint = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/PerimeterPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/PerimeterPoint.js'(exports, module) {
 			var Point = require_Point()
 			var DegToRad = require_DegToRad()
 			var PerimeterPoint = function (rectangle, angle, out) {
@@ -48916,7 +48907,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/RandomOutside.js
 	var require_RandomOutside = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/RandomOutside.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/RandomOutside.js'(exports, module) {
 			var Between = require_Between2()
 			var ContainsRect = require_ContainsRect()
 			var Point = require_Point()
@@ -48952,7 +48943,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/SameDimensions.js
 	var require_SameDimensions = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/SameDimensions.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/SameDimensions.js'(exports, module) {
 			var SameDimensions = function (rect, toCompare) {
 				return rect.width === toCompare.width && rect.height === toCompare.height
 			}
@@ -48962,7 +48953,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/Scale.js
 	var require_Scale = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/Scale.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/Scale.js'(exports, module) {
 			var Scale = function (rect, x, y) {
 				if (y === void 0) {
 					y = x
@@ -48977,7 +48968,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/rectangle/index.js
 	var require_rectangle = __commonJS({
-		'../../node_modules/phaser/src/geom/rectangle/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/rectangle/index.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			Rectangle.Area = require_Area()
 			Rectangle.Ceil = require_Ceil3()
@@ -49023,7 +49014,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Area.js
 	var require_Area2 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Area.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Area.js'(exports, module) {
 			var Area = function (circle) {
 				return circle.radius > 0 ? Math.PI * circle.radius * circle.radius : 0
 			}
@@ -49033,7 +49024,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Clone.js
 	var require_Clone4 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Clone.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Clone.js'(exports, module) {
 			var Circle = require_Circle()
 			var Clone = function (source) {
 				return new Circle(source.x, source.y, source.radius)
@@ -49044,7 +49035,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/ContainsPoint.js
 	var require_ContainsPoint2 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/ContainsPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/ContainsPoint.js'(exports, module) {
 			var Contains = require_Contains()
 			var ContainsPoint = function (circle, point) {
 				return Contains(circle, point.x, point.y)
@@ -49055,7 +49046,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/ContainsRect.js
 	var require_ContainsRect2 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/ContainsRect.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/ContainsRect.js'(exports, module) {
 			var Contains = require_Contains()
 			var ContainsRect = function (circle, rect) {
 				return Contains(circle, rect.x, rect.y) && Contains(circle, rect.right, rect.y) && Contains(circle, rect.x, rect.bottom) && Contains(circle, rect.right, rect.bottom)
@@ -49066,7 +49057,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/CopyFrom.js
 	var require_CopyFrom3 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/CopyFrom.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/CopyFrom.js'(exports, module) {
 			var CopyFrom = function (source, dest) {
 				return dest.setTo(source.x, source.y, source.radius)
 			}
@@ -49076,7 +49067,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Equals.js
 	var require_Equals3 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Equals.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Equals.js'(exports, module) {
 			var Equals = function (circle, toCompare) {
 				return circle.x === toCompare.x && circle.y === toCompare.y && circle.radius === toCompare.radius
 			}
@@ -49086,7 +49077,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/GetBounds.js
 	var require_GetBounds3 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/GetBounds.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/GetBounds.js'(exports, module) {
 			var Rectangle = require_Rectangle()
 			var GetBounds = function (circle, out) {
 				if (out === void 0) {
@@ -49104,7 +49095,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/Offset.js
 	var require_Offset2 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/Offset.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/Offset.js'(exports, module) {
 			var Offset = function (circle, x, y) {
 				circle.x += x
 				circle.y += y
@@ -49116,7 +49107,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/OffsetPoint.js
 	var require_OffsetPoint2 = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/OffsetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/OffsetPoint.js'(exports, module) {
 			var OffsetPoint = function (circle, point) {
 				circle.x += point.x
 				circle.y += point.y
@@ -49128,7 +49119,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/circle/index.js
 	var require_circle = __commonJS({
-		'../../node_modules/phaser/src/geom/circle/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/circle/index.js'(exports, module) {
 			var Circle = require_Circle()
 			Circle.Area = require_Area2()
 			Circle.Circumference = require_Circumference()
@@ -49151,7 +49142,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/CreatePixelPerfectHandler.js
 	var require_CreatePixelPerfectHandler = __commonJS({
-		'../../node_modules/phaser/src/input/CreatePixelPerfectHandler.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/CreatePixelPerfectHandler.js'(exports, module) {
 			var CreatePixelPerfectHandler = function (textureManager, alphaTolerance) {
 				return function (hitArea, x, y, gameObject) {
 					var alpha = textureManager.getPixelAlpha(x, y, gameObject.texture.key, gameObject.frame.name)
@@ -49164,18 +49155,18 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/CreateInteractiveObject.js
 	var require_CreateInteractiveObject = __commonJS({
-		'../../node_modules/phaser/src/input/CreateInteractiveObject.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/CreateInteractiveObject.js'(exports, module) {
 			var CreateInteractiveObject = function (gameObject, hitArea, hitAreaCallback) {
 				return {
-					gameObject: gameObject,
+					gameObject,
 					enabled: true,
 					draggable: false,
 					dropZone: false,
 					cursor: false,
 					target: null,
 					camera: null,
-					hitArea: hitArea,
-					hitAreaCallback: hitAreaCallback,
+					hitArea,
+					hitAreaCallback,
 					hitAreaDebug: null,
 					customHitArea: false,
 					localX: 0,
@@ -49196,7 +49187,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/Axis.js
 	var require_Axis = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/Axis.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/Axis.js'(exports, module) {
 			var Class = require_Class()
 			var Axis = new Class({
 				initialize: function Axis2(pad, index) {
@@ -49223,49 +49214,49 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/events/BUTTON_DOWN_EVENT.js
 	var require_BUTTON_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/BUTTON_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/BUTTON_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'down'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/BUTTON_UP_EVENT.js
 	var require_BUTTON_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/BUTTON_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/BUTTON_UP_EVENT.js'(exports, module) {
 			module.exports = 'up'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/CONNECTED_EVENT.js
 	var require_CONNECTED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/CONNECTED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/CONNECTED_EVENT.js'(exports, module) {
 			module.exports = 'connected'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/DISCONNECTED_EVENT.js
 	var require_DISCONNECTED_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/DISCONNECTED_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/DISCONNECTED_EVENT.js'(exports, module) {
 			module.exports = 'disconnected'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_DOWN_EVENT.js
 	var require_GAMEPAD_BUTTON_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'down'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_UP_EVENT.js
 	var require_GAMEPAD_BUTTON_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/GAMEPAD_BUTTON_UP_EVENT.js'(exports, module) {
 			module.exports = 'up'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/gamepad/events/index.js
 	var require_events18 = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/events/index.js'(exports, module) {
 			module.exports = {
 				BUTTON_DOWN: require_BUTTON_DOWN_EVENT(),
 				BUTTON_UP: require_BUTTON_UP_EVENT(),
@@ -49279,7 +49270,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/Button.js
 	var require_Button = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/Button.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/Button.js'(exports, module) {
 			var Class = require_Class()
 			var Events = require_events18()
 			var Button = new Class({
@@ -49318,7 +49309,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/Gamepad.js
 	var require_Gamepad = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/Gamepad.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/Gamepad.js'(exports, module) {
 			var Axis = require_Axis()
 			var Button = require_Button()
 			var Class = require_Class()
@@ -49500,12 +49491,12 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/InputPluginCache.js
 	var require_InputPluginCache = __commonJS({
-		'../../node_modules/phaser/src/input/InputPluginCache.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/InputPluginCache.js'(exports, module) {
 			var GetValue = require_GetValue()
 			var inputPlugins = {}
 			var InputPluginCache = {}
 			InputPluginCache.register = function (key, plugin, mapping, settingsKey, configKey) {
-				inputPlugins[key] = { plugin: plugin, mapping: mapping, settingsKey: settingsKey, configKey: configKey }
+				inputPlugins[key] = { plugin, mapping, settingsKey, configKey }
 			}
 			InputPluginCache.getPlugin = function (key) {
 				return inputPlugins[key]
@@ -49535,7 +49526,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/GamepadPlugin.js
 	var require_GamepadPlugin = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/GamepadPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/GamepadPlugin.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events18()
@@ -49731,7 +49722,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/configs/Sony_PlayStation_DualShock_4.js
 	var require_Sony_PlayStation_DualShock_4 = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/configs/Sony_PlayStation_DualShock_4.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/configs/Sony_PlayStation_DualShock_4.js'(exports, module) {
 			module.exports = {
 				UP: 12,
 				DOWN: 13,
@@ -49761,7 +49752,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/configs/SNES_USB_Controller.js
 	var require_SNES_USB_Controller = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/configs/SNES_USB_Controller.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/configs/SNES_USB_Controller.js'(exports, module) {
 			module.exports = {
 				UP: 12,
 				DOWN: 13,
@@ -49781,7 +49772,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/configs/XBox360_Controller.js
 	var require_XBox360_Controller = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/configs/XBox360_Controller.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/configs/XBox360_Controller.js'(exports, module) {
 			module.exports = {
 				UP: 12,
 				DOWN: 13,
@@ -49810,7 +49801,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/configs/index.js
 	var require_configs = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/configs/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/configs/index.js'(exports, module) {
 			module.exports = {
 				DUALSHOCK_4: require_Sony_PlayStation_DualShock_4(),
 				SNES_USB: require_SNES_USB_Controller(),
@@ -49821,7 +49812,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/gamepad/index.js
 	var require_gamepad = __commonJS({
-		'../../node_modules/phaser/src/input/gamepad/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/gamepad/index.js'(exports, module) {
 			module.exports = {
 				Axis: require_Axis(),
 				Button: require_Button(),
@@ -49835,7 +49826,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/triangle/Contains.js
 	var require_Contains4 = __commonJS({
-		'../../node_modules/phaser/src/geom/triangle/Contains.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/triangle/Contains.js'(exports, module) {
 			var Contains = function (triangle, x, y) {
 				var v0x = triangle.x3 - triangle.x1
 				var v0y = triangle.y3 - triangle.y1
@@ -49860,7 +49851,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/triangle/GetPoint.js
 	var require_GetPoint5 = __commonJS({
-		'../../node_modules/phaser/src/geom/triangle/GetPoint.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/triangle/GetPoint.js'(exports, module) {
 			var Point = require_Point()
 			var Length = require_Length()
 			var GetPoint = function (triangle, position, out) {
@@ -49904,7 +49895,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/triangle/GetPoints.js
 	var require_GetPoints5 = __commonJS({
-		'../../node_modules/phaser/src/geom/triangle/GetPoints.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/triangle/GetPoints.js'(exports, module) {
 			var Length = require_Length()
 			var Point = require_Point()
 			var GetPoints = function (triangle, quantity, stepRate, out) {
@@ -49950,7 +49941,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/geom/triangle/Triangle.js
 	var require_Triangle = __commonJS({
-		'../../node_modules/phaser/src/geom/triangle/Triangle.js': function (exports, module) {
+		'../../node_modules/phaser/src/geom/triangle/Triangle.js'(exports, module) {
 			var Class = require_Class()
 			var Contains = require_Contains4()
 			var GetPoint = require_GetPoint5()
@@ -50125,7 +50116,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/InputPlugin.js
 	var require_InputPlugin = __commonJS({
-		'../../node_modules/phaser/src/input/InputPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/InputPlugin.js'(exports, module) {
 			var Circle = require_Circle()
 			var CircleContains = require_Contains()
 			var Class = require_Class()
@@ -51376,56 +51367,56 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_DOWN_EVENT.js
 	var require_ANY_KEY_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'keydown'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_UP_EVENT.js
 	var require_ANY_KEY_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/ANY_KEY_UP_EVENT.js'(exports, module) {
 			module.exports = 'keyup'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/COMBO_MATCH_EVENT.js
 	var require_COMBO_MATCH_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/COMBO_MATCH_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/COMBO_MATCH_EVENT.js'(exports, module) {
 			module.exports = 'keycombomatch'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/DOWN_EVENT.js
 	var require_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/DOWN_EVENT.js'(exports, module) {
 			module.exports = 'down'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/KEY_DOWN_EVENT.js
 	var require_KEY_DOWN_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/KEY_DOWN_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/KEY_DOWN_EVENT.js'(exports, module) {
 			module.exports = 'keydown-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/KEY_UP_EVENT.js
 	var require_KEY_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/KEY_UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/KEY_UP_EVENT.js'(exports, module) {
 			module.exports = 'keyup-'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/UP_EVENT.js
 	var require_UP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/UP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/UP_EVENT.js'(exports, module) {
 			module.exports = 'up'
 		},
 	})
 
 	// ../../node_modules/phaser/src/input/keyboard/events/index.js
 	var require_events19 = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/events/index.js'(exports, module) {
 			module.exports = {
 				ANY_KEY_DOWN: require_ANY_KEY_DOWN_EVENT(),
 				ANY_KEY_UP: require_ANY_KEY_UP_EVENT(),
@@ -51440,7 +51431,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/Key.js
 	var require_Key = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/Key.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/Key.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events19()
@@ -51545,7 +51536,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/combo/AdvanceKeyCombo.js
 	var require_AdvanceKeyCombo = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/combo/AdvanceKeyCombo.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/combo/AdvanceKeyCombo.js'(exports, module) {
 			var AdvanceKeyCombo = function (event, combo) {
 				combo.timeLastMatched = event.timeStamp
 				combo.index++
@@ -51562,7 +51553,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/combo/ProcessKeyCombo.js
 	var require_ProcessKeyCombo = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/combo/ProcessKeyCombo.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/combo/ProcessKeyCombo.js'(exports, module) {
 			var AdvanceKeyCombo = require_AdvanceKeyCombo()
 			var ProcessKeyCombo = function (event, combo) {
 				if (combo.matched) {
@@ -51599,7 +51590,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/combo/ResetKeyCombo.js
 	var require_ResetKeyCombo = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/combo/ResetKeyCombo.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/combo/ResetKeyCombo.js'(exports, module) {
 			var ResetKeyCombo = function (combo) {
 				combo.current = combo.keyCodes[0]
 				combo.index = 0
@@ -51614,7 +51605,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/combo/KeyCombo.js
 	var require_KeyCombo = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/combo/KeyCombo.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/combo/KeyCombo.js'(exports, module) {
 			var Class = require_Class()
 			var Events = require_events19()
 			var GetFastValue = require_GetFastValue()
@@ -51687,7 +51678,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/KeyMap.js
 	var require_KeyMap = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/KeyMap.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/KeyMap.js'(exports, module) {
 			var KeyCodes = require_KeyCodes()
 			var KeyMap = {}
 			for (key in KeyCodes) {
@@ -51700,7 +51691,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/KeyboardPlugin.js
 	var require_KeyboardPlugin = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/KeyboardPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/KeyboardPlugin.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events19()
@@ -52019,7 +52010,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/JustDown.js
 	var require_JustDown = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/JustDown.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/JustDown.js'(exports, module) {
 			var JustDown = function (key) {
 				if (key._justDown) {
 					key._justDown = false
@@ -52034,7 +52025,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/JustUp.js
 	var require_JustUp = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/JustUp.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/JustUp.js'(exports, module) {
 			var JustUp = function (key) {
 				if (key._justUp) {
 					key._justUp = false
@@ -52049,7 +52040,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/DownDuration.js
 	var require_DownDuration = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/DownDuration.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/DownDuration.js'(exports, module) {
 			var DownDuration = function (key, duration) {
 				if (duration === void 0) {
 					duration = 50
@@ -52063,7 +52054,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/keys/UpDuration.js
 	var require_UpDuration = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/keys/UpDuration.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/keys/UpDuration.js'(exports, module) {
 			var UpDuration = function (key, duration) {
 				if (duration === void 0) {
 					duration = 50
@@ -52077,7 +52068,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/keyboard/index.js
 	var require_keyboard = __commonJS({
-		'../../node_modules/phaser/src/input/keyboard/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/keyboard/index.js'(exports, module) {
 			module.exports = {
 				Events: require_events19(),
 				KeyboardManager: require_KeyboardManager(),
@@ -52098,7 +52089,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/mouse/index.js
 	var require_mouse = __commonJS({
-		'../../node_modules/phaser/src/input/mouse/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/mouse/index.js'(exports, module) {
 			module.exports = {
 				MouseManager: require_MouseManager(),
 			}
@@ -52107,7 +52098,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/touch/index.js
 	var require_touch = __commonJS({
-		'../../node_modules/phaser/src/input/touch/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/touch/index.js'(exports, module) {
 			module.exports = {
 				TouchManager: require_TouchManager(),
 			}
@@ -52116,7 +52107,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/input/index.js
 	var require_input = __commonJS({
-		'../../node_modules/phaser/src/input/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/input/index.js'(exports, module) {
 			var CONST = require_const9()
 			var Extend = require_Extend()
 			var Input = {
@@ -52139,7 +52130,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/const.js
 	var require_const12 = __commonJS({
-		'../../node_modules/phaser/src/loader/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/const.js'(exports, module) {
 			var FILE_CONST = {
 				LOADER_IDLE: 0,
 				LOADER_LOADING: 1,
@@ -52164,7 +52155,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/GetURL.js
 	var require_GetURL = __commonJS({
-		'../../node_modules/phaser/src/loader/GetURL.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/GetURL.js'(exports, module) {
 			var GetURL = function (file, baseURL) {
 				if (!file.url) {
 					return false
@@ -52181,7 +52172,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/XHRSettings.js
 	var require_XHRSettings = __commonJS({
-		'../../node_modules/phaser/src/loader/XHRSettings.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/XHRSettings.js'(exports, module) {
 			var XHRSettings = function (responseType, async, user, password, timeout, withCredentials) {
 				if (responseType === void 0) {
 					responseType = ''
@@ -52202,17 +52193,17 @@ var Phaser = (function () {
 					withCredentials = false
 				}
 				return {
-					responseType: responseType,
-					async: async,
-					user: user,
-					password: password,
-					timeout: timeout,
+					responseType,
+					async,
+					user,
+					password,
+					timeout,
 					headers: void 0,
 					header: void 0,
 					headerValue: void 0,
 					requestedWith: false,
 					overrideMimeType: void 0,
-					withCredentials: withCredentials,
+					withCredentials,
 				}
 			}
 			module.exports = XHRSettings
@@ -52221,7 +52212,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/MergeXHRSettings.js
 	var require_MergeXHRSettings = __commonJS({
-		'../../node_modules/phaser/src/loader/MergeXHRSettings.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/MergeXHRSettings.js'(exports, module) {
 			var Extend = require_Extend()
 			var XHRSettings = require_XHRSettings()
 			var MergeXHRSettings = function (global, local) {
@@ -52241,7 +52232,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/XHRLoader.js
 	var require_XHRLoader = __commonJS({
-		'../../node_modules/phaser/src/loader/XHRLoader.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/XHRLoader.js'(exports, module) {
 			var MergeXHRSettings = require_MergeXHRSettings()
 			var XHRLoader = function (file, globalXHRSettings) {
 				var config = MergeXHRSettings(globalXHRSettings, file.xhrSettings)
@@ -52287,7 +52278,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/File.js
 	var require_File = __commonJS({
-		'../../node_modules/phaser/src/loader/File.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/File.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var Events = require_events14()
@@ -52476,7 +52467,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/ImageFile.js
 	var require_ImageFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/ImageFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/ImageFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var File = require_File()
@@ -52505,11 +52496,11 @@ var Phaser = (function () {
 					var fileConfig = {
 						type: 'image',
 						cache: loader.textureManager,
-						extension: extension,
+						extension,
 						responseType: 'blob',
-						key: key,
-						url: url,
-						xhrSettings: xhrSettings,
+						key,
+						url,
+						xhrSettings,
 						config: frameConfig,
 					}
 					File.call(this, loader, fileConfig)
@@ -52597,7 +52588,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/JSONFile.js
 	var require_JSONFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/JSONFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/JSONFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var File = require_File()
@@ -52620,11 +52611,11 @@ var Phaser = (function () {
 					var fileConfig = {
 						type: 'json',
 						cache: loader.cacheManager.json,
-						extension: extension,
+						extension,
 						responseType: 'text',
-						key: key,
-						url: url,
-						xhrSettings: xhrSettings,
+						key,
+						url,
+						xhrSettings,
 						config: dataKey,
 					}
 					File.call(this, loader, fileConfig)
@@ -52672,7 +52663,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/MultiFile.js
 	var require_MultiFile = __commonJS({
-		'../../node_modules/phaser/src/loader/MultiFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/MultiFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var Events = require_events14()
@@ -52754,7 +52745,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/AtlasJSONFile.js
 	var require_AtlasJSONFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/AtlasJSONFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/AtlasJSONFile.js'(exports, module) {
 			var Class = require_Class()
 			var FileTypesManager = require_FileTypesManager()
 			var GetFastValue = require_GetFastValue()
@@ -52771,14 +52762,14 @@ var Phaser = (function () {
 						var config = key
 						key = GetFastValue(config, 'key')
 						image = new ImageFile(loader, {
-							key: key,
+							key,
 							url: GetFastValue(config, 'textureURL'),
 							extension: GetFastValue(config, 'textureExtension', 'png'),
 							normalMap: GetFastValue(config, 'normalMap'),
 							xhrSettings: GetFastValue(config, 'textureXhrSettings'),
 						})
 						data = new JSONFile(loader, {
-							key: key,
+							key,
 							url: GetFastValue(config, 'atlasURL'),
 							extension: GetFastValue(config, 'atlasExtension', 'json'),
 							xhrSettings: GetFastValue(config, 'atlasXhrSettings'),
@@ -52822,7 +52813,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/dom/ParseXML.js
 	var require_ParseXML = __commonJS({
-		'../../node_modules/phaser/src/dom/ParseXML.js': function (exports, module) {
+		'../../node_modules/phaser/src/dom/ParseXML.js'(exports, module) {
 			var ParseXML = function (data) {
 				var xml = ''
 				try {
@@ -52848,7 +52839,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/XMLFile.js
 	var require_XMLFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/XMLFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/XMLFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var File = require_File()
@@ -52870,11 +52861,11 @@ var Phaser = (function () {
 					var fileConfig = {
 						type: 'xml',
 						cache: loader.cacheManager.xml,
-						extension: extension,
+						extension,
 						responseType: 'text',
-						key: key,
-						url: url,
-						xhrSettings: xhrSettings,
+						key,
+						url,
+						xhrSettings,
 					}
 					File.call(this, loader, fileConfig)
 				},
@@ -52904,7 +52895,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/BitmapFontFile.js
 	var require_BitmapFontFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/BitmapFontFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/BitmapFontFile.js'(exports, module) {
 			var Class = require_Class()
 			var FileTypesManager = require_FileTypesManager()
 			var GetFastValue = require_GetFastValue()
@@ -52922,14 +52913,14 @@ var Phaser = (function () {
 						var config = key
 						key = GetFastValue(config, 'key')
 						image = new ImageFile(loader, {
-							key: key,
+							key,
 							url: GetFastValue(config, 'textureURL'),
 							extension: GetFastValue(config, 'textureExtension', 'png'),
 							normalMap: GetFastValue(config, 'normalMap'),
 							xhrSettings: GetFastValue(config, 'textureXhrSettings'),
 						})
 						data = new XMLFile(loader, {
-							key: key,
+							key,
 							url: GetFastValue(config, 'fontDataURL'),
 							extension: GetFastValue(config, 'fontDataExtension', 'xml'),
 							xhrSettings: GetFastValue(config, 'fontDataXhrSettings'),
@@ -52951,7 +52942,7 @@ var Phaser = (function () {
 						image.addToCache()
 						var texture = image.cache.get(image.key)
 						var data = ParseXMLBitmapFont(xml.data, image.cache.getFrame(image.key), 0, 0, texture)
-						this.loader.cacheManager.bitmapFont.add(image.key, { data: data, texture: image.key, frame: null })
+						this.loader.cacheManager.bitmapFont.add(image.key, { data, texture: image.key, frame: null })
 						this.complete = true
 					}
 				},
@@ -52975,7 +52966,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/CSSFile.js
 	var require_CSSFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/CSSFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/CSSFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var File = require_File()
@@ -52996,11 +52987,11 @@ var Phaser = (function () {
 					var fileConfig = {
 						type: 'script',
 						cache: false,
-						extension: extension,
+						extension,
 						responseType: 'text',
-						key: key,
-						url: url,
-						xhrSettings: xhrSettings,
+						key,
+						url,
+						xhrSettings,
 					}
 					File.call(this, loader, fileConfig)
 				},
@@ -53029,7 +53020,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/filetypes/ScriptFile.js
 	var require_ScriptFile = __commonJS({
-		'../../node_modules/phaser/src/loader/filetypes/ScriptFile.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/filetypes/ScriptFile.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var File = require_File()
@@ -53051,13 +53042,13 @@ var Phaser = (function () {
 						type = 'script'
 					}
 					var fileConfig = {
-						type: type,
+						type,
 						cache: false,
-						extension: extension,
+						extension,
 						responseType: 'text',
-						key: key,
-						url: url,
-						xhrSettings: xhrSettings,
+						key,
+						url,
+						xhrSettings,
 					}
 					File.call(this, loader, fileConfig)
 				},
@@ -53088,7 +53079,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/loader/LoaderPlugin.js
 	var require_LoaderPlugin = __commonJS({
-		'../../node_modules/phaser/src/loader/LoaderPlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/loader/LoaderPlugin.js'(exports, module) {
 			var Class = require_Class()
 			var CONST = require_const12()
 			var CustomSet = require_Set()
@@ -53545,7 +53536,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/BasePlugin.js
 	var require_BasePlugin = __commonJS({
-		'../../node_modules/phaser/src/plugins/BasePlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/BasePlugin.js'(exports, module) {
 			var Class = require_Class()
 			var BasePlugin = new Class({
 				initialize: function BasePlugin2(pluginManager) {
@@ -53568,7 +53559,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/ScenePlugin.js
 	var require_ScenePlugin = __commonJS({
-		'../../node_modules/phaser/src/plugins/ScenePlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/ScenePlugin.js'(exports, module) {
 			var BasePlugin = require_BasePlugin()
 			var Class = require_Class()
 			var SceneEvents = require_events()
@@ -53595,7 +53586,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/plugins/index.js
 	var require_plugins = __commonJS({
-		'../../node_modules/phaser/src/plugins/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/plugins/index.js'(exports, module) {
 			module.exports = {
 				BasePlugin: require_BasePlugin(),
 				DefaultPlugins: require_DefaultPlugins(),
@@ -53608,7 +53599,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/snapshot/index.js
 	var require_snapshot = __commonJS({
-		'../../node_modules/phaser/src/renderer/snapshot/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/snapshot/index.js'(exports, module) {
 			module.exports = {
 				Canvas: require_CanvasSnapshot(),
 				WebGL: require_WebGLSnapshot(),
@@ -53618,7 +53609,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/canvas/index.js
 	var require_canvas2 = __commonJS({
-		'../../node_modules/phaser/src/renderer/canvas/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/canvas/index.js'(exports, module) {
 			module.exports = {
 				CanvasRenderer: require_CanvasRenderer(),
 				GetBlendModes: require_GetBlendModes(),
@@ -53629,7 +53620,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/pipelines/index.js
 	var require_pipelines = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/pipelines/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/pipelines/index.js'(exports, module) {
 			var CONST = require_const7()
 			var Extend = require_Extend()
 			var Pipelines = {
@@ -53654,7 +53645,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/wrappers/index.js
 	var require_wrappers = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/wrappers/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/wrappers/index.js'(exports, module) {
 			var Wrappers = {
 				WebGLAttribLocationWrapper: require_WebGLAttribLocationWrapper(),
 				WebGLBufferWrapper: require_WebGLBufferWrapper(),
@@ -53669,7 +53660,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/webgl/index.js
 	var require_webgl = __commonJS({
-		'../../node_modules/phaser/src/renderer/webgl/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/webgl/index.js'(exports, module) {
 			var WEBGL_CONST = require_const8()
 			var Extend = require_Extend()
 			var WebGL = {
@@ -53689,7 +53680,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/renderer/index.js
 	var require_renderer = __commonJS({
-		'../../node_modules/phaser/src/renderer/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/renderer/index.js'(exports, module) {
 			module.exports = {
 				Events: require_events8(),
 				Snapshot: require_snapshot(),
@@ -53705,7 +53696,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scale/index.js
 	var require_scale = __commonJS({
-		'../../node_modules/phaser/src/scale/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/scale/index.js'(exports, module) {
 			var Extend = require_Extend()
 			var CONST = require_const10()
 			var Scale = {
@@ -53726,7 +53717,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/ScenePlugin.js
 	var require_ScenePlugin2 = __commonJS({
-		'../../node_modules/phaser/src/scene/ScenePlugin.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/ScenePlugin.js'(exports, module) {
 			var Clamp = require_Clamp()
 			var Class = require_Class()
 			var Events = require_events()
@@ -54048,7 +54039,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/scene/index.js
 	var require_scene = __commonJS({
-		'../../node_modules/phaser/src/scene/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/scene/index.js'(exports, module) {
 			var CONST = require_const11()
 			var Extend = require_Extend()
 			var Scene = {
@@ -54067,7 +54058,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/const.js
 	var require_const13 = __commonJS({
-		'../../node_modules/phaser/src/textures/const.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/const.js'(exports, module) {
 			var CONST = {
 				LINEAR: 0,
 				NEAREST: 1,
@@ -54078,14 +54069,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/textures/index.js
 	var require_textures = __commonJS({
-		'../../node_modules/phaser/src/textures/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/textures/index.js'(exports, module) {
 			var Extend = require_Extend()
 			var FilterMode = require_const13()
 			var Textures = {
 				CanvasTexture: require_CanvasTexture(),
 				DynamicTexture: require_DynamicTexture(),
 				Events: require_events9(),
-				FilterMode: FilterMode,
+				FilterMode,
 				Frame: require_Frame(),
 				Parsers: require_parsers(),
 				Texture: require_Texture2(),
@@ -54099,7 +54090,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/time/TimerEvent.js
 	var require_TimerEvent = __commonJS({
-		'../../node_modules/phaser/src/time/TimerEvent.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/TimerEvent.js'(exports, module) {
 			var Class = require_Class()
 			var GetFastValue = require_GetFastValue()
 			var TimerEvent = new Class({
@@ -54189,7 +54180,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/time/Clock.js
 	var require_Clock = __commonJS({
-		'../../node_modules/phaser/src/time/Clock.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/Clock.js'(exports, module) {
 			var Class = require_Class()
 			var PluginCache = require_PluginCache()
 			var SceneEvents = require_events()
@@ -54235,7 +54226,7 @@ var Phaser = (function () {
 					return event
 				},
 				delayedCall: function (delay, callback, args, callbackScope) {
-					return this.addEvent({ delay: delay, callback: callback, args: args, callbackScope: callbackScope })
+					return this.addEvent({ delay, callback, args, callbackScope })
 				},
 				clearPendingEvents: function () {
 					this._pendingInsertion = []
@@ -54351,14 +54342,14 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/time/events/COMPLETE_EVENT.js
 	var require_COMPLETE_EVENT4 = __commonJS({
-		'../../node_modules/phaser/src/time/events/COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/events/COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/time/events/index.js
 	var require_events20 = __commonJS({
-		'../../node_modules/phaser/src/time/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/events/index.js'(exports, module) {
 			module.exports = {
 				COMPLETE: require_COMPLETE_EVENT4(),
 			}
@@ -54367,7 +54358,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/time/Timeline.js
 	var require_Timeline = __commonJS({
-		'../../node_modules/phaser/src/time/Timeline.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/Timeline.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var GameObjectFactory = require_GameObjectFactory()
@@ -54626,7 +54617,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/time/index.js
 	var require_time = __commonJS({
-		'../../node_modules/phaser/src/time/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/time/index.js'(exports, module) {
 			module.exports = {
 				Clock: require_Clock(),
 				Events: require_events20(),
@@ -54638,7 +54629,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetNewValue.js
 	var require_GetNewValue = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetNewValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetNewValue.js'(exports, module) {
 			var GetNewValue = function (source, key, defaultValue) {
 				var valueCallback
 				if (source.hasOwnProperty(key)) {
@@ -54667,7 +54658,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/ReservedProps.js
 	var require_ReservedProps = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/ReservedProps.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/ReservedProps.js'(exports, module) {
 			module.exports = [
 				'callbackScope',
 				'completeDelay',
@@ -54714,7 +54705,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetProps.js
 	var require_GetProps = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetProps.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetProps.js'(exports, module) {
 			var RESERVED = require_ReservedProps()
 			var GetProps = function (config) {
 				var key
@@ -54722,13 +54713,13 @@ var Phaser = (function () {
 				if (config.hasOwnProperty('props')) {
 					for (key in config.props) {
 						if (key.substring(0, 1) !== '_') {
-							keys.push({ key: key, value: config.props[key] })
+							keys.push({ key, value: config.props[key] })
 						}
 					}
 				} else {
 					for (key in config) {
 						if (RESERVED.indexOf(key) === -1 && key.substring(0, 1) !== '_') {
-							keys.push({ key: key, value: config[key] })
+							keys.push({ key, value: config[key] })
 						}
 					}
 				}
@@ -54740,7 +54731,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetTargets.js
 	var require_GetTargets = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetTargets.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetTargets.js'(exports, module) {
 			var GetValue = require_GetValue()
 			var GetTargets = function (config) {
 				var targets = GetValue(config, 'targets', null)
@@ -54761,7 +54752,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/GetValueOp.js
 	var require_GetValueOp = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/GetValueOp.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/GetValueOp.js'(exports, module) {
 			var Between = require_Between2()
 			var FloatBetween = require_FloatBetween()
 			function hasGetActive(def) {
@@ -54884,9 +54875,9 @@ var Phaser = (function () {
 				}
 				if (!callbacks) {
 					callbacks = {
-						getActive: getActive,
-						getEnd: getEnd,
-						getStart: getStart,
+						getActive,
+						getEnd,
+						getStart,
 					}
 				}
 				return callbacks
@@ -54897,77 +54888,77 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_ACTIVE_EVENT.js
 	var require_TWEEN_ACTIVE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_ACTIVE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_ACTIVE_EVENT.js'(exports, module) {
 			module.exports = 'active'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_COMPLETE_EVENT.js
 	var require_TWEEN_COMPLETE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_COMPLETE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_COMPLETE_EVENT.js'(exports, module) {
 			module.exports = 'complete'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_LOOP_EVENT.js
 	var require_TWEEN_LOOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_LOOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_LOOP_EVENT.js'(exports, module) {
 			module.exports = 'loop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_PAUSE_EVENT.js
 	var require_TWEEN_PAUSE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_PAUSE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_PAUSE_EVENT.js'(exports, module) {
 			module.exports = 'pause'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_RESUME_EVENT.js
 	var require_TWEEN_RESUME_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_RESUME_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_RESUME_EVENT.js'(exports, module) {
 			module.exports = 'resume'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_REPEAT_EVENT.js
 	var require_TWEEN_REPEAT_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_REPEAT_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_REPEAT_EVENT.js'(exports, module) {
 			module.exports = 'repeat'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_START_EVENT.js
 	var require_TWEEN_START_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_START_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_START_EVENT.js'(exports, module) {
 			module.exports = 'start'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_STOP_EVENT.js
 	var require_TWEEN_STOP_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_STOP_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_STOP_EVENT.js'(exports, module) {
 			module.exports = 'stop'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_UPDATE_EVENT.js
 	var require_TWEEN_UPDATE_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_UPDATE_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_UPDATE_EVENT.js'(exports, module) {
 			module.exports = 'update'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/TWEEN_YOYO_EVENT.js
 	var require_TWEEN_YOYO_EVENT = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/TWEEN_YOYO_EVENT.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/TWEEN_YOYO_EVENT.js'(exports, module) {
 			module.exports = 'yoyo'
 		},
 	})
 
 	// ../../node_modules/phaser/src/tweens/events/index.js
 	var require_events21 = __commonJS({
-		'../../node_modules/phaser/src/tweens/events/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/events/index.js'(exports, module) {
 			module.exports = {
 				TWEEN_ACTIVE: require_TWEEN_ACTIVE_EVENT(),
 				TWEEN_COMPLETE: require_TWEEN_COMPLETE_EVENT(),
@@ -54985,7 +54976,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/BaseTween.js
 	var require_BaseTween = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/BaseTween.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/BaseTween.js'(exports, module) {
 			var Class = require_Class()
 			var EventEmitter = require_eventemitter3()
 			var Events = require_events21()
@@ -55119,7 +55110,7 @@ var Phaser = (function () {
 						params = []
 					}
 					if (this.callbacks.hasOwnProperty(type)) {
-						this.callbacks[type] = { func: callback, params: params }
+						this.callbacks[type] = { func: callback, params }
 					}
 					return this
 				},
@@ -55200,7 +55191,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/Defaults.js
 	var require_Defaults = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/Defaults.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/Defaults.js'(exports, module) {
 			var TWEEN_DEFAULTS = {
 				targets: null,
 				delay: 0,
@@ -55222,7 +55213,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/BaseTweenData.js
 	var require_BaseTweenData = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/BaseTweenData.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/BaseTweenData.js'(exports, module) {
 			var Class = require_Class()
 			var Events = require_events21()
 			var TWEEN_CONST = require_const6()
@@ -55412,7 +55403,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/TweenData.js
 	var require_TweenData = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/TweenData.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/TweenData.js'(exports, module) {
 			var BaseTweenData = require_BaseTweenData()
 			var Clamp = require_Clamp()
 			var Class = require_Class()
@@ -55572,7 +55563,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/TweenFrameData.js
 	var require_TweenFrameData = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/TweenFrameData.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/TweenFrameData.js'(exports, module) {
 			var BaseTweenData = require_BaseTweenData()
 			var Clamp = require_Clamp()
 			var Class = require_Class()
@@ -55691,7 +55682,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/Tween.js
 	var require_Tween = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/Tween.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/Tween.js'(exports, module) {
 			var BaseTween = require_BaseTween()
 			var Class = require_Class()
 			var Events = require_events21()
@@ -55991,7 +55982,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/NumberTweenBuilder.js
 	var require_NumberTweenBuilder = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/NumberTweenBuilder.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/NumberTweenBuilder.js'(exports, module) {
 			var BaseTween = require_BaseTween()
 			var Defaults = require_Defaults()
 			var GetAdvancedValue = require_GetAdvancedValue()
@@ -56061,7 +56052,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/StaggerBuilder.js
 	var require_StaggerBuilder = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/StaggerBuilder.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/StaggerBuilder.js'(exports, module) {
 			var GetEaseFunction = require_GetEaseFunction()
 			var GetValue = require_GetValue()
 			var MATH_CONST = require_const4()
@@ -56183,7 +56174,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/TweenBuilder.js
 	var require_TweenBuilder = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/TweenBuilder.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/TweenBuilder.js'(exports, module) {
 			var BaseTween = require_BaseTween()
 			var Defaults = require_Defaults()
 			var GetAdvancedValue = require_GetAdvancedValue()
@@ -56312,7 +56303,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/index.js
 	var require_builders = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/index.js'(exports, module) {
 			module.exports = {
 				GetBoolean: require_GetBoolean(),
 				GetEaseFunction: require_GetEaseFunction(),
@@ -56330,7 +56321,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/tween/TweenChain.js
 	var require_TweenChain = __commonJS({
-		'../../node_modules/phaser/src/tweens/tween/TweenChain.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/tween/TweenChain.js'(exports, module) {
 			var ArrayRemove = require_Remove()
 			var BaseTween = require_BaseTween()
 			var Class = require_Class()
@@ -56520,7 +56511,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/builders/TweenChainBuilder.js
 	var require_TweenChainBuilder = __commonJS({
-		'../../node_modules/phaser/src/tweens/builders/TweenChainBuilder.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/builders/TweenChainBuilder.js'(exports, module) {
 			var BaseTween = require_BaseTween()
 			var GetAdvancedValue = require_GetAdvancedValue()
 			var GetBoolean = require_GetBoolean()
@@ -56557,7 +56548,7 @@ var Phaser = (function () {
 					var targets = GetTargets(config)
 					var defaults = void 0
 					if (targets) {
-						defaults = { targets: targets }
+						defaults = { targets }
 					}
 					for (i = 0; i < tweens.length; i++) {
 						chainedTweens.push(TweenBuilder(chain, tweens[i], defaults))
@@ -56572,7 +56563,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/TweenManager.js
 	var require_TweenManager = __commonJS({
-		'../../node_modules/phaser/src/tweens/TweenManager.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/TweenManager.js'(exports, module) {
 			var ArrayRemove = require_Remove()
 			var Class = require_Class()
 			var Flatten = require_Flatten()
@@ -56887,7 +56878,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/tweens/index.js
 	var require_tweens = __commonJS({
-		'../../node_modules/phaser/src/tweens/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/tweens/index.js'(exports, module) {
 			var Tweens = {
 				States: require_const6(),
 				Builders: require_builders(),
@@ -56905,7 +56896,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/GetMinMaxValue.js
 	var require_GetMinMaxValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/GetMinMaxValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/GetMinMaxValue.js'(exports, module) {
 			var GetValue = require_GetValue()
 			var Clamp = require_Clamp()
 			var GetMinMaxValue = function (source, key, min, max, defaultValue) {
@@ -56921,7 +56912,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/HasAll.js
 	var require_HasAll = __commonJS({
-		'../../node_modules/phaser/src/utils/object/HasAll.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/HasAll.js'(exports, module) {
 			var HasAll = function (source, keys) {
 				for (var i = 0; i < keys.length; i++) {
 					if (!source.hasOwnProperty(keys[i])) {
@@ -56936,7 +56927,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/Pick.js
 	var require_Pick = __commonJS({
-		'../../node_modules/phaser/src/utils/object/Pick.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/Pick.js'(exports, module) {
 			var HasValue = require_HasValue()
 			var Pick = function (object, keys) {
 				var obj = {}
@@ -56954,7 +56945,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/SetValue.js
 	var require_SetValue = __commonJS({
-		'../../node_modules/phaser/src/utils/object/SetValue.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/SetValue.js'(exports, module) {
 			var SetValue = function (source, key, value) {
 				if (!source || typeof source === 'number') {
 					return false
@@ -56984,7 +56975,7 @@ var Phaser = (function () {
 
 	// ../../node_modules/phaser/src/utils/object/index.js
 	var require_object = __commonJS({
-		'../../node_modules/phaser/src/utils/object/index.js': function (exports, module) {
+		'../../node_modules/phaser/src/utils/object/index.js'(exports, module) {
 			module.exports = {
 				Clone: require_Clone(),
 				DeepCopy: require_DeepCopy(),
@@ -57007,7 +56998,7 @@ var Phaser = (function () {
 
 	// phaser.custom.config.js
 	var require_phaser_custom_config = __commonJS({
-		'phaser.custom.config.js': function (exports, module) {
+		'phaser.custom.config.js'(exports, module) {
 			require_polyfills()
 			var CONST = require_const()
 			var Extend = require_Extend()
