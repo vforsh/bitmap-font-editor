@@ -1,6 +1,7 @@
 import { Config } from './Config'
 import { Main } from './Main'
 import { UrlParams } from './UrlParams'
+import Center = Phaser.Scale.Center
 
 export enum RendererType {
 	WEBGL = 'webgl',
@@ -70,6 +71,7 @@ function getScaleConfig(): Phaser.Types.Core.ScaleConfig {
 		height: Config.SOURCE_GAME_HEIGHT,
 		mode: Phaser.Scale.NONE,
 		autoRound: true,
+		autoCenter: Center.CENTER_BOTH,
 	}
 }
 
