@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/bitmap-font-editor.iml" filepath="$PROJECT_DIR$/.idea/bitmap-font-editor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Bitmap Font Editor.iml" filepath="$PROJECT_DIR$/.idea/Bitmap Font Editor.iml" />
     </modules>
   </component>
 </project>
